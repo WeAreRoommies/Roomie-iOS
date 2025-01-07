@@ -5,6 +5,8 @@
 //  Created by 예삐 on 1/7/25.
 //
 
+import UIKit
+
 enum Screen {
     static func width(_ value: CGFloat) -> CGFloat {
         let screenWidth = UIScreen.main.bounds.width
