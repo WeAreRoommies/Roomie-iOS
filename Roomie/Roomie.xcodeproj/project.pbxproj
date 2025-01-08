@@ -6,6 +6,14 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A346BD422D2E23F0002BA445 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD412D2E23F0002BA445 /* SnapKit */; };
+		A346BD452D2E23FD002BA445 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD442D2E23FD002BA445 /* Then */; };
+		A346BD482D2E2449002BA445 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD472D2E2449002BA445 /* Moya */; };
+		A346BD4B2D2E2477002BA445 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD4A2D2E2477002BA445 /* Kingfisher */; };
+		A346BD4E2D2E2489002BA445 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD4D2D2E2489002BA445 /* CombineCocoa */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		0ABCF9387F76F9D8837E2F9E /* Pods-Roomie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roomie.debug.xcconfig"; path = "Target Support Files/Pods-Roomie/Pods-Roomie.debug.xcconfig"; sourceTree = "<group>"; };
 		A346BA412D2CDF13002BA445 /* Roomie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Roomie.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -38,6 +46,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A346BD4B2D2E2477002BA445 /* Kingfisher in Frameworks */,
+				A346BD422D2E23F0002BA445 /* SnapKit in Frameworks */,
+				A346BD452D2E23FD002BA445 /* Then in Frameworks */,
+				A346BD4E2D2E2489002BA445 /* CombineCocoa in Frameworks */,
+				A346BD482D2E2449002BA445 /* Moya in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +132,13 @@
 			);
 			mainGroup = A346BA382D2CDF13002BA445;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A346BD402D2E23F0002BA445 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				A346BD432D2E23FD002BA445 /* XCRemoteSwiftPackageReference "Then" */,
+				A346BD462D2E2449002BA445 /* XCRemoteSwiftPackageReference "Moya" */,
+				A346BD492D2E2477002BA445 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				A346BD4C2D2E2489002BA445 /* XCRemoteSwiftPackageReference "CombineCocoa" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A346BA422D2CDF13002BA445 /* Products */;
 			projectDirPath = "";
@@ -393,6 +413,77 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A346BD402D2E23F0002BA445 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		A346BD432D2E23FD002BA445 /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		A346BD462D2E2449002BA445 /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.3;
+			};
+		};
+		A346BD492D2E2477002BA445 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.1.3;
+			};
+		};
+		A346BD4C2D2E2489002BA445 /* XCRemoteSwiftPackageReference "CombineCocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CombineCommunity/CombineCocoa";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A346BD412D2E23F0002BA445 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A346BD402D2E23F0002BA445 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		A346BD442D2E23FD002BA445 /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A346BD432D2E23FD002BA445 /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
+		A346BD472D2E2449002BA445 /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A346BD462D2E2449002BA445 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
+		};
+		A346BD4A2D2E2477002BA445 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A346BD492D2E2477002BA445 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		A346BD4D2D2E2489002BA445 /* CombineCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A346BD4C2D2E2489002BA445 /* XCRemoteSwiftPackageReference "CombineCocoa" */;
+			productName = CombineCocoa;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A346BA392D2CDF13002BA445 /* Project object */;
 }
