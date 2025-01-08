@@ -6,8 +6,18 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A346BD422D2E23F0002BA445 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD412D2E23F0002BA445 /* SnapKit */; };
+		A346BD452D2E23FD002BA445 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD442D2E23FD002BA445 /* Then */; };
+		A346BD482D2E2449002BA445 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD472D2E2449002BA445 /* Moya */; };
+		A346BD4B2D2E2477002BA445 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD4A2D2E2477002BA445 /* Kingfisher */; };
+		A346BD4E2D2E2489002BA445 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD4D2D2E2489002BA445 /* CombineCocoa */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		0ABCF9387F76F9D8837E2F9E /* Pods-Roomie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roomie.debug.xcconfig"; path = "Target Support Files/Pods-Roomie/Pods-Roomie.debug.xcconfig"; sourceTree = "<group>"; };
 		A346BA412D2CDF13002BA445 /* Roomie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Roomie.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C8959DCCF833BE3AC6F237CE /* Pods-Roomie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roomie.release.xcconfig"; path = "Target Support Files/Pods-Roomie/Pods-Roomie.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,17 +46,32 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A346BD4B2D2E2477002BA445 /* Kingfisher in Frameworks */,
+				A346BD422D2E23F0002BA445 /* SnapKit in Frameworks */,
+				A346BD452D2E23FD002BA445 /* Then in Frameworks */,
+				A346BD4E2D2E2489002BA445 /* CombineCocoa in Frameworks */,
+				A346BD482D2E2449002BA445 /* Moya in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9058F962AE18635590BD14B9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0ABCF9387F76F9D8837E2F9E /* Pods-Roomie.debug.xcconfig */,
+				C8959DCCF833BE3AC6F237CE /* Pods-Roomie.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		A346BA382D2CDF13002BA445 = {
 			isa = PBXGroup;
 			children = (
 				A346BA432D2CDF13002BA445 /* Roomie */,
 				A346BA422D2CDF13002BA445 /* Products */,
+				9058F962AE18635590BD14B9 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -65,9 +90,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A346BA542D2CDF16002BA445 /* Build configuration list for PBXNativeTarget "Roomie" */;
 			buildPhases = (
+				04B3EF15FB06D401DED8E2A3 /* [CP] Check Pods Manifest.lock */,
 				A346BA3D2D2CDF13002BA445 /* Sources */,
 				A346BA3E2D2CDF13002BA445 /* Frameworks */,
 				A346BA3F2D2CDF13002BA445 /* Resources */,
+				6517468F8D5ADAA56C710780 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -77,8 +104,6 @@
 				A346BA432D2CDF13002BA445 /* Roomie */,
 			);
 			name = Roomie;
-			packageProductDependencies = (
-			);
 			productName = Roomie;
 			productReference = A346BA412D2CDF13002BA445 /* Roomie.app */;
 			productType = "com.apple.product-type.application";
@@ -107,6 +132,13 @@
 			);
 			mainGroup = A346BA382D2CDF13002BA445;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A346BD402D2E23F0002BA445 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				A346BD432D2E23FD002BA445 /* XCRemoteSwiftPackageReference "Then" */,
+				A346BD462D2E2449002BA445 /* XCRemoteSwiftPackageReference "Moya" */,
+				A346BD492D2E2477002BA445 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				A346BD4C2D2E2489002BA445 /* XCRemoteSwiftPackageReference "CombineCocoa" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A346BA422D2CDF13002BA445 /* Products */;
 			projectDirPath = "";
@@ -127,6 +159,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		04B3EF15FB06D401DED8E2A3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Roomie-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6517468F8D5ADAA56C710780 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Roomie/Pods-Roomie-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Roomie/Pods-Roomie-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Roomie/Pods-Roomie-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A346BA3D2D2CDF13002BA445 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -140,6 +214,7 @@
 /* Begin XCBuildConfiguration section */
 		A346BA552D2CDF16002BA445 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0ABCF9387F76F9D8837E2F9E /* Pods-Roomie.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -151,6 +226,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -166,6 +242,7 @@
 		};
 		A346BA562D2CDF16002BA445 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8959DCCF833BE3AC6F237CE /* Pods-Roomie.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -177,6 +254,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -192,6 +270,8 @@
 		};
 		A346BA572D2CDF16002BA445 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = A346BA432D2CDF13002BA445 /* Roomie */;
+			baseConfigurationReferenceRelativePath = Global/Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -227,7 +307,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -242,7 +322,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -255,6 +335,8 @@
 		};
 		A346BA582D2CDF16002BA445 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = A346BA432D2CDF13002BA445 /* Roomie */;
+			baseConfigurationReferenceRelativePath = Global/Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -290,7 +372,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -299,7 +381,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -331,6 +413,77 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A346BD402D2E23F0002BA445 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		A346BD432D2E23FD002BA445 /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		A346BD462D2E2449002BA445 /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.3;
+			};
+		};
+		A346BD492D2E2477002BA445 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.1.3;
+			};
+		};
+		A346BD4C2D2E2489002BA445 /* XCRemoteSwiftPackageReference "CombineCocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CombineCommunity/CombineCocoa";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A346BD412D2E23F0002BA445 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A346BD402D2E23F0002BA445 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		A346BD442D2E23FD002BA445 /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A346BD432D2E23FD002BA445 /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
+		A346BD472D2E2449002BA445 /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A346BD462D2E2449002BA445 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
+		};
+		A346BD4A2D2E2477002BA445 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A346BD492D2E2477002BA445 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		A346BD4D2D2E2489002BA445 /* CombineCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A346BD4C2D2E2489002BA445 /* XCRemoteSwiftPackageReference "CombineCocoa" */;
+			productName = CombineCocoa;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A346BA392D2CDF13002BA445 /* Project object */;
 }
