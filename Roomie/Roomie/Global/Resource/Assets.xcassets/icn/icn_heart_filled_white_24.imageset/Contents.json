@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "icn_heart_filled_white_24.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
