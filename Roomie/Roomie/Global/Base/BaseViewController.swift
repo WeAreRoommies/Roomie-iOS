@@ -18,6 +18,12 @@ class BaseViewController: UIViewController {
         setupDelegate()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+    
     /// 네비게이션 바 등 추가적으로 UI와 관련한 작업
     func setupView() {}
     
@@ -85,5 +91,15 @@ extension BaseViewController {
     @objc
     func backButtonDidTap() {
         navigationController?.popViewController(animated: true)
+    }
+}
+
+// MARK: - UIGestureRecognizerDelegate
+
+extension BaseViewController: UIGestureRecognizerDelegate {
+    
+    /// 뒤로가기 제스쳐 삽입
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return navigationController?.viewControllers.count ?? 0 > 1
     }
 }
