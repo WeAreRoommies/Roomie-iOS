@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class MapDetialInfoView: BaseView {
+final class MapDetialCardView: BaseView {
     let titleLabel = UILabel()
     
     private let subtitleStackView = UIStackView()

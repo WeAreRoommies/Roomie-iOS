@@ -14,14 +14,14 @@ import NMapsMap
 final class MapView: BaseView {
     let mapView = NMFMapView(frame: .zero)
     
-    let mapDetailInfoView = MapDetialInfoView()
+    let mapDetailCardView = MapDetialCardView()
     
     override func setStyle() {
         mapView.do {
             $0.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: 37.555184166, lng: 126.936910322)))
         }
         
-        mapDetailInfoView.do {
+        mapDetailCardView.do {
             $0.backgroundColor = .grayscale1
             $0.layer.cornerRadius = 12
             $0.isHidden = true
@@ -29,7 +29,7 @@ final class MapView: BaseView {
     }
     
     override func setUI() {
-        addSubviews(mapView, mapDetailInfoView)
+        addSubviews(mapView, mapDetailCardView)
     }
     
     override func setLayout() {
@@ -37,7 +37,7 @@ final class MapView: BaseView {
             $0.edges.equalToSuperview()
         }
         
-        mapDetailInfoView.snp.makeConstraints {
+        mapDetailCardView.snp.makeConstraints {
             $0.bottom.equalTo(safeAreaLayoutGuide).inset(12)
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(170)
