@@ -61,8 +61,20 @@ final class MapViewController: BaseViewController {
             .store(in: cancelBag)
         
         output.markerDetailInfo
-            .sink { markerDetailInfo in
+            .sink { [weak self] markerDetailInfo in
                 print(markerDetailInfo.locationDescription)
+                self?.rootView.mapDetailInfoView.isHidden = false
+                self?.rootView.mapDetailInfoView.depositLabel.updateText("보증금 \(markerDetailInfo.deposit)")
+                self?.rootView.mapDetailInfoView.contractTermLabel.updateText(
+                    "\(markerDetailInfo.contractTerm)개월"
+                )
+                self?.rootView.mapDetailInfoView.genderOccupancyLabel.updateText(
+                    "\(markerDetailInfo.genderPolicy)・\(markerDetailInfo.occupancyType)"
+                )
+                self?.rootView.mapDetailInfoView.locationLabel.updateText(
+                    "\(markerDetailInfo.location)・\(markerDetailInfo.locationDescription)"
+                )
+                self?.rootView.mapDetailInfoView.moodTagLabel.updateText(markerDetailInfo.moodTag)
             }
             .store(in: cancelBag)
     }
