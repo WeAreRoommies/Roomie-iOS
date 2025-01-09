@@ -18,10 +18,9 @@ final class MainTabBarController: UITabBarController {
         $0.tabBarItem.image = .icnHomeLine24
     }
     
-    // TODO: 이미지 에셋 수정 필요
     let mapViewController: MapViewController = MapViewController().then {
         $0.tabBarItem.title = "지도"
-        $0.tabBarItem.image = .icnSearchLine24
+        $0.tabBarItem.image = .icnMapLine24
     }
     
     let myPageViewController: MyPageViewController = MyPageViewController().then {
