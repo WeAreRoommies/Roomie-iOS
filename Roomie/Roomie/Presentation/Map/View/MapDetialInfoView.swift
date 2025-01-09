@@ -11,7 +11,7 @@ import SnapKit
 import Then
 
 final class MapDetialInfoView: BaseView {
-    private let titleLabel = UILabel()
+    let titleLabel = UILabel()
     
     private let subtitleStackView = UIStackView()
     private let seperatorView = UIView()
@@ -26,7 +26,7 @@ final class MapDetialInfoView: BaseView {
     
     override func setStyle() {
         titleLabel.do {
-            $0.setText("월세 500/30", style: .title2, color: .grayscale12)
+            $0.setText(style: .title2, color: .grayscale12)
         }
         
         subtitleStackView.do {
