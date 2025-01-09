@@ -7,6 +7,8 @@
 
 import UIKit
 
+import SnapKit
+
 class BaseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +30,60 @@ class BaseViewController: UIViewController {
 
 extension BaseViewController {
     
-    /// 네비게이션 바 타이틀 및 배경색 설정
+    /// 네비게이션 바 커스텀
+    func setupNavigationBarTitle(with string: String) {
+        title = string
+        
+        let barAppearance = UINavigationBarAppearance()
+        barAppearance.backgroundColor = .grayscale1
+        barAppearance.shadowColor = nil
+        
+        barAppearance.titleTextAttributes = [
+            .foregroundColor: UIColor.grayscale10,
+            .font: UIFont.pretendard(.heading5)
+        ]
+        
+        navigationController?.navigationBar.standardAppearance = barAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = barAppearance
+        
+        let backButton = UIBarButtonItem(
+            image: .btnBack,
+            style: .plain,
+            target: self,
+            action: #selector(backButtonDidTap)
+        ).then {
+            $0.tintColor = .grayscale10
+        }
+        
+        navigationItem.leftBarButtonItem = backButton
+        
+        let identifier = "border"
+        guard view.subviews.first(
+            where: { $0.accessibilityIdentifier == identifier }
+        ) == nil else { return }
+        
+        let safeArea = view.safeAreaLayoutGuide
+        let border = UIView().then {
+            $0.backgroundColor = .grayscale4
+            $0.accessibilityIdentifier = identifier
+        }
+        
+        view.addSubview(border)
+        
+        border.snp.makeConstraints {
+            $0.top.equalTo(safeArea)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+        
+        view.bringSubviewToFront(border)
+        
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
+    }
     
+    @objc
+    func backButtonDidTap() {
+        navigationController?.popViewController(animated: true)
+    }
 }
