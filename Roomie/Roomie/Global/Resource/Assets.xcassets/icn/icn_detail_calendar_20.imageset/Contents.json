@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_detail_calendar_20.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

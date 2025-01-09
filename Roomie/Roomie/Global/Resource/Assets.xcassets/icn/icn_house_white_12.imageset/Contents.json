@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_house_white_12.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
