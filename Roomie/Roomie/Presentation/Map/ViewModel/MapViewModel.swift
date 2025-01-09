@@ -9,17 +9,20 @@ import Foundation
 import Combine
 
 final class MapViewModel {
-    private let mapDataSubject = CurrentValueSubject<[MapModel], Never>([])
+    private var houseID: Int?
     
+    private let mapDataSubject = CurrentValueSubject<[MapModel], Never>([])
 }
 
 extension MapViewModel: ViewModelType {
     struct Input {
         let viewWillAppear: AnyPublisher<Void, Never>
+        let markerDidSelect: AnyPublisher<Int, Never>
     }
     
     struct Output {
-        let markerInfo: AnyPublisher<[(CGFloat, CGFloat)], Never>
+        let markersInfo: AnyPublisher<[MarkerInfo], Never>
+        let markerDetailInfo: AnyPublisher<MarkerDetailInfo, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -29,13 +32,43 @@ extension MapViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
-        let markerInfo = mapDataSubject
+        input.markerDidSelect
+            .sink { [weak self] houseID in
+                self?.houseID = houseID
+            }
+            .store(in: cancelBag)
+        
+        let markersInfo = mapDataSubject
             .map { data in
-                data.map { ($0.x, $0.y)}
+                data.map { MarkerInfo(houseID: $0.houseID, x: $0.x, y: $0.y) }
             }
             .eraseToAnyPublisher()
         
-        return Output(markerInfo: markerInfo)
+        let markerDetailInfo = input.markerDidSelect
+            .map { [weak self] houseID in
+                self?.houseID = houseID
+                return self?.mapDataSubject.value.first { $0.houseID == houseID }
+                    .map { data in
+                        MarkerDetailInfo(
+                            monthlyRent: data.monthlyRent,
+                            deposit: data.deposit,
+                            occupancyType: data.occupancyType,
+                            location: data.location,
+                            genderPolicy: data.genderPolicy,
+                            locationDescription: data.locationDescription,
+                            isPinned: data.isPinned,
+                            moodTag: data.moodTag,
+                            contractTerm: data.contractTerm
+                        )
+                    }
+            }
+            .compactMap { $0 }
+            .eraseToAnyPublisher()
+        
+        return Output(
+            markersInfo: markersInfo,
+            markerDetailInfo: markerDetailInfo
+        )
     }
 }
 
