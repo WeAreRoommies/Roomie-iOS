@@ -92,7 +92,7 @@ private extension MapViewController {
                     marker.touchHandler = { [weak self] _ in
                         guard let self = self else { return false }
                         
-                        erasePreviousMarker()
+                        erasePreviousSelectedMarker()
                         marker.iconImage = NMFOverlayImage(name: "icn_map_pin_active")
                         self.selectedMarker = marker
                         
@@ -107,6 +107,7 @@ private extension MapViewController {
         output.markerDetailInfo
             .sink { [weak self] markerDetailInfo in
                 self?.rootView.mapDetailCardView.isHidden = false
+                
                 self?.rootView.mapDetailCardView.titleLabel.updateText(
                     "월세 \(markerDetailInfo.monthlyRent)"
                 )
@@ -129,7 +130,7 @@ private extension MapViewController {
             .store(in: cancelBag)
     }
     
-    func erasePreviousMarker() {
+    func erasePreviousSelectedMarker() {
         if let previousMarker = self.selectedMarker {
             previousMarker.iconImage = NMFOverlayImage(name: "icn_map_pin_normal")
         }
@@ -141,7 +142,7 @@ private extension MapViewController {
 extension MapViewController: NMFMapViewTouchDelegate {
     func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
         if !rootView.mapDetailCardView.isHidden {
-            erasePreviousMarker()
+            erasePreviousSelectedMarker()
             
             rootView.mapDetailCardView.isHidden = true
         }
