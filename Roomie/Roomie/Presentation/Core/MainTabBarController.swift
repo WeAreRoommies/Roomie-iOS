@@ -18,7 +18,9 @@ final class MainTabBarController: UITabBarController {
         $0.tabBarItem.image = .icnHomeLine24
     }
     
-    let mapViewController: MapViewController = MapViewController().then {
+    let mapViewController: MapViewController = MapViewController(
+        viewModel: MapViewModel()
+    ).then {
         $0.tabBarItem.title = "지도"
         $0.tabBarItem.image = .icnMapLine24
     }

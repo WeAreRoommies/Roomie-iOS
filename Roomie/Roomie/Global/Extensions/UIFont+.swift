@@ -63,17 +63,19 @@ extension UIFont {
             case .heading4, .heading5: 24
             case .title1, .title2, .title3: 22
             case .body1, .body2, .body3: 20
-            case .body4, .body5, .body6:18
+            case .body4, .body5, .body6: 18
             case .caption1, .caption2, .caption3: 14
             }
         }
         
         var baselineOffset: CGFloat {
+            let font = UIFont(name: weight, size: size) ?? .systemFont(ofSize: size)
+            
             if ProcessInfo.processInfo.isOperatingSystemAtLeast(
                 OperatingSystemVersion(majorVersion: 16, minorVersion: 4, patchVersion: 0)) {
-                (lineHeight - size) / 2
+                return (lineHeight - font.lineHeight) / 2
             } else {
-                (lineHeight - size) / 4
+                return (lineHeight - font.lineHeight) / 4
             }
         }
     }
