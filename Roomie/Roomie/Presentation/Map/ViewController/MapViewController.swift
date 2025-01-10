@@ -15,6 +15,8 @@ final class MapViewController: BaseViewController {
     private let viewModel = MapViewModel()
     private let cancelBag = CancelBag()
     
+    private var selectedMarker: NMFMarker?
+    
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let markerDidSelectSubject = PassthroughSubject<Int, Never>()
     
@@ -56,7 +58,13 @@ final class MapViewController: BaseViewController {
                     marker.height = 36
                     
                     marker.touchHandler = { [weak self] _ in
-                        self?.markerDidSelectSubject.send(markerInfo.houseID)
+                        guard let self = self else { return false }
+                        
+                        erasePreviousMarker()
+                        marker.iconImage = NMFOverlayImage(name: "icn_map_pin_active")
+                        self.selectedMarker = marker
+                        
+                        self.markerDidSelectSubject.send(markerInfo.houseID)
                         
                         return true
                     }
@@ -91,7 +99,17 @@ final class MapViewController: BaseViewController {
 extension MapViewController: NMFMapViewTouchDelegate {
     func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
         if !rootView.mapDetailCardView.isHidden {
+            erasePreviousMarker()
+            
             rootView.mapDetailCardView.isHidden = true
+        }
+    }
+}
+
+private extension MapViewController {
+    func erasePreviousMarker() {
+        if let previousMarker = self.selectedMarker {
+            previousMarker.iconImage = NMFOverlayImage(name: "icn_map_pin_normal")
         }
     }
 }
