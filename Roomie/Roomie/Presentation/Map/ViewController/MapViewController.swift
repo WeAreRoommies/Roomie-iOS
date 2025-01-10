@@ -34,6 +34,10 @@ final class MapViewController: BaseViewController {
         viewWillAppearSubject.send(())
     }
     
+    override func setupDelegate() {
+        rootView.mapView.touchDelegate = self
+    }
+    
     private func bindViewModel() {
         let input = MapViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
@@ -81,5 +85,13 @@ final class MapViewController: BaseViewController {
                 self?.rootView.mapDetailCardView.moodTagLabel.updateText(markerDetailInfo.moodTag)
             }
             .store(in: cancelBag)
+    }
+}
+
+extension MapViewController: NMFMapViewTouchDelegate {
+    func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
+        if !rootView.mapDetailCardView.isHidden {
+            rootView.mapDetailCardView.isHidden = true
+        }
     }
 }
