@@ -90,7 +90,9 @@ final class MapViewController: BaseViewController {
                 self?.rootView.mapDetailCardView.locationLabel.updateText(
                     "\(markerDetailInfo.location)・\(markerDetailInfo.locationDescription)"
                 )
-                self?.rootView.mapDetailCardView.moodTagLabel.updateText(markerDetailInfo.moodTag)
+                self?.rootView.mapDetailCardView.moodTagLabel.updateText(
+                    markerDetailInfo.moodTag
+                )
             }
             .store(in: cancelBag)
     }

@@ -25,6 +25,9 @@ final class MapView: BaseView {
             $0.backgroundColor = .grayscale1
             $0.layer.cornerRadius = 12
             $0.isHidden = true
+            $0.layer.shadowOpacity = 0.25
+            $0.layer.shadowRadius = 2
+            $0.layer.shadowOffset = CGSize(width: 0, height: 0)
         }
     }
     
