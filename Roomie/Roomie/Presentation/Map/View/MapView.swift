@@ -12,10 +12,15 @@ import Then
 import NMapsMap
 
 final class MapView: BaseView {
+    
+    // MARK: - UIComponent
+
     let mapView = NMFMapView(frame: .zero)
     
     let mapDetailCardView = MapDetialCardView()
     
+    // MARK: - UISetting
+
     override func setStyle() {
         mapView.do {
             $0.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: 37.555184166, lng: 126.936910322)))

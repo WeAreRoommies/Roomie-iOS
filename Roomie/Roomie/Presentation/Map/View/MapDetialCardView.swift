@@ -11,6 +11,9 @@ import SnapKit
 import Then
 
 final class MapDetialCardView: BaseView {
+    
+    // MARK: - UISetting
+
     let titleLabel = UILabel()
     
     private let subtitleStackView = UIStackView()
@@ -24,6 +27,8 @@ final class MapDetialCardView: BaseView {
     private let moodTagView = UIView()
     let moodTagLabel = UILabel()
     
+    // MARK: - UISetting
+
     override func setStyle() {
         titleLabel.do {
             $0.setText(style: .title2, color: .grayscale12)

@@ -11,6 +11,9 @@ import Combine
 import NMapsMap
 
 final class MapViewController: BaseViewController {
+    
+    // MARK: - Property
+
     private let rootView = MapView()
     
     private let viewModel: MapViewModel
@@ -22,6 +25,8 @@ final class MapViewController: BaseViewController {
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let markerDidSelectSubject = PassthroughSubject<Int, Never>()
     
+    // MARK: - Initializer
+
     init(viewModel: MapViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -31,6 +36,8 @@ final class MapViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - LifeCycle
+
     override func loadView() {
         view = rootView
     }
@@ -50,8 +57,12 @@ final class MapViewController: BaseViewController {
     override func setupDelegate() {
         rootView.mapView.touchDelegate = self
     }
-    
-    private func bindViewModel() {
+}
+
+// MARK: - Functions
+
+private extension MapViewController {
+    func bindViewModel() {
         let input = MapViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
             markerDidSelect: markerDidSelectSubject.eraseToAnyPublisher()
@@ -107,7 +118,15 @@ final class MapViewController: BaseViewController {
             }
             .store(in: cancelBag)
     }
+    
+    func erasePreviousMarker() {
+        if let previousMarker = self.selectedMarker {
+            previousMarker.iconImage = NMFOverlayImage(name: "icn_map_pin_normal")
+        }
+    }
 }
+
+// MARK: - NMFMapViewTouchDelegate
 
 extension MapViewController: NMFMapViewTouchDelegate {
     func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
@@ -115,14 +134,6 @@ extension MapViewController: NMFMapViewTouchDelegate {
             erasePreviousMarker()
             
             rootView.mapDetailCardView.isHidden = true
-        }
-    }
-}
-
-private extension MapViewController {
-    func erasePreviousMarker() {
-        if let previousMarker = self.selectedMarker {
-            previousMarker.iconImage = NMFOverlayImage(name: "icn_map_pin_normal")
         }
     }
 }
