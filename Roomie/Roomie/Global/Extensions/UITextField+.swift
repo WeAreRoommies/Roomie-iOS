@@ -21,10 +21,10 @@ extension UITextField {
     }
     
     func setText(
-        placeholder: String,
+        placeholder: String = "",
+        placeholderColor: UIColor = .grayscale1,
         textColor: UIColor,
         backgroundColor: UIColor,
-        placeholderColor: UIColor,
         style: UIFont.Pretendard
     ) {
         self.textColor = textColor
@@ -40,7 +40,7 @@ extension UITextField {
         self.attributedText = .pretendardString(style: style)
     }
     
-    func setLayer(borderWidth: CGFloat = 0, borderColor: UIColor, cornerRadius: CGFloat) {
+    func setLayer(borderWidth: CGFloat, borderColor: UIColor, cornerRadius: CGFloat) {
         layer.borderColor = borderColor.cgColor
         layer.cornerRadius = cornerRadius
         layer.borderWidth = borderWidth
