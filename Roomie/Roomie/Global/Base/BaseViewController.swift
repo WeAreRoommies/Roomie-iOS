@@ -37,7 +37,7 @@ class BaseViewController: UIViewController {
 extension BaseViewController {
     
     /// 네비게이션 바 커스텀
-    func setupNavigationBarTitle(with string: String) {
+    func setupNavigationBar(with string: String, isBorderHidden: Bool = false) {
         title = string
         
         let barAppearance = UINavigationBarAppearance()
@@ -63,34 +63,48 @@ extension BaseViewController {
         
         navigationItem.leftBarButtonItem = backButton
         
-        let identifier = "border"
-        guard view.subviews.first(
-            where: { $0.accessibilityIdentifier == identifier }
-        ) == nil else { return }
-        
-        let safeArea = view.safeAreaLayoutGuide
-        let border = UIView().then {
-            $0.backgroundColor = .grayscale4
-            $0.accessibilityIdentifier = identifier
+        if !isBorderHidden {
+            let identifier = "border"
+            guard view.subviews.first(
+                where: { $0.accessibilityIdentifier == identifier }
+            ) == nil else { return }
+            
+            let safeArea = view.safeAreaLayoutGuide
+            let border = UIView().then {
+                $0.backgroundColor = .grayscale4
+                $0.accessibilityIdentifier = identifier
+            }
+            
+            view.addSubview(border)
+            
+            border.snp.makeConstraints {
+                $0.top.equalTo(safeArea)
+                $0.leading.trailing.equalToSuperview()
+                $0.height.equalTo(1)
+            }
+            
+            view.bringSubviewToFront(border)
+            
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
         }
-        
-        view.addSubview(border)
-        
-        border.snp.makeConstraints {
-            $0.top.equalTo(safeArea)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(1)
-        }
-        
-        view.bringSubviewToFront(border)
-        
-        view.setNeedsLayout()
-        view.layoutIfNeeded()
+    }
+    
+    /// 화면 터치 시 키보드 내리기
+    func hideKeyboardWhenDidTap() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
     }
     
     @objc
     func backButtonDidTap() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 
