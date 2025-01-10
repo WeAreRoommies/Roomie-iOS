@@ -12,7 +12,7 @@ import Then
 
 final class MapDetialCardView: BaseView {
     
-    // MARK: - UISetting
+    // MARK: - UIComponent
 
     let titleLabel = UILabel()
     

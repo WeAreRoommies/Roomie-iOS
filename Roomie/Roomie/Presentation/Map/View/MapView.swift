@@ -7,9 +7,9 @@
 
 import UIKit
 
+import NMapsMap
 import SnapKit
 import Then
-import NMapsMap
 
 final class MapView: BaseView {
     
