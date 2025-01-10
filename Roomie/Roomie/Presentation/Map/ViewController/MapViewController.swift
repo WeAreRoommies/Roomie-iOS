@@ -8,6 +8,7 @@
 import UIKit
 import Combine
 
+import CombineCocoa
 import NMapsMap
 
 final class MapViewController: BaseViewController {
@@ -56,6 +57,15 @@ final class MapViewController: BaseViewController {
     
     override func setupDelegate() {
         rootView.mapView.touchDelegate = self
+    }
+    
+    override func setupAction() {
+        rootView.mapDetailCardView.arrowButton
+            .tapPublisher
+            .sink {
+                // TODO: 매물 상세 뷰 화면 연결
+            }
+            .store(in: cancelBag)
     }
 }
 
