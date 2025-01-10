@@ -12,13 +12,24 @@ import NMapsMap
 
 final class MapViewController: BaseViewController {
     private let rootView = MapView()
-    private let viewModel = MapViewModel()
+    
+    private let viewModel: MapViewModel
+    
     private let cancelBag = CancelBag()
     
     private var selectedMarker: NMFMarker?
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let markerDidSelectSubject = PassthroughSubject<Int, Never>()
+    
+    init(viewModel: MapViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         view = rootView
