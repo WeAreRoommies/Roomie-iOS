@@ -45,7 +45,7 @@ extension BaseViewController {
         barAppearance.shadowColor = nil
         
         barAppearance.titleTextAttributes = [
-            .foregroundColor: UIColor.grayscale10,
+            .foregroundColor: UIColor.grayscale12,
             .font: UIFont.pretendard(.heading5)
         ]
         
