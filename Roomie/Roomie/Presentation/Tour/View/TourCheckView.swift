@@ -24,7 +24,6 @@ final class TourCheckView: BaseView {
     
     let nextButton = CustomButton(title: "이 방이 맞아요")
         
-    
     // MARK: - UISetting
     
     override func setStyle() {
