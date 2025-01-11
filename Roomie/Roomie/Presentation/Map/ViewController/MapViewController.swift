@@ -52,7 +52,14 @@ final class MapViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        navigationController?.setNavigationBarHidden(true, animated: false)
         viewWillAppearSubject.send(())
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     override func setupDelegate() {
@@ -60,6 +67,14 @@ final class MapViewController: BaseViewController {
     }
     
     override func setupAction() {
+        rootView.filteringButton
+            .tapPublisher
+            .sink {
+                let mapFilterViewController = MapFilterViewController()
+                self.navigationController?.pushViewController(mapFilterViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
         rootView.mapDetailCardView.arrowButton
             .tapPublisher
             .sink {
@@ -141,6 +156,8 @@ private extension MapViewController {
 
 extension MapViewController: NMFMapViewTouchDelegate {
     func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
+        view.endEditing(true)
+        
         if !rootView.mapDetailCardView.isHidden {
             erasePreviousSelectedMarker()
             
