@@ -21,6 +21,8 @@ final class TourCheckView: BaseView {
     
     private let roomTitleLabel = UILabel()
     let roomNameLabel = UILabel()
+    
+    let nextButton = CustomButton(title: "이 방이 맞아요")
         
     
     // MARK: - UISetting
@@ -55,7 +57,8 @@ final class TourCheckView: BaseView {
             houseTitleLabel,
             houseNameLabel,
             roomTitleLabel,
-            roomNameLabel
+            roomNameLabel,
+            nextButton
         )
     }
     
@@ -87,6 +90,12 @@ final class TourCheckView: BaseView {
             $0.top.equalTo(houseNameLabel.snp.bottom).offset(16)
             $0.leading.equalTo(roomTitleLabel.snp.trailing).offset(20)
             $0.trailing.equalToSuperview().inset(20)
+        }
+        
+        nextButton.snp.makeConstraints {
+            $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.height.equalTo(58)
         }
     }
 }
