@@ -95,7 +95,7 @@ final class TourCheckView: BaseView {
         nextButton.snp.makeConstraints {
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.height.equalTo(58)
+            $0.height.equalTo(CustomButton.defaultHeight)
         }
     }
 }
