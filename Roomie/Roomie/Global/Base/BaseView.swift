@@ -11,6 +11,7 @@ class BaseView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        backgroundColor = .white
         setStyle()
         setUI()
         setLayout()
@@ -28,9 +29,7 @@ class BaseView: UIView {
     func setStyle() {}
     
     /// UI 위계 설정 (addSubView 등)
-    func setUI() {
-        backgroundColor = .white
-    }
+    func setUI() {}
     
     /// 오토레이아웃 설정 (SnapKit 코드 관련)
     func setLayout() {}
