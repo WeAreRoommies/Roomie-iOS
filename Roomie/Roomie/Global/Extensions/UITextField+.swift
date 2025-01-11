@@ -27,6 +27,7 @@ extension UITextField {
         backgroundColor: UIColor,
         style: UIFont.Pretendard
     ) {
+        self.font = UIFont.pretendard(style)
         self.textColor = textColor
         self.backgroundColor = backgroundColor
         attributedPlaceholder = NSAttributedString(
