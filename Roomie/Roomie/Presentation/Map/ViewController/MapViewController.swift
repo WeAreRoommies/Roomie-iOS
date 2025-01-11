@@ -59,7 +59,7 @@ final class MapViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     override func setupDelegate() {
@@ -67,6 +67,14 @@ final class MapViewController: BaseViewController {
     }
     
     override func setupAction() {
+        rootView.filteringButton
+            .tapPublisher
+            .sink {
+                let mapFilterViewController = MapFilterViewController()
+                self.navigationController?.pushViewController(mapFilterViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
         rootView.mapDetailCardView.arrowButton
             .tapPublisher
             .sink {
