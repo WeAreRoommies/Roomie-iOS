@@ -80,7 +80,7 @@ final class MapView: BaseView {
     
     override func setLayout() {
         searchTextField.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(56)
+            $0.top.equalTo(safeAreaLayoutGuide).inset(12)
             $0.leading.equalToSuperview().inset(20)
             $0.trailing.equalTo(filteringButton.snp.leading).offset(-8)
             $0.height.equalTo(50)
@@ -93,7 +93,7 @@ final class MapView: BaseView {
         }
         
         filteringButton.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(56)
+            $0.top.equalTo(safeAreaLayoutGuide).inset(12)
             $0.trailing.equalToSuperview().inset(20)
             $0.width.equalTo(48)
             $0.height.equalTo(50)
