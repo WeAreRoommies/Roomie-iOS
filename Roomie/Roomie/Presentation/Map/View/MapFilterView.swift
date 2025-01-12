@@ -11,12 +11,17 @@ import SnapKit
 import Then
 
 final class MapFilterView: BaseView {
+    
+    // MARK: - UIComponent
+    
     private let seperatorView = UIView()
     let filterSegmentedControl = FilterSegmentedControl(items: ["금액", "방 형태", "계약기간"])
     
     let filterPriceView = FilterPriceView()
     let filterRoomView = FilterRoomView()
     let filterPeriodView = FilterPeriodView()
+    
+    // MARK: - UISetting
     
     override func setStyle() {
         seperatorView.do {
@@ -38,7 +43,7 @@ final class MapFilterView: BaseView {
         filterSegmentedControl.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide).offset(4)
             $0.leading.equalToSuperview().inset(16)
-            $0.height.equalTo(40)
+            $0.height.equalTo(36)
         }
         
         seperatorView.snp.makeConstraints {
