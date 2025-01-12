@@ -14,7 +14,7 @@ final class TourCheckView: BaseView {
     
     // MARK: - UIComponent
     
-    let titleLabel = UILabel()
+    private let titleLabel = UILabel()
     
     private let houseTitleLabel = UILabel()
     let houseNameLabel = UILabel()
@@ -29,7 +29,6 @@ final class TourCheckView: BaseView {
     override func setStyle() {
         titleLabel.do {
             $0.setText("선택하신 방이 맞는지\n확인해주세요", style: .heading2, color: .grayscale12)
-            $0.textAlignment = .left
         }
         
         houseTitleLabel.do {
@@ -50,7 +49,6 @@ final class TourCheckView: BaseView {
     }
     
     override func setUI() {
-        backgroundColor = .grayscale1 // TODO: 화면 연결 후 삭제
         addSubviews(
             titleLabel,
             houseTitleLabel,
