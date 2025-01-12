@@ -11,6 +11,9 @@ import SnapKit
 import Then
 
 final class FilterPriceView: BaseView {
+    
+    // MARK: - UIComponent
+    
     private let depositLabel = UILabel()
     private let depositCenterView = UIView()
     let depositMinTextField = PriceTextField(placeHolder: "0")
@@ -18,6 +21,8 @@ final class FilterPriceView: BaseView {
     let depositSlider = PriceSlider()
     
     private let monthlyRentLabel = UILabel()
+    
+    // MARK: - UISetting
     
     override func setStyle() {
         depositLabel.do {

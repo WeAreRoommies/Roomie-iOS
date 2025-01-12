@@ -11,6 +11,9 @@ import Combine
 import CombineCocoa
 
 final class MapFilterViewController: BaseViewController {
+    
+    // MARK: - Property
+
     private let rootView = MapFilterView()
     
     private let viewModel: MapFilterViewModel
@@ -22,6 +25,9 @@ final class MapFilterViewController: BaseViewController {
     private let depositMinRangeSubject = PassthroughSubject<Int, Never>()
     private let depositMaxRangeSubject = PassthroughSubject<Int, Never>()
     
+    
+    // MARK: - Initializer
+
     init(viewModel: MapFilterViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -31,6 +37,8 @@ final class MapFilterViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - LifeCycle
+
     override func loadView() {
         view = rootView
     }
@@ -41,6 +49,8 @@ final class MapFilterViewController: BaseViewController {
         bindViewModel()
     }
     
+    // MARK: - Functions
+
     override func setupView() {
         setupNavigationBar(with: "필터", isBorderHidden: true)
     }
