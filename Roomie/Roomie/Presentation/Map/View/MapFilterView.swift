@@ -38,7 +38,7 @@ final class MapFilterView: BaseView {
         filterSegmentedControl.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide).offset(4)
             $0.leading.equalToSuperview().inset(16)
-            $0.height.equalTo(40)
+            $0.height.equalTo(36)
         }
         
         seperatorView.snp.makeConstraints {
