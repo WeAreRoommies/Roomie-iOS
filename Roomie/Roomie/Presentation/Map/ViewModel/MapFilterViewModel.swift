@@ -11,6 +11,9 @@ import Combine
 final class MapFilterViewModel {
     private let depositMinSubject = CurrentValueSubject<Int, Never>(0)
     private let depositMaxSubject = CurrentValueSubject<Int, Never>(500)
+    
+    private let monthlyRentMinSubject = CurrentValueSubject<Int, Never>(0)
+    private let monthlyRentMaxSubject = CurrentValueSubject<Int, Never>(500)
 }
 
 extension MapFilterViewModel: ViewModelType {
@@ -22,6 +25,14 @@ extension MapFilterViewModel: ViewModelType {
         // 보증금 슬라이더 값
         let depositMinRange: AnyPublisher<Int, Never>
         let depositMaxRange: AnyPublisher<Int, Never>
+        
+        /// 월세 텍스트필드 값
+        let monthlyRentMinText: AnyPublisher<Int, Never>
+        let monthlyRentMaxText: AnyPublisher<Int, Never>
+        
+        // 월세 슬라이더 값
+        let monthlyRentMinRange: AnyPublisher<Int, Never>
+        let monthlyRentMaxRange: AnyPublisher<Int, Never>
     }
     
     struct Output {
@@ -32,6 +43,14 @@ extension MapFilterViewModel: ViewModelType {
         // 보증금 슬라이더 값
         let depositMinRange: AnyPublisher<Int, Never>
         let depositMaxRange: AnyPublisher<Int, Never>
+        
+        /// 월세 텍스트필드 값
+        let monthlyRentMinText: AnyPublisher<Int, Never>
+        let monthlyRentMaxText: AnyPublisher<Int, Never>
+        
+        // 월세 슬라이더 값
+        let monthlyRentMinRange: AnyPublisher<Int, Never>
+        let monthlyRentMaxRange: AnyPublisher<Int, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -63,17 +82,55 @@ extension MapFilterViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
+        input.monthlyRentMinText
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.monthlyRentMinSubject.send($0)
+            }
+            .store(in: cancelBag)
+        
+        input.monthlyRentMaxText
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.monthlyRentMaxSubject.send($0)
+            }
+            .store(in: cancelBag)
+        
+        input.monthlyRentMinRange
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.monthlyRentMinSubject.send($0)
+            }
+            .store(in: cancelBag)
+        
+        input.monthlyRentMaxRange
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.monthlyRentMaxSubject.send($0)
+            }
+            .store(in: cancelBag)
+        
         let depositMin = depositMinSubject
             .eraseToAnyPublisher()
         
         let depositMax = depositMaxSubject
             .eraseToAnyPublisher()
         
+        let monthlyRentMin = monthlyRentMinSubject
+            .eraseToAnyPublisher()
+        
+        let monthlyRentMax = monthlyRentMaxSubject
+            .eraseToAnyPublisher()
+        
         return Output(
             depositMinText: depositMin,
             depositMaxText: depositMax,
             depositMinRange: depositMin,
-            depositMaxRange: depositMax
+            depositMaxRange: depositMax,
+            monthlyRentMinText: monthlyRentMin,
+            monthlyRentMaxText: monthlyRentMax,
+            monthlyRentMinRange: monthlyRentMin,
+            monthlyRentMaxRange: monthlyRentMax
         )
     }
 }
