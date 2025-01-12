@@ -70,7 +70,9 @@ final class MapViewController: BaseViewController {
         rootView.filteringButton
             .tapPublisher
             .sink {
-                let mapFilterViewController = MapFilterViewController()
+                let mapFilterViewController = MapFilterViewController(
+                    viewModel: MapFilterViewModel()
+                )
                 self.navigationController?.pushViewController(mapFilterViewController, animated: true)
             }
             .store(in: cancelBag)
