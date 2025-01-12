@@ -9,11 +9,14 @@ import Foundation
 import Combine
 
 final class MapFilterViewModel {
+    private let depositMaxValue: Int = 500
+    private let monthlyRentMaxValue: Int = 150
+    
     private let depositMinSubject = CurrentValueSubject<Int, Never>(0)
     private let depositMaxSubject = CurrentValueSubject<Int, Never>(500)
     
     private let monthlyRentMinSubject = CurrentValueSubject<Int, Never>(0)
-    private let monthlyRentMaxSubject = CurrentValueSubject<Int, Never>(500)
+    private let monthlyRentMaxSubject = CurrentValueSubject<Int, Never>(150)
 }
 
 extension MapFilterViewModel: ViewModelType {
@@ -62,6 +65,7 @@ extension MapFilterViewModel: ViewModelType {
             .store(in: cancelBag)
         
         input.depositMaxText
+            .map { $0 > self.depositMaxValue ? self.depositMaxValue : $0 }
             .sink { [weak self] in
                 guard let self = self else { return }
                 self.depositMaxSubject.send($0)
@@ -90,6 +94,7 @@ extension MapFilterViewModel: ViewModelType {
             .store(in: cancelBag)
         
         input.monthlyRentMaxText
+            .map { $0 > self.monthlyRentMaxValue ? self.monthlyRentMaxValue : $0 }
             .sink { [weak self] in
                 guard let self = self else { return }
                 self.monthlyRentMaxSubject.send($0)
