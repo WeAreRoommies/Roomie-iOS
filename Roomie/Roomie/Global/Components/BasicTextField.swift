@@ -7,6 +7,13 @@
 
 import UIKit
 
+/// primaryPurpler 테두리의 textField 컴포넌트입니다.
+///
+/// 초기화시 placeholder값을 설정할 수 있습니다.
+/// 입력상태시 테두리 색상이 변경됩니다.
+/// - Parameters:
+///     - placeHoder: placeHolder를 나타내는 문자열입니다.
+
 final class BasicTextField: UITextField {
     
     // MARK: - Property
