@@ -24,7 +24,6 @@ final class CustomButton: UIButton {
     
     static let defaultHeight: CGFloat = Screen.height(58)
     
-    // TODO: isEnabled를 Combine을 사용이 가능한지 고민
     override var isEnabled: Bool {
         didSet {
             updateButtonColor()
