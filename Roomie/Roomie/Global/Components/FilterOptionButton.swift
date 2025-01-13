@@ -73,7 +73,7 @@ final class FilterOptionButton: UIView {
         }
         
         titleLabel.do {
-            $0.font = .pretendard(.body1)
+            $0.setText(style: .body1, color: .grayscale11)
         }
     }
     
