@@ -62,6 +62,8 @@ final class MapViewController: BaseViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
+    // MARK: - Functions
+    
     override func setupDelegate() {
         rootView.mapView.touchDelegate = self
     }
@@ -70,7 +72,9 @@ final class MapViewController: BaseViewController {
         rootView.filteringButton
             .tapPublisher
             .sink {
-                let mapFilterViewController = MapFilterViewController()
+                let mapFilterViewController = MapFilterViewController(
+                    viewModel: MapFilterViewModel()
+                )
                 self.navigationController?.pushViewController(mapFilterViewController, animated: true)
             }
             .store(in: cancelBag)
@@ -83,8 +87,6 @@ final class MapViewController: BaseViewController {
             .store(in: cancelBag)
     }
 }
-
-// MARK: - Functions
 
 private extension MapViewController {
     func bindViewModel() {
