@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import Combine
+
+import CombineCocoa
 
 /// primaryPurple 색상의 버튼 컴포넌트입니다.
 ///
@@ -21,11 +24,14 @@ final class CustomButton: UIButton {
     
     static let defaultHeight: CGFloat = Screen.height(58)
     
+    // TODO: isEnabled를 Combine을 사용이 가능한지 고민
     override var isEnabled: Bool {
         didSet {
             updateButtonColor()
         }
     }
+    
+    private let cancelBag = CancelBag()
     
     // MARK: - Initializer
     
@@ -33,18 +39,21 @@ final class CustomButton: UIButton {
         super.init(frame: .zero)
         
         setButton(with: title, isEnabled: isEnabled)
+        setButtonColor()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         setButton()
+        setButtonColor()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
         setButton()
+        setButtonColor()
     }
 }
 
@@ -55,30 +64,31 @@ private extension CustomButton {
         setTitle(title, style: .title2, color: .grayscale1)
         self.isEnabled = isEnabled
         layer.cornerRadius = 8
+    }
+    
+    func setButtonColor() {
+        controlEventPublisher(for: .touchDown)
+            .map { UIColor.primaryLight1 }
+            .sink { [weak self] buttonColor in
+                self?.backgroundColor = buttonColor
+            }
+            .store(in: cancelBag)
         
-        addTarget(
-            self,
-            action: #selector(buttonPressed),
-            for: .touchDown
+        Publishers.MergeMany(
+            controlEventPublisher(for: .touchUpInside),
+            controlEventPublisher(for: .touchUpOutside),
+            controlEventPublisher(for: .touchCancel)
         )
-        addTarget(
-            self,
-            action: #selector(buttonReleased),
-            for: [.touchUpInside,.touchUpOutside,.touchCancel]
-        )
+        .map {
+            self.isEnabled ? UIColor.primaryPurple : UIColor.grayscale6
+        }
+        .sink { buttonColor in
+            self.backgroundColor = buttonColor
+        }
+        .store(in: cancelBag)
     }
     
     func updateButtonColor() {
         backgroundColor = isEnabled ? .primaryPurple : .grayscale6
-    }
-    
-    @objc
-    func buttonPressed() {
-        backgroundColor = .primaryLight1
-    }
-    
-    @objc
-    func buttonReleased() {
-        updateButtonColor()
     }
 }
