@@ -6,6 +6,11 @@
 //
 
 import UIKit
+import Combine
+
+import CombineCocoa
+import SnapKit
+import Then
 
 /// primaryPurpler 테두리의 textField 컴포넌트입니다.
 ///
@@ -21,12 +26,15 @@ final class BasicTextField: UITextField {
     static let defaultWidth: CGFloat = Screen.width(335)
     static let defaultHeight: CGFloat = Screen.height(54)
     
+    private let cancelBag = CancelBag()
+    
     // MARK: - Initializer
     
     init(placeHolder: String) {
         super.init(frame: .zero)
         
         setTextField(placeHolder: placeHolder)
+        setTextFieldBorder()
     }
     
     override init(frame: CGRect) {
@@ -55,29 +63,21 @@ private extension BasicTextField {
         addPadding(left: 16, right: 16)
         setLayer(borderWidth: 1, borderColor: .grayscale5, cornerRadius: 8)
         setAutoType()
+        
         tintColor = .primaryPurple
-        
-        addTarget(
-            self,
-            action: #selector(textFieldDidBeginEditing),
-            for: .editingDidBegin
+    }
+    
+    func setTextFieldBorder() {
+        let textFieldEvent = Publishers.MergeMany(
+            controlEventPublisher(for: .editingDidBegin).map { UIColor.primaryPurple.cgColor },
+            controlEventPublisher(for: .editingDidEnd).map { UIColor.grayscale5.cgColor },
+            controlEventPublisher(for: .editingDidEndOnExit).map { UIColor.grayscale5.cgColor }
         )
         
-        addTarget(
-            self,
-            action: #selector(textFieldDidEndEditing),
-            for: .editingDidEnd
-        )
+        textFieldEvent
+            .sink { borderColor in
+                self.layer.borderColor = borderColor
+            }
+            .store(in: cancelBag)
     }
-    
-    @objc
-    func textFieldDidBeginEditing() {
-        layer.borderColor = UIColor.primaryPurple.cgColor
-    }
-    
-    @objc
-    func textFieldDidEndEditing() {
-        layer.borderColor = UIColor.grayscale5.cgColor
-    }
-    
 }
