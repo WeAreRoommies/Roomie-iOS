@@ -1,5 +1,5 @@
 //
-//  BasicTextField.swift
+//  TourTextField.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/12/25.
@@ -19,7 +19,7 @@ import Then
 /// - Parameters:
 ///     - placeHoder: placeHolder를 나타내는 문자열입니다.
 
-final class BasicTextField: UITextField {
+final class TourTextField: UITextField {
     
     // MARK: - Property
     
@@ -52,7 +52,7 @@ final class BasicTextField: UITextField {
 
 // MARK: - Function
 
-private extension BasicTextField {
+private extension TourTextField {
     func setTextField(placeHolder: String = "placeHolder") {
         setText(
             placeholder: placeHolder,

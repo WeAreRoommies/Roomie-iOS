@@ -1,5 +1,5 @@
 //
-//  CustomButton.swift
+//  RoomieButton.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/11/25.
@@ -18,7 +18,7 @@ import CombineCocoa
 /// - Parameters:
 ///     - title: 버튼 제목을 나타내는 문자열입니다.
 ///     - isEnabled: 버튼 활성화 여부입니다. 디폴트값은 true입니다.
-final class CustomButton: UIButton {
+final class RoomieButton: UIButton {
     
     // MARK: - Property
     
@@ -58,7 +58,7 @@ final class CustomButton: UIButton {
 
 // MARK: - Function
 
-private extension CustomButton {
+private extension RoomieButton {
     func setButton(with title: String = " ", isEnabled: Bool = true) {
         setTitle(title, style: .title2, color: .grayscale1)
         self.isEnabled = isEnabled
