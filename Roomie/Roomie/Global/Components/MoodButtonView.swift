@@ -12,7 +12,7 @@ import CombineCocoa
 import Then
 import SnapKit
 
-final class MoodView: UIView {
+final class MoodButtonView: UIView {
     
     // MARK: - Property
     
@@ -68,10 +68,12 @@ final class MoodView: UIView {
     // MARK: - UISetting
 
     private func setStyle() {
-        self.backgroundColor = .primaryLight5
-        self.layer.borderColor = UIColor.primaryLight2.cgColor
-        self.layer.borderWidth = 1
-        self.layer.cornerRadius = 8
+        self.do {
+            $0.backgroundColor = .primaryLight5
+            $0.layer.borderColor = UIColor.primaryLight2.cgColor
+            $0.layer.borderWidth = 1
+            $0.layer.cornerRadius = 8
+        }
         
         moodTypeLabel.do {
             $0.setText(style: .body2, color: .primaryPurple)
@@ -105,7 +107,8 @@ final class MoodView: UIView {
     
     private func setLayout() {
         moodTypeLabel.snp.makeConstraints{
-            $0.top.leading.equalToSuperview().inset(12)
+            $0.top.equalToSuperview().inset(12)
+            $0.leading.equalToSuperview().inset(12)
         }
         
         nextImageView.snp.makeConstraints{

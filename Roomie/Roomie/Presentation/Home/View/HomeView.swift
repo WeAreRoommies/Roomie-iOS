@@ -13,7 +13,7 @@ final class HomeView: BaseView {
 
     // MARK: - UIComponents
     
-    let scrollView = UIScrollView()
+    private let scrollView = UIScrollView()
     
     private let contentView = UIView()
     
@@ -22,14 +22,14 @@ final class HomeView: BaseView {
     private let subGreetingLabel = UILabel()
     private let roomieImageView = UIImageView()
     
-    private let updateButton = UpdateView()
+    private let updateButton = UpdateButtonView()
     
     private let moodView = UIView()
     private let moodLabel = UILabel()
     private let moodStackView = UIStackView()
-    private let calmCardView = MoodView(.calm, image: .icnDelete20)
-    private let livelyCardView = MoodView(.lively, image: .icnDelete20)
-    private let neatCardView = MoodView(.neat, image: .icnDelete20)
+    private let calmCardView = MoodButtonView(.calm, image: .icnDelete20)
+    private let livelyCardView = MoodButtonView(.lively, image: .icnDelete20)
+    private let neatCardView = MoodButtonView(.neat, image: .icnDelete20)
     
     private let recentlyLabel = UILabel()
 
@@ -107,6 +107,7 @@ final class HomeView: BaseView {
             $0.width.equalToSuperview()
             $0.height.greaterThanOrEqualToSuperview().priority(.high)
         }
+        
         nameLabel.snp.makeConstraints{
             $0.top.equalToSuperview().inset(31)
             $0.leading.equalToSuperview().inset(20)
@@ -125,7 +126,7 @@ final class HomeView: BaseView {
         roomieImageView.snp.makeConstraints{
             $0.top.equalToSuperview().inset(31)
             $0.trailing.equalToSuperview().inset(20)
-            $0.width.height.equalTo(20)
+            $0.size.equalTo(CGSize(width: 20, height: 20))
         }
         
         updateButton.snp.makeConstraints{
@@ -147,25 +148,21 @@ final class HomeView: BaseView {
         
         moodStackView.snp.makeConstraints{
             $0.top.equalTo(moodLabel.snp.bottom).offset(16)
-            $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(20)
         }
         
         calmCardView.snp.makeConstraints{
             $0.top.equalToSuperview()
-            $0.width.equalTo(106)
             $0.height.equalTo(200)
         }
         
         livelyCardView.snp.makeConstraints{
             $0.top.equalToSuperview()
-            $0.width.equalTo(106)
             $0.height.equalTo(200)
         }
         
         neatCardView.snp.makeConstraints{
             $0.top.equalToSuperview()
-            $0.width.equalTo(106)
             $0.height.equalTo(200)
         }
         

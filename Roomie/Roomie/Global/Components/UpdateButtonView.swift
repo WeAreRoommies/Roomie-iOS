@@ -4,6 +4,7 @@
 //
 //  Created by MaengKim on 1/14/25.
 //
+
 import UIKit
 import Combine
 
@@ -11,14 +12,13 @@ import CombineCocoa
 import Then
 import SnapKit
 
-final class UpdateView: UIView {
+final class UpdateButtonView: UIView {
     
     // MARK: - Property
     
     private var cancelBag = CancelBag()
     
-    var isSelected: Bool
-    
+    var isSelected: Bool = false
     
     // MARK: - UIComponents
     
@@ -29,7 +29,6 @@ final class UpdateView: UIView {
     // MARK: - Initializer
 
     override init(frame: CGRect) {
-        self.isSelected = false
         super.init(frame: frame)
         
         setStyle()
@@ -39,7 +38,6 @@ final class UpdateView: UIView {
     }
     
     required init?(coder: NSCoder) {
-        self.isSelected = false
         super.init(coder: coder)
         
         setStyle()
@@ -73,14 +71,14 @@ final class UpdateView: UIView {
     
     private func setLayout() {
         titleLabel.snp.makeConstraints{
-            $0.top.bottom.equalToSuperview().inset(12)
+            $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(24)
         }
         
         nextImageView.snp.makeConstraints{
-            $0.top.bottom.equalToSuperview().inset(12)
+            $0.size.equalTo(CGSize(width: 20, height: 20))
+            $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(24)
-            $0.width.height.equalTo(20)
         }
         
         updateButton.snp.makeConstraints{
