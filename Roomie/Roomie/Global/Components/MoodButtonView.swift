@@ -140,7 +140,6 @@ final class MoodButtonView: UIView {
         pressedEvent
             .map { UIColor.primaryLight5 }
             .sink { [weak self] backgroundColor in
-                print(backgroundColor)
                 self?.backgroundColor = backgroundColor
             }
             .store(in: cancelBag)
@@ -149,7 +148,6 @@ final class MoodButtonView: UIView {
             .controlEventPublisher(for: .touchDown)
             .map { UIColor.grayscale4 }
             .sink { [weak self] backgroundColor in
-                print(backgroundColor)
                 self?.backgroundColor = backgroundColor
             }
             .store(in: cancelBag)

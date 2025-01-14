@@ -78,7 +78,7 @@ final class UpdateButtonView: UIView {
         nextImageView.snp.makeConstraints{
             $0.size.equalTo(CGSize(width: 20, height: 20))
             $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().inset(24)
+            $0.trailing.equalToSuperview().inset(16)
         }
         
         updateButton.snp.makeConstraints{
