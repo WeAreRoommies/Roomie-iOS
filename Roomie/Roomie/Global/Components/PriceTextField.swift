@@ -27,7 +27,7 @@ final class PriceTextField: UITextField {
         setUI()
         setLayout()
         
-        setupTextField(placeHolder: placeHolder)
+        setTextField(placeHolder: placeHolder)
         setupTextFieldBorder()
     }
     
@@ -38,7 +38,7 @@ final class PriceTextField: UITextField {
         setUI()
         setLayout()
         
-        setupTextField()
+        setTextField()
         setupTextFieldBorder()
     }
     
@@ -49,7 +49,7 @@ final class PriceTextField: UITextField {
         setUI()
         setLayout()
         
-        setupTextField()
+        setTextField()
         setupTextFieldBorder()
     }
     
@@ -72,7 +72,7 @@ final class PriceTextField: UITextField {
 }
 
 private extension PriceTextField {
-    func setupTextField(placeHolder: String = "text") {
+    func setTextField(placeHolder: String = "text") {
         setText(
             placeholder: placeHolder,
             placeholderColor: .grayscale6,

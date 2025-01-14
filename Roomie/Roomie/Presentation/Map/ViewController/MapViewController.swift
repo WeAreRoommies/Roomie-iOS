@@ -64,11 +64,11 @@ final class MapViewController: BaseViewController {
     
     // MARK: - Functions
     
-    override func setupDelegate() {
+    override func setDelegate() {
         rootView.mapView.touchDelegate = self
     }
     
-    override func setupAction() {
+    override func setAction() {
         rootView.filteringButton
             .tapPublisher
             .sink {
