@@ -12,10 +12,6 @@ import CombineCocoa
 import SnapKit
 import Then
 
-protocol DatePickerViewDelegate: AnyObject {
-    func pickerViewPopUp()
-}
-
 final class DatePickerView: UIView {
     
     // MARK: - Property
@@ -23,21 +19,19 @@ final class DatePickerView: UIView {
     static let defaultHeight: CGFloat = Screen.height(54)
     
     private let cancelBag = CancelBag()
-
-    weak var delegate: DatePickerViewDelegate?
     
     // MARK: - UIComponent
     
     private let dateLabel = UILabel()
     private let calendarIcon = UIImageView()
-    let pickerButton = UIButton()
+    private let pickerButton = UIButton()
     
-    private let datePicker = UIPickerView()
-    private let birthAlert = UIAlertController(
-        title: "title test",
-        message: "message test",
-        preferredStyle: .alert
+    private let alertController = UIAlertController(
+        title: nil,
+        message: nil,
+        preferredStyle: .actionSheet
     )
+    private let datePicker = UIDatePicker()
     
     // MARK: - Initializer
     
@@ -49,6 +43,7 @@ final class DatePickerView: UIView {
         setLayout()
         
         setPickerView()
+        setAction()
     }
     
     required init?(coder: NSCoder) {
@@ -59,11 +54,20 @@ final class DatePickerView: UIView {
         setLayout()
         
         setPickerView()
+        setAction()
     }
     
     // MARK: - UISetting
     
     private func setStyle() {
+        self.do {
+            $0.backgroundColor = .grayscale2
+            $0.layer.borderColor = UIColor.grayscale5.cgColor
+            $0.layer.borderWidth = 1
+            $0.layer.cornerRadius = 8
+            $0.clipsToBounds = true
+        }
+        
         dateLabel.do {
             $0.setText(dateFormat(date: Date()), style: .body1, color: .grayscale6)
         }
@@ -73,71 +77,79 @@ final class DatePickerView: UIView {
             $0.tintColor = .grayscale6
         }
         
-//        datePicker.do {
-//            $0.datePickerMode = .date
-//            $0.preferredDatePickerStyle = .wheels
-//            $0.locale = Locale(identifier: "ko_KR")
-//        }
-
+        datePicker.do {
+            $0.datePickerMode = .date
+            $0.preferredDatePickerStyle = .inline
+            $0.locale = Locale(identifier: "ko_KR")
+            $0.minimumDate = Date()
+        }
     }
     
     private func setUI() {
-        backgroundColor = .grayscale2
-        layer.borderColor = UIColor.grayscale5.cgColor
-        layer.borderWidth = 1
-        layer.cornerRadius = 8
-        clipsToBounds = true
-        
-        addSubviews(
-            dateLabel,
-            calendarIcon,
-            pickerButton
-        )
+        addSubviews(dateLabel, calendarIcon, pickerButton)
+        alertController.view.addSubview(datePicker)
     }
     
     private func setLayout() {
         dateLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(16)
-            $0.trailing.equalTo(calendarIcon.snp.leading).offset(-5)
         }
         
         calendarIcon.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(16)
-            $0.height.equalTo(Screen.height(26))
-            $0.width.equalTo(Screen.width(26))
+            $0.size.equalTo(Screen.height(26))
         }
         
         pickerButton.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        
+        datePicker.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(40)
+        }
     }
-}
-
-// MARK: - Function
-
-private extension DatePickerView {
-    func setPickerView() {
+    
+    private func setAction() {
         pickerButton.tapPublisher
-            .sink {
-                // TODO: DatePickerView popup
-                print("눌렸습니다.")
-                self.delegate?.pickerViewPopUp()
+            .sink { [weak self] in
+                guard let alertController = self?.alertController else { return }
+                if let parentViewController = self?.findViewController() {
+                    parentViewController.present(alertController, animated: true)
+                }
             }
             .store(in: cancelBag)
     }
+}
+
+// MARK: - Functions
+
+private extension DatePickerView {
+    func setPickerView() {
+        let confirmAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            dateLabel.setText(dateFormat(date: datePicker.date), style: .body1, color: .grayscale11)
+        }
+        alertController.addAction(confirmAction)
+    }
     
-    /// Date를 yyyy/MM/dd 형식의 문자열로 반환합니다.
+    func findViewController() -> UIViewController? {
+        var nextResponder: UIResponder? = self
+        while let responder = nextResponder {
+            if let viewController = responder as? UIViewController {
+                return viewController
+            }
+            nextResponder = responder.next
+        }
+        return nil
+    }
+    
     func dateFormat(date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd"
         
         return formatter.string(from: date)
-    }
-    
-    @objc
-    func dateChange(_ sender: UIDatePicker) {
-        dateLabel.updateText(dateFormat(date: sender.date))
     }
 }
