@@ -18,8 +18,6 @@ final class MoodButtonView: UIView {
     
     private var cancelBag = CancelBag()
     
-    var isSelected: Bool
-    
     
     // MARK: - UIComponents
     
@@ -31,14 +29,13 @@ final class MoodButtonView: UIView {
     
     // MARK: - Initializer
     
-    init(_ type: MoodType, image: UIImage, isSelected: Bool = false) {
-        self.isSelected = isSelected
+    init(_ type: MoodType, image: UIImage) {
         super.init(frame: .zero)
         
         setStyle()
         setUI()
         setLayout()
-        setAction()
+        setMoodButtonView()
         
         moodTypeLabel.text = type.title
         moodSubLabel.text = type.subTitle
@@ -46,23 +43,21 @@ final class MoodButtonView: UIView {
     }
     
     override init(frame: CGRect) {
-        self.isSelected = false
         super.init(frame: frame)
         
         setStyle()
         setUI()
         setLayout()
-        setAction()
+        setMoodButtonView()
     }
     
     required init?(coder: NSCoder) {
-        self.isSelected = false
         super.init(coder: coder)
         
         setStyle()
         setUI()
         setLayout()
-        setAction()
+        setMoodButtonView()
     }
     
     // MARK: - UISetting
@@ -135,11 +130,27 @@ final class MoodButtonView: UIView {
     
     // MARK: - Functions
     
-    private func setAction() {
+    private func setMoodButtonView() {
+        let pressedEvent = Publishers.MergeMany(
+            moodButton.controlEventPublisher(for: .touchCancel),
+            moodButton.controlEventPublisher(for: .touchUpInside),
+            moodButton.controlEventPublisher(for: .touchUpOutside)
+        )
+        
+        pressedEvent
+            .map { UIColor.primaryLight5 }
+            .sink { [weak self] backgroundColor in
+                print(backgroundColor)
+                self?.backgroundColor = backgroundColor
+            }
+            .store(in: cancelBag)
+        
         moodButton
-            .tapPublisher
-            .sink { [weak self] in
-                self?.isSelected.toggle()
+            .controlEventPublisher(for: .touchDown)
+            .map { UIColor.grayscale4 }
+            .sink { [weak self] backgroundColor in
+                print(backgroundColor)
+                self?.backgroundColor = backgroundColor
             }
             .store(in: cancelBag)
     }

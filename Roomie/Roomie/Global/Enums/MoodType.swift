@@ -4,6 +4,7 @@
 //
 //  Created by MaengKim on 1/14/25.
 //
+
 enum MoodType {
     case calm
     case lively

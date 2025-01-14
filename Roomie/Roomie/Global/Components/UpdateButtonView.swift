@@ -18,13 +18,11 @@ final class UpdateButtonView: UIView {
     
     private var cancelBag = CancelBag()
     
-    var isSelected: Bool = false
-    
     // MARK: - UIComponents
     
     let titleLabel = UILabel()
     private let nextImageView = UIImageView()
-    private let updateButton = UIButton()
+    let updateButton = UIButton()
     
     // MARK: - Initializer
 
@@ -34,7 +32,7 @@ final class UpdateButtonView: UIView {
         setStyle()
         setUI()
         setLayout()
-        setAction()
+        setUpdateButtonView()
     }
     
     required init?(coder: NSCoder) {
@@ -43,14 +41,16 @@ final class UpdateButtonView: UIView {
         setStyle()
         setUI()
         setLayout()
-        setAction()
+        setUpdateButtonView()
     }
     
     // MARK: - UISetting
 
     private func setStyle() {
-        self.backgroundColor = .grayscale1
-        self.layer.cornerRadius = 8
+        self.do {
+            $0.backgroundColor = .grayscale1
+            $0.layer.cornerRadius = 8
+        }
         
         titleLabel.do {
             $0.setText("1월 1일 루미 업데이트 알아보기" ,style: .body2, color: .grayscale10)
@@ -86,13 +86,27 @@ final class UpdateButtonView: UIView {
         }
     }
     
-    // MARK: - Functions
-    
-    private func setAction() {
+    private func setUpdateButtonView() {
+        let pressedEvent = Publishers.MergeMany(
+            updateButton.controlEventPublisher(for: .touchCancel),
+            updateButton.controlEventPublisher(for: .touchUpInside),
+            updateButton.controlEventPublisher(for: .touchUpOutside)
+        )
+        
+        pressedEvent
+            .map { UIColor.grayscale1 }
+            .sink { [weak self] backgroundColor in
+                print(backgroundColor)
+                self?.backgroundColor = backgroundColor
+            }
+            .store(in: cancelBag)
+        
         updateButton
-            .tapPublisher
-            .sink { [weak self] in
-                self?.isSelected.toggle()
+            .controlEventPublisher(for: .touchDown)
+            .map { UIColor.grayscale4 }
+            .sink { [weak self] backgroundColor in
+                print(backgroundColor)
+                self?.backgroundColor = backgroundColor
             }
             .store(in: cancelBag)
     }

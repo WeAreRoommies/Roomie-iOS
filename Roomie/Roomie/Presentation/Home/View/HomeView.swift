@@ -22,14 +22,14 @@ final class HomeView: BaseView {
     private let subGreetingLabel = UILabel()
     private let roomieImageView = UIImageView()
     
-    private let updateButton = UpdateButtonView()
+    let updateButton = UpdateButtonView()
     
     private let moodView = UIView()
     private let moodLabel = UILabel()
     private let moodStackView = UIStackView()
-    private let calmCardView = MoodButtonView(.calm, image: .icnDelete20)
-    private let livelyCardView = MoodButtonView(.lively, image: .icnDelete20)
-    private let neatCardView = MoodButtonView(.neat, image: .icnDelete20)
+    let calmCardView = MoodButtonView(.calm, image: .icnDelete20)
+    let livelyCardView = MoodButtonView(.lively, image: .icnDelete20)
+    let neatCardView = MoodButtonView(.neat, image: .icnDelete20)
     
     private let recentlyLabel = UILabel()
 
