@@ -22,7 +22,7 @@ final class TourCheckView: BaseView {
     private let roomTitleLabel = UILabel()
     let roomNameLabel = UILabel()
     
-    let nextButton = CustomButton(title: "이 방이 맞아요")
+    let nextButton = RoomieButton(title: "이 방이 맞아요")
         
     // MARK: - UISetting
     
@@ -92,7 +92,7 @@ final class TourCheckView: BaseView {
         nextButton.snp.makeConstraints {
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.height.equalTo(CustomButton.defaultHeight)
+            $0.height.equalTo(RoomieButton.defaultHeight)
         }
     }
 }

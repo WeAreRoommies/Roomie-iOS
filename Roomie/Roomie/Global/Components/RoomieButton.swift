@@ -62,14 +62,14 @@ private extension RoomieButton {
     func setButton(with title: String = " ", isEnabled: Bool = true) {
         setTitle(title, style: .title2, color: .grayscale1)
         self.isEnabled = isEnabled
-        layer.cornerRadius = 8
+        setLayer(borderColor: .grayscale1, cornerRadius: 8)
     }
     
     func setButtonColor() {
         controlEventPublisher(for: .touchDown)
             .map { UIColor.primaryLight1 }
-            .sink { [weak self] buttonColor in
-                self?.backgroundColor = buttonColor
+            .sink { buttonColor in
+                self.backgroundColor = buttonColor
             }
             .store(in: cancelBag)
         
@@ -78,9 +78,7 @@ private extension RoomieButton {
             controlEventPublisher(for: .touchUpOutside),
             controlEventPublisher(for: .touchCancel)
         )
-        .map {
-            self.isEnabled ? UIColor.primaryPurple : UIColor.grayscale6
-        }
+        .map { self.isEnabled ? UIColor.primaryPurple : UIColor.grayscale6 }
         .sink { buttonColor in
             self.backgroundColor = buttonColor
         }
