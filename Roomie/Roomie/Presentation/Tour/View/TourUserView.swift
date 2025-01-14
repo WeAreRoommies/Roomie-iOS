@@ -18,10 +18,20 @@ final class TourUserView: BaseView {
     private let subTitleLabel = UILabel()
     
     private let nameLabel = UILabel()
-    let nameTextField = BasicTextField(placeHolder: "")
+    let nameTextField = TourTextField(placeHolder: "")
     
     private let birthLabel = UILabel()
-    let birthPickerTextField = PickerTextField()
+    let birthPickerView = DatePickerView()
+    
+    private let genderLabel = UILabel()
+    let maleButton = GenderButton(gender: .male)
+    let femaleButton = GenderButton(gender: .female)
+    private let genderButtonStackView = UIStackView()
+    
+    private let phoneNumberLabel = UILabel()
+    let phoneNumberTextField = TourTextField(placeHolder: "")
+    
+    let nextButton = RoomieButton(title: "다음으로", isEnabled: false)
     
     // MARK: - UISetting
     
@@ -41,6 +51,25 @@ final class TourUserView: BaseView {
         birthLabel.do {
             $0.setText("생년월일", style: .body2, color: .grayscale10)
         }
+        
+        genderLabel.do {
+            $0.setText("성별", style: .body2, color: .grayscale10)
+        }
+        
+        genderButtonStackView.do {
+            $0.axis = .horizontal
+            $0.spacing = 11
+            $0.alignment = .fill
+            $0.distribution = .fillEqually
+        }
+        
+        phoneNumberLabel.do {
+            $0.setText("연락처", style: .body2, color: .grayscale10)
+        }
+        
+        phoneNumberTextField.do {
+            $0.keyboardType = .phonePad
+        }
     }
     
     override func setUI() {
@@ -50,7 +79,17 @@ final class TourUserView: BaseView {
             nameLabel,
             nameTextField,
             birthLabel,
-            birthPickerTextField
+            birthPickerView,
+            genderLabel,
+            genderButtonStackView,
+            phoneNumberLabel,
+            phoneNumberTextField,
+            nextButton
+        )
+        
+        genderButtonStackView.addArrangedSubviews(
+            maleButton,
+            femaleButton
         )
     }
     
@@ -73,7 +112,7 @@ final class TourUserView: BaseView {
         nameTextField.snp.makeConstraints {
             $0.top.equalTo(nameLabel.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.height.equalTo(BasicTextField.defaultHeight)
+            $0.height.equalTo(TourTextField.defaultHeight)
         }
         
         birthLabel.snp.makeConstraints {
@@ -81,11 +120,40 @@ final class TourUserView: BaseView {
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
-        birthPickerTextField.snp.makeConstraints {
+        birthPickerView.snp.makeConstraints {
             $0.top.equalTo(birthLabel.snp.bottom).offset(12)
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(DatePickerView.defaultHeight)
         }
+        
+        genderLabel.snp.makeConstraints {
+            $0.top.equalTo(birthPickerView.snp.bottom).offset(32)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+        }
+
+        genderButtonStackView.snp.makeConstraints {
+            $0.top.equalTo(genderLabel.snp.bottom).offset(6)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.height.equalTo(GenderButton.defaultHeight)
+        }
+        
+        phoneNumberLabel.snp.makeConstraints {
+            $0.top.equalTo(genderButtonStackView.snp.bottom).offset(32)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+        }
+        
+        phoneNumberTextField.snp.makeConstraints {
+            $0.top.equalTo(phoneNumberLabel.snp.bottom).offset(8)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.height.equalTo(TourTextField.defaultHeight)
+        }
+        
+        nextButton.snp.makeConstraints {
+            $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.height.equalTo(RoomieButton.defaultHeight)
+        }
+        
     }
     
 }
