@@ -17,6 +17,9 @@ final class MapFilterViewModel {
     
     private let monthlyRentMinSubject = CurrentValueSubject<Int, Never>(0)
     private let monthlyRentMaxSubject = CurrentValueSubject<Int, Never>(150)
+    
+    private let genderSubject = CurrentValueSubject<[String], Never>([])
+    private let occupancyTypeSubject = CurrentValueSubject<[Int], Never>([])
 }
 
 extension MapFilterViewModel: ViewModelType {
@@ -36,6 +39,20 @@ extension MapFilterViewModel: ViewModelType {
         // 월세 슬라이더 값
         let monthlyRentMinRange: AnyPublisher<Int, Never>
         let monthlyRentMaxRange: AnyPublisher<Int, Never>
+        
+        /// 성별 옵션
+        let maleButtonDidTap: AnyPublisher<Void, Never>
+        let femaleButtonDidTap: AnyPublisher<Void, Never>
+        let genderDivisionButtonDidTap: AnyPublisher<Void, Never>
+        let genderFreeButtonDidTap: AnyPublisher<Void, Never>
+        
+        /// 방 형태 옵션
+        let singleButtonDidTap: AnyPublisher<Void, Never>
+        let doubleButtonDidTap: AnyPublisher<Void, Never>
+        let tripleButtonDidTap: AnyPublisher<Void, Never>
+        let quadButtonDidTap: AnyPublisher<Void, Never>
+        let quintButtonDidTap: AnyPublisher<Void, Never>
+        let sextButtonDidTap: AnyPublisher<Void, Never>
     }
     
     struct Output {
@@ -112,6 +129,136 @@ extension MapFilterViewModel: ViewModelType {
             .sink { [weak self] in
                 guard let self = self else { return }
                 self.monthlyRentMaxSubject.send($0)
+            }
+            .store(in: cancelBag)
+        
+        input.maleButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let gender = "남성전용"
+                
+                self.genderSubject.send(
+                    self.genderSubject.value.contains(gender)
+                    ? self.genderSubject.value.filter { $0 != gender }
+                    : self.genderSubject.value + [gender]
+                )
+            }
+            .store(in: cancelBag)
+        
+        input.femaleButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let gender = "여성전용"
+                
+                self.genderSubject.send(
+                    self.genderSubject.value.contains(gender)
+                    ? self.genderSubject.value.filter { $0 != gender }
+                    : self.genderSubject.value + [gender]
+                )
+            }
+            .store(in: cancelBag)
+        
+        input.genderDivisionButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let gender = "남녀분리"
+                
+                self.genderSubject.send(
+                    self.genderSubject.value.contains(gender)
+                    ? self.genderSubject.value.filter { $0 != gender }
+                    : self.genderSubject.value + [gender]
+                )
+            }
+            .store(in: cancelBag)
+        
+        input.genderFreeButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let gender = "성별무관"
+                
+                self.genderSubject.send(
+                    self.genderSubject.value.contains(gender)
+                    ? self.genderSubject.value.filter { $0 != gender }
+                    : self.genderSubject.value + [gender]
+                )
+            }
+            .store(in: cancelBag)
+        
+        input.singleButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let occupancyType = 1
+                
+                self.occupancyTypeSubject.send(
+                    self.occupancyTypeSubject.value.contains(occupancyType)
+                    ? self.occupancyTypeSubject.value.filter { $0 != occupancyType }
+                    : self.occupancyTypeSubject.value + [occupancyType]
+                )
+            }
+            .store(in: cancelBag)
+        
+        input.doubleButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let occupancyType = 2
+                
+                self.occupancyTypeSubject.send(
+                    self.occupancyTypeSubject.value.contains(occupancyType)
+                    ? self.occupancyTypeSubject.value.filter { $0 != occupancyType }
+                    : self.occupancyTypeSubject.value + [occupancyType]
+                )
+            }
+            .store(in: cancelBag)
+        
+        input.tripleButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let occupancyType = 3
+                
+                self.occupancyTypeSubject.send(
+                    self.occupancyTypeSubject.value.contains(occupancyType)
+                    ? self.occupancyTypeSubject.value.filter { $0 != occupancyType }
+                    : self.occupancyTypeSubject.value + [occupancyType]
+                )
+            }
+            .store(in: cancelBag)
+        
+        input.quadButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let occupancyType = 4
+                
+                self.occupancyTypeSubject.send(
+                    self.occupancyTypeSubject.value.contains(occupancyType)
+                    ? self.occupancyTypeSubject.value.filter { $0 != occupancyType }
+                    : self.occupancyTypeSubject.value + [occupancyType]
+                )
+            }
+            .store(in: cancelBag)
+        
+        input.quintButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let occupancyType = 5
+                
+                self.occupancyTypeSubject.send(
+                    self.occupancyTypeSubject.value.contains(occupancyType)
+                    ? self.occupancyTypeSubject.value.filter { $0 != occupancyType }
+                    : self.occupancyTypeSubject.value + [occupancyType]
+                )
+            }
+            .store(in: cancelBag)
+        
+        input.sextButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let occupancyType = 6
+                
+                self.occupancyTypeSubject.send(
+                    self.occupancyTypeSubject.value.contains(occupancyType)
+                    ? self.occupancyTypeSubject.value.filter { $0 != occupancyType }
+                    : self.occupancyTypeSubject.value + [occupancyType]
+                )
             }
             .store(in: cancelBag)
         
