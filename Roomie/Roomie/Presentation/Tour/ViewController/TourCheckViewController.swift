@@ -15,6 +15,8 @@ final class TourCheckViewController: BaseViewController {
     // MARK: - Property
     
     private let rootView = TourCheckView()
+    
+    private let cancelBag = CancelBag()
 
     // MARK: - LifeCycle
     
@@ -26,5 +28,15 @@ final class TourCheckViewController: BaseViewController {
         super.viewDidLoad()
 
         setupNavigationBar(with: "", isBorderHidden: true)
+    }
+    
+    override func setupAction() {
+        rootView.nextButton
+            .tapPublisher
+            .sink {
+                let tourUserViewController = TourUserViewController()
+                self.navigationController?.pushViewController(tourUserViewController, animated: true)
+            }
+            .store(in: cancelBag)
     }
 }

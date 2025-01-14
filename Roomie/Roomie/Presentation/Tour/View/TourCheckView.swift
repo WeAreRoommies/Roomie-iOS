@@ -14,7 +14,7 @@ final class TourCheckView: BaseView {
     
     // MARK: - UIComponent
     
-    let titleLabel = UILabel()
+    private let titleLabel = UILabel()
     
     private let houseTitleLabel = UILabel()
     let houseNameLabel = UILabel()
@@ -22,14 +22,13 @@ final class TourCheckView: BaseView {
     private let roomTitleLabel = UILabel()
     let roomNameLabel = UILabel()
     
-    let nextButton = CustomButton(title: "이 방이 맞아요")
+    let nextButton = RoomieButton(title: "이 방이 맞아요")
         
     // MARK: - UISetting
     
     override func setStyle() {
         titleLabel.do {
             $0.setText("선택하신 방이 맞는지\n확인해주세요", style: .heading2, color: .grayscale12)
-            $0.textAlignment = .left
         }
         
         houseTitleLabel.do {
@@ -50,7 +49,6 @@ final class TourCheckView: BaseView {
     }
     
     override func setUI() {
-        backgroundColor = .grayscale1 // TODO: 화면 연결 후 삭제
         addSubviews(
             titleLabel,
             houseTitleLabel,
@@ -94,7 +92,7 @@ final class TourCheckView: BaseView {
         nextButton.snp.makeConstraints {
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.height.equalTo(CustomButton.defaultHeight)
+            $0.height.equalTo(RoomieButton.defaultHeight)
         }
     }
 }

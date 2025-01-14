@@ -1,11 +1,14 @@
 //
-//  CustomButton.swift
+//  RoomieButton.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/11/25.
 //
 
 import UIKit
+import Combine
+
+import CombineCocoa
 
 /// primaryPurple 색상의 버튼 컴포넌트입니다.
 ///
@@ -15,7 +18,7 @@ import UIKit
 /// - Parameters:
 ///     - title: 버튼 제목을 나타내는 문자열입니다.
 ///     - isEnabled: 버튼 활성화 여부입니다. 디폴트값은 true입니다.
-final class CustomButton: UIButton {
+final class RoomieButton: UIButton {
     
     // MARK: - Property
     
@@ -27,58 +30,62 @@ final class CustomButton: UIButton {
         }
     }
     
+    private let cancelBag = CancelBag()
+    
     // MARK: - Initializer
     
     init(title: String, isEnabled: Bool = true) {
         super.init(frame: .zero)
         
         setButton(with: title, isEnabled: isEnabled)
+        setButtonColor()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         setButton()
+        setButtonColor()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
         setButton()
+        setButtonColor()
     }
 }
 
 // MARK: - Function
 
-private extension CustomButton {
+private extension RoomieButton {
     func setButton(with title: String = " ", isEnabled: Bool = true) {
         setTitle(title, style: .title2, color: .grayscale1)
         self.isEnabled = isEnabled
-        layer.cornerRadius = 8
+        setLayer(borderColor: .grayscale1, cornerRadius: 8)
+    }
+    
+    func setButtonColor() {
+        controlEventPublisher(for: .touchDown)
+            .map { UIColor.primaryLight1 }
+            .sink { buttonColor in
+                self.backgroundColor = buttonColor
+            }
+            .store(in: cancelBag)
         
-        addTarget(
-            self,
-            action: #selector(buttonPressed),
-            for: .touchDown
+        Publishers.MergeMany(
+            controlEventPublisher(for: .touchUpInside),
+            controlEventPublisher(for: .touchUpOutside),
+            controlEventPublisher(for: .touchCancel)
         )
-        addTarget(
-            self,
-            action: #selector(buttonReleased),
-            for: [.touchUpInside,.touchUpOutside,.touchCancel]
-        )
+        .map { self.isEnabled ? UIColor.primaryPurple : UIColor.grayscale6 }
+        .sink { buttonColor in
+            self.backgroundColor = buttonColor
+        }
+        .store(in: cancelBag)
     }
     
     func updateButtonColor() {
         backgroundColor = isEnabled ? .primaryPurple : .grayscale6
-    }
-    
-    @objc
-    func buttonPressed() {
-        backgroundColor = .primaryLight1
-    }
-    
-    @objc
-    func buttonReleased() {
-        updateButtonColor()
     }
 }
