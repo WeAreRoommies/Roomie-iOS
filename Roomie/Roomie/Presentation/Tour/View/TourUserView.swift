@@ -68,7 +68,7 @@ final class TourUserView: BaseView {
         }
         
         phoneNumberTextField.do {
-            $0.keyboardType = .phonePad
+            $0.keyboardType = .numberPad
         }
     }
     
@@ -153,7 +153,5 @@ final class TourUserView: BaseView {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(RoomieButton.defaultHeight)
         }
-        
     }
-    
 }

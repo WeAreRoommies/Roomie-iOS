@@ -6,9 +6,15 @@
 //
 
 import UIKit
+import Combine
 
+import CombineCocoa
 import SnapKit
 import Then
+
+protocol DatePickerViewDelegate: AnyObject {
+    func pickerViewPopUp()
+}
 
 final class DatePickerView: UIView {
     
@@ -16,11 +22,22 @@ final class DatePickerView: UIView {
     
     static let defaultHeight: CGFloat = Screen.height(54)
     
+    private let cancelBag = CancelBag()
+
+    weak var delegate: DatePickerViewDelegate?
+    
     // MARK: - UIComponent
     
     private let dateLabel = UILabel()
     private let calendarIcon = UIImageView()
     let pickerButton = UIButton()
+    
+    private let datePicker = UIPickerView()
+    private let birthAlert = UIAlertController(
+        title: "title test",
+        message: "message test",
+        preferredStyle: .alert
+    )
     
     // MARK: - Initializer
     
@@ -37,6 +54,10 @@ final class DatePickerView: UIView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
+        setStyle()
+        setUI()
+        setLayout()
+        
         setPickerView()
     }
     
@@ -46,13 +67,20 @@ final class DatePickerView: UIView {
         dateLabel.do {
             // TODO: 피커 날짜 현재 날짜로 하는지, 2025/01/01로 고정인지 질문
             $0.setText("2025/01/01", style: .body1, color: .grayscale6)
-            //            $0.setText(dateFormat(date: Date()), style: .body1, color: .grayscale6)
+            // $0.setText(dateFormat(date: Date()), style: .body1, color: .grayscale6)
         }
         
         calendarIcon.do {
             $0.image = .icnCalender24
             $0.tintColor = .grayscale6
         }
+        
+//        datePicker.do {
+//            $0.datePickerMode = .date
+//            $0.preferredDatePickerStyle = .wheels
+//            $0.locale = Locale(identifier: "ko_KR")
+//        }
+
     }
     
     private func setUI() {
@@ -93,25 +121,23 @@ final class DatePickerView: UIView {
 
 private extension DatePickerView {
     func setPickerView() {
-        pickerButton.addTarget(
-            self,
-            action: #selector(pickerDidTap),
-            for: .touchUpInside
-        )
+        
+        pickerButton.tapPublisher
+            .sink {
+                // TODO: DatePickerView popup
+                print("눌렸습니다.")
+                self.delegate?.pickerViewPopUp()
+            }
+            .store(in: cancelBag)
     }
     
+    /// Date를 yyyy/MM/dd 형식의 문자열로 반환합니다.
     func dateFormat(date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd"
         
         return formatter.string(from: date)
     }
-    
-    @objc
-    func pickerDidTap() {
-        print("눌림")
-    }
-    
     
     @objc
     func dateChange(_ sender: UIDatePicker) {
