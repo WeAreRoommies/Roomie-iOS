@@ -56,7 +56,7 @@ final class RoomieButton: UIButton {
     }
 }
 
-// MARK: - Function
+// MARK: - Functions
 
 private extension RoomieButton {
     func setButton(with title: String = " ", isEnabled: Bool = true) {

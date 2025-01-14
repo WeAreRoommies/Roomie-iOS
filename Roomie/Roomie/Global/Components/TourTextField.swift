@@ -52,7 +52,7 @@ final class TourTextField: UITextField {
     }
 }
 
-// MARK: - Function
+// MARK: - Functions
 
 private extension TourTextField {
     func setTextField(placeHolder: String = "") {
