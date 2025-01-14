@@ -29,7 +29,11 @@ final class TourUserView: BaseView {
     private let genderButtonStackView = UIStackView()
     
     private let phoneNumberLabel = UILabel()
-    let phoneNumberTextField = TourTextField()
+    let phoneNumberTextField = TourTextField(placeHolder: "", isErrorExist: true)
+    
+    private let inValidErrorIcon = UIImageView()
+    private let inValidErrorLabel = UILabel()
+    let inValidErrorStackView = UIStackView()
     
     let nextButton = RoomieButton(title: "다음으로", isEnabled: false)
     
@@ -70,6 +74,23 @@ final class TourUserView: BaseView {
         phoneNumberTextField.do {
             $0.keyboardType = .numberPad
         }
+        
+        inValidErrorIcon.do {
+            $0.image = .icnWarning14
+            $0.contentMode = .scaleAspectFit
+        }
+        
+        inValidErrorLabel.do {
+            $0.setText("휴대폰 번호 형식이 잘못되었어요", style: .body4, color: .actionError)
+        }
+        
+        inValidErrorStackView.do {
+            $0.axis = .horizontal
+            $0.spacing = 4
+            $0.alignment = .fill
+            $0.distribution = .fill
+            $0.isHidden = true
+        }
     }
     
     override func setUI() {
@@ -84,12 +105,18 @@ final class TourUserView: BaseView {
             genderButtonStackView,
             phoneNumberLabel,
             phoneNumberTextField,
-            nextButton
+            nextButton,
+            inValidErrorStackView
         )
         
         genderButtonStackView.addArrangedSubviews(
             maleButton,
             femaleButton
+        )
+        
+        inValidErrorStackView.addArrangedSubviews(
+            inValidErrorIcon,
+            inValidErrorLabel
         )
     }
     
@@ -146,6 +173,16 @@ final class TourUserView: BaseView {
             $0.top.equalTo(phoneNumberLabel.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(TourTextField.defaultHeight)
+        }
+        
+        inValidErrorIcon.snp.makeConstraints {
+            $0.width.equalTo(Screen.width(14))
+            $0.height.equalTo(Screen.height(14))
+        }
+        
+        inValidErrorStackView.snp.makeConstraints {
+            $0.top.equalTo(phoneNumberTextField.snp.bottom).offset(4)
+            $0.leading.equalToSuperview().inset(20)
         }
         
         nextButton.snp.makeConstraints {

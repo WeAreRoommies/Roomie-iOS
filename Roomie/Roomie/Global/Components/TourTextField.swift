@@ -25,12 +25,13 @@ final class TourTextField: UITextField {
     
     static let defaultWidth: CGFloat = Screen.width(335)
     static let defaultHeight: CGFloat = Screen.height(54)
+    var shouldShowActionColor: Bool = false
     
     private let cancelBag = CancelBag()
     
     // MARK: - Initializer
     
-    init(placeHolder: String) {
+    init(placeHolder: String, isErrorExist: Bool) {
         super.init(frame: .zero)
         
         setTextField(placeHolder: placeHolder)
@@ -55,7 +56,7 @@ final class TourTextField: UITextField {
 // MARK: - Functions
 
 private extension TourTextField {
-    func setTextField(placeHolder: String = "") {
+    func setTextField(placeHolder: String = "", isErrorExist: Bool = false) {
         setText(
             placeholder: placeHolder,
             textColor: .grayscale12,
@@ -71,7 +72,9 @@ private extension TourTextField {
     
     func setTextFieldBorder() {
         let textFieldEvent = Publishers.MergeMany(
-            controlEventPublisher(for: .editingDidBegin).map { UIColor.primaryPurple.cgColor },
+            controlEventPublisher(for: .editingDidBegin).map {
+                self.shouldShowActionColor ? UIColor.actionError.cgColor : UIColor.primaryPurple.cgColor
+            },
             controlEventPublisher(for: .editingDidEnd).map { UIColor.grayscale5.cgColor },
             controlEventPublisher(for: .editingDidEndOnExit).map { UIColor.grayscale5.cgColor }
         )
