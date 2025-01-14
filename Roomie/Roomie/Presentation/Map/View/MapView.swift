@@ -75,7 +75,13 @@ final class MapView: BaseView {
     }
     
     override func setUI() {
-        addSubviews(mapView, mapDetailCardView, searchTextField, filteringButton, searchImageView)
+        addSubviews(
+            mapView,
+            mapDetailCardView,
+            searchTextField,
+            filteringButton,
+            searchImageView
+        )
     }
     
     override func setLayout() {
