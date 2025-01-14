@@ -30,7 +30,7 @@ extension MapFilterViewModel: ViewModelType {
         let depositMinText: AnyPublisher<Int, Never>
         let depositMaxText: AnyPublisher<Int, Never>
         
-        // 보증금 슬라이더 값
+        /// 보증금 슬라이더 값
         let depositMinRange: AnyPublisher<Int, Never>
         let depositMaxRange: AnyPublisher<Int, Never>
         
@@ -38,7 +38,7 @@ extension MapFilterViewModel: ViewModelType {
         let monthlyRentMinText: AnyPublisher<Int, Never>
         let monthlyRentMaxText: AnyPublisher<Int, Never>
         
-        // 월세 슬라이더 값
+        /// 월세 슬라이더 값
         let monthlyRentMinRange: AnyPublisher<Int, Never>
         let monthlyRentMaxRange: AnyPublisher<Int, Never>
         
