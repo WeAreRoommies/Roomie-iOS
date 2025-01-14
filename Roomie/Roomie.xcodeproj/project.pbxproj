@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		064CC988CED48FA685DDF5D5 /* libPods-Roomie.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51DC1BD67525B1D092E2ECB1 /* libPods-Roomie.a */; };
 		A346BD422D2E23F0002BA445 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD412D2E23F0002BA445 /* SnapKit */; };
 		A346BD452D2E23FD002BA445 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD442D2E23FD002BA445 /* Then */; };
 		A346BD482D2E2449002BA445 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD472D2E2449002BA445 /* Moya */; };
@@ -16,6 +17,7 @@
 
 /* Begin PBXFileReference section */
 		0ABCF9387F76F9D8837E2F9E /* Pods-Roomie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roomie.debug.xcconfig"; path = "Target Support Files/Pods-Roomie/Pods-Roomie.debug.xcconfig"; sourceTree = "<group>"; };
+		51DC1BD67525B1D092E2ECB1 /* libPods-Roomie.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Roomie.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A346BA412D2CDF13002BA445 /* Roomie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Roomie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8959DCCF833BE3AC6F237CE /* Pods-Roomie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roomie.release.xcconfig"; path = "Target Support Files/Pods-Roomie/Pods-Roomie.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -51,12 +53,21 @@
 				A346BD452D2E23FD002BA445 /* Then in Frameworks */,
 				A346BD4E2D2E2489002BA445 /* CombineCocoa in Frameworks */,
 				A346BD482D2E2449002BA445 /* Moya in Frameworks */,
+				064CC988CED48FA685DDF5D5 /* libPods-Roomie.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8CC7319AD60EFF252AA6292B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				51DC1BD67525B1D092E2ECB1 /* libPods-Roomie.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		9058F962AE18635590BD14B9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -72,6 +83,7 @@
 				A346BA432D2CDF13002BA445 /* Roomie */,
 				A346BA422D2CDF13002BA445 /* Products */,
 				9058F962AE18635590BD14B9 /* Pods */,
+				8CC7319AD60EFF252AA6292B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
