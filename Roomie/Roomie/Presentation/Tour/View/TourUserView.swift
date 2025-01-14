@@ -29,7 +29,7 @@ final class TourUserView: BaseView {
     private let genderButtonStackView = UIStackView()
     
     private let phoneNumberLabel = UILabel()
-    let phoneNumberTextField = TourTextField(placeHolder: "", isErrorExist: true)
+    let phoneNumberTextField = TourTextField(isErrorExist: true)
     
     private let inValidErrorIcon = UIImageView()
     private let inValidErrorLabel = UILabel()

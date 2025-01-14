@@ -31,10 +31,10 @@ final class TourTextField: UITextField {
     
     // MARK: - Initializer
     
-    init(placeHolder: String, isErrorExist: Bool) {
+    init(_ placeHolder: String = "", isErrorExist: Bool = false) {
         super.init(frame: .zero)
         
-        setTextField(placeHolder: placeHolder)
+        setTextField(placeHolder: placeHolder, isErrorExist: isErrorExist)
         setTextFieldBorder()
     }
     
