@@ -22,6 +22,10 @@ final class HomeViewController: BaseViewController {
     
     private let rootView = HomeView()
     
+    final let cellWidth: CGFloat = 343
+    final let cellHeight: CGFloat = 112
+    final let contentInset = 4
+    
     // MARK: - Initializer
     
     init(viewModel: HomeViewModel) {
@@ -73,5 +77,17 @@ final class HomeViewController: BaseViewController {
                 // TODO: 화면 전환하기
             }
             .store(in: cancelBag)
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+
+extension HomeViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        return CGSize(width: , height: <#T##CGFloat#>)
     }
 }
