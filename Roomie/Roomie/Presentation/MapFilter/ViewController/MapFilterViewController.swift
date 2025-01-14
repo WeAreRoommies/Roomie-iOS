@@ -42,6 +42,10 @@ final class MapFilterViewController: BaseViewController {
     private let quintButtonDidTapSubject = PassthroughSubject<Void, Never>()
     private let sextButtonDidTapSubject = PassthroughSubject<Void, Never>()
     
+    private let threeMonthButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let sixMonthButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let oneYearButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    
     // MARK: - Initializer
 
     init(viewModel: MapFilterViewModel) {
@@ -219,6 +223,30 @@ final class MapFilterViewController: BaseViewController {
                 self.sextButtonDidTapSubject.send(())
             }
             .store(in: cancelBag)
+        
+        rootView.filterPeriodView.threeMonthButton.optionButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.threeMonthButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
+        
+        rootView.filterPeriodView.sixMonthButton.optionButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.sixMonthButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
+        
+        rootView.filterPeriodView.oneYearButton.optionButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.oneYearButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
     }
 }
 
@@ -242,7 +270,10 @@ private extension MapFilterViewController {
             tripleButtonDidTap: tripleButtonDidTapSubject.eraseToAnyPublisher(),
             quadButtonDidTap: quadButtonDidTapSubject.eraseToAnyPublisher(),
             quintButtonDidTap: quintButtonDidTapSubject.eraseToAnyPublisher(),
-            sextButtonDidTap: sextButtonDidTapSubject.eraseToAnyPublisher()
+            sextButtonDidTap: sextButtonDidTapSubject.eraseToAnyPublisher(),
+            threeMonthButtonDidTap: threeMonthButtonDidTapSubject.eraseToAnyPublisher(),
+            sixMonthButtonDidTap: sixMonthButtonDidTapSubject.eraseToAnyPublisher(),
+            oneYearButtonDidTap: oneYearButtonDidTapSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)

@@ -20,6 +20,8 @@ final class MapFilterViewModel {
     
     private let genderSubject = CurrentValueSubject<[String], Never>([])
     private let occupancyTypeSubject = CurrentValueSubject<[Int], Never>([])
+    
+    private let contractPeriodSubject = CurrentValueSubject<[Int], Never>([])
 }
 
 extension MapFilterViewModel: ViewModelType {
@@ -53,6 +55,11 @@ extension MapFilterViewModel: ViewModelType {
         let quadButtonDidTap: AnyPublisher<Void, Never>
         let quintButtonDidTap: AnyPublisher<Void, Never>
         let sextButtonDidTap: AnyPublisher<Void, Never>
+        
+        /// 계약기간 옵션
+        let threeMonthButtonDidTap: AnyPublisher<Void, Never>
+        let sixMonthButtonDidTap: AnyPublisher<Void, Never>
+        let oneYearButtonDidTap: AnyPublisher<Void, Never>
     }
     
     struct Output {
@@ -60,7 +67,7 @@ extension MapFilterViewModel: ViewModelType {
         let depositMinText: AnyPublisher<Int, Never>
         let depositMaxText: AnyPublisher<Int, Never>
         
-        // 보증금 슬라이더 값
+        /// 보증금 슬라이더 값
         let depositMinRange: AnyPublisher<Int, Never>
         let depositMaxRange: AnyPublisher<Int, Never>
         
@@ -68,7 +75,7 @@ extension MapFilterViewModel: ViewModelType {
         let monthlyRentMinText: AnyPublisher<Int, Never>
         let monthlyRentMaxText: AnyPublisher<Int, Never>
         
-        // 월세 슬라이더 값
+        /// 월세 슬라이더 값
         let monthlyRentMinRange: AnyPublisher<Int, Never>
         let monthlyRentMaxRange: AnyPublisher<Int, Never>
     }
@@ -259,6 +266,48 @@ extension MapFilterViewModel: ViewModelType {
                     ? self.occupancyTypeSubject.value.filter { $0 != occupancyType }
                     : self.occupancyTypeSubject.value + [occupancyType]
                 )
+            }
+            .store(in: cancelBag)
+        
+        input.threeMonthButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let contractPeroid = 3
+                
+                self.contractPeriodSubject.send(
+                    self.contractPeriodSubject.value.contains(contractPeroid)
+                    ? self.contractPeriodSubject.value.filter { $0 != contractPeroid }
+                    : self.contractPeriodSubject.value + [contractPeroid]
+                )
+                print(contractPeriodSubject.value)
+            }
+            .store(in: cancelBag)
+        
+        input.sixMonthButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let contractPeroid = 6
+                
+                self.contractPeriodSubject.send(
+                    self.contractPeriodSubject.value.contains(contractPeroid)
+                    ? self.contractPeriodSubject.value.filter { $0 != contractPeroid }
+                    : self.contractPeriodSubject.value + [contractPeroid]
+                )
+                print(contractPeriodSubject.value)
+            }
+            .store(in: cancelBag)
+        
+        input.oneYearButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let contractPeroid = 12
+                
+                self.contractPeriodSubject.send(
+                    self.contractPeriodSubject.value.contains(contractPeroid)
+                    ? self.contractPeriodSubject.value.filter { $0 != contractPeroid }
+                    : self.contractPeriodSubject.value + [contractPeroid]
+                )
+                print(contractPeriodSubject.value)
             }
             .store(in: cancelBag)
         
