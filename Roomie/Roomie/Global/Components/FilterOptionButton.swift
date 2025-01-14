@@ -27,7 +27,7 @@ final class FilterOptionButton: UIView {
     // MARK: - UIComponents
 
     private let titleLabel = UILabel()
-    private let optionButton = UIButton()
+    let optionButton = UIButton()
     
     // MARK: - Initializer
     

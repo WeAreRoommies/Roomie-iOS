@@ -30,6 +30,10 @@ final class MapFilterViewController: BaseViewController {
     private let monthlyRentMinRangeSubject = PassthroughSubject<Int, Never>()
     private let monthlyRentMaxRangeSubject = PassthroughSubject<Int, Never>()
     
+    private let maleButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let femaleButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let genderDivisionButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let genderFreeButtonDidTapSubject = PassthroughSubject<Void, Never>()
     
     // MARK: - Initializer
 
@@ -128,6 +132,38 @@ final class MapFilterViewController: BaseViewController {
                 self.monthlyRentMaxRangeSubject.send(Int(rootView.filterPriceView.monthlyRentSlider.max))
             }
             .store(in: cancelBag)
+        
+        rootView.filterRoomView.maleButton.optionButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.maleButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
+        
+        rootView.filterRoomView.femaleButton.optionButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.femaleButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
+        
+        rootView.filterRoomView.genderDivisionButton.optionButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.genderDivisionButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
+        
+        rootView.filterRoomView.genderFreeButton.optionButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.genderFreeButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
     }
 }
 
@@ -141,7 +177,11 @@ private extension MapFilterViewController {
             monthlyRentMinText: monthlyRentMinTextSubject.eraseToAnyPublisher(),
             monthlyRentMaxText: monthlyRentMaxTextSubject.eraseToAnyPublisher(),
             monthlyRentMinRange: monthlyRentMinRangeSubject.eraseToAnyPublisher(),
-            monthlyRentMaxRange: monthlyRentMaxRangeSubject.eraseToAnyPublisher()
+            monthlyRentMaxRange: monthlyRentMaxRangeSubject.eraseToAnyPublisher(),
+            maleButtonDidTap: maleButtonDidTapSubject.eraseToAnyPublisher(),
+            femaleButtonDidTap: femaleButtonDidTapSubject.eraseToAnyPublisher(),
+            genderDivisionButtonDidTap: genderDivisionButtonDidTapSubject.eraseToAnyPublisher(),
+            genderFreeButtonDidTap: genderFreeButtonDidTapSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)

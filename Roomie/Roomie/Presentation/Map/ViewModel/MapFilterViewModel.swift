@@ -17,6 +17,9 @@ final class MapFilterViewModel {
     
     private let monthlyRentMinSubject = CurrentValueSubject<Int, Never>(0)
     private let monthlyRentMaxSubject = CurrentValueSubject<Int, Never>(150)
+    
+    private let genderSubject = CurrentValueSubject<[String], Never>([])
+    private let occupancyTypeSubject = CurrentValueSubject<[Int], Never>([])
 }
 
 extension MapFilterViewModel: ViewModelType {
@@ -36,6 +39,11 @@ extension MapFilterViewModel: ViewModelType {
         // 월세 슬라이더 값
         let monthlyRentMinRange: AnyPublisher<Int, Never>
         let monthlyRentMaxRange: AnyPublisher<Int, Never>
+        
+        let maleButtonDidTap: AnyPublisher<Void, Never>
+        let femaleButtonDidTap: AnyPublisher<Void, Never>
+        let genderDivisionButtonDidTap: AnyPublisher<Void, Never>
+        let genderFreeButtonDidTap: AnyPublisher<Void, Never>
     }
     
     struct Output {
@@ -112,6 +120,66 @@ extension MapFilterViewModel: ViewModelType {
             .sink { [weak self] in
                 guard let self = self else { return }
                 self.monthlyRentMaxSubject.send($0)
+            }
+            .store(in: cancelBag)
+        
+        input.maleButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let gender = "남성전용"
+                var currentGenders = self.genderSubject.value
+                
+                self.genderSubject.send(
+                    self.genderSubject.value.contains(gender)
+                    ? self.genderSubject.value.filter { $0 != gender }
+                    : self.genderSubject.value + [gender]
+                )
+                print(genderSubject.value)
+            }
+            .store(in: cancelBag)
+        
+        input.femaleButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let gender = "여성전용"
+                var currentGenders = self.genderSubject.value
+                
+                self.genderSubject.send(
+                    self.genderSubject.value.contains(gender)
+                    ? self.genderSubject.value.filter { $0 != gender }
+                    : self.genderSubject.value + [gender]
+                )
+                print(genderSubject.value)
+            }
+            .store(in: cancelBag)
+        
+        input.genderDivisionButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let gender = "남녀분리"
+                var currentGenders = self.genderSubject.value
+                
+                self.genderSubject.send(
+                    self.genderSubject.value.contains(gender)
+                    ? self.genderSubject.value.filter { $0 != gender }
+                    : self.genderSubject.value + [gender]
+                )
+                print(genderSubject.value)
+            }
+            .store(in: cancelBag)
+        
+        input.genderFreeButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let gender = "성별무관"
+                var currentGenders = self.genderSubject.value
+                
+                self.genderSubject.send(
+                    self.genderSubject.value.contains(gender)
+                    ? self.genderSubject.value.filter { $0 != gender }
+                    : self.genderSubject.value + [gender]
+                )
+                print(genderSubject.value)
             }
             .store(in: cancelBag)
         

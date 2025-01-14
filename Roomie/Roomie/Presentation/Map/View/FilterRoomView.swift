@@ -13,18 +13,18 @@ import Then
 final class FilterRoomView: BaseView {
     
     private let genderLabel = UILabel()
-    private let maleButton = FilterOptionButton(title: "남성전용")
-    private let femaleButton = FilterOptionButton(title: "여성전용")
-    private let genderDivisionButton = FilterOptionButton(title: "남녀분리")
-    private let genderFreeButton = FilterOptionButton(title: "성별무관")
+    let maleButton = FilterOptionButton(title: "남성전용")
+    let femaleButton = FilterOptionButton(title: "여성전용")
+    let genderDivisionButton = FilterOptionButton(title: "남녀분리")
+    let genderFreeButton = FilterOptionButton(title: "성별무관")
     
     private let occupancyTypeLabl = UILabel()
-    private let singleButton = FilterOptionButton(title: "1인실")
-    private let doubleButton = FilterOptionButton(title: "2인실")
-    private let tripleButton = FilterOptionButton(title: "3인실")
-    private let quadButton = FilterOptionButton(title: "4인실")
-    private let quintButton = FilterOptionButton(title: "5인실")
-    private let sextButton = FilterOptionButton(title: "6인실")
+    let singleButton = FilterOptionButton(title: "1인실")
+    let doubleButton = FilterOptionButton(title: "2인실")
+    let tripleButton = FilterOptionButton(title: "3인실")
+    let quadButton = FilterOptionButton(title: "4인실")
+    let quintButton = FilterOptionButton(title: "5인실")
+    let sextButton = FilterOptionButton(title: "6인실")
     
     override func setStyle() {
         genderLabel.do {
