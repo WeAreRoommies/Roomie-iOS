@@ -19,7 +19,9 @@ final class MapFilterViewModel {
     private let monthlyRentMaxSubject = CurrentValueSubject<Int, Never>(150)
     
     private let genderSubject = CurrentValueSubject<[String], Never>([])
-    private let occupancyTypeSubject = CurrentValueSubject<[Int], Never>([])
+    private let occupancyTypeSubject = CurrentValueSubject<[String], Never>([])
+    
+    private let contractPeriodSubject = CurrentValueSubject<[Int], Never>([])
 }
 
 extension MapFilterViewModel: ViewModelType {
@@ -28,7 +30,7 @@ extension MapFilterViewModel: ViewModelType {
         let depositMinText: AnyPublisher<Int, Never>
         let depositMaxText: AnyPublisher<Int, Never>
         
-        // 보증금 슬라이더 값
+        /// 보증금 슬라이더 값
         let depositMinRange: AnyPublisher<Int, Never>
         let depositMaxRange: AnyPublisher<Int, Never>
         
@@ -36,7 +38,7 @@ extension MapFilterViewModel: ViewModelType {
         let monthlyRentMinText: AnyPublisher<Int, Never>
         let monthlyRentMaxText: AnyPublisher<Int, Never>
         
-        // 월세 슬라이더 값
+        /// 월세 슬라이더 값
         let monthlyRentMinRange: AnyPublisher<Int, Never>
         let monthlyRentMaxRange: AnyPublisher<Int, Never>
         
@@ -53,6 +55,11 @@ extension MapFilterViewModel: ViewModelType {
         let quadButtonDidTap: AnyPublisher<Void, Never>
         let quintButtonDidTap: AnyPublisher<Void, Never>
         let sextButtonDidTap: AnyPublisher<Void, Never>
+        
+        /// 계약기간 옵션
+        let threeMonthButtonDidTap: AnyPublisher<Void, Never>
+        let sixMonthButtonDidTap: AnyPublisher<Void, Never>
+        let oneYearButtonDidTap: AnyPublisher<Void, Never>
     }
     
     struct Output {
@@ -60,7 +67,7 @@ extension MapFilterViewModel: ViewModelType {
         let depositMinText: AnyPublisher<Int, Never>
         let depositMaxText: AnyPublisher<Int, Never>
         
-        // 보증금 슬라이더 값
+        /// 보증금 슬라이더 값
         let depositMinRange: AnyPublisher<Int, Never>
         let depositMaxRange: AnyPublisher<Int, Never>
         
@@ -68,7 +75,7 @@ extension MapFilterViewModel: ViewModelType {
         let monthlyRentMinText: AnyPublisher<Int, Never>
         let monthlyRentMaxText: AnyPublisher<Int, Never>
         
-        // 월세 슬라이더 값
+        /// 월세 슬라이더 값
         let monthlyRentMinRange: AnyPublisher<Int, Never>
         let monthlyRentMaxRange: AnyPublisher<Int, Never>
     }
@@ -187,7 +194,7 @@ extension MapFilterViewModel: ViewModelType {
         input.singleButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                let occupancyType = 1
+                let occupancyType = "1인실"
                 
                 self.occupancyTypeSubject.send(
                     self.occupancyTypeSubject.value.contains(occupancyType)
@@ -200,7 +207,7 @@ extension MapFilterViewModel: ViewModelType {
         input.doubleButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                let occupancyType = 2
+                let occupancyType = "2인실"
                 
                 self.occupancyTypeSubject.send(
                     self.occupancyTypeSubject.value.contains(occupancyType)
@@ -213,7 +220,7 @@ extension MapFilterViewModel: ViewModelType {
         input.tripleButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                let occupancyType = 3
+                let occupancyType = "3인실"
                 
                 self.occupancyTypeSubject.send(
                     self.occupancyTypeSubject.value.contains(occupancyType)
@@ -226,7 +233,7 @@ extension MapFilterViewModel: ViewModelType {
         input.quadButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                let occupancyType = 4
+                let occupancyType = "4인실"
                 
                 self.occupancyTypeSubject.send(
                     self.occupancyTypeSubject.value.contains(occupancyType)
@@ -239,7 +246,7 @@ extension MapFilterViewModel: ViewModelType {
         input.quintButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                let occupancyType = 5
+                let occupancyType = "5인실"
                 
                 self.occupancyTypeSubject.send(
                     self.occupancyTypeSubject.value.contains(occupancyType)
@@ -252,12 +259,51 @@ extension MapFilterViewModel: ViewModelType {
         input.sextButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                let occupancyType = 6
+                let occupancyType = "6인실"
                 
                 self.occupancyTypeSubject.send(
                     self.occupancyTypeSubject.value.contains(occupancyType)
                     ? self.occupancyTypeSubject.value.filter { $0 != occupancyType }
                     : self.occupancyTypeSubject.value + [occupancyType]
+                )
+            }
+            .store(in: cancelBag)
+        
+        input.threeMonthButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let contractPeroid = 3
+                
+                self.contractPeriodSubject.send(
+                    self.contractPeriodSubject.value.contains(contractPeroid)
+                    ? self.contractPeriodSubject.value.filter { $0 != contractPeroid }
+                    : self.contractPeriodSubject.value + [contractPeroid]
+                )
+            }
+            .store(in: cancelBag)
+        
+        input.sixMonthButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let contractPeroid = 6
+                
+                self.contractPeriodSubject.send(
+                    self.contractPeriodSubject.value.contains(contractPeroid)
+                    ? self.contractPeriodSubject.value.filter { $0 != contractPeroid }
+                    : self.contractPeriodSubject.value + [contractPeroid]
+                )
+            }
+            .store(in: cancelBag)
+        
+        input.oneYearButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let contractPeroid = 12
+                
+                self.contractPeriodSubject.send(
+                    self.contractPeriodSubject.value.contains(contractPeroid)
+                    ? self.contractPeriodSubject.value.filter { $0 != contractPeroid }
+                    : self.contractPeriodSubject.value + [contractPeroid]
                 )
             }
             .store(in: cancelBag)
