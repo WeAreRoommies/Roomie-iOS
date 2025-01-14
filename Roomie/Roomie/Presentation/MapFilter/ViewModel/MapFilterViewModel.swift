@@ -19,7 +19,7 @@ final class MapFilterViewModel {
     private let monthlyRentMaxSubject = CurrentValueSubject<Int, Never>(150)
     
     private let genderSubject = CurrentValueSubject<[String], Never>([])
-    private let occupancyTypeSubject = CurrentValueSubject<[Int], Never>([])
+    private let occupancyTypeSubject = CurrentValueSubject<[String], Never>([])
     
     private let contractPeriodSubject = CurrentValueSubject<[Int], Never>([])
 }
@@ -194,7 +194,7 @@ extension MapFilterViewModel: ViewModelType {
         input.singleButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                let occupancyType = 1
+                let occupancyType = "1인실"
                 
                 self.occupancyTypeSubject.send(
                     self.occupancyTypeSubject.value.contains(occupancyType)
@@ -207,7 +207,7 @@ extension MapFilterViewModel: ViewModelType {
         input.doubleButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                let occupancyType = 2
+                let occupancyType = "2인실"
                 
                 self.occupancyTypeSubject.send(
                     self.occupancyTypeSubject.value.contains(occupancyType)
@@ -220,7 +220,7 @@ extension MapFilterViewModel: ViewModelType {
         input.tripleButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                let occupancyType = 3
+                let occupancyType = "3인실"
                 
                 self.occupancyTypeSubject.send(
                     self.occupancyTypeSubject.value.contains(occupancyType)
@@ -233,7 +233,7 @@ extension MapFilterViewModel: ViewModelType {
         input.quadButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                let occupancyType = 4
+                let occupancyType = "4인실"
                 
                 self.occupancyTypeSubject.send(
                     self.occupancyTypeSubject.value.contains(occupancyType)
@@ -246,7 +246,7 @@ extension MapFilterViewModel: ViewModelType {
         input.quintButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                let occupancyType = 5
+                let occupancyType = "5인실"
                 
                 self.occupancyTypeSubject.send(
                     self.occupancyTypeSubject.value.contains(occupancyType)
@@ -259,7 +259,7 @@ extension MapFilterViewModel: ViewModelType {
         input.sextButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                let occupancyType = 6
+                let occupancyType = "6인실"
                 
                 self.occupancyTypeSubject.send(
                     self.occupancyTypeSubject.value.contains(occupancyType)
@@ -279,7 +279,6 @@ extension MapFilterViewModel: ViewModelType {
                     ? self.contractPeriodSubject.value.filter { $0 != contractPeroid }
                     : self.contractPeriodSubject.value + [contractPeroid]
                 )
-                print(contractPeriodSubject.value)
             }
             .store(in: cancelBag)
         
@@ -293,7 +292,6 @@ extension MapFilterViewModel: ViewModelType {
                     ? self.contractPeriodSubject.value.filter { $0 != contractPeroid }
                     : self.contractPeriodSubject.value + [contractPeroid]
                 )
-                print(contractPeriodSubject.value)
             }
             .store(in: cancelBag)
         
@@ -307,7 +305,6 @@ extension MapFilterViewModel: ViewModelType {
                     ? self.contractPeriodSubject.value.filter { $0 != contractPeroid }
                     : self.contractPeriodSubject.value + [contractPeroid]
                 )
-                print(contractPeriodSubject.value)
             }
             .store(in: cancelBag)
         
