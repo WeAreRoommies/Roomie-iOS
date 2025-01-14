@@ -68,7 +68,7 @@ final class MapFilterViewController: BaseViewController {
     // MARK: - Functions
 
     override func setView() {
-        setupNavigationBar(with: "필터", isBorderHidden: true)
+        setNavigationBar(with: "필터", isBorderHidden: true)
     }
     
     override func setAction() {

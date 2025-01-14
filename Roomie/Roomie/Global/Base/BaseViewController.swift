@@ -37,7 +37,7 @@ class BaseViewController: UIViewController {
 extension BaseViewController {
     
     /// 네비게이션 바 커스텀
-    func setupNavigationBar(with string: String, isBorderHidden: Bool = false) {
+    func setNavigationBar(with string: String, isBorderHidden: Bool = false) {
         title = string
         
         let barAppearance = UINavigationBarAppearance()

@@ -22,7 +22,7 @@ final class TourUserViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupNavigationBar(with: "", isBorderHidden: true)
+        setNavigationBar(with: "", isBorderHidden: true)
         hideKeyboardWhenDidTap()
     }
     

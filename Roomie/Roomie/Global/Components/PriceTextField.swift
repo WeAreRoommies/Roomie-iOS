@@ -28,7 +28,7 @@ final class PriceTextField: UITextField {
         setLayout()
         
         setTextField(placeHolder: placeHolder)
-        setupTextFieldBorder()
+        setTextFieldBorder()
     }
     
     override init(frame: CGRect) {
@@ -39,7 +39,7 @@ final class PriceTextField: UITextField {
         setLayout()
         
         setTextField()
-        setupTextFieldBorder()
+        setTextFieldBorder()
     }
     
     required init?(coder: NSCoder) {
@@ -50,7 +50,7 @@ final class PriceTextField: UITextField {
         setLayout()
         
         setTextField()
-        setupTextFieldBorder()
+        setTextFieldBorder()
     }
     
     private func setStyle() {
@@ -88,7 +88,7 @@ private extension PriceTextField {
         delegate = self
     }
     
-    func setupTextFieldBorder() {
+    func setTextFieldBorder() {
         let textFieldEvent = Publishers.MergeMany(
             controlEventPublisher(for: .editingDidBegin).map { UIColor.primaryPurple.cgColor },
             controlEventPublisher(for: .editingDidEnd).map { UIColor.grayscale5.cgColor },
