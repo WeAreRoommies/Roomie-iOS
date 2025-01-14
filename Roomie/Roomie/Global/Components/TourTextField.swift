@@ -41,19 +41,21 @@ final class TourTextField: UITextField {
         super.init(frame: frame)
         
         setTextField()
+        setTextFieldBorder()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
         setTextField()
+        setTextFieldBorder()
     }
 }
 
 // MARK: - Function
 
 private extension TourTextField {
-    func setTextField(placeHolder: String = "placeHolder") {
+    func setTextField(placeHolder: String = "") {
         setText(
             placeholder: placeHolder,
             textColor: .grayscale12,

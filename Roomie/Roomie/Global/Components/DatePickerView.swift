@@ -65,9 +65,7 @@ final class DatePickerView: UIView {
     
     private func setStyle() {
         dateLabel.do {
-            // TODO: 피커 날짜 현재 날짜로 하는지, 2025/01/01로 고정인지 질문
-            $0.setText("2025/01/01", style: .body1, color: .grayscale6)
-            // $0.setText(dateFormat(date: Date()), style: .body1, color: .grayscale6)
+            $0.setText(dateFormat(date: Date()), style: .body1, color: .grayscale6)
         }
         
         calendarIcon.do {
@@ -121,7 +119,6 @@ final class DatePickerView: UIView {
 
 private extension DatePickerView {
     func setPickerView() {
-        
         pickerButton.tapPublisher
             .sink {
                 // TODO: DatePickerView popup

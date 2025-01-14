@@ -14,20 +14,6 @@ final class GenderButton: UIButton {
     
     // MARK: - Property
     
-    enum Gender {
-        case male
-        case female
-        
-        var genderString: String {
-            switch self {
-            case .male:
-                return "남성"
-            case .female:
-                return "여성"
-            }
-        }
-    }
-    
     static let defaultWidth: CGFloat = Screen.width(162)
     static let defaultHeight: CGFloat = Screen.height(44)
     
@@ -65,24 +51,12 @@ private extension GenderButton {
     }
     
     func setButtonColor() {
-        controlEventPublisher(for: .touchDown)
+        tapPublisher
             .sink {
                 self.backgroundColor = .primaryLight5
                 self.layer.borderColor = UIColor.primaryPurple.cgColor
                 self.setTitleColor(.primaryPurple, for: .normal)
             }
             .store(in: cancelBag)
-        
-//        Publishers.MergeMany(
-//            controlEventPublisher(for: .touchUpInside),
-//            controlEventPublisher(for: .touchUpOutside),
-//            controlEventPublisher(for: .touchCancel)
-//        )
-//        .sink {
-//            self.backgroundColor = .grayscale1
-//            self.layer.borderColor = UIColor.grayscale5.cgColor
-//            self.setTitleColor(.grayscale12, for: .normal)
-//        }
-//        .store(in: cancelBag)
     }
 }

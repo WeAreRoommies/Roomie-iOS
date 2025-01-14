@@ -18,7 +18,7 @@ final class TourUserView: BaseView {
     private let subTitleLabel = UILabel()
     
     private let nameLabel = UILabel()
-    let nameTextField = TourTextField(placeHolder: "")
+    let nameTextField = TourTextField()
     
     private let birthLabel = UILabel()
     let birthPickerView = DatePickerView()
@@ -29,7 +29,7 @@ final class TourUserView: BaseView {
     private let genderButtonStackView = UIStackView()
     
     private let phoneNumberLabel = UILabel()
-    let phoneNumberTextField = TourTextField(placeHolder: "")
+    let phoneNumberTextField = TourTextField()
     
     let nextButton = RoomieButton(title: "다음으로", isEnabled: false)
     
