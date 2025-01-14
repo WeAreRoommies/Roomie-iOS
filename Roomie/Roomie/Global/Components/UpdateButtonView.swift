@@ -96,7 +96,6 @@ final class UpdateButtonView: UIView {
         pressedEvent
             .map { UIColor.grayscale1 }
             .sink { [weak self] backgroundColor in
-                print(backgroundColor)
                 self?.backgroundColor = backgroundColor
             }
             .store(in: cancelBag)
@@ -105,7 +104,6 @@ final class UpdateButtonView: UIView {
             .controlEventPublisher(for: .touchDown)
             .map { UIColor.grayscale4 }
             .sink { [weak self] backgroundColor in
-                print(backgroundColor)
                 self?.backgroundColor = backgroundColor
             }
             .store(in: cancelBag)
