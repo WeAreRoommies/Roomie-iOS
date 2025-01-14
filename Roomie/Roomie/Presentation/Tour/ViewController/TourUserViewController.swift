@@ -18,7 +18,8 @@ final class TourUserViewController: BaseViewController {
     
     private let viewModel: TourViewModel
     
-    private let phoneNumberSubject = PassthroughSubject<String, Never>()
+    private let nameTextSubject = PassthroughSubject<String, Never>()
+    private let phoneNumberTextSubject = PassthroughSubject<String, Never>()
     
     private let cancelBag = CancelBag()
     
@@ -64,6 +65,14 @@ final class TourUserViewController: BaseViewController {
     }
     
     override func setAction() {
+        rootView.nameTextField
+            .textPublisher
+            .compactMap { $0 }
+            .sink { [weak self] name in
+                self?.nameTextSubject.send(name)
+            }
+            .store(in: cancelBag)
+        
         rootView.maleButton
             .tapPublisher
             .sink { [weak self] in
@@ -82,7 +91,7 @@ final class TourUserViewController: BaseViewController {
             .controlEventPublisher(for: .editingDidEnd)
             .sink { [weak self] in
                 let phoneNumber = self?.rootView.phoneNumberTextField.text ?? ""
-                self?.phoneNumberSubject.send(phoneNumber)
+                self?.phoneNumberTextSubject.send(phoneNumber)
             }
             .store(in: cancelBag)
     }
@@ -93,7 +102,8 @@ final class TourUserViewController: BaseViewController {
 private extension TourUserViewController {
     func bindViewModel() {
         let input = TourViewModel.Input(
-            phoneNumberSubject: phoneNumberSubject.eraseToAnyPublisher()
+            nameTextSubject: nameTextSubject.eraseToAnyPublisher(),
+            phoneNumberTextSubject: phoneNumberTextSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
