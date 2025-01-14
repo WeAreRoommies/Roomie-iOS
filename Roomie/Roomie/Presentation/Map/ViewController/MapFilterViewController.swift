@@ -35,6 +35,13 @@ final class MapFilterViewController: BaseViewController {
     private let genderDivisionButtonDidTapSubject = PassthroughSubject<Void, Never>()
     private let genderFreeButtonDidTapSubject = PassthroughSubject<Void, Never>()
     
+    private let singleButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let doubleButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let tripleButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let quadButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let quintButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let sextButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    
     // MARK: - Initializer
 
     init(viewModel: MapFilterViewModel) {
@@ -164,6 +171,54 @@ final class MapFilterViewController: BaseViewController {
                 self.genderFreeButtonDidTapSubject.send(())
             }
             .store(in: cancelBag)
+        
+        rootView.filterRoomView.singleButton.optionButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.singleButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
+        
+        rootView.filterRoomView.doubleButton.optionButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.doubleButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
+        
+        rootView.filterRoomView.tripleButton.optionButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.tripleButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
+        
+        rootView.filterRoomView.quadButton.optionButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.quadButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
+        
+        rootView.filterRoomView.quintButton.optionButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.quintButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
+        
+        rootView.filterRoomView.sextButton.optionButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.sextButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
     }
 }
 
@@ -181,7 +236,13 @@ private extension MapFilterViewController {
             maleButtonDidTap: maleButtonDidTapSubject.eraseToAnyPublisher(),
             femaleButtonDidTap: femaleButtonDidTapSubject.eraseToAnyPublisher(),
             genderDivisionButtonDidTap: genderDivisionButtonDidTapSubject.eraseToAnyPublisher(),
-            genderFreeButtonDidTap: genderFreeButtonDidTapSubject.eraseToAnyPublisher()
+            genderFreeButtonDidTap: genderFreeButtonDidTapSubject.eraseToAnyPublisher(),
+            singleButtonDidTap: singleButtonDidTapSubject.eraseToAnyPublisher(),
+            doubleButtonDidTap: doubleButtonDidTapSubject.eraseToAnyPublisher(),
+            tripleButtonDidTap: tripleButtonDidTapSubject.eraseToAnyPublisher(),
+            quadButtonDidTap: quadButtonDidTapSubject.eraseToAnyPublisher(),
+            quintButtonDidTap: quintButtonDidTapSubject.eraseToAnyPublisher(),
+            sextButtonDidTap: sextButtonDidTapSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
