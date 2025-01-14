@@ -38,7 +38,7 @@ final class TourUserViewController: BaseViewController {
         removeKeyboardObserver()
     }
     
-    override func setupDelegate() {
+    override func setDelegate() {
         rootView.phoneNumberTextField.delegate = self
     }
 }

@@ -30,7 +30,7 @@ final class TourCheckViewController: BaseViewController {
         setupNavigationBar(with: "", isBorderHidden: true)
     }
     
-    override func setupAction() {
+    override func setAction() {
         rootView.nextButton
             .tapPublisher
             .sink {

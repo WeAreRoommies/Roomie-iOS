@@ -67,11 +67,11 @@ final class MapFilterViewController: BaseViewController {
     
     // MARK: - Functions
 
-    override func setupView() {
+    override func setView() {
         setupNavigationBar(with: "필터", isBorderHidden: true)
     }
     
-    override func setupAction() {
+    override func setAction() {
         hideKeyboardWhenDidTap()
         
         rootView.filterSegmentedControl
