@@ -12,6 +12,8 @@ final class TourUserViewController: BaseViewController {
     // MARK: - Property
     
     private let rootView = TourUserView()
+    
+    private let cancelBag = CancelBag()
 
     // MARK: - LifeCycle
     
@@ -40,6 +42,22 @@ final class TourUserViewController: BaseViewController {
     
     override func setDelegate() {
         rootView.phoneNumberTextField.delegate = self
+    }
+    
+    override func setAction() {
+        rootView.maleButton
+            .tapPublisher
+            .sink { [weak self] in
+                self?.rootView.femaleButton.isSelected = false
+            }
+            .store(in: cancelBag)
+        
+        rootView.femaleButton
+            .tapPublisher
+            .sink { [weak self] in
+                self?.rootView.maleButton.isSelected = false
+            }
+            .store(in: cancelBag)
     }
 }
 
