@@ -60,6 +60,8 @@ final class TourTextView: UITextView {
         setLayout()
     }
     
+    // MARK: - UISetting
+    
     private func setStyle() {
         self.do {
             $0.setText(

@@ -17,7 +17,7 @@ final class TourCompleteView: BaseView {
     private let titleLabel = UILabel()
     private let subTitleLabel = UILabel()
     
-    // TODO: 그 뭐냐 그그그그그 GUI 디쟈너 물어보rl
+    // TODO: GUI 나오면 붙이기
     
     let lookOtherButton = OtherButton(title: "다른 방 보러가기")
     let completeButton = RoomieButton(title: "완료하기", isEnabled: true)
@@ -67,7 +67,6 @@ final class TourCompleteView: BaseView {
             $0.leading.equalTo(lookOtherButton.snp.trailing).offset(12)
             $0.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(OtherButton.defaultHeight)
-            
         }
     }
 }
