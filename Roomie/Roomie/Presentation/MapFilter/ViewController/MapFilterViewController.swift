@@ -42,9 +42,14 @@ final class MapFilterViewController: BaseViewController {
     private let quintButtonDidTapSubject = PassthroughSubject<Void, Never>()
     private let sextButtonDidTapSubject = PassthroughSubject<Void, Never>()
     
+    private let preferredDateSubject = PassthroughSubject<String, Never>()
+    
     private let threeMonthButtonDidTapSubject = PassthroughSubject<Void, Never>()
     private let sixMonthButtonDidTapSubject = PassthroughSubject<Void, Never>()
     private let oneYearButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    
+    private let resetButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let applyButtonDidTapSubject = PassthroughSubject<Void, Never>()
     
     // MARK: - Initializer
 
@@ -247,6 +252,22 @@ final class MapFilterViewController: BaseViewController {
                 self.oneYearButtonDidTapSubject.send(())
             }
             .store(in: cancelBag)
+        
+        rootView.resetButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.resetButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
+        
+        rootView.applyButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.navigationController?.popViewController(animated: true)
+            }
+            .store(in: cancelBag)
     }
 }
 
@@ -271,9 +292,12 @@ private extension MapFilterViewController {
             quadButtonDidTap: quadButtonDidTapSubject.eraseToAnyPublisher(),
             quintButtonDidTap: quintButtonDidTapSubject.eraseToAnyPublisher(),
             sextButtonDidTap: sextButtonDidTapSubject.eraseToAnyPublisher(),
+            preferredDate: preferredDateSubject.eraseToAnyPublisher(),
             threeMonthButtonDidTap: threeMonthButtonDidTapSubject.eraseToAnyPublisher(),
             sixMonthButtonDidTap: sixMonthButtonDidTapSubject.eraseToAnyPublisher(),
-            oneYearButtonDidTap: oneYearButtonDidTapSubject.eraseToAnyPublisher()
+            oneYearButtonDidTap: oneYearButtonDidTapSubject.eraseToAnyPublisher(),
+            resetButtonDidTap: resetButtonDidTapSubject.eraseToAnyPublisher(),
+            applyButtonDidTap: applyButtonDidTapSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -341,6 +365,72 @@ private extension MapFilterViewController {
                 self.rootView.filterPriceView.monthlyRentMaxTextField.text = monthlyRentMax
             }
             .store(in: cancelBag)
+        
+        output.isGenderEmpty
+            .sink { [weak self] isEmpty in
+                guard let self = self else { return }
+                
+                let buttons = [
+                    self.rootView.filterRoomView.maleButton,
+                    self.rootView.filterRoomView.femaleButton,
+                    self.rootView.filterRoomView.genderDivisionButton,
+                    self.rootView.filterRoomView.genderFreeButton
+                ]
+                
+                if isEmpty {
+                    buttons.forEach { $0.isSelected = false }
+                }
+            }
+            .store(in: cancelBag)
+        
+        output.isOccupancyTypeEmpty
+            .sink { [weak self] isEmpty in
+                guard let self = self else { return }
+                
+                let buttons = [
+                    self.rootView.filterRoomView.singleButton,
+                    self.rootView.filterRoomView.doubleButton,
+                    self.rootView.filterRoomView.tripleButton,
+                    self.rootView.filterRoomView.quadButton,
+                    self.rootView.filterRoomView.quintButton,
+                    self.rootView.filterRoomView.sextButton
+                ]
+                
+                if isEmpty {
+                    buttons.forEach { $0.isSelected = false }
+                }
+            }
+            .store(in: cancelBag)
+        
+        output.isContractPeriodEmpty
+            .sink { [weak self] isEmpty in
+                guard let self = self else { return }
+                
+                let buttons = [
+                    self.rootView.filterPeriodView.threeMonthButton,
+                    self.rootView.filterPeriodView.sixMonthButton,
+                    self.rootView.filterPeriodView.oneYearButton
+                ]
+                
+                if isEmpty {
+                    buttons.forEach { $0.isSelected = false }
+                }
+            }
+            .store(in: cancelBag)
+        
+        output.isPreferredDateEmpty
+            .sink { [weak self] isEmpty in
+                guard let self = self else { return }
+                
+                if isEmpty {
+                    self.rootView.filterPeriodView.preferredDatePickerView.dateLabel.setText(
+                        String.formattedDate(date: Date()),
+                        style: .body1,
+                        color: .grayscale6
+                    )
+                }
+            }
+            .store(in: cancelBag)
     }
     
     func updateFilterViews(for selectedIndex: Int) {
@@ -358,5 +448,11 @@ private extension MapFilterViewController {
             rootView.filterRoomView.isHidden = true
             rootView.filterPeriodView.isHidden = false
         }
+    }
+}
+
+extension MapFilterViewController: DatePickerViewDelegate {
+    func dateDidPick(date: String) {
+        preferredDateSubject.send(date)
     }
 }

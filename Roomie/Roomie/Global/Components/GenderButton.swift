@@ -17,6 +17,12 @@ final class GenderButton: UIButton {
     static let defaultWidth: CGFloat = Screen.width(162)
     static let defaultHeight: CGFloat = Screen.height(44)
     
+    override var isSelected: Bool {
+        didSet {
+            updateButtonColor()
+        }
+    }
+    
     private let cancelBag = CancelBag()
     
     // MARK: - Initializer
@@ -25,21 +31,21 @@ final class GenderButton: UIButton {
         super.init(frame: .zero)
         
         setButton(with: gender)
-        setButtonColor()
+        setAction()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         setButton()
-        setButtonColor()
+        setAction()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
         setButton()
-        setButtonColor()
+        setAction()
     }
 }
 
@@ -50,13 +56,17 @@ private extension GenderButton {
         isEnabled = true
     }
     
-    func setButtonColor() {
+    func setAction() {
         tapPublisher
             .sink {
-                self.backgroundColor = .primaryLight5
-                self.layer.borderColor = UIColor.primaryPurple.cgColor
-                self.setTitleColor(.primaryPurple, for: .normal)
+                self.isSelected.toggle()
             }
             .store(in: cancelBag)
+    }
+    
+    func updateButtonColor() {
+        backgroundColor = isSelected ? .primaryLight5 : .grayscale1
+        layer.borderColor = isSelected ? UIColor.primaryPurple.cgColor : UIColor.grayscale5.cgColor
+        setTitleColor(isSelected ? .primaryPurple : .grayscale12, for: .normal)
     }
 }

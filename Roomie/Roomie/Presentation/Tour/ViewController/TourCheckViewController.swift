@@ -34,7 +34,7 @@ final class TourCheckViewController: BaseViewController {
         rootView.nextButton
             .tapPublisher
             .sink {
-                let tourUserViewController = TourUserViewController()
+                let tourUserViewController = TourUserViewController(viewModel: TourViewModel())
                 self.navigationController?.pushViewController(tourUserViewController, animated: true)
             }
             .store(in: cancelBag)
