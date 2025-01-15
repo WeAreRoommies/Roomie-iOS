@@ -12,11 +12,18 @@ import CombineCocoa
 import SnapKit
 import Then
 
+protocol DatePickerViewDelegate: AnyObject {
+    /// DatePicker에서 날짜가 선택된 시점, delegate에게 "yyyy/MM/dd"형태의 문자열 date로 전달
+    func dateDidPick(date: String)
+}
+
 final class DatePickerView: UIView {
     
     // MARK: - Property
     
     static let defaultHeight: CGFloat = Screen.height(54)
+    
+    weak var delegate: DatePickerViewDelegate?
     
     private let cancelBag = CancelBag()
     
@@ -131,6 +138,7 @@ private extension DatePickerView {
         let confirmAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
             guard let self = self else { return }
             dateLabel.setText(dateFormat(date: datePicker.date), style: .body1, color: .grayscale11)
+            delegate?.dateDidPick(date: dateFormat(date: datePicker.date))
         }
         alertController.addAction(confirmAction)
     }

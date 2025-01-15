@@ -10,6 +10,7 @@ import Foundation
 enum Gender {
     case male
     case female
+    case none // 선택되지 않은 상태를 나타냄
     
     var genderString: String {
         switch self {
@@ -17,6 +18,8 @@ enum Gender {
             return "남성"
         case .female:
             return "여성"
+        case .none:
+            return ""
         }
     }
 }
