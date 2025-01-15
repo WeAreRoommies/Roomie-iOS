@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class RoomListCollectionCell: BaseCollectionViewCell {
+final class RoomListTableViewCell: BaseTableViewCell {
     
     // MARK: - Property
     
@@ -92,6 +92,8 @@ final class RoomListCollectionCell: BaseCollectionViewCell {
     }
     
     override func setUI() {
+        addSubview(cellView)
+        
         cellView.addSubviews(
             roomImageView,
             likedImageView,
@@ -110,6 +112,10 @@ final class RoomListCollectionCell: BaseCollectionViewCell {
     }
     
     override func setLayout() {
+        cellView.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(4)
+        }
+        
         roomImageView.snp.makeConstraints{
             $0.top.leading.bottom.equalToSuperview()
             $0.size.equalTo(CGSize(width: 140, height: 104))
@@ -152,7 +158,9 @@ final class RoomListCollectionCell: BaseCollectionViewCell {
     }
 }
 
-extension RoomListCollectionCell {
+// MARK: - DataBinding
+
+extension RoomListTableViewCell {
     func dataBind(
         _ roomImage: String,
         houseId: Int,
@@ -169,6 +177,7 @@ extension RoomListCollectionCell {
         likedImageView.image = isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
         
         // TODO: 데이터 연결
+        print("data bind: \(houseId)")
         
         if let image = UIImage(named: roomImage) {
             roomImageView.image = image
@@ -178,12 +187,11 @@ extension RoomListCollectionCell {
             roomImageView.backgroundColor = .grayscale4
         }
         
-        roomImageView.image = .icnDelete20
-        monthlyRentLabel.text = montlyRent
+        monthlyRentLabel.text = "월세 \(montlyRent)"
         depositLabel.text = "보증금 \(deposit)"
         termLabel.text = "\(contract_term)개월"
         moodTagLabel.text = moodTag
-        roomTypeLabel.text = "\(occupanyTypes)인실·\(genderPolicy)"
-        roomLocationLabel.text = "\(location)·\(locationDescription)"
+        roomTypeLabel.text = "\(occupanyTypes) · \(genderPolicy)"
+        roomLocationLabel.text = "\(location) · \(locationDescription)"
     }
 }

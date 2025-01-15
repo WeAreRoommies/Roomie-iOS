@@ -22,9 +22,9 @@ final class HomeViewController: BaseViewController {
     
     private let rootView = HomeView()
     
-    final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
-    final let cellHeight: CGFloat = 112
-    final let contentInterSpacing: CGFloat = 4
+    final let cellHeight: CGFloat = 120 //112 + 4 + 4
+    
+    private var recentlyRooms: [HomeModel] = HomeModel.mockHomeData()
     
     // MARK: - Initializer
     
@@ -46,13 +46,15 @@ final class HomeViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        rootView.collectionView.delegate = self
-        rootView.collectionView.dataSource = self
+        rootView.roomListtableView.delegate = self
+        rootView.roomListtableView.dataSource = self
         
-        rootView.collectionView.register(
-            RoomListCollectionCell.self,
-            forCellWithReuseIdentifier: RoomListCollectionCell.reuseIdentifier
+        rootView.roomListtableView.register(
+            RoomListTableViewCell.self,
+            forCellReuseIdentifier: RoomListTableViewCell.reuseIdentifier
         )
+        
+        updateTableViewHeight()
     }
     
     // MARK: - Functions
@@ -86,59 +88,56 @@ final class HomeViewController: BaseViewController {
             }
             .store(in: cancelBag)
     }
+    
+    private func updateTableViewHeight() {
+        let totalHeight = CGFloat(recentlyRooms.count * 120)
+        
+        rootView.roomListTableViewHeightConstraint?.update(offset: totalHeight)
+        rootView.layoutIfNeeded()
+    }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
+// MARK: - UITableViewDelegate
 
-extension HomeViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
-        return CGSize(width: cellWidth, height: cellHeight)
-    }
-    
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        minimumLineSpacingForsectionAt section: Int
+extension HomeViewController: UITableViewDelegate {
+    func tableView(
+        _ tableView: UITableView,
+        heightForRowAt indexPath: IndexPath
     ) -> CGFloat {
-        return contentInterSpacing
+        return cellHeight
     }
     
-    func collectionView(
-        _ collectionView: UICollectionView,
-        didSelectItemAt indexPath: IndexPath
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
     ) {
         // TODO: 상세매물 페이지와 연결
     }
+
 }
 
-// MARK: - UICollectionViewDataSource
+// MARK: - UITableViewDataSource
 
-extension HomeViewController: UICollectionViewDataSource {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
+extension HomeViewController: UITableViewDataSource {
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
     ) -> Int {
-        return HomeModel.mockHomeData().count
+        return recentlyRooms.count
     }
     
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        guard let item = collectionView.dequeueReusableCell(
-            withReuseIdentifier: RoomListCollectionCell.reuseIdentifier,
-            for: indexPath
-        ) as? RoomListCollectionCell else {
-            return UICollectionViewCell()
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: RoomListTableViewCell.reuseIdentifier, for: indexPath
+        ) as? RoomListTableViewCell else {
+            return UITableViewCell()
         }
         
-        let data = HomeModel.mockHomeData()[indexPath.row]
+        let data = recentlyRooms[indexPath.row]
         
-        item.dataBind(
+        cell.dataBind(
             data.mainImageURL,
             houseId: data.houseID,
             montlyRent: data.monthlyRent,
@@ -151,6 +150,7 @@ extension HomeViewController: UICollectionViewDataSource {
             moodTag: data.moodTag,
             contract_term: data.contractTerm
         )
-        return item
+        
+        return cell
     }
 }

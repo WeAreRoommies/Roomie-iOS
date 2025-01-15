@@ -48,7 +48,7 @@ final class UpdateButtonView: UIView {
 
     private func setStyle() {
         self.do {
-            $0.backgroundColor = .grayscale1
+            $0.backgroundColor = .transpGray160
             $0.layer.cornerRadius = 8
         }
         
