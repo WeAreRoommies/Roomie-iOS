@@ -54,7 +54,7 @@ final class TourTextView: UITextView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
-//        setPlaceholder()
+        setPlaceholder()
         setStyle()
         setUI()
         setLayout()
@@ -78,6 +78,7 @@ final class TourTextView: UITextView {
                 bottom: textViewInset,
                 right: textViewInset
             )
+            $0.setAutoType()
         }
         
         placeholderLabel.do {
