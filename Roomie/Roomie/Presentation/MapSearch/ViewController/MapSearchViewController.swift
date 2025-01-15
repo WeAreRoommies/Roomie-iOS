@@ -12,12 +12,28 @@ import CombineCocoa
 
 final class MapSearchViewController: BaseViewController {
     
+    // MARK: - Property
+
     private let rootView = MapSearchView()
     
     private let cancelBag = CancelBag()
     
+    private let mapSearchData: [MapSearchModel] = MapSearchModel.mockMapSearchData()
+    
+    final let cellWidth: CGFloat = UIScreen.main.bounds.width - 40
+    final let cellHeight: CGFloat = 118
+    final let contentInset = UIEdgeInsets(top: 16, left: 20, bottom: 16, right: 20)
+    
+    // MARK: - LifeCycle
+    
     override func loadView() {
         view = rootView
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setRegister()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -32,6 +48,13 @@ final class MapSearchViewController: BaseViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
+    // MARK: - Functions
+    
+    override func setDelegate() {
+        rootView.collectionView.delegate = self
+        rootView.collectionView.dataSource = self
+    }
+    
     override func setAction() {
         hideKeyboardWhenDidTap()
         
@@ -43,5 +66,60 @@ final class MapSearchViewController: BaseViewController {
                 self?.navigationController?.popViewController(animated: true)
             }
             .store(in: cancelBag)
+    }
+    
+    private func setRegister() {
+        rootView.collectionView.register(
+            MapSearchCollectionViewCell.self,
+            forCellWithReuseIdentifier: MapSearchCollectionViewCell.reuseIdentifier
+        )
+    }
+}
+
+// MARK: - UICollectionViewDelegateFlowLayout
+
+extension MapSearchViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        return CGSize(width: cellWidth, height: cellHeight)
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int
+    ) -> UIEdgeInsets {
+        return contentInset
+    }
+}
+
+// MARK: - UICollectionViewDataSource
+
+extension MapSearchViewController: UICollectionViewDataSource {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        return mapSearchData.count
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: MapSearchCollectionViewCell.reuseIdentifier,
+            for: indexPath
+        ) as? MapSearchCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        
+        let data = mapSearchData[indexPath.row]
+        cell.dataBind(data)
+        
+        return cell
     }
 }
