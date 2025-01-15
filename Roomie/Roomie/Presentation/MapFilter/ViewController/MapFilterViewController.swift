@@ -46,6 +46,9 @@ final class MapFilterViewController: BaseViewController {
     private let sixMonthButtonDidTapSubject = PassthroughSubject<Void, Never>()
     private let oneYearButtonDidTapSubject = PassthroughSubject<Void, Never>()
     
+    private let resetButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let applyButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    
     // MARK: - Initializer
 
     init(viewModel: MapFilterViewModel) {
@@ -247,6 +250,22 @@ final class MapFilterViewController: BaseViewController {
                 self.oneYearButtonDidTapSubject.send(())
             }
             .store(in: cancelBag)
+        
+        rootView.resetButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.resetButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
+        
+        rootView.applyButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.applyButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
     }
 }
 
@@ -273,7 +292,9 @@ private extension MapFilterViewController {
             sextButtonDidTap: sextButtonDidTapSubject.eraseToAnyPublisher(),
             threeMonthButtonDidTap: threeMonthButtonDidTapSubject.eraseToAnyPublisher(),
             sixMonthButtonDidTap: sixMonthButtonDidTapSubject.eraseToAnyPublisher(),
-            oneYearButtonDidTap: oneYearButtonDidTapSubject.eraseToAnyPublisher()
+            oneYearButtonDidTap: oneYearButtonDidTapSubject.eraseToAnyPublisher(),
+            resetButtonDidTap: resetButtonDidTapSubject.eraseToAnyPublisher(),
+            applyButtonDidTap: applyButtonDidTapSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -339,6 +360,58 @@ private extension MapFilterViewController {
             .sink { [weak self] monthlyRentMax in
                 guard let self = self else { return }
                 self.rootView.filterPriceView.monthlyRentMaxTextField.text = monthlyRentMax
+            }
+            .store(in: cancelBag)
+        
+        output.isGenderEmpty
+            .sink { [weak self] isEmpty in
+                guard let self = self else { return }
+                
+                let buttons = [
+                    self.rootView.filterRoomView.maleButton,
+                    self.rootView.filterRoomView.femaleButton,
+                    self.rootView.filterRoomView.genderDivisionButton,
+                    self.rootView.filterRoomView.genderFreeButton
+                ]
+                
+                if isEmpty {
+                    buttons.forEach { $0.isSelected = false }
+                }
+            }
+            .store(in: cancelBag)
+        
+        output.isOccupancyTypeEmpty
+            .sink { [weak self] isEmpty in
+                guard let self = self else { return }
+                
+                let buttons = [
+                    self.rootView.filterRoomView.singleButton,
+                    self.rootView.filterRoomView.doubleButton,
+                    self.rootView.filterRoomView.tripleButton,
+                    self.rootView.filterRoomView.quadButton,
+                    self.rootView.filterRoomView.quintButton,
+                    self.rootView.filterRoomView.sextButton
+                ]
+                
+                if isEmpty {
+                    buttons.forEach { $0.isSelected = false }
+                }
+            }
+            .store(in: cancelBag)
+        
+        output.isContractPeriodEmpty
+            .sink { [weak self] isEmpty in
+                guard let self = self else { return }
+                
+                let buttons = [
+                    self.rootView.filterPeriodView.threeMonthButton,
+                    self.rootView.filterPeriodView.sixMonthButton,
+                    self.rootView.filterPeriodView.oneYearButton
+                ]
+                
+                if isEmpty {
+                    buttons.forEach { $0.isSelected = false }
+                }
             }
             .store(in: cancelBag)
     }

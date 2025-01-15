@@ -60,6 +60,10 @@ extension MapFilterViewModel: ViewModelType {
         let threeMonthButtonDidTap: AnyPublisher<Void, Never>
         let sixMonthButtonDidTap: AnyPublisher<Void, Never>
         let oneYearButtonDidTap: AnyPublisher<Void, Never>
+        
+        /// 초기화 및 적용 버튼
+        let resetButtonDidTap: AnyPublisher<Void, Never>
+        let applyButtonDidTap: AnyPublisher<Void, Never>
     }
     
     struct Output {
@@ -78,6 +82,11 @@ extension MapFilterViewModel: ViewModelType {
         /// 월세 슬라이더 값
         let monthlyRentMinRange: AnyPublisher<Int, Never>
         let monthlyRentMaxRange: AnyPublisher<Int, Never>
+        
+        let isGenderEmpty: AnyPublisher<Bool, Never>
+        let isOccupancyTypeEmpty: AnyPublisher<Bool, Never>
+        
+        let isContractPeriodEmpty: AnyPublisher<Bool, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -308,6 +317,28 @@ extension MapFilterViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
+        input.resetButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.depositMaxSubject.send(500)
+                self.depositMinSubject.send(0)
+                self.monthlyRentMaxSubject.send(150)
+                self.monthlyRentMinSubject.send(0)
+                self.genderSubject.send([])
+                self.occupancyTypeSubject.send([])
+                self.contractPeriodSubject.send([])
+            }
+            .store(in: cancelBag)
+        
+        input.applyButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                // TODO: 이후 API 통신 연결
+                
+                self.fetchMapData()
+            }
+            .store(in: cancelBag)
+        
         let depositMin = depositMinSubject
             .eraseToAnyPublisher()
         
@@ -320,6 +351,18 @@ extension MapFilterViewModel: ViewModelType {
         let monthlyRentMax = monthlyRentMaxSubject
             .eraseToAnyPublisher()
         
+        let isGenderEmpty = genderSubject
+            .map { $0.isEmpty }
+            .eraseToAnyPublisher()
+        
+        let isOccupancyTypeEmpty = occupancyTypeSubject
+            .map { $0.isEmpty }
+            .eraseToAnyPublisher()
+        
+        let isContractPeriodEmpty = contractPeriodSubject
+            .map { $0.isEmpty }
+            .eraseToAnyPublisher()
+        
         return Output(
             depositMinText: depositMin,
             depositMaxText: depositMax,
@@ -328,7 +371,17 @@ extension MapFilterViewModel: ViewModelType {
             monthlyRentMinText: monthlyRentMin,
             monthlyRentMaxText: monthlyRentMax,
             monthlyRentMinRange: monthlyRentMin,
-            monthlyRentMaxRange: monthlyRentMax
+            monthlyRentMaxRange: monthlyRentMax,
+            isGenderEmpty: isGenderEmpty,
+            isOccupancyTypeEmpty: isOccupancyTypeEmpty,
+            isContractPeriodEmpty: isContractPeriodEmpty
         )
+    }
+}
+
+private extension MapFilterViewModel {
+    func fetchMapData() {
+        // TODO: 이후 API 통신 연결
+        
     }
 }
