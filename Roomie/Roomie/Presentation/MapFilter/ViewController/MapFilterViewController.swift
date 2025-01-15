@@ -265,7 +265,7 @@ final class MapFilterViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                self.applyButtonDidTapSubject.send(())
+                self.navigationController?.popViewController(animated: true)
             }
             .store(in: cancelBag)
     }

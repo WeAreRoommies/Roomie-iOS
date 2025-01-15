@@ -337,11 +337,8 @@ extension MapFilterViewModel: ViewModelType {
             .store(in: cancelBag)
         
         input.applyButtonDidTap
-            .sink { [weak self] in
-                guard let self = self else { return }
-                // TODO: 이후 API 통신 연결
-                
-                self.fetchMapData()
+            .sink {
+                // TODO: 데이터 전달
             }
             .store(in: cancelBag)
         
@@ -387,12 +384,5 @@ extension MapFilterViewModel: ViewModelType {
             isPreferredDateEmpty: isPreferredEmpty,
             isContractPeriodEmpty: isContractPeriodEmpty
         )
-    }
-}
-
-private extension MapFilterViewModel {
-    func fetchMapData() {
-        // TODO: 이후 API 통신 연결
-        
     }
 }
