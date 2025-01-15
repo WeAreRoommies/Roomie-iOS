@@ -16,7 +16,7 @@ final class TourUserViewController: BaseViewController {
     
     private let rootView = TourUserView()
     
-    private let viewModel: TourViewModel
+    private let viewModel: TourUserViewModel
     
     private let nameTextSubject = PassthroughSubject<String, Never>()
     private let dateSubject = PassthroughSubject<String, Never>()
@@ -27,7 +27,7 @@ final class TourUserViewController: BaseViewController {
     
     // MARK: - Initializer
     
-    init(viewModel: TourViewModel) {
+    init(viewModel: TourUserViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -99,6 +99,15 @@ final class TourUserViewController: BaseViewController {
                 self?.phoneNumberTextSubject.send(phoneNumber)
             }
             .store(in: cancelBag)
+        
+        rootView.nextButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self else { return }
+                let tourDateViewController = TourDateViewController(viewModel: TourDateViewModel())
+                self.navigationController?.pushViewController(tourDateViewController, animated: true)
+            }
+            .store(in: cancelBag)
     }
 }
 
@@ -106,7 +115,7 @@ final class TourUserViewController: BaseViewController {
 
 private extension TourUserViewController {
     func bindViewModel() {
-        let input = TourViewModel.Input(
+        let input = TourUserViewModel.Input(
             nameTextSubject: nameTextSubject.eraseToAnyPublisher(),
             dateSubject: dateSubject.eraseToAnyPublisher(),
             genderSubject: genderSubject.eraseToAnyPublisher(),

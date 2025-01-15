@@ -16,6 +16,19 @@ final class TourDateViewController: BaseViewController {
     
     private let rootView = TourDateView()
     
+    private let viewModel: TourDateViewModel
+    
+    // MARK: - Initializer
+    
+    init(viewModel: TourDateViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - LifeCycle
     
     override func loadView() {
