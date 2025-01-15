@@ -13,6 +13,8 @@ final class HomeView: BaseView {
 
     // MARK: - UIComponents
     
+    var roomListTableViewHeightConstraint: Constraint?
+    
     private let scrollView = UIScrollView()
     
     private let contentView = UIView()
@@ -27,12 +29,20 @@ final class HomeView: BaseView {
     private let moodView = UIView()
     private let moodLabel = UILabel()
     private let moodStackView = UIStackView()
-    let calmCardView = MoodButtonView(.calm, image: .icnDelete20)
-    let livelyCardView = MoodButtonView(.lively, image: .icnDelete20)
-    let neatCardView = MoodButtonView(.neat, image: .icnDelete20)
+    let calmCardView = MoodButtonView(.calm, image: .imgCalm)
+    let livelyCardView = MoodButtonView(.lively, image: .imgExciting)
+    let neatCardView = MoodButtonView(.neat, image: .imgClean)
     
     private let recentlyLabel = UILabel()
-
+    
+    let roomListCollectionView = UICollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout().then {
+            $0.scrollDirection = .vertical
+        }
+    )
+    
+    private let nextMapView = NextMapButtonView()
     
     // MARK: - UISetting
     
@@ -50,7 +60,11 @@ final class HomeView: BaseView {
             $0.numberOfLines = 2
         }
         roomieImageView.do {
-            $0.image = .icnDelete20
+            $0.image = .imgHomeCharacter1
+        }
+        
+        contentView.do {
+            $0.isUserInteractionEnabled = true
         }
         
         moodView.do {
@@ -71,6 +85,14 @@ final class HomeView: BaseView {
         recentlyLabel.do {
             $0.setText("최근 본 방" ,style: .heading5, color: .grayscale12)
         }
+        
+        roomListCollectionView.do {
+            $0.backgroundColor = UIColor.clear
+            $0.showsHorizontalScrollIndicator = false
+            $0.showsVerticalScrollIndicator = false
+            $0.isPagingEnabled = true
+            $0.isUserInteractionEnabled = true
+        }
     }
     
     override func setUI() {
@@ -88,7 +110,9 @@ final class HomeView: BaseView {
         moodView.addSubviews(
             moodLabel,
             moodStackView,
-            recentlyLabel
+            recentlyLabel,
+            roomListCollectionView,
+            nextMapView
         )
         moodStackView.addArrangedSubviews(
             calmCardView,
@@ -104,12 +128,13 @@ final class HomeView: BaseView {
         
         contentView.snp.makeConstraints{
             $0.edges.equalToSuperview()
+            $0.height.greaterThanOrEqualToSuperview().priority(.low)
+            $0.bottom.equalTo(moodView.snp.bottom)
             $0.width.equalToSuperview()
-            $0.height.greaterThanOrEqualToSuperview().priority(.high)
         }
         
         nameLabel.snp.makeConstraints{
-            $0.top.equalToSuperview().inset(31)
+            $0.top.equalToSuperview().inset(41)
             $0.leading.equalToSuperview().inset(20)
         }
         
@@ -124,9 +149,10 @@ final class HomeView: BaseView {
         }
         
         roomieImageView.snp.makeConstraints{
-            $0.top.equalToSuperview().inset(31)
-            $0.trailing.equalToSuperview().inset(20)
-            $0.size.equalTo(CGSize(width: 20, height: 20))
+            $0.top.equalToSuperview()
+            $0.trailing.equalToSuperview()
+            $0.height.equalTo(180)
+            $0.width.equalTo(240)
         }
         
         updateButton.snp.makeConstraints{
@@ -169,6 +195,19 @@ final class HomeView: BaseView {
         recentlyLabel.snp.makeConstraints{
             $0.top.equalTo(calmCardView.snp.bottom).offset(32)
             $0.leading.equalToSuperview().inset(20)
+        }
+        
+        roomListCollectionView.snp.makeConstraints{
+            $0.top.equalTo(recentlyLabel.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            self.roomListTableViewHeightConstraint = $0.height.equalTo(0).constraint
+        }
+        
+        nextMapView.snp.makeConstraints{
+            $0.top.equalTo(roomListCollectionView.snp.bottom).offset(20)
+            $0.bottom.equalToSuperview().inset(20)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(48)
         }
     }
 }
