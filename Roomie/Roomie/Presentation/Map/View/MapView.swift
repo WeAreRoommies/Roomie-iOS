@@ -77,10 +77,10 @@ final class MapView: BaseView {
     override func setUI() {
         addSubviews(
             mapView,
-            mapDetailCardView,
             searchBarView,
             filteringButton,
-            mapListButton
+            mapListButton,
+            mapDetailCardView
         )
         searchBarView.addSubviews(
             searchBarLabel,
