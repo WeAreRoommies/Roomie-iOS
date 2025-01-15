@@ -1,5 +1,5 @@
 //
-//  TourViewModel.swift
+//  TourUserViewModel.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/12/25.
@@ -8,7 +8,8 @@
 import Foundation
 import Combine
 
-final class TourViewModel {
+// TODO: builder로 name, date, gender, phoneNumber를 model로 보내주기
+final class TourUserViewModel {
     
     // MARK: - Property
     
@@ -18,7 +19,7 @@ final class TourViewModel {
     private let phoneNumberTextSubject = PassthroughSubject<String, Never>()   
 }
 
-extension TourViewModel: ViewModelType {
+extension TourUserViewModel: ViewModelType {
     struct Input {
         let nameTextSubject: AnyPublisher<String, Never>
         let dateSubject: AnyPublisher<String, Never>
