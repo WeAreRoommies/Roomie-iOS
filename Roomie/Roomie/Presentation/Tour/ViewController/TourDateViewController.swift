@@ -75,9 +75,10 @@ final class TourDateViewController: BaseViewController {
         
         rootView.nextButton
             .tapPublisher
-            .sink {
-                // TODO: TourCompleteViewController로 연결
-                print("TourDateViewController: nextButton 눌림")
+            .sink { [weak self] in
+                guard let self else { return }
+                let tourCompleteViewController = TourCompleteViewController()
+                self.navigationController?.pushViewController(tourCompleteViewController, animated: true)
             }
             .store(in: cancelBag)
     }
