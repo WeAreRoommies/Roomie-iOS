@@ -15,8 +15,7 @@ final class TourViewModel {
     private let nameTextSubject = PassthroughSubject<String, Never>()
     private let dateSubject = PassthroughSubject<String, Never>()
     private let genderSubject = PassthroughSubject<Gender, Never>()
-    private let phoneNumberTextSubject = PassthroughSubject<String, Never>()
-    
+    private let phoneNumberTextSubject = PassthroughSubject<String, Never>()   
 }
 
 extension TourViewModel: ViewModelType {
