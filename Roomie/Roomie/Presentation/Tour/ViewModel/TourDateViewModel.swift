@@ -14,7 +14,7 @@ final class TourDateViewModel {
     // MARK: - Property
     
     private let dateSubject = PassthroughSubject<String, Never>()
-    private let messageSubject = PassthroughSubject<String, Never>()
+    private let messageSubject = CurrentValueSubject<String, Never>("")
     
 }
 
