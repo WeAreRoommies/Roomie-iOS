@@ -16,13 +16,28 @@ final class MapSearchViewController: BaseViewController {
 
     private let rootView = MapSearchView()
     
+    private let viewModel: MapSearchViewModel
+    
     private let cancelBag = CancelBag()
     
-    private let mapSearchData: [MapSearchModel] = MapSearchModel.mockMapSearchData()
+    private var mapSearchData: [MapSearchModel] = []
     
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 40
     final let cellHeight: CGFloat = 118
     final let contentInset = UIEdgeInsets(top: 16, left: 20, bottom: 16, right: 20)
+    
+    private let searchTextFieldEnterSubject = PassthroughSubject<String, Never>()
+    
+    // MARK: - Initializer
+
+    init(viewModel: MapSearchViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - LifeCycle
     
@@ -34,6 +49,7 @@ final class MapSearchViewController: BaseViewController {
         super.viewDidLoad()
         
         setRegister()
+        bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,13 +82,38 @@ final class MapSearchViewController: BaseViewController {
                 self?.navigationController?.popViewController(animated: true)
             }
             .store(in: cancelBag)
+        
+        rootView.searchTextField
+            .controlEventPublisher(for: .editingDidEndOnExit)
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.searchTextFieldEnterSubject.send(self.rootView.searchTextField.text ?? "")
+            }
+            .store(in: cancelBag)
     }
-    
-    private func setRegister() {
+}
+
+private extension MapSearchViewController {
+    func setRegister() {
         rootView.collectionView.register(
             MapSearchCollectionViewCell.self,
             forCellWithReuseIdentifier: MapSearchCollectionViewCell.reuseIdentifier
         )
+    }
+    
+    func bindViewModel() {
+        let input = MapSearchViewModel.Input(
+            searchTextFieldEnterSubject: searchTextFieldEnterSubject.eraseToAnyPublisher()
+        )
+        
+        let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        
+        output.mapSearchData
+            .sink { [weak self] data in
+                self?.mapSearchData = data
+                self?.rootView.collectionView.reloadData()
+            }
+            .store(in: cancelBag)
     }
 }
 

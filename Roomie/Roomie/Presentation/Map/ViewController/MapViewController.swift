@@ -72,7 +72,9 @@ final class MapViewController: BaseViewController {
         rootView.searchBarButton
             .tapPublisher
             .sink {
-                let mapSearchViewController = MapSearchViewController()
+                let mapSearchViewController = MapSearchViewController(
+                    viewModel: MapSearchViewModel()
+                )
                 self.navigationController?.pushViewController(mapSearchViewController, animated: true)
             }
             .store(in: cancelBag)
