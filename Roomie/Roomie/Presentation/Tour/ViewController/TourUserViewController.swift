@@ -19,6 +19,8 @@ final class TourUserViewController: BaseViewController {
     private let viewModel: TourViewModel
     
     private let nameTextSubject = PassthroughSubject<String, Never>()
+    private let dateTextSubject = PassthroughSubject<String, Never>()
+    private let genderSubject = PassthroughSubject<Gender, Never>()
     private let phoneNumberTextSubject = PassthroughSubject<String, Never>()
     
     private let cancelBag = CancelBag()
@@ -77,6 +79,7 @@ final class TourUserViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 self?.rootView.femaleButton.isSelected = false
+                self?.genderSubject.send(Gender.male)
             }
             .store(in: cancelBag)
         
@@ -84,6 +87,7 @@ final class TourUserViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 self?.rootView.maleButton.isSelected = false
+                self?.genderSubject.send(Gender.female)
             }
             .store(in: cancelBag)
         
@@ -103,7 +107,8 @@ private extension TourUserViewController {
     func bindViewModel() {
         let input = TourViewModel.Input(
             nameTextSubject: nameTextSubject.eraseToAnyPublisher(),
-            phoneNumberTextSubject: phoneNumberTextSubject.eraseToAnyPublisher()
+            phoneNumberTextSubject: phoneNumberTextSubject.eraseToAnyPublisher(),
+            genderSubject: genderSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -115,6 +120,12 @@ private extension TourUserViewController {
                 self?.rootView.inValidErrorStackView.isHidden = isValid
                 
                 self?.rootView.phoneNumberTextField.shouldShowActionColor = !isValid
+            }
+            .store(in: cancelBag)
+        
+        output.isNextButtonEnabled
+            .sink { [weak self] isEnabled in
+                self?.rootView.nextButton.isEnabled = isEnabled
             }
             .store(in: cancelBag)
     }
