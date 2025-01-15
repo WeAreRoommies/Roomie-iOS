@@ -19,8 +19,8 @@ final class TourCompleteView: BaseView {
     
     // TODO: 그 뭐냐 그그그그그 GUI 디쟈너 물어보rl
     
-    private let lookAnotherButton = OtherButton(title: "다른 방 보러가기")
-    private let completeButton = RoomieButton(title: "완료하기", isEnabled: true)
+    let lookOtherButton = OtherButton(title: "다른 방 보러가기")
+    let completeButton = RoomieButton(title: "완료하기", isEnabled: true)
     
     // MARK: - UISetting
     
@@ -39,7 +39,7 @@ final class TourCompleteView: BaseView {
         addSubviews(
             titleLabel,
             subTitleLabel,
-            lookAnotherButton,
+            lookOtherButton,
             completeButton
         )
     }
@@ -55,7 +55,7 @@ final class TourCompleteView: BaseView {
             $0.centerX.equalToSuperview()
         }
         
-        lookAnotherButton.snp.makeConstraints {
+        lookOtherButton.snp.makeConstraints {
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
             $0.leading.equalToSuperview().inset(20)
             $0.height.equalTo(OtherButton.defaultHeight)
@@ -64,7 +64,7 @@ final class TourCompleteView: BaseView {
         
         completeButton.snp.makeConstraints {
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
-            $0.leading.equalTo(lookAnotherButton.snp.trailing).offset(12)
+            $0.leading.equalTo(lookOtherButton.snp.trailing).offset(12)
             $0.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(OtherButton.defaultHeight)
             
