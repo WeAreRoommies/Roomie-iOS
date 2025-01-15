@@ -22,6 +22,8 @@ final class TourDateView: BaseView {
     private let messageLabel = UILabel()
     private let messageTextView = TourTextView(placeholder: "문의내용을 적어주세요")
     
+    let nextButton = RoomieButton(title: "다 작성했어요", isEnabled: false)
+    
     // MARK: - UISetting
     
     override func setStyle() {
@@ -44,7 +46,8 @@ final class TourDateView: BaseView {
             preferredDateLabel,
             preferredDatePickerView,
             messageLabel,
-            messageTextView
+            messageTextView,
+            nextButton
         )
     }
     
@@ -74,6 +77,12 @@ final class TourDateView: BaseView {
             $0.top.equalTo(messageLabel.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(Screen.height(112))
+        }
+        
+        nextButton.snp.makeConstraints {
+            $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.height.equalTo(RoomieButton.defaultHeight)
         }
     }
 }
