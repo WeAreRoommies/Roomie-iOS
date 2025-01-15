@@ -37,11 +37,7 @@ final class RoomListCollectionViewCell: BaseCollectionViewCell {
     
     override var isSelected: Bool {
         didSet{
-            if isSelected == true {
-                self.backgroundColor = .grayscale3
-            } else {
-                self.backgroundColor = .clear
-            }
+            self.backgroundColor = isSelected ? .grayscale3 : .clear
         }
     }
     
