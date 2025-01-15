@@ -19,7 +19,7 @@ final class TourUserViewController: BaseViewController {
     private let viewModel: TourViewModel
     
     private let nameTextSubject = PassthroughSubject<String, Never>()
-    private let dateTextSubject = PassthroughSubject<String, Never>()
+    private let dateSubject = PassthroughSubject<String, Never>()
     private let genderSubject = PassthroughSubject<Gender, Never>()
     private let phoneNumberTextSubject = PassthroughSubject<String, Never>()
     
@@ -63,6 +63,7 @@ final class TourUserViewController: BaseViewController {
     }
     
     override func setDelegate() {
+        rootView.birthPickerView.delegate = self
         rootView.phoneNumberTextField.delegate = self
     }
     
@@ -107,8 +108,9 @@ private extension TourUserViewController {
     func bindViewModel() {
         let input = TourViewModel.Input(
             nameTextSubject: nameTextSubject.eraseToAnyPublisher(),
-            phoneNumberTextSubject: phoneNumberTextSubject.eraseToAnyPublisher(),
-            genderSubject: genderSubject.eraseToAnyPublisher()
+            dateSubject: dateSubject.eraseToAnyPublisher(),
+            genderSubject: genderSubject.eraseToAnyPublisher(),
+            phoneNumberTextSubject: phoneNumberTextSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -131,9 +133,21 @@ private extension TourUserViewController {
     }
 }
 
+// MARK: - DatePickerViewDelegate
+
+extension TourUserViewController: DatePickerViewDelegate {
+    func dateDidPick(date: String) {
+        dateSubject.send(date)
+    }
+}
+
+// MARK: - KeyboardObservable
+
 extension TourUserViewController: KeyboardObservable {
     var transformView: UIView { return self.view }
 }
+
+// MARK: - UITextFieldDelegate
 
 extension TourUserViewController: UITextFieldDelegate {
     func textField(
