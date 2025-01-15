@@ -18,7 +18,6 @@ final class MoodButtonView: UIView {
     
     private var cancelBag = CancelBag()
     
-    
     // MARK: - UIComponents
     
     let moodTypeLabel = UILabel()

@@ -98,7 +98,6 @@ final class HomeViewController: BaseViewController {
         let totalHeight = cellsHeight + totalSpacing
         
         rootView.roomListTableViewHeightConstraint?.update(offset: totalHeight)
-//        rootView.layoutIfNeeded()
     }
 }
 
