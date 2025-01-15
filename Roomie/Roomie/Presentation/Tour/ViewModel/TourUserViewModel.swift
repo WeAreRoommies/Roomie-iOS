@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 
+// TODO: builder로 name, date, gender, phoneNumber를 model로 보내주기
 final class TourUserViewModel {
     
     // MARK: - Property

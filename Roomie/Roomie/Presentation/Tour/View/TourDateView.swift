@@ -17,10 +17,10 @@ final class TourDateView: BaseView {
     private let titleLabel = UILabel()
     
     private let preferredDateLabel = UILabel()
-    private let preferredDatePickerView = DatePickerView()
+    let preferredDatePickerView = DatePickerView()
     
     private let messageLabel = UILabel()
-    private let messageTextView = TourTextView(placeholder: "문의내용을 적어주세요")
+    let messageTextView = TourTextView(placeholder: "문의내용을 적어주세요")
     
     let nextButton = RoomieButton(title: "다 작성했어요", isEnabled: false)
     

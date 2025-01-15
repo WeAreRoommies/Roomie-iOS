@@ -18,6 +18,11 @@ final class TourDateViewController: BaseViewController {
     
     private let viewModel: TourDateViewModel
     
+    private let dateSubject = PassthroughSubject<String, Never>()
+    private let messageSubject = PassthroughSubject<String, Never>()
+    
+    private let cancelBag = CancelBag()
+    
     // MARK: - Initializer
     
     init(viewModel: TourDateViewModel) {
@@ -39,6 +44,7 @@ final class TourDateViewController: BaseViewController {
         super.viewDidLoad()
         
         setNavigationBar(with: "", isBorderHidden: true)
+        bindViewModel()
         hideKeyboardWhenDidTap()
     }
     
@@ -53,7 +59,58 @@ final class TourDateViewController: BaseViewController {
         
         removeKeyboardObserver()
     }
+    
+    override func setDelegate() {
+        rootView.preferredDatePickerView.delegate = self
+    }
+    
+    override func setAction() {
+        rootView.messageTextView
+            .textPublisher
+            .compactMap { $0 }
+            .sink { [weak self] message in
+                self?.messageSubject.send(message)
+            }
+            .store(in: cancelBag)
+        
+        rootView.nextButton
+            .tapPublisher
+            .sink {
+                // TODO: TourCompleteViewController로 연결
+                print("TourDateViewController: nextButton 눌림")
+            }
+            .store(in: cancelBag)
+    }
 }
+
+// MARK: - Functions
+
+private extension TourDateViewController {
+    func bindViewModel() {
+        let input = TourDateViewModel.Input(
+            dateSubject: dateSubject.eraseToAnyPublisher(),
+            messageSubject: messageSubject.eraseToAnyPublisher()
+        )
+        
+        let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        
+        output.isNextButtonEnabled
+            .sink { [weak self] isEnabled in
+                self?.rootView.nextButton.isEnabled = isEnabled
+            }
+            .store(in: cancelBag)
+    }
+}
+
+// MARK: - DatePickerViewDelegate
+
+extension TourDateViewController: DatePickerViewDelegate {
+    func dateDidPick(date: String) {
+        dateSubject.send(date)
+    }
+}
+
+// MARK: - KeyboardObservable
 
 extension TourDateViewController: KeyboardObservable {
     var transformView: UIView { return self.view }

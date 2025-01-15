@@ -18,6 +18,9 @@ final class TourCheckViewController: BaseViewController {
     
     private let viewModel: TourCheckViewModel
     
+    private let roomIDSubject = PassthroughSubject<Int, Never>()
+    private let houseIDSubject = PassthroughSubject<Int, Never>()
+    
     private let cancelBag = CancelBag()
     
     // MARK: - Initializer
@@ -40,6 +43,7 @@ final class TourCheckViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        bindViewModel()
         setNavigationBar(with: "", isBorderHidden: true)
     }
     
@@ -54,3 +58,16 @@ final class TourCheckViewController: BaseViewController {
             .store(in: cancelBag)
     }
 }
+
+// MARK: - Functions
+
+private extension TourCheckViewController {
+    // TODO: 이전 뷰에서 roomID, houseID 받아와서 subject에 연결
+    func bindViewModel() {
+        let input = TourCheckViewModel.Input(
+            roomIDSubject: roomIDSubject.eraseToAnyPublisher(),
+            houseIDSubject: houseIDSubject.eraseToAnyPublisher()
+        )
+    }
+}
+
