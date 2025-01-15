@@ -104,6 +104,7 @@ final class MoodButtonView: UIView {
         moodTypeLabel.snp.makeConstraints{
             $0.top.equalToSuperview().inset(12)
             $0.leading.equalToSuperview().inset(12)
+            $0.trailing.equalTo(nextImageView.snp.leading).offset(-20)
         }
         
         nextImageView.snp.makeConstraints{
@@ -115,12 +116,14 @@ final class MoodButtonView: UIView {
         moodSubLabel.snp.makeConstraints{
             $0.top.equalTo(moodTypeLabel.snp.bottom).offset(4)
             $0.leading.equalToSuperview().inset(12)
+            $0.trailing.equalToSuperview().inset(18)
         }
         
         moodImageView.snp.makeConstraints{
             $0.top.equalTo(moodSubLabel.snp.bottom).offset(8)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
+            $0.height.equalTo(128).priority(.high)
         }
         
         moodButton.snp.makeConstraints{

@@ -37,7 +37,7 @@ extension HomeModel {
                 location: "서대문구 연희동",
                 genderPolicy: "여성전용",
                 locationDescription: "자이아파트",
-                isPinned: true,
+                isPinned: false,
                 moodTag: "#차분한",
                 contractTerm: 6,
                 mainImageURL: ""

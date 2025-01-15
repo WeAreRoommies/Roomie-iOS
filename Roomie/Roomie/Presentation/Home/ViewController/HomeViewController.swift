@@ -22,7 +22,9 @@ final class HomeViewController: BaseViewController {
     
     private let rootView = HomeView()
     
-    final let cellHeight: CGFloat = 120 //112 + 4 + 4
+    final let cellHeight: CGFloat = 112
+    final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
+    final let contentInterSpacing: CGFloat = 4
     
     private var recentlyRooms: [HomeModel] = HomeModel.mockHomeData()
     
@@ -46,15 +48,15 @@ final class HomeViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        rootView.roomListtableView.delegate = self
-        rootView.roomListtableView.dataSource = self
+        rootView.roomListCollectionView.delegate = self
+        rootView.roomListCollectionView.dataSource = self
         
-        rootView.roomListtableView.register(
-            RoomListTableViewCell.self,
-            forCellReuseIdentifier: RoomListTableViewCell.reuseIdentifier
+        rootView.roomListCollectionView.register(
+            RoomListCollectionViewCell.self,
+            forCellWithReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier
         )
         
-        updateTableViewHeight()
+        updateCollectionViewHeight()
     }
     
     // MARK: - Functions
@@ -89,50 +91,63 @@ final class HomeViewController: BaseViewController {
             .store(in: cancelBag)
     }
     
-    private func updateTableViewHeight() {
-        let totalHeight = CGFloat(recentlyRooms.count * 120)
+    private func updateCollectionViewHeight() {
+        let numberOfItems = recentlyRooms.count
+        let cellsHeight = CGFloat(numberOfItems) * cellHeight
+        let totalSpacing = CGFloat(numberOfItems - 1) * contentInterSpacing
+        let totalHeight = cellsHeight + totalSpacing
         
         rootView.roomListTableViewHeightConstraint?.update(offset: totalHeight)
-        rootView.layoutIfNeeded()
+//        rootView.layoutIfNeeded()
     }
 }
 
-// MARK: - UITableViewDelegate
+// MARK: - UICollectionViewDelegateFlowLayout
 
-extension HomeViewController: UITableViewDelegate {
-    func tableView(
-        _ tableView: UITableView,
-        heightForRowAt indexPath: IndexPath
-    ) -> CGFloat {
-        return cellHeight
+extension HomeViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        return CGSize(width: cellWidth, height: cellHeight)
     }
     
-    func tableView(
-        _ tableView: UITableView,
-        didSelectRowAt indexPath: IndexPath
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        return contentInterSpacing
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
     ) {
         // TODO: 상세매물 페이지와 연결
     }
-
 }
 
-// MARK: - UITableViewDataSource
 
-extension HomeViewController: UITableViewDataSource {
-    func tableView(
-        _ tableView: UITableView,
-        numberOfRowsInSection section: Int
+// MARK: - UICollectionViewDataSource
+extension HomeViewController: UICollectionViewDataSource {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
     ) -> Int {
-        return recentlyRooms.count
+        return HomeModel.mockHomeData().count
     }
     
-    func tableView(
-        _ tableView: UITableView,
-        cellForRowAt indexPath: IndexPath
-    ) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: RoomListTableViewCell.reuseIdentifier, for: indexPath
-        ) as? RoomListTableViewCell else {
-            return UITableViewCell()
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier,
+            for: indexPath
+        ) as? RoomListCollectionViewCell else {
+            return UICollectionViewCell()
         }
         
         let data = recentlyRooms[indexPath.row]
@@ -150,7 +165,6 @@ extension HomeViewController: UITableViewDataSource {
             moodTag: data.moodTag,
             contract_term: data.contractTerm
         )
-        
         return cell
     }
 }

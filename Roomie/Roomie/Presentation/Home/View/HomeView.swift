@@ -35,7 +35,12 @@ final class HomeView: BaseView {
     
     private let recentlyLabel = UILabel()
     
-    let roomListtableView = UITableView()
+    let roomListCollectionView = UICollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout().then {
+            $0.scrollDirection = .vertical
+        }
+    )
     
     private let nextMapView = NextMapButtonView()
     
@@ -77,9 +82,11 @@ final class HomeView: BaseView {
             $0.setText("최근 본 방" ,style: .heading5, color: .grayscale12)
         }
         
-        roomListtableView.do {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.separatorStyle = .none
+        roomListCollectionView.do {
+            $0.backgroundColor = UIColor.clear
+            $0.showsHorizontalScrollIndicator = false
+            $0.showsVerticalScrollIndicator = false
+            $0.isPagingEnabled = true
         }
     }
     
@@ -99,7 +106,7 @@ final class HomeView: BaseView {
             moodLabel,
             moodStackView,
             recentlyLabel,
-            roomListtableView,
+            roomListCollectionView,
             nextMapView
         )
         moodStackView.addArrangedSubviews(
@@ -139,7 +146,7 @@ final class HomeView: BaseView {
         roomieImageView.snp.makeConstraints{
             $0.top.equalToSuperview()
             $0.trailing.equalToSuperview()
-            $0.size.equalTo(CGSize(width: 240, height: 220))
+            $0.size.equalTo(CGSize(width: 240, height: 180))
         }
         
         updateButton.snp.makeConstraints{
@@ -184,14 +191,14 @@ final class HomeView: BaseView {
             $0.leading.equalToSuperview().inset(20)
         }
         
-        roomListtableView.snp.makeConstraints{
+        roomListCollectionView.snp.makeConstraints{
             $0.top.equalTo(recentlyLabel.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview().inset(16)
             self.roomListTableViewHeightConstraint = $0.height.equalTo(0).constraint
         }
         
         nextMapView.snp.makeConstraints{
-            $0.top.equalTo(roomListtableView.snp.bottom).offset(20)
+            $0.top.equalTo(roomListCollectionView.snp.bottom).offset(20)
             $0.bottom.equalToSuperview().inset(20)
             $0.height.equalTo(48)
             $0.leading.trailing.equalToSuperview().inset(16)

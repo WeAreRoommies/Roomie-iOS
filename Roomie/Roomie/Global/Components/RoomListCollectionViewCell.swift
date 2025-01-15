@@ -10,15 +10,13 @@ import UIKit
 import SnapKit
 import Then
 
-final class RoomListTableViewCell: BaseTableViewCell {
+final class RoomListCollectionViewCell: BaseCollectionViewCell {
     
     // MARK: - Property
     
     var itemRow: Int?
     
     // MARK: - UIComponent
-    
-    private let cellView = UIView()
     
     private let subtitleStackView = UIStackView()
     private let roomImageView = UIImageView()
@@ -92,9 +90,7 @@ final class RoomListTableViewCell: BaseTableViewCell {
     }
     
     override func setUI() {
-        addSubview(cellView)
-        
-        cellView.addSubviews(
+        addSubviews(
             roomImageView,
             likedImageView,
             moodTagView,
@@ -112,27 +108,29 @@ final class RoomListTableViewCell: BaseTableViewCell {
     }
     
     override func setLayout() {
-        cellView.snp.makeConstraints {
-            $0.edges.equalToSuperview().inset(4)
-        }
-        
         roomImageView.snp.makeConstraints{
-            $0.top.leading.bottom.equalToSuperview()
+            $0.top.leading.equalToSuperview().inset(4)
             $0.size.equalTo(CGSize(width: 140, height: 104))
         }
         
         moodTagView.snp.makeConstraints{
-            $0.leading.equalToSuperview().inset(6)
-            $0.top.equalToSuperview().inset(6)
+            $0.top.equalToSuperview().inset(10)
+            $0.leading.equalToSuperview().inset(10)
+            $0.height.equalTo(22)
+        }
+        
+        moodTagLabel.snp.makeConstraints{
+            $0.edges.equalToSuperview().inset(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
+            $0.centerX.equalToSuperview()
         }
         
         likedImageView.snp.makeConstraints{
             $0.leading.equalTo(moodTagView.snp.trailing).offset(56)
-            $0.top.equalToSuperview().inset(6)
+            $0.top.equalToSuperview().inset(10)
         }
         
         monthlyRentLabel.snp.makeConstraints{
-            $0.top.equalToSuperview().inset(7)
+            $0.top.equalToSuperview().inset(11)
             $0.leading.equalTo(roomImageView.snp.trailing).offset(16)
         }
         
@@ -160,7 +158,7 @@ final class RoomListTableViewCell: BaseTableViewCell {
 
 // MARK: - DataBinding
 
-extension RoomListTableViewCell {
+extension RoomListCollectionViewCell {
     func dataBind(
         _ roomImage: String,
         houseId: Int,
@@ -177,20 +175,19 @@ extension RoomListTableViewCell {
         likedImageView.image = isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
         
         // TODO: 데이터 연결
-        print("data bind: \(houseId)")
         
         if let image = UIImage(named: roomImage) {
             roomImageView.image = image
             roomImageView.backgroundColor = .clear
         } else {
             roomImageView.image = nil
-            roomImageView.backgroundColor = .grayscale4
+            roomImageView.backgroundColor = .grayscale5
         }
         
         monthlyRentLabel.text = "월세 \(montlyRent)"
         depositLabel.text = "보증금 \(deposit)"
         termLabel.text = "\(contract_term)개월"
-        moodTagLabel.text = moodTag
+        moodTagLabel.text = "\(moodTag)"
         roomTypeLabel.text = "\(occupanyTypes) · \(genderPolicy)"
         roomLocationLabel.text = "\(location) · \(locationDescription)"
     }
