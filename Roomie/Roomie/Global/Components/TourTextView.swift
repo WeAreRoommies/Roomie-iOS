@@ -104,7 +104,9 @@ private extension TourTextView {
         
         didBeginEditingPublisher
             .sink { [weak self] in
-                self?.placeholderHiddenSubject.send(true)
+                guard let self else { return }
+                self.layer.borderColor = UIColor.primaryPurple.cgColor
+                self.placeholderHiddenSubject.send(true)
             }
             .store(in: cancelBag)
         
@@ -112,6 +114,7 @@ private extension TourTextView {
             .map { self.text.isEmpty }
             .sink { [weak self] isTextViewEmpty in
                 guard let self else { return }
+                self.layer.borderColor = UIColor.grayscale5.cgColor
                 self.placeholderHiddenSubject.send(!isTextViewEmpty)
             }
             .store(in: cancelBag)

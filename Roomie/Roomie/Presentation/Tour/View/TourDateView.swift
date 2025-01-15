@@ -20,6 +20,7 @@ final class TourDateView: BaseView {
     private let preferredDatePickerView = DatePickerView()
     
     private let messageLabel = UILabel()
+    private let messageTextView = TourTextView(placeholder: "문의내용을 적어주세요")
     
     // MARK: - UISetting
     
@@ -42,7 +43,8 @@ final class TourDateView: BaseView {
             titleLabel,
             preferredDateLabel,
             preferredDatePickerView,
-            messageLabel
+            messageLabel,
+            messageTextView
         )
     }
     
@@ -66,6 +68,12 @@ final class TourDateView: BaseView {
         messageLabel.snp.makeConstraints {
             $0.top.equalTo(preferredDatePickerView.snp.bottom).offset(32)
             $0.horizontalEdges.equalToSuperview().inset(20)
+        }
+        
+        messageTextView.snp.makeConstraints {
+            $0.top.equalTo(messageLabel.snp.bottom).offset(8)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.height.equalTo(Screen.height(112))
         }
     }
 }

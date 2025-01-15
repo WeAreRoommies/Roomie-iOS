@@ -29,4 +29,20 @@ final class TourDateViewController: BaseViewController {
         hideKeyboardWhenDidTap()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        setKeyboardObserver()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        removeKeyboardObserver()
+    }
 }
+
+extension TourDateViewController: KeyboardObservable {
+    var transformView: UIView { return self.view }
+}
+
