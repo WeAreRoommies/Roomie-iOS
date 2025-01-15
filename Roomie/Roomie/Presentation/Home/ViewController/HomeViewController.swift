@@ -26,7 +26,7 @@ final class HomeViewController: BaseViewController {
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
     
-    private var recentlyRooms: [HomeModel] = HomeModel.mockHomeData()
+    private var recentlyRooms: [RecentlyRoom] = RecentlyRoom.mockHomeData()
     
     // MARK: - Initializer
     
@@ -48,14 +48,8 @@ final class HomeViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        rootView.roomListCollectionView.delegate = self
-        rootView.roomListCollectionView.dataSource = self
-        
-        rootView.roomListCollectionView.register(
-            RoomListCollectionViewCell.self,
-            forCellWithReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier
-        )
-        
+        setDelegate()
+        setRegister()
         updateCollectionViewHeight()
     }
     
@@ -91,6 +85,18 @@ final class HomeViewController: BaseViewController {
             .store(in: cancelBag)
     }
     
+    override func setDelegate() {
+        rootView.roomListCollectionView.delegate = self
+        rootView.roomListCollectionView.dataSource = self
+    }
+    
+    private func setRegister() {
+        rootView.roomListCollectionView.register(
+            RoomListCollectionViewCell.self,
+            forCellWithReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier
+        )
+    }
+    
     private func updateCollectionViewHeight() {
         let numberOfItems = recentlyRooms.count
         let cellsHeight = CGFloat(numberOfItems) * cellHeight
@@ -98,6 +104,7 @@ final class HomeViewController: BaseViewController {
         let totalHeight = cellsHeight + totalSpacing
         
         rootView.roomListTableViewHeightConstraint?.update(offset: totalHeight)
+        rootView.layoutIfNeeded()
     }
 }
 
@@ -124,18 +131,20 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
+        self.editButtonItem.isSelected = true
+        print("selected")
         // TODO: 상세매물 페이지와 연결
     }
 }
 
-
 // MARK: - UICollectionViewDataSource
+
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        return HomeModel.mockHomeData().count
+        return recentlyRooms.count
     }
     
     func collectionView(

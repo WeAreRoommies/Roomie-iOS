@@ -29,9 +29,9 @@ final class HomeView: BaseView {
     private let moodView = UIView()
     private let moodLabel = UILabel()
     private let moodStackView = UIStackView()
-    let calmCardView = MoodButtonView(.calm, image: .calm)
-    let livelyCardView = MoodButtonView(.lively, image: .exciting)
-    let neatCardView = MoodButtonView(.neat, image: .clean)
+    let calmCardView = MoodButtonView(.calm, image: .imgCalm)
+    let livelyCardView = MoodButtonView(.lively, image: .imgExciting)
+    let neatCardView = MoodButtonView(.neat, image: .imgClean)
     
     private let recentlyLabel = UILabel()
     
@@ -60,7 +60,11 @@ final class HomeView: BaseView {
             $0.numberOfLines = 2
         }
         roomieImageView.do {
-            $0.image = .homeCharacter1
+            $0.image = .imgHomeCharacter1
+        }
+        
+        contentView.do {
+            $0.isUserInteractionEnabled = true
         }
         
         moodView.do {
@@ -87,6 +91,7 @@ final class HomeView: BaseView {
             $0.showsHorizontalScrollIndicator = false
             $0.showsVerticalScrollIndicator = false
             $0.isPagingEnabled = true
+            $0.isUserInteractionEnabled = true
         }
     }
     
@@ -146,7 +151,8 @@ final class HomeView: BaseView {
         roomieImageView.snp.makeConstraints{
             $0.top.equalToSuperview()
             $0.trailing.equalToSuperview()
-            $0.size.equalTo(CGSize(width: 240, height: 180))
+            $0.height.equalTo(180)
+            $0.width.equalTo(240)
         }
         
         updateButton.snp.makeConstraints{
@@ -200,8 +206,8 @@ final class HomeView: BaseView {
         nextMapView.snp.makeConstraints{
             $0.top.equalTo(roomListCollectionView.snp.bottom).offset(20)
             $0.bottom.equalToSuperview().inset(20)
-            $0.height.equalTo(48)
             $0.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(48)
         }
     }
 }

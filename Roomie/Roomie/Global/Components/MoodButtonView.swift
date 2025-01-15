@@ -120,7 +120,7 @@ final class MoodButtonView: UIView {
         
         moodImageView.snp.makeConstraints{
             $0.top.equalTo(moodSubLabel.snp.bottom).offset(8)
-            $0.leading.trailing.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
             $0.height.equalTo(128).priority(.high)
         }
@@ -148,7 +148,7 @@ final class MoodButtonView: UIView {
         
         moodButton
             .controlEventPublisher(for: .touchDown)
-            .map { UIColor.grayscale4 }
+            .map { UIColor.grayscale3 }
             .sink { [weak self] backgroundColor in
                 self?.backgroundColor = backgroundColor
             }

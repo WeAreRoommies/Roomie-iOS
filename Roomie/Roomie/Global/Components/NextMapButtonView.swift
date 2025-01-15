@@ -83,7 +83,7 @@ final class NextMapButtonView: UIView {
         pinImageView.snp.makeConstraints{
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(24)
-            $0.size.equalTo(CGSize(width: 16, height: 16))
+            $0.size.equalTo(16)
         }
         
         titleLabel.snp.makeConstraints{
@@ -92,7 +92,7 @@ final class NextMapButtonView: UIView {
         }
         
         nextImageView.snp.makeConstraints{
-            $0.size.equalTo(CGSize(width: 24, height: 24))
+            $0.size.equalTo(24)
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(24)
         }
@@ -119,7 +119,7 @@ final class NextMapButtonView: UIView {
         
         updateButton
             .controlEventPublisher(for: .touchDown)
-            .map { UIColor.grayscale4 }
+            .map { UIColor.grayscale3 }
             .sink { [weak self] backgroundColor in
                 self?.backgroundColor = backgroundColor
             }

@@ -102,7 +102,7 @@ final class UpdateButtonView: UIView {
         
         updateButton
             .controlEventPublisher(for: .touchDown)
-            .map { UIColor.grayscale4 }
+            .map { UIColor.grayscale3 }
             .sink { [weak self] backgroundColor in
                 self?.backgroundColor = backgroundColor
             }

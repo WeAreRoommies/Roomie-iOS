@@ -37,11 +37,11 @@ enum MoodType {
     var image: UIImage? {
         switch self {
         case .calm:
-            return UIImage(named: "calm_image")
+            return UIImage(named: "img_calm")
         case .lively:
-            return UIImage(named: "exciting_image")
+            return UIImage(named: "img_exciting")
         case .neat:
-            return UIImage(named: "clean_image")
+            return UIImage(named: "img_clean")
         }
     }
 }

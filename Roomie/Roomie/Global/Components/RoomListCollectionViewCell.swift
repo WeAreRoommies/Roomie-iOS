@@ -6,15 +6,13 @@
 //
 
 import UIKit
+import Combine
 
+import CombineCocoa
 import SnapKit
 import Then
 
 final class RoomListCollectionViewCell: BaseCollectionViewCell {
-    
-    // MARK: - Property
-    
-    var itemRow: Int?
     
     // MARK: - UIComponent
     
@@ -37,7 +35,19 @@ final class RoomListCollectionViewCell: BaseCollectionViewCell {
     
     // MARK: - UISetting
     
+    override var isSelected: Bool {
+        didSet{
+            if isSelected == true {
+                self.backgroundColor = .grayscale3
+            } else {
+                self.backgroundColor = .clear
+            }
+        }
+    }
+    
     override func setStyle() {
+        self.layer.cornerRadius = 8
+        
         subtitleStackView.do {
             $0.axis = .horizontal
             $0.spacing = 8
@@ -48,19 +58,24 @@ final class RoomListCollectionViewCell: BaseCollectionViewCell {
         roomImageView.do {
             $0.layer.cornerRadius = 8
             $0.backgroundColor = .grayscale10
+            $0.contentMode = .scaleAspectFill
+            $0.isUserInteractionEnabled = false
         }
         
         moodTagView.do {
             $0.backgroundColor = .transpGray160
             $0.layer.cornerRadius = 4
+            $0.isUserInteractionEnabled = false
         }
         
         moodTagLabel.do {
             $0.setText(style: .caption2, color: .grayscale12)
+            $0.isUserInteractionEnabled = false
         }
         
         likedImageView.do {
             $0.image = .icnHeart24Normal
+            $0.isUserInteractionEnabled = false
         }
         
         monthlyRentLabel.do {
@@ -110,7 +125,8 @@ final class RoomListCollectionViewCell: BaseCollectionViewCell {
     override func setLayout() {
         roomImageView.snp.makeConstraints{
             $0.top.leading.equalToSuperview().inset(4)
-            $0.size.equalTo(CGSize(width: 140, height: 104))
+            $0.width.equalTo(140)
+            $0.height.equalTo(104)
         }
         
         moodTagView.snp.makeConstraints{
@@ -132,6 +148,7 @@ final class RoomListCollectionViewCell: BaseCollectionViewCell {
         monthlyRentLabel.snp.makeConstraints{
             $0.top.equalToSuperview().inset(11)
             $0.leading.equalTo(roomImageView.snp.trailing).offset(16)
+            $0.trailing.equalToSuperview().inset(83)
         }
         
         subtitleStackView.snp.makeConstraints{
@@ -147,11 +164,13 @@ final class RoomListCollectionViewCell: BaseCollectionViewCell {
         roomTypeLabel.snp.makeConstraints{
             $0.top.equalTo(subtitleStackView.snp.bottom).offset(12)
             $0.leading.equalTo(roomImageView.snp.trailing).offset(16)
+            $0.trailing.equalToSuperview().inset(80)
         }
         
         roomLocationLabel.snp.makeConstraints{
             $0.top.equalTo(roomTypeLabel.snp.bottom)
             $0.leading.equalTo(roomImageView.snp.trailing).offset(16)
+            $0.trailing.equalToSuperview().inset(30)
         }
     }
 }
