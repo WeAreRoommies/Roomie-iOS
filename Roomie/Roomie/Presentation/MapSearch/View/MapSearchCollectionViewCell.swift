@@ -11,6 +11,14 @@ import SnapKit
 import Then
 
 final class MapSearchCollectionViewCell: BaseCollectionViewCell {
+    
+    // MARK: - Property
+    
+    override var isSelected: Bool {
+        didSet{
+            self.cellView.backgroundColor = isSelected ? .grayscale3 : .grayscale1
+        }
+    }
         
     // MARK: - UIComponent
     
