@@ -168,8 +168,6 @@ private extension MapViewController {
 
 extension MapViewController: NMFMapViewTouchDelegate {
     func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
-//        view.endEditing(true)
-        
         if !rootView.mapDetailCardView.isHidden {
             erasePreviousSelectedMarker()
             

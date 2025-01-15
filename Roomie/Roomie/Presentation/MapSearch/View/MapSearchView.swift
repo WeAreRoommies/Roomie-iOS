@@ -12,7 +12,7 @@ import Then
 
 final class MapSearchView: BaseView {
     
-    // MARK: - Property
+    // MARK: - UIComponent
     
     let backButton = UIButton()
     
@@ -27,6 +27,8 @@ final class MapSearchView: BaseView {
             $0.minimumLineSpacing = 12
         }
     )
+    
+    // MARK: - UISetting
     
     override func setStyle() {
         backButton.do {
