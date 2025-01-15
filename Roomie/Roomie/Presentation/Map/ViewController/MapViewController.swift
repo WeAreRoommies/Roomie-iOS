@@ -69,6 +69,16 @@ final class MapViewController: BaseViewController {
     }
     
     override func setAction() {
+        rootView.searchBarButton
+            .tapPublisher
+            .sink {
+                let mapSearchViewController = MapSearchViewController(
+                    viewModel: MapSearchViewModel()
+                )
+                self.navigationController?.pushViewController(mapSearchViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
         rootView.filteringButton
             .tapPublisher
             .sink {
@@ -158,8 +168,6 @@ private extension MapViewController {
 
 extension MapViewController: NMFMapViewTouchDelegate {
     func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
-        view.endEditing(true)
-        
         if !rootView.mapDetailCardView.isHidden {
             erasePreviousSelectedMarker()
             
