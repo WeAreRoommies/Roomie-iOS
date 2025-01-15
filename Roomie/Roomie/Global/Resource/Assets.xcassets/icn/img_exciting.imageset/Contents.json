@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "exciting_img_i.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

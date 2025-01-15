@@ -18,7 +18,6 @@ final class MoodButtonView: UIView {
     
     private var cancelBag = CancelBag()
     
-    
     // MARK: - UIComponents
     
     let moodTypeLabel = UILabel()
@@ -104,6 +103,7 @@ final class MoodButtonView: UIView {
         moodTypeLabel.snp.makeConstraints{
             $0.top.equalToSuperview().inset(12)
             $0.leading.equalToSuperview().inset(12)
+            $0.trailing.equalTo(nextImageView.snp.leading).offset(-20)
         }
         
         nextImageView.snp.makeConstraints{
@@ -112,15 +112,17 @@ final class MoodButtonView: UIView {
             $0.size.equalTo(16)
         }
         
-        moodImageView.snp.makeConstraints{
-            $0.top.equalTo(moodTypeLabel.snp.bottom).offset(10)
-            $0.centerX.equalToSuperview()
-            $0.width.height.equalTo(20)
+        moodSubLabel.snp.makeConstraints{
+            $0.top.equalTo(moodTypeLabel.snp.bottom).offset(4)
+            $0.leading.equalToSuperview().inset(12)
+            $0.trailing.equalToSuperview().inset(18)
         }
         
-        moodSubLabel.snp.makeConstraints{
-            $0.bottom.equalToSuperview().inset(12)
-            $0.leading.equalToSuperview().inset(12)
+        moodImageView.snp.makeConstraints{
+            $0.top.equalTo(moodSubLabel.snp.bottom).offset(8)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(128).priority(.high)
         }
         
         moodButton.snp.makeConstraints{
@@ -140,16 +142,14 @@ final class MoodButtonView: UIView {
         pressedEvent
             .map { UIColor.primaryLight5 }
             .sink { [weak self] backgroundColor in
-                print(backgroundColor)
                 self?.backgroundColor = backgroundColor
             }
             .store(in: cancelBag)
         
         moodButton
             .controlEventPublisher(for: .touchDown)
-            .map { UIColor.grayscale4 }
+            .map { UIColor.grayscale3 }
             .sink { [weak self] backgroundColor in
-                print(backgroundColor)
                 self?.backgroundColor = backgroundColor
             }
             .store(in: cancelBag)
