@@ -89,6 +89,13 @@ final class MapViewController: BaseViewController {
             }
             .store(in: cancelBag)
         
+        rootView.mapListButton.updateButton
+            .tapPublisher
+            .sink { [weak self] in
+                self?.presentMapListSheetSheet()
+            }
+            .store(in: cancelBag)
+        
         rootView.mapDetailCardView.arrowButton
             .tapPublisher
             .sink {
@@ -173,5 +180,25 @@ extension MapViewController: NMFMapViewTouchDelegate {
             
             rootView.mapDetailCardView.isHidden = true
         }
+    }
+}
+
+// MARK: - UIAdaptivePresentationControllerDelegate
+
+extension MapViewController: UIAdaptivePresentationControllerDelegate {
+    func presentMapListSheetSheet() {
+        let mapListSheetViewController = MapListSheetViewController()
+        
+        let mediumDetent = UISheetPresentationController.Detent.custom { _ in 348 }
+        let largeDetent = UISheetPresentationController.Detent.custom { _ in 648 }
+        
+        if let sheet = mapListSheetViewController.sheetPresentationController {
+            sheet.detents = [mediumDetent, largeDetent]
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 16
+        }
+        mapListSheetViewController.isModalInPresentation = false
+        
+        self.present(mapListSheetViewController, animated: true)
     }
 }

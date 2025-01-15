@@ -29,6 +29,8 @@ final class MapView: BaseView {
     
     let mapView = NMFMapView(frame: .zero)
     
+    let mapListButton = NextMapButtonView()
+    
     let mapDetailCardView = MapDetialCardView()
     
     // MARK: - UISetting
@@ -77,7 +79,8 @@ final class MapView: BaseView {
             mapView,
             mapDetailCardView,
             searchBarView,
-            filteringButton
+            filteringButton,
+            mapListButton
         )
         searchBarView.addSubviews(
             searchBarLabel,
@@ -118,6 +121,12 @@ final class MapView: BaseView {
         
         mapView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+        
+        mapListButton.snp.makeConstraints {
+            $0.bottom.equalTo(safeAreaLayoutGuide).inset(12)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(48)
         }
         
         mapDetailCardView.snp.makeConstraints {
