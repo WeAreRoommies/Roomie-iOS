@@ -83,9 +83,11 @@ extension MapFilterViewModel: ViewModelType {
         let monthlyRentMinRange: AnyPublisher<Int, Never>
         let monthlyRentMaxRange: AnyPublisher<Int, Never>
         
+        /// 방 형태
         let isGenderEmpty: AnyPublisher<Bool, Never>
         let isOccupancyTypeEmpty: AnyPublisher<Bool, Never>
         
+        /// 계약기간
         let isContractPeriodEmpty: AnyPublisher<Bool, Never>
     }
     
