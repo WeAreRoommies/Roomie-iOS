@@ -5,6 +5,8 @@
 //  Created by MaengKim on 1/14/25.
 //
 
+import UIKit
+
 enum MoodType {
     case calm
     case lively
@@ -29,6 +31,17 @@ enum MoodType {
             return "활기찬 분위기의\n방이 궁금하신가요?"
         case .neat:
             return "깔끔한 분위기의\n방이 궁금하신가요?"
+        }
+    }
+    
+    var image: UIImage? {
+        switch self {
+        case .calm:
+            return UIImage(named: "calm_image")
+        case .lively:
+            return UIImage(named: "exciting_image")
+        case .neat:
+            return UIImage(named: "clean_image")
         }
     }
 }
