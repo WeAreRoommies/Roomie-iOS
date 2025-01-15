@@ -21,6 +21,7 @@ final class MapFilterViewModel {
     private let genderSubject = CurrentValueSubject<[String], Never>([])
     private let occupancyTypeSubject = CurrentValueSubject<[String], Never>([])
     
+    private let preferredDateSubject = CurrentValueSubject<String, Never>("")
     private let contractPeriodSubject = CurrentValueSubject<[Int], Never>([])
 }
 
@@ -57,6 +58,7 @@ extension MapFilterViewModel: ViewModelType {
         let sextButtonDidTap: AnyPublisher<Void, Never>
         
         /// 계약기간 옵션
+        let preferredDate: AnyPublisher<String, Never>
         let threeMonthButtonDidTap: AnyPublisher<Void, Never>
         let sixMonthButtonDidTap: AnyPublisher<Void, Never>
         let oneYearButtonDidTap: AnyPublisher<Void, Never>
@@ -88,6 +90,7 @@ extension MapFilterViewModel: ViewModelType {
         let isOccupancyTypeEmpty: AnyPublisher<Bool, Never>
         
         /// 계약기간
+        let isPreferredDateEmpty: AnyPublisher<Bool, Never>
         let isContractPeriodEmpty: AnyPublisher<Bool, Never>
     }
     
@@ -328,6 +331,7 @@ extension MapFilterViewModel: ViewModelType {
                 self.monthlyRentMinSubject.send(0)
                 self.genderSubject.send([])
                 self.occupancyTypeSubject.send([])
+                self.preferredDateSubject.send("")
                 self.contractPeriodSubject.send([])
             }
             .store(in: cancelBag)
@@ -361,6 +365,10 @@ extension MapFilterViewModel: ViewModelType {
             .map { $0.isEmpty }
             .eraseToAnyPublisher()
         
+        let isPreferredEmpty = preferredDateSubject
+            .map { $0.isEmpty }
+            .eraseToAnyPublisher()
+        
         let isContractPeriodEmpty = contractPeriodSubject
             .map { $0.isEmpty }
             .eraseToAnyPublisher()
@@ -376,6 +384,7 @@ extension MapFilterViewModel: ViewModelType {
             monthlyRentMaxRange: monthlyRentMax,
             isGenderEmpty: isGenderEmpty,
             isOccupancyTypeEmpty: isOccupancyTypeEmpty,
+            isPreferredDateEmpty: isPreferredEmpty,
             isContractPeriodEmpty: isContractPeriodEmpty
         )
     }

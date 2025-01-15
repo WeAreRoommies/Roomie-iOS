@@ -16,7 +16,7 @@ final class FilterPeriodView: BaseView {
     // MARK: - Property
 
     private let preferredDateLabel = UILabel()
-    private let preferredDatePickerView = DatePickerView()
+    let preferredDatePickerView = DatePickerView()
     
     private let contractPeriodLabel = UILabel()
     let threeMonthButton = FilterOptionButton(title: "3개월")

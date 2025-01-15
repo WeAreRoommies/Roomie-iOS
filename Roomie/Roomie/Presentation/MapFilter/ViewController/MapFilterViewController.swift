@@ -42,6 +42,8 @@ final class MapFilterViewController: BaseViewController {
     private let quintButtonDidTapSubject = PassthroughSubject<Void, Never>()
     private let sextButtonDidTapSubject = PassthroughSubject<Void, Never>()
     
+    private let preferredDateSubject = PassthroughSubject<String, Never>()
+    
     private let threeMonthButtonDidTapSubject = PassthroughSubject<Void, Never>()
     private let sixMonthButtonDidTapSubject = PassthroughSubject<Void, Never>()
     private let oneYearButtonDidTapSubject = PassthroughSubject<Void, Never>()
@@ -290,6 +292,7 @@ private extension MapFilterViewController {
             quadButtonDidTap: quadButtonDidTapSubject.eraseToAnyPublisher(),
             quintButtonDidTap: quintButtonDidTapSubject.eraseToAnyPublisher(),
             sextButtonDidTap: sextButtonDidTapSubject.eraseToAnyPublisher(),
+            preferredDate: preferredDateSubject.eraseToAnyPublisher(),
             threeMonthButtonDidTap: threeMonthButtonDidTapSubject.eraseToAnyPublisher(),
             sixMonthButtonDidTap: sixMonthButtonDidTapSubject.eraseToAnyPublisher(),
             oneYearButtonDidTap: oneYearButtonDidTapSubject.eraseToAnyPublisher(),
@@ -414,6 +417,20 @@ private extension MapFilterViewController {
                 }
             }
             .store(in: cancelBag)
+        
+        output.isPreferredDateEmpty
+            .sink { [weak self] isEmpty in
+                guard let self = self else { return }
+                
+                if isEmpty {
+                    self.rootView.filterPeriodView.preferredDatePickerView.dateLabel.setText(
+                        String.formattedDate(date: Date()),
+                        style: .body1,
+                        color: .grayscale6
+                    )
+                }
+            }
+            .store(in: cancelBag)
     }
     
     func updateFilterViews(for selectedIndex: Int) {
@@ -431,5 +448,11 @@ private extension MapFilterViewController {
             rootView.filterRoomView.isHidden = true
             rootView.filterPeriodView.isHidden = false
         }
+    }
+}
+
+extension MapFilterViewController: DatePickerViewDelegate {
+    func dateDidPick(date: String) {
+        preferredDateSubject.send(date)
     }
 }
