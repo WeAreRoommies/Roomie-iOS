@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-class HousePhotoCell: BaseCollectionViewCell {
+final class HousePhotoCell: BaseCollectionViewCell {
     
     // MARK: - UIComponent
     
@@ -21,17 +21,13 @@ class HousePhotoCell: BaseCollectionViewCell {
     // MARK: - UISetting
     
     override func setStyle() {
-        self.do {
-            $0.backgroundColor = .red
-        }
-        
         photoImageView.do {
             $0.backgroundColor = .grayscale4
         }
         
         roundedTopView.do {
             $0.backgroundColor = .grayscale1
-            $0.roundCorners(cornerRadius: 8, maskedCorners: [.layerMinXMinYCorner, .layerMaxXMinYCorner])
+            $0.roundCorners(cornerRadius: 16, maskedCorners: [.layerMinXMinYCorner, .layerMaxXMinYCorner])
         }
     }
     
