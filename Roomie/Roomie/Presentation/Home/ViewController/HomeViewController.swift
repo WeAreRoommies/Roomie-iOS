@@ -161,20 +161,8 @@ extension HomeViewController: UICollectionViewDataSource {
         }
         
         let data = recentlyRooms[indexPath.row]
+        cell.dataBind(data)
         
-        cell.dataBind(
-            data.mainImageURL,
-            houseId: data.houseID,
-            montlyRent: data.monthlyRent,
-            deposit: data.deposit,
-            occupanyTypes: data.occupancyType,
-            location: data.location,
-            genderPolicy: data.genderPolicy,
-            locationDescription: data.locationDescription,
-            isPinned: data.isPinned,
-            moodTag: data.moodTag,
-            contract_term: data.contractTerm
-        )
         return cell
     }
 }

@@ -23,6 +23,7 @@ extension MapViewModel: ViewModelType {
     struct Output {
         let markersInfo: AnyPublisher<[MarkerInfo], Never>
         let markerDetailInfo: AnyPublisher<MarkerDetailInfo, Never>
+        let mapListData: AnyPublisher<[MapModel], Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -37,6 +38,9 @@ extension MapViewModel: ViewModelType {
                 self?.houseID = houseID
             }
             .store(in: cancelBag)
+        
+        let mapListData = mapDataSubject
+            .eraseToAnyPublisher()
         
         let markersInfo = mapDataSubject
             .map { data in
@@ -67,7 +71,8 @@ extension MapViewModel: ViewModelType {
         
         return Output(
             markersInfo: markersInfo,
-            markerDetailInfo: markerDetailInfo
+            markerDetailInfo: markerDetailInfo,
+            mapListData: mapListData
         )
     }
 }

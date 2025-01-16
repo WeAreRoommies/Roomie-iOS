@@ -174,24 +174,8 @@ final class RoomListCollectionViewCell: BaseCollectionViewCell {
 // MARK: - DataBinding
 
 extension RoomListCollectionViewCell {
-    func dataBind(
-        _ roomImage: String,
-        houseId: Int,
-        montlyRent: String,
-        deposit: String,
-        occupanyTypes: String,
-        location: String,
-        genderPolicy: String,
-        locationDescription: String,
-        isPinned: Bool,
-        moodTag: String,
-        contract_term: Int
-    ) {
-        likedImageView.image = isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
-        
-        // TODO: 데이터 연결
-        
-        if let image = UIImage(named: roomImage) {
+    func dataBind(_ data: MapModel) {
+        if let image = UIImage(named: data.mainImageURL) {
             roomImageView.image = image
             roomImageView.backgroundColor = .clear
         } else {
@@ -199,11 +183,34 @@ extension RoomListCollectionViewCell {
             roomImageView.backgroundColor = .grayscale5
         }
         
-        monthlyRentLabel.text = "월세 \(montlyRent)"
-        depositLabel.text = "보증금 \(deposit)"
-        termLabel.text = "\(contract_term)개월"
-        moodTagLabel.text = "\(moodTag)"
-        roomTypeLabel.text = "\(occupanyTypes) · \(genderPolicy)"
-        roomLocationLabel.text = "\(location) · \(locationDescription)"
+        likedImageView.image = data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
+        
+        moodTagLabel.text = data.moodTag
+        monthlyRentLabel.text = "월세 \(data.monthlyRent)"
+        depositLabel.text = "보증금 \(data.deposit)"
+        termLabel.text = "\(data.contractTerm)개월"
+        roomTypeLabel.text = "\(data.occupancyType) · \(data.genderPolicy)"
+        roomLocationLabel.text = "\(data.location) · \(data.locationDescription)"
+    }
+    
+    func dataBind(_ data: RecentlyRoom) {
+        // TODO: 데이터 연결
+        
+        if let image = UIImage(named: data.mainImageURL) {
+            roomImageView.image = image
+            roomImageView.backgroundColor = .clear
+        } else {
+            roomImageView.image = nil
+            roomImageView.backgroundColor = .grayscale5
+        }
+        
+        likedImageView.image = data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
+        
+        moodTagLabel.text = data.moodTag
+        monthlyRentLabel.text = "월세 \(data.monthlyRent)"
+        depositLabel.text = "보증금 \(data.deposit)"
+        termLabel.text = "\(data.contractTerm)개월"
+        roomTypeLabel.text = "\(data.occupancyType) · \(data.genderPolicy)"
+        roomLocationLabel.text = "\(data.location) · \(data.locationDescription)"
     }
 }

@@ -21,7 +21,7 @@ final class MapFilterView: BaseView {
     let filterRoomView = FilterRoomView()
     let filterPeriodView = FilterPeriodView()
     
-    let resetButton = UIButton()
+    let resetButton = RoomieWhiteButton(title: "초기화")
     let applyButton = RoomieButton(title: "적용하기")
     
     // MARK: - UISetting
@@ -29,11 +29,6 @@ final class MapFilterView: BaseView {
     override func setStyle() {
         seperatorView.do {
             $0.backgroundColor = .grayscale4
-        }
-        
-        resetButton.do {
-            $0.setTitle("초기화", style: .title2, color: .grayscale12)
-            $0.setLayer(borderWidth: 1, borderColor: .grayscale5, cornerRadius: 8)
         }
     }
     
