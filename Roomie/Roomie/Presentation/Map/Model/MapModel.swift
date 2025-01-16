@@ -84,7 +84,7 @@ extension MapModel {
                 location: "마포구 노고산동",
                 genderPolicy: "여성전용",
                 locationDescription: "신촌 맹그로브",
-                isPinned: true,
+                isPinned: false,
                 moodTag: "#활발한",
                 contractTerm: 12,
                 mainImageURL: ""

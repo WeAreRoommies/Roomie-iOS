@@ -175,8 +175,15 @@ final class RoomListCollectionViewCell: BaseCollectionViewCell {
 
 extension RoomListCollectionViewCell {
     func dataBind(_ data: MapModel) {
-        roomImageView.image = nil
-        roomImageView.backgroundColor = .grayscale5
+        if let image = UIImage(named: data.mainImageURL) {
+            roomImageView.image = image
+            roomImageView.backgroundColor = .clear
+        } else {
+            roomImageView.image = nil
+            roomImageView.backgroundColor = .grayscale5
+        }
+        
+        likedImageView.image = data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
         
         moodTagLabel.text = data.moodTag
         monthlyRentLabel.text = "월세 \(data.monthlyRent)"
