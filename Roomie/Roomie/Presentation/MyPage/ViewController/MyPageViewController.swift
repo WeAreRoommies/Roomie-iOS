@@ -68,7 +68,10 @@ extension MyPageViewController: UICollectionViewDelegate {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        // TODO: 찜 리스트 화면 연결
+        if indexPath.row == 0 {
+            let wishListController = WishListViewController(viewModel: WishListViewModel())
+            self.navigationController?.pushViewController(wishListController, animated: true)
+        }
     }
 }
 

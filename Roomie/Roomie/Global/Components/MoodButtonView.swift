@@ -111,7 +111,6 @@ final class MoodButtonView: UIView {
         moodTypeLabel.snp.makeConstraints{
             $0.top.equalToSuperview().inset(12)
             $0.leading.equalTo(hashTagLabel.snp.trailing).offset(4)
-            $0.trailing.equalTo(nextImageView.snp.leading).offset(-20)
         }
         
         nextImageView.snp.makeConstraints{
