@@ -1,5 +1,5 @@
 //
-//  MyPageCompositionalHelper.swift
+//  MyPageLayoutHelper.swift
 //  Roomie
 //
 //  Created by 예삐 on 1/16/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum MyPageCompositionalHelper {
+enum MyPageLayoutHelper {
     static func createLayout() -> UICollectionViewCompositionalLayout {
         return UICollectionViewCompositionalLayout {
             (sectionNumber, _ environment) -> NSCollectionLayoutSection? in

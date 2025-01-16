@@ -16,7 +16,7 @@ final class MyPageView: BaseView {
 
     let collectionView = UICollectionView(
         frame: .zero,
-        collectionViewLayout: MyPageCompositionalHelper.createLayout()
+        collectionViewLayout: MyPageLayoutHelper.createLayout()
     )
     
     // MARK: - UISetting
