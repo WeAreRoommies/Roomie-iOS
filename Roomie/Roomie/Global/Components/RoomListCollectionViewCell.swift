@@ -137,8 +137,9 @@ final class RoomListCollectionViewCell: BaseCollectionViewCell {
         }
         
         likedImageView.snp.makeConstraints{
-            $0.leading.equalTo(moodTagView.snp.trailing).offset(56)
-            $0.top.equalToSuperview().inset(10)
+            $0.top.equalTo(roomImageView.snp.top).offset(6)
+            $0.trailing.equalTo(roomImageView.snp.trailing).offset(-6)
+            $0.size.equalTo(24)
         }
         
         monthlyRentLabel.snp.makeConstraints{
@@ -228,6 +229,27 @@ extension RoomListCollectionViewCell {
         likedImageView.image = data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
         
         moodTagLabel.text = data.moodTag
+        monthlyRentLabel.text = "월세 \(data.monthlyRent)"
+        depositLabel.text = "보증금 \(data.deposit)"
+        termLabel.text = "\(data.contractTerm)개월"
+        roomTypeLabel.text = "\(data.occupancyType) · \(data.genderPolicy)"
+        roomLocationLabel.text = "\(data.location) · \(data.locationDescription)"
+    }
+    
+    func dataBind(_ data: MoodListRoom) {
+        // TODO: 데이터 연결
+        
+        if let image = UIImage(named: data.mainImageURL) {
+            roomImageView.image = image
+            roomImageView.backgroundColor = .clear
+        } else {
+            roomImageView.image = nil
+            roomImageView.backgroundColor = .grayscale5
+        }
+        
+        likedImageView.image = data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
+        
+        moodTagView.isHidden = true
         monthlyRentLabel.text = "월세 \(data.monthlyRent)"
         depositLabel.text = "보증금 \(data.deposit)"
         termLabel.text = "\(data.contractTerm)개월"

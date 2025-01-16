@@ -1,8 +1,8 @@
 //
-//  WishListView.swift
+//  MoodListView.swift
 //  Roomie
 //
-//  Created by MaengKim on 1/16/25.
+//  Created by MaengKim on 1/17/25.
 //
 
 import UIKit
@@ -10,22 +10,20 @@ import UIKit
 import SnapKit
 import Then
 
-final class WishListView: BaseView {
+final class MoodListView: BaseView {
     
     // MARK: - UIComponents
     
-    let wishListCollectionView: UICollectionView = UICollectionView(
+    let moodListCollectionView: UICollectionView = UICollectionView(
         frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()
     )
     
     // MARK: - UISetting
     
     override func setStyle() {
-        wishListCollectionView.do {
+        moodListCollectionView.do {
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .vertical
-            layout.sectionFootersPinToVisibleBounds = true
-            layout.footerReferenceSize = .zero
             
             $0.collectionViewLayout = layout
             $0.backgroundColor = .grayscale1
@@ -35,11 +33,11 @@ final class WishListView: BaseView {
     }
     
     override func setUI() {
-        addSubview(wishListCollectionView)
+        addSubview(moodListCollectionView)
     }
     
     override func setLayout() {
-        wishListCollectionView.snp.makeConstraints{
+        moodListCollectionView.snp.makeConstraints{
             $0.top.equalTo(safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()

@@ -15,11 +15,22 @@ enum MoodType {
     var title: String {
         switch self {
         case .calm:
-            return "# 차분한"
+            return "차분한"
         case .lively:
-            return "# 활기찬"
+            return "활기찬"
         case .neat:
-            return "# 깔끔한"
+            return "깔끔한"
+        }
+    }
+    
+    var subTitleMood: String {
+        switch self {
+        case .calm:
+            return "차분함"
+        case .lively:
+            return "활기참"
+        case .neat:
+            return "깔끔함"
         }
     }
     
@@ -34,7 +45,7 @@ enum MoodType {
         }
     }
     
-    var image: UIImage? {
+    var moodCardViewImage: UIImage? {
         switch self {
         case .calm:
             return UIImage(named: "img_calm")
@@ -42,6 +53,28 @@ enum MoodType {
             return UIImage(named: "img_exciting")
         case .neat:
             return UIImage(named: "img_clean")
+        }
+    }
+    
+    var moodListViewImage: UIImage? {
+        switch self {
+        case .calm:
+            return UIImage(named: "img_moodview_calm")
+        case .lively:
+            return UIImage(named: "img_moodview_exciting")
+        case .neat:
+            return UIImage(named: "img_moodview_clean")
+        }
+    }
+    
+    var moodListData: [MoodListRoom] {
+        switch self {
+        case .calm:
+            return MoodListRoom.calmListRoomData()
+        case .lively:
+            return MoodListRoom.livelyListRoomData()
+        case .neat:
+            return MoodListRoom.neatListRoomData()
         }
     }
 }
