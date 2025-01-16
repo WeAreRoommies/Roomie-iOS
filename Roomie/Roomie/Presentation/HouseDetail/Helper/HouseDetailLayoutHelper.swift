@@ -22,7 +22,7 @@ final class HouseDetailLayoutHelper {
             let layoutSection: NSCollectionLayoutSection
             switch sectionIndex {
             default:
-                layoutSection = createFirstSectionLayout()
+                layoutSection = createHousePhotoLayout()
                 return layoutSection
             }
         }
@@ -99,9 +99,8 @@ final class HouseDetailLayoutHelper {
 // MARK: - Layout 관련 private extension
 
 private extension HouseDetailLayoutHelper {
-    
     // 첫 번째 섹션 레이아웃
-    static func createFirstSectionLayout() -> NSCollectionLayoutSection {
+    static func createHousePhotoLayout() -> NSCollectionLayoutSection {
         
         // item
         let itemInset: CGFloat = 0
