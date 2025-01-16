@@ -14,7 +14,7 @@ final class MyPagePlusHeaderView: BaseCollectionReusableView {
     
     // MARK: - UIComponent
 
-    private let profileView = UIView()
+    private let profileImageView = UIImageView()
     
     private let userInfoStackView = UIStackView()
     private let nicknameLabel = UILabel()
@@ -30,9 +30,10 @@ final class MyPagePlusHeaderView: BaseCollectionReusableView {
     // MARK: - UISetting
     
     override func setStyle() {
-        profileView.do {
-            $0.backgroundColor = .grayscale4
+        profileImageView.do {
+            $0.image = .imgProfile
             $0.layer.cornerRadius = 60 / 2
+            $0.clipsToBounds = true
         }
         
         userInfoStackView.do {
@@ -75,7 +76,7 @@ final class MyPagePlusHeaderView: BaseCollectionReusableView {
     
     override func setUI() {
         addSubviews(
-            profileView,
+            profileImageView,
             userInfoStackView,
             nextImageView,
             dividerView,
@@ -86,19 +87,19 @@ final class MyPagePlusHeaderView: BaseCollectionReusableView {
     }
     
     override func setLayout() {
-        profileView.snp.makeConstraints {
+        profileImageView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(24)
             $0.leading.equalToSuperview().inset(20)
             $0.size.equalTo(60)
         }
         
         userInfoStackView.snp.makeConstraints {
-            $0.centerY.equalTo(profileView.snp.centerY)
-            $0.leading.equalTo(profileView.snp.trailing).offset(12)
+            $0.centerY.equalTo(profileImageView.snp.centerY)
+            $0.leading.equalTo(profileImageView.snp.trailing).offset(12)
         }
         
         nextImageView.snp.makeConstraints {
-            $0.centerY.equalTo(profileView.snp.centerY)
+            $0.centerY.equalTo(profileImageView.snp.centerY)
             $0.trailing.equalToSuperview().inset(10)
             $0.size.equalTo(44)
         }
@@ -109,7 +110,7 @@ final class MyPagePlusHeaderView: BaseCollectionReusableView {
         }
         
         dividerView.snp.makeConstraints {
-            $0.top.equalTo(profileView.snp.bottom).offset(24)
+            $0.top.equalTo(profileImageView.snp.bottom).offset(24)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(12)
         }

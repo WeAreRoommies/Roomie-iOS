@@ -37,6 +37,7 @@ final class MyPageViewController: BaseViewController {
     }
     
     override func setDelegate() {
+        rootView.collectionView.delegate = self
         rootView.collectionView.dataSource = self
     }
 }
@@ -59,6 +60,15 @@ private extension MyPageViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: MyPageServiceHeaderView.reuseIdentifier
         )
+    }
+}
+
+extension MyPageViewController: UICollectionViewDelegate {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        // TODO: 찜 리스트 화면 연결
     }
 }
 
