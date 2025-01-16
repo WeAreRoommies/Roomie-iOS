@@ -16,6 +16,8 @@ final class HouseDetailViewController: BaseViewController {
     
     private let rootView = HouseDetailView()
     
+    private var dataSource: UICollectionViewDiffableDataSource<HouseDetailSection, HouseDetailModel>!
+    
     // MARK: - Initializer
     
     // MARK: - LifeCycle
@@ -27,6 +29,28 @@ final class HouseDetailViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureDataSource()
+        applySnapshot()
+        setRegister()
+    }
+    
+    private func setRegister() {
+        rootView.collectionView.register(HousePhotoCell.self, forCellWithReuseIdentifier: HousePhotoCell.reuseIdentifier)
+    }
+    
+    // MARK: - DataSource 설정
+    
+    private func configureDataSource() {
+        dataSource = HouseDetailLayoutHelper.configureDataSource(
+            for: rootView.collectionView,
+            with: HouseDetailModel.mockData()
+        )
+    }
+    
+    // MARK: - Snapshot 업데이트
+    
+    private func applySnapshot() {
+        HouseDetailLayoutHelper.applySnapshot(for: dataSource, with: HouseDetailModel.mockData())
     }
     
     
