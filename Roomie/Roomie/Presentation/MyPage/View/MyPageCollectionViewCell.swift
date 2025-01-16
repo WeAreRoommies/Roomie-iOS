@@ -19,6 +19,14 @@ final class MyPageCollectionViewCell: BaseCollectionViewCell {
     private let subtitleLabel = UILabel()
     private let nextImageView = UIImageView()
     
+    // MARK: - Property
+    
+    override var isSelected: Bool {
+        didSet{
+            self.backgroundColor = isSelected ? .grayscale3 : .clear
+        }
+    }
+    
     // MARK: - UISetting
 
     override func setStyle() {
