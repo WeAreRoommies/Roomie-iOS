@@ -187,7 +187,9 @@ extension MapViewController: NMFMapViewTouchDelegate {
 
 extension MapViewController: UIAdaptivePresentationControllerDelegate {
     func presentMapListSheetSheet() {
-        let mapListSheetViewController = MapListSheetViewController()
+        let mapListSheetViewController = MapListSheetViewController(
+            viewModel: MapViewModel()
+        )
         
         let mediumDetent = UISheetPresentationController.Detent.custom { _ in 348 }
         let largeDetent = UISheetPresentationController.Detent.custom { _ in 648 }
