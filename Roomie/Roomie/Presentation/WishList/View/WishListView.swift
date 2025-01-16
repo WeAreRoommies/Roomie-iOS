@@ -18,8 +18,6 @@ final class WishListView: BaseView {
         frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()
     )
     
-    let footerView = WishListCollectionFooterView()
-    
     // MARK: - UISetting
     
     override func setStyle() {

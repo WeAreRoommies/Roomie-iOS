@@ -69,7 +69,8 @@ final class HomeViewController: BaseViewController {
         rootView.calmCardView.moodButton
             .tapPublisher
             .sink {
-                // TODO: 화면 전환하기
+                let calmMoodListViewController = MoodListViewController(viewModel: MoodListViewModel(), moodType: .calm)
+                self.navigationController?.pushViewController(calmMoodListViewController, animated: true)
             }
             .store(in: cancelBag)
         

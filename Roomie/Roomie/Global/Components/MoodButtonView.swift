@@ -78,10 +78,6 @@ final class MoodButtonView: UIView {
             $0.tintColor = .primaryPurple
         }
         
-        moodImageView.do {
-            $0.image = .icnDelete20
-        }
-        
         moodSubLabel.do {
             $0.setText(style: .caption3, color: .primaryPurple)
             $0.numberOfLines = 2

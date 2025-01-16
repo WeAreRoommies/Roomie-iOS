@@ -234,4 +234,24 @@ extension RoomListCollectionViewCell {
         roomTypeLabel.text = "\(data.occupancyType) · \(data.genderPolicy)"
         roomLocationLabel.text = "\(data.location) · \(data.locationDescription)"
     }
+    
+    func dataBind(_ data: MoodListRoom) {
+        // TODO: 데이터 연결
+        
+        if let image = UIImage(named: data.mainImageURL) {
+            roomImageView.image = image
+            roomImageView.backgroundColor = .clear
+        } else {
+            roomImageView.image = nil
+            roomImageView.backgroundColor = .grayscale5
+        }
+        
+        likedImageView.image = data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
+        
+        monthlyRentLabel.text = "월세 \(data.monthlyRent)"
+        depositLabel.text = "보증금 \(data.deposit)"
+        termLabel.text = "\(data.contractTerm)개월"
+        roomTypeLabel.text = "\(data.occupancyType) · \(data.genderPolicy)"
+        roomLocationLabel.text = "\(data.location) · \(data.locationDescription)"
+    }
 }
