@@ -64,7 +64,7 @@ enum MyPageCompositionalHelper {
         
         let defaultSize = NSCollectionLayoutSize(
             widthDimension: .absolute(UIScreen.main.bounds.width),
-            heightDimension: .absolute(60)
+            heightDimension: .absolute(52)
         )
         
         let headerSize = NSCollectionLayoutSize(
