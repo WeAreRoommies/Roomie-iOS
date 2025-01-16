@@ -164,11 +164,3 @@ extension MoodListRoom {
         ]
     }
 }
-
-extension MoodInfo {
-    static func mockMoodInfoData() -> [MoodInfo] {
-        return [
-            MoodInfo(moodTag: "#차분한")
-        ]
-    }
-}

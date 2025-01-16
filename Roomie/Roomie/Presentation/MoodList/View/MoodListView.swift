@@ -24,8 +24,6 @@ final class MoodListView: BaseView {
         moodListCollectionView.do {
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .vertical
-//            layout.sectionFootersPinToVisibleBounds = true
-//            layout.footerReferenceSize = .zero
             
             $0.collectionViewLayout = layout
             $0.backgroundColor = .grayscale1

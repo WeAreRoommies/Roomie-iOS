@@ -25,8 +25,6 @@ final class MoodListViewController: BaseViewController {
     
     private var moodListRooms: [MoodListRoom]
     
-    private var moodInfo: [MoodInfo] = MoodInfo.mockMoodInfoData()
-    
     private let moodType: MoodType
     
     private var moodNavibarTitle: String
@@ -163,7 +161,6 @@ extension MoodListViewController: UICollectionViewDataSource {
         
         let data = moodListRooms[indexPath.row]
         cell.dataBind(data)
-        
         
         return cell
     }

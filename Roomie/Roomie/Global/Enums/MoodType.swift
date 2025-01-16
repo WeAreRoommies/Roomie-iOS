@@ -58,7 +58,7 @@ enum MoodType {
     
     var moodListViewImage: UIImage? {
         switch self {
-        case.calm:
+        case .calm:
             return UIImage(named: "img_moodview_calm")
         case .lively:
             return UIImage(named: "img_moodview_exciting")
