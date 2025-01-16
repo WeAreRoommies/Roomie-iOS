@@ -77,4 +77,15 @@ enum MoodType {
             return UIImage(named: "img_moodview_clean")
         }
     }
+    
+    var moodListData: [MoodListRoom] {
+        switch self {
+        case .calm:
+            return MoodListRoom.calmListRoomData()
+        case .lively:
+            return MoodListRoom.livelyListRoomData()
+        case .neat:
+            return MoodListRoom.neatListRoomData()
+        }
+    }
 }

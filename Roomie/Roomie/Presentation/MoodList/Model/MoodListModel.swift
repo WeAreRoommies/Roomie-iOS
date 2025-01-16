@@ -25,7 +25,7 @@ struct MoodInfo {
 }
 
 extension MoodListRoom {
-    static func moodListRoomData() -> [MoodListRoom] {
+    static func calmListRoomData() -> [MoodListRoom] {
         return [
             MoodListRoom(
                 houseID: 1,
@@ -36,6 +36,116 @@ extension MoodListRoom {
                 genderPolicy: "여성전용",
                 locationDescription: "자이아파트",
                 isPinned: false,
+                contractTerm: 6,
+                mainImageURL: ""
+            ),
+            MoodListRoom(
+                houseID: 2,
+                monthlyRent: "30~50",
+                deposit: "200~300",
+                occupancyType: "1,2,3인실",
+                location: "서대문구 대현동",
+                genderPolicy: "성별무관",
+                locationDescription: "자이아파트",
+                isPinned: true,
+                contractTerm: 6,
+                mainImageURL: ""
+            )
+        ]
+    }
+}
+
+extension MoodListRoom {
+    static func livelyListRoomData() -> [MoodListRoom] {
+        return [
+            MoodListRoom(
+                houseID: 1,
+                monthlyRent: "30~50",
+                deposit: "200~300",
+                occupancyType: "1,2인실",
+                location: "서대문구 연희동",
+                genderPolicy: "여성전용",
+                locationDescription: "자이아파트",
+                isPinned: false,
+                contractTerm: 6,
+                mainImageURL: ""
+            ),
+            MoodListRoom(
+                houseID: 2,
+                monthlyRent: "30~50",
+                deposit: "200~300",
+                occupancyType: "1,2,3인실",
+                location: "서대문구 대현동",
+                genderPolicy: "성별무관",
+                locationDescription: "자이아파트",
+                isPinned: true,
+                contractTerm: 6,
+                mainImageURL: ""
+            ),
+            MoodListRoom(
+                houseID: 2,
+                monthlyRent: "30~50",
+                deposit: "200~300",
+                occupancyType: "1,2,3인실",
+                location: "서대문구 대현동",
+                genderPolicy: "성별무관",
+                locationDescription: "자이아파트",
+                isPinned: true,
+                contractTerm: 6,
+                mainImageURL: ""
+            ),
+            MoodListRoom(
+                houseID: 2,
+                monthlyRent: "30~50",
+                deposit: "200~300",
+                occupancyType: "1,2,3인실",
+                location: "서대문구 대현동",
+                genderPolicy: "성별무관",
+                locationDescription: "자이아파트",
+                isPinned: true,
+                contractTerm: 6,
+                mainImageURL: ""
+            ),
+            MoodListRoom(
+                houseID: 2,
+                monthlyRent: "30~50",
+                deposit: "200~300",
+                occupancyType: "1,2,3인실",
+                location: "서대문구 대현동",
+                genderPolicy: "성별무관",
+                locationDescription: "자이아파트",
+                isPinned: true,
+                contractTerm: 6,
+                mainImageURL: ""
+            )
+        ]
+    }
+}
+
+extension MoodListRoom {
+    static func neatListRoomData() -> [MoodListRoom] {
+        return [
+            MoodListRoom(
+                houseID: 1,
+                monthlyRent: "30~50",
+                deposit: "200~300",
+                occupancyType: "1,2인실",
+                location: "서대문구 연희동",
+                genderPolicy: "여성전용",
+                locationDescription: "자이아파트",
+                isPinned: false,
+                contractTerm: 6,
+                mainImageURL: ""
+            ),
+            MoodListRoom(
+                houseID: 2,
+                monthlyRent: "30~50",
+                deposit: "200~300",
+                occupancyType: "1,2,3인실",
+                location: "서대문구 대현동",
+                genderPolicy: "성별무관",
+                locationDescription: "자이아파트",
+                isPinned: true,
                 contractTerm: 6,
                 mainImageURL: ""
             ),
