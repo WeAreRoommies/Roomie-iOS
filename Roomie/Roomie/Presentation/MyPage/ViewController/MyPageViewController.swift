@@ -9,11 +9,17 @@ import UIKit
 
 final class MyPageViewController: BaseViewController {
     
+    // MARK: - UIComponent
+
     private let rootView = MyPageView()
     
+    // MARK: - Property
+
     private let plusData = MyPageModel.myPagePlusData()
     private let serviceData = MyPageModel.myPageServiceData()
     
+    // MARK: - LifeCycle
+
     override func loadView() {
         view = rootView
     }
@@ -24,6 +30,8 @@ final class MyPageViewController: BaseViewController {
         setRegister()
     }
     
+    // MARK: - Functions
+
     override func setView() {
         setNavigationBar(with: "마이페이지")
     }
@@ -53,6 +61,8 @@ private extension MyPageViewController {
         )
     }
 }
+
+// MARK: - UICollectionViewDataSource
 
 extension MyPageViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
