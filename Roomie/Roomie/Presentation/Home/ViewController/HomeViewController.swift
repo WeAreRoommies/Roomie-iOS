@@ -59,11 +59,7 @@ final class HomeViewController: BaseViewController {
         rootView.updateButton.updateButton
             .tapPublisher
             .sink {
-                let wishListViewController = WishListViewController(
-                    viewModel: WishListViewModel()
-                )
-                wishListViewController.hidesBottomBarWhenPushed = true
-                self.navigationController?.pushViewController(wishListViewController, animated: true)
+                // TODO: 업데이트 연결
             }
             .store(in: cancelBag)
         
