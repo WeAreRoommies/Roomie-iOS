@@ -1,36 +1,35 @@
 //
-//  ViewController.swift
+//  WishListViewController.swift
 //  Roomie
 //
-//  Created by 예삐 on 1/7/25.
+//  Created by MaengKim on 1/16/25.
 //
 
 import UIKit
 import Combine
 
+import CombineCocoa
 import SnapKit
 import Then
-import CombineCocoa
 
-final class HomeViewController: BaseViewController {
+final class WishListViewController: BaseViewController {
     
     // MARK: - Property
     
-    private let viewModel: HomeViewModel
+    private let rootView = WishListView()
     
-    private let cancelBag = CancelBag()
-    
-    private let rootView = HomeView()
+    private let viewModel: WishListViewModel
     
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
+    final let contentInset = UIEdgeInsets(top: 12, left: 16, bottom: 24, right: 16)
     
-    private var recentlyRooms: [RecentlyRoom] = RecentlyRoom.mockHomeData()
+    private var wishListRooms: [WishListRoom] = WishListRoom.mockHomeData()
     
     // MARK: - Initializer
     
-    init(viewModel: HomeViewModel) {
+    init(viewModel: WishListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -48,72 +47,37 @@ final class HomeViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setDelegate()
         setRegister()
-        updateCollectionViewHeight()
     }
     
     // MARK: - Functions
     
-    override func setAction() {
-        rootView.updateButton.updateButton
-            .tapPublisher
-            .sink {
-                let wishListViewController = WishListViewController(
-                    viewModel: WishListViewModel()
-                )
-                self.navigationController?.pushViewController(wishListViewController, animated: true)
-            }
-            .store(in: cancelBag)
-        
-        rootView.calmCardView.moodButton
-            .tapPublisher
-            .sink {
-                // TODO: 화면 전환하기
-            }
-            .store(in: cancelBag)
-        
-        rootView.livelyCardView.moodButton
-            .tapPublisher
-            .sink {
-                // TODO: 화면 전환하기
-            }
-            .store(in: cancelBag)
-        
-        rootView.neatCardView.moodButton
-            .tapPublisher
-            .sink {
-                // TODO: 화면 전환하기
-            }
-            .store(in: cancelBag)
+    override func setView() {
+        setNavigationBar(with: "찜 목록")
     }
     
     override func setDelegate() {
-        rootView.roomListCollectionView.delegate = self
-        rootView.roomListCollectionView.dataSource = self
+        rootView.wishListCollectionView.delegate = self
+        rootView.wishListCollectionView.dataSource = self
     }
     
     private func setRegister() {
-        rootView.roomListCollectionView.register(
+        rootView.wishListCollectionView.register(
             RoomListCollectionViewCell.self,
             forCellWithReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier
         )
-    }
-    
-    private func updateCollectionViewHeight() {
-        let numberOfItems = recentlyRooms.count
-        let cellsHeight = CGFloat(numberOfItems) * cellHeight
-        let totalSpacing = CGFloat(numberOfItems - 1) * contentInterSpacing
-        let totalHeight = cellsHeight + totalSpacing
         
-        rootView.roomListTableViewHeightConstraint?.update(offset: totalHeight)
-        rootView.layoutIfNeeded()
+        rootView.wishListCollectionView.register(
+            WishListCollectionFooterView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+            withReuseIdentifier: WishListCollectionFooterView.reuseIdentifier
+        )
     }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
-extension HomeViewController: UICollectionViewDelegateFlowLayout {
+extension WishListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -132,20 +96,36 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(
         _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int
+    ) -> UIEdgeInsets {
+        return contentInset
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
         // TODO: 상세매물 페이지와 연결
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        referenceSizeForFooterInSection section: Int
+    ) -> CGSize {
+        return CGSize(width: UIScreen.main.bounds.width, height: 100)
     }
 }
 
 // MARK: - UICollectionViewDataSource
 
-extension HomeViewController: UICollectionViewDataSource {
+extension WishListViewController: UICollectionViewDataSource {
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        return recentlyRooms.count
+        return wishListRooms.count
     }
     
     func collectionView(
@@ -159,9 +139,24 @@ extension HomeViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        let data = recentlyRooms[indexPath.row]
+        let data = wishListRooms[indexPath.row]
         cell.dataBind(data)
         
         return cell
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionFooter else { return UICollectionReusableView() }
+        
+        guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: WishListCollectionFooterView.reuseIdentifier, for: indexPath) as? WishListCollectionFooterView
+        else {
+            return UICollectionReusableView()
+        }
+        
+        return footer
     }
 }

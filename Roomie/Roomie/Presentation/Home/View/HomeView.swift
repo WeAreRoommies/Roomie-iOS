@@ -35,12 +35,10 @@ final class HomeView: BaseView {
     
     private let recentlyLabel = UILabel()
     
-    let roomListCollectionView = UICollectionView(
-        frame: .zero,
-        collectionViewLayout: UICollectionViewFlowLayout().then {
-            $0.scrollDirection = .vertical
-        }
+    let roomListCollectionView: UICollectionView = UICollectionView(
+        frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()
     )
+
     
     private let nextMapView = NextMapButtonView()
     
@@ -87,6 +85,10 @@ final class HomeView: BaseView {
         }
         
         roomListCollectionView.do {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .vertical
+            
+            $0.collectionViewLayout = layout
             $0.backgroundColor = UIColor.clear
             $0.showsHorizontalScrollIndicator = false
             $0.showsVerticalScrollIndicator = false
