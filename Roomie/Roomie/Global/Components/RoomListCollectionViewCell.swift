@@ -129,7 +129,6 @@ final class RoomListCollectionViewCell: BaseCollectionViewCell {
             $0.top.equalToSuperview().inset(10)
             $0.leading.equalToSuperview().inset(10)
             $0.height.equalTo(22)
-//            $0.width.lessThanOrEqualTo(48)
         }
         
         moodTagLabel.snp.makeConstraints{
@@ -138,8 +137,9 @@ final class RoomListCollectionViewCell: BaseCollectionViewCell {
         }
         
         likedImageView.snp.makeConstraints{
-            $0.leading.equalTo(moodTagView.snp.trailing).offset(56)
-            $0.top.equalToSuperview().inset(10)
+            $0.top.equalTo(roomImageView.snp.top).offset(6)
+            $0.trailing.equalTo(roomImageView.snp.trailing).offset(-6)
+            $0.size.equalTo(24)
         }
         
         monthlyRentLabel.snp.makeConstraints{
