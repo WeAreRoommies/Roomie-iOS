@@ -106,7 +106,6 @@ extension WishListViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        self.editButtonItem.isSelected = true
         // TODO: 상세매물 페이지와 연결
     }
     
