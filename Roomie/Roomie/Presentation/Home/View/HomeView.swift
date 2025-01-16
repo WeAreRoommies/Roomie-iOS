@@ -40,7 +40,7 @@ final class HomeView: BaseView {
     )
 
     
-    private let nextMapView = NextMapButtonView()
+    let nextMapView = NextMapButtonView()
     
     // MARK: - UISetting
     

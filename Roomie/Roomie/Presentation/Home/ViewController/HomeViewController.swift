@@ -69,7 +69,10 @@ final class HomeViewController: BaseViewController {
         rootView.calmCardView.moodButton
             .tapPublisher
             .sink {
-                let calmMoodListViewController = MoodListViewController(viewModel: MoodListViewModel(), moodType: .calm)
+                let calmMoodListViewController = MoodListViewController(
+                    viewModel: MoodListViewModel(),
+                    moodType: .calm
+                )
                 self.navigationController?.pushViewController(calmMoodListViewController, animated: true)
             }
             .store(in: cancelBag)
@@ -77,7 +80,10 @@ final class HomeViewController: BaseViewController {
         rootView.livelyCardView.moodButton
             .tapPublisher
             .sink {
-                let livelyMoodListViewController = MoodListViewController(viewModel: MoodListViewModel(), moodType: .lively)
+                let livelyMoodListViewController = MoodListViewController(
+                    viewModel: MoodListViewModel(),
+                    moodType: .lively
+                )
                 self.navigationController?.pushViewController(livelyMoodListViewController, animated: true)
             }
             .store(in: cancelBag)
@@ -85,8 +91,19 @@ final class HomeViewController: BaseViewController {
         rootView.neatCardView.moodButton
             .tapPublisher
             .sink {
-                let neatMoodListViewController = MoodListViewController(viewModel: MoodListViewModel(), moodType: .neat)
+                let neatMoodListViewController = MoodListViewController(
+                    viewModel: MoodListViewModel(),
+                    moodType: .neat
+                )
                 self.navigationController?.pushViewController(neatMoodListViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
+        rootView.nextMapView.updateButton
+            .tapPublisher
+            .sink {
+                let mapViewController = MapViewController(viewModel: MapViewModel())
+                self.navigationController?.pushViewController(mapViewController, animated: true)
             }
             .store(in: cancelBag)
     }
