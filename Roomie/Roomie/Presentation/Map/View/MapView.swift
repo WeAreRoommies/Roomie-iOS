@@ -29,7 +29,9 @@ final class MapView: BaseView {
     
     let mapView = NMFMapView(frame: .zero)
     
-    let mapListButton = NextMapButtonView()
+//    let mapListButton = NextMapButtonView()
+    
+    let mapListButton = UIButton()
     
     let mapDetailCardView = MapDetialCardView()
     
@@ -62,6 +64,15 @@ final class MapView: BaseView {
         
         mapView.do {
             $0.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: 37.555184166, lng: 126.936910322)))
+        }
+        
+        mapListButton.do {
+            $0.setTitle("내 주변 매물 보기", style: .title3, color: .grayscale1)
+            $0.backgroundColor = .primaryPurple
+            $0.layer.cornerRadius = 50 / 2
+            $0.layer.shadowOpacity = 0.25
+            $0.layer.shadowRadius = 2
+            $0.layer.shadowOffset = CGSize(width: 0, height: 0)
         }
         
         mapDetailCardView.do {
@@ -124,9 +135,10 @@ final class MapView: BaseView {
         }
         
         mapListButton.snp.makeConstraints {
-            $0.bottom.equalTo(safeAreaLayoutGuide).inset(12)
-            $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(48)
+            $0.bottom.equalTo(safeAreaLayoutGuide).inset(20)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(148)
+            $0.height.equalTo(50)
         }
         
         mapDetailCardView.snp.makeConstraints {

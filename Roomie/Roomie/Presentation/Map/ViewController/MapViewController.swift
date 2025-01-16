@@ -89,7 +89,7 @@ final class MapViewController: BaseViewController {
             }
             .store(in: cancelBag)
         
-        rootView.mapListButton.updateButton
+        rootView.mapListButton
             .tapPublisher
             .sink { [weak self] in
                 self?.presentMapListSheetSheet()
