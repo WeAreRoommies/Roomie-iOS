@@ -63,6 +63,18 @@ struct Roommate {
     let activityTime: String
 }
 
+// MARK: - HouseInfoModel
+
+struct HouseInfoData {
+    let name: String
+    let title: String
+    let location: String
+    let occupancyTypes: String
+    let occupancyStatus: String
+    let genderPolicy: String
+    let contractTerm: Int
+}
+
 // MARK: - Mock Data
 
 extension HouseDetailModel {
