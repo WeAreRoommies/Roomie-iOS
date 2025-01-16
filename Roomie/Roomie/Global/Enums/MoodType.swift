@@ -15,22 +15,11 @@ enum MoodType {
     var title: String {
         switch self {
         case .calm:
-            return "# 차분한"
+            return "차분한"
         case .lively:
-            return "# 활기찬"
+            return "활기찬"
         case .neat:
-            return "# 깔끔한"
-        }
-    }
-    
-    var moodListTitle: String {
-        switch self {
-        case .calm:
-            return "#차분한"
-        case .lively:
-            return "#활기찬"
-        case .neat:
-            return "#깔끔한"
+            return "깔끔한"
         }
     }
     

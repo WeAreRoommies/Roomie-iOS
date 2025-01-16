@@ -36,7 +36,7 @@ final class MoodListViewController: BaseViewController {
     init(viewModel: MoodListViewModel, moodType: MoodType) {
         self.viewModel = viewModel
         self.moodType = moodType
-        self.moodNavibarTitle = moodType.moodListTitle
+        self.moodNavibarTitle = moodType.title
         self.moodListRooms = moodType.moodListData
         super.init(nibName: nil, bundle: nil)
     }
@@ -61,7 +61,7 @@ final class MoodListViewController: BaseViewController {
     // MARK: - Functions
     
     override func setView() {
-        setNavigationBar(with: "\(moodNavibarTitle)")
+        setNavigationBar(with: "#\(moodNavibarTitle)")
     }
     
     override func setDelegate() {

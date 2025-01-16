@@ -20,8 +20,10 @@ final class MoodButtonView: UIView {
     
     // MARK: - UIComponents
     
+    let hashTagLabel = UILabel()
     let moodTypeLabel = UILabel()
     private let nextImageView = UIImageView()
+    
     let moodImageView = UIImageView()
     let moodSubLabel = UILabel()
     let moodButton = UIButton()
@@ -69,6 +71,10 @@ final class MoodButtonView: UIView {
             $0.layer.cornerRadius = 8
         }
         
+        hashTagLabel.do {
+            $0.setText("#", style: .body2, color: .primaryPurple)
+        }
+        
         moodTypeLabel.do {
             $0.setText(style: .body2, color: .primaryPurple)
         }
@@ -87,6 +93,7 @@ final class MoodButtonView: UIView {
     
     private func setUI() {
         addSubviews(
+            hashTagLabel,
             moodTypeLabel,
             nextImageView,
             moodImageView,
@@ -96,9 +103,14 @@ final class MoodButtonView: UIView {
     }
     
     private func setLayout() {
-        moodTypeLabel.snp.makeConstraints{
+        hashTagLabel.snp.makeConstraints{
             $0.top.equalToSuperview().inset(12)
             $0.leading.equalToSuperview().inset(12)
+        }
+        
+        moodTypeLabel.snp.makeConstraints{
+            $0.top.equalToSuperview().inset(12)
+            $0.leading.equalTo(hashTagLabel.snp.trailing).offset(4)
             $0.trailing.equalTo(nextImageView.snp.leading).offset(-20)
         }
         

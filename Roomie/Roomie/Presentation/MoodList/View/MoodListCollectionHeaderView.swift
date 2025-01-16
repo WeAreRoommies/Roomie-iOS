@@ -20,9 +20,13 @@ final class MoodListCollectionHeaderView: BaseCollectionReusableView {
     
     // MARK: - UIComponent
     
+    private let hashTagLabel = UILabel()
     private let moodLabel = UILabel()
+    
     private let subMoodLabel = UILabel()
+    
     private let titleLabel = UILabel()
+    
     private let subTitleMoodLabel = UILabel()
     private let subTitleLabel = UILabel()
     
@@ -31,6 +35,10 @@ final class MoodListCollectionHeaderView: BaseCollectionReusableView {
     // MARK: - UISetting
     
     override func setStyle() {
+        hashTagLabel.do {
+            $0.setText("#", style: .heading5, color: .primaryPurple)
+        }
+        
         moodLabel.do {
             $0.setText(style: .heading5, color: .primaryPurple)
         }
@@ -54,6 +62,7 @@ final class MoodListCollectionHeaderView: BaseCollectionReusableView {
     
     override func setUI() {
         addSubviews(
+            hashTagLabel,
             moodLabel,
             subMoodLabel,
             titleLabel,
@@ -64,9 +73,14 @@ final class MoodListCollectionHeaderView: BaseCollectionReusableView {
     }
     
     override func setLayout() {
-        moodLabel.snp.makeConstraints{
+        hashTagLabel.snp.makeConstraints{
             $0.top.equalToSuperview().inset(40)
             $0.leading.equalToSuperview().inset(20)
+        }
+        
+        moodLabel.snp.makeConstraints{
+            $0.top.equalToSuperview().inset(40)
+            $0.leading.equalTo(hashTagLabel.snp.trailing)
         }
         
         subMoodLabel.snp.makeConstraints{
@@ -92,13 +106,12 @@ final class MoodListCollectionHeaderView: BaseCollectionReusableView {
         moodImageView.snp.makeConstraints{
             $0.top.equalToSuperview().inset(4)
             $0.trailing.equalToSuperview().inset(12)
-//            $0.leading.equalTo(subMoodLabel.snp.trailing).offset(23)
             $0.size.equalTo(160)
         }
     }
     
     func configure(with type: MoodType) {
-        moodLabel.text = type.moodListTitle
+        moodLabel.text = type.title
         subTitleMoodLabel.text = type.subTitleMood
         moodImageView.image = type.moodListViewImage
     }
