@@ -20,16 +20,9 @@ final class MapView: BaseView {
     private let searchImageView = UIImageView()
     let searchBarButton = UIButton()
     
-    let filteringButton: UIButton = {
-        var config = UIButton.Configuration.plain()
-        config.image = UIImage(named: "icn_map_fillter_20")
-        let button = UIButton(configuration: config)
-        return button
-    }()
+    let filteringButton = UIButton()
     
     let mapView = NMFMapView(frame: .zero)
-    
-//    let mapListButton = NextMapButtonView()
     
     let mapListButton = UIButton()
     
@@ -55,6 +48,7 @@ final class MapView: BaseView {
         }
         
         filteringButton.do {
+            $0.setImage(.icnMapFillter20, for: .normal)
             $0.backgroundColor = .grayscale1
             $0.layer.cornerRadius = 8
             $0.layer.shadowOpacity = 0.25

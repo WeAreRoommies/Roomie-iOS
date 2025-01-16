@@ -79,7 +79,7 @@ final class MapViewController: BaseViewController {
             }
             .store(in: cancelBag)
         
-        rootView.filteringButton
+        rootView.filterButton
             .tapPublisher
             .sink {
                 let mapFilterViewController = MapFilterViewController(
