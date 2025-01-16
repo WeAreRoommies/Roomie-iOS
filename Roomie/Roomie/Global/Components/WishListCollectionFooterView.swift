@@ -26,6 +26,7 @@ final class WishListCollectionFooterView: BaseCollectionReusableView {
         self.do {
             $0.backgroundColor = .grayscale1
         }
+        
         barView.do {
             $0.backgroundColor = .grayscale5
         }
@@ -53,6 +54,7 @@ final class WishListCollectionFooterView: BaseCollectionReusableView {
             $0.height.equalTo(1)
             $0.width.equalToSuperview()
         }
+        
         rightPolicyLabel.snp.makeConstraints{
             $0.top.equalToSuperview().inset(35)
             $0.centerX.equalToSuperview()

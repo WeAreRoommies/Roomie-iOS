@@ -23,6 +23,7 @@ final class WishListViewController: BaseViewController {
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
+    final let contentInset = UIEdgeInsets(top: 12, left: 16, bottom: 24, right: 16)
     
     private var wishListRooms: [WishListRoom] = WishListRoom.mockHomeData()
     
@@ -37,11 +38,7 @@ final class WishListViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Functions
-    
-    override func setView() {
-        setNavigationBar(with: "찜 목록")
-    }
+    // MARK: - LifeCycle
     
     override func loadView() {
         view = rootView
@@ -50,8 +47,13 @@ final class WishListViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setDelegate()
         setRegister()
+    }
+    
+    // MARK: - Functions
+    
+    override func setView() {
+        setNavigationBar(with: "찜 목록")
     }
     
     override func setDelegate() {
@@ -61,7 +63,14 @@ final class WishListViewController: BaseViewController {
     
     private func setRegister() {
         rootView.wishListCollectionView.register(
-            RoomListCollectionViewCell.self, forCellWithReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier
+            RoomListCollectionViewCell.self,
+            forCellWithReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier
+        )
+        
+        rootView.wishListCollectionView.register(
+            WishListCollectionFooterView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+            withReuseIdentifier: WishListCollectionFooterView.reuseIdentifier
         )
     }
 }
@@ -87,10 +96,26 @@ extension WishListViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(
         _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int
+    ) -> UIEdgeInsets {
+        return contentInset
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
         self.editButtonItem.isSelected = true
         // TODO: 상세매물 페이지와 연결
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        referenceSizeForFooterInSection section: Int
+    ) -> CGSize {
+        return CGSize(width: UIScreen.main.bounds.width, height: 100)
     }
 }
 
@@ -116,20 +141,23 @@ extension WishListViewController: UICollectionViewDataSource {
         }
         
         let data = wishListRooms[indexPath.row]
+        cell.dataBind(data)
         
-        cell.dataBind(
-            data.mainImageURL,
-            houseId: data.houseID,
-            montlyRent: data.monthlyRent,
-            deposit: data.deposit,
-            occupanyTypes: data.occupancyType,
-            location: data.location,
-            genderPolicy: data.genderPolicy,
-            locationDescription: data.locationDescription,
-            isPinned: data.isPinned,
-            moodTag: data.moodTag,
-            contract_term: data.contractTerm
-        )
         return cell
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionFooter else { return UICollectionReusableView() }
+        
+        guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: WishListCollectionFooterView.reuseIdentifier, for: indexPath) as? WishListCollectionFooterView
+        else {
+            return UICollectionReusableView()
+        }
+        
+        return footer
     }
 }
