@@ -18,83 +18,24 @@ final class HouseDetailLayoutHelper {
             sectionIndex: Int,
             environment: NSCollectionLayoutEnvironment
         ) -> NSCollectionLayoutSection? in
-            
             let layoutSection: NSCollectionLayoutSection
-            switch sectionIndex {
-            default:
-                layoutSection = createHousePhotoLayout()
-                return layoutSection
-            }
-        }
-        return layout
-    }
-    
-    // MARK: - DataSource 설정
-    
-    /// DataSource를 설정하는 함수입니다.
-    /// ViewController에서 호출합니다.
-    static func configureDataSource(for collectionView: UICollectionView, with mockData: [HouseDetailModel]) -> UICollectionViewDiffableDataSource<HouseDetailSection, HouseDetailModel> {
-        
-        // cell provider 구현
-        let dataSource = UICollectionViewDiffableDataSource<HouseDetailSection, HouseDetailModel>(
-            collectionView: collectionView
-        ) { collectionView, indexPath, item in
             
-            switch HouseDetailSection(rawValue: indexPath.section) {
-                
-            case .housePhoto:
-                guard let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: HousePhotoCell.reuseIdentifier,
-                    for: indexPath
-                ) as? HousePhotoCell else {
-                    return UICollectionViewCell()
-                }
-                return cell
-                
-            default:
+            guard let section = HouseDetailSection(rawValue: sectionIndex) else {
                 return nil
             }
-        }
-        
-        // header
-        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
-            guard let section = HouseDetailSection(rawValue: indexPath.section) else { return nil }
             
             switch section {
             case .housePhoto:
-                return nil
+                layoutSection = createHousePhotoLayout()
+            case .houseInfo:
+                layoutSection = createHouseInfoLayout()
             }
             
-//            switch section {
-//            case .first:
-//                if kind == FirstHeaderView.firstHeaderElementKind {
-//                    guard let headerView = collectionView.dequeueReusableSupplementaryView(
-//                        ofKind: kind,
-//                        withReuseIdentifier: FirstHeaderView.identifier,
-//                        for: indexPath
-//                    ) as? FirstHeaderView else { return UICollectionReusableView() }
-//                    return headerView
-//                } else {
-//                    return UICollectionReusableView()
-//                }
-//            }
+            return layoutSection
         }
-        
-        return dataSource
-    }
-    
-    // MARK: - Snapshot 설정
-    
-    /// Snapshot을 설정하는 함수입니다.
-    /// ViewController에서 호출합니다.
-    static func applySnapshot(for dataSource: UICollectionViewDiffableDataSource<HouseDetailSection, HouseDetailModel>, with mockData: [HouseDetailModel]) {
-        var snapshot = NSDiffableDataSourceSnapshot<HouseDetailSection, HouseDetailModel>()
-        snapshot.appendSections([.housePhoto])
-        snapshot.appendItems(mockData, toSection: .housePhoto)
-        dataSource.apply(snapshot, animatingDifferences: true)
+        return layout
     }
 }
-
 
 // MARK: - Layout 관련 private extension
 
@@ -137,6 +78,34 @@ private extension HouseDetailLayoutHelper {
         // section
         let section = NSCollectionLayoutSection(group: group)
         //        section.boundarySupplementaryItems = [headerElement]
+        return section
+    }
+    
+    static func createHouseInfoLayout() -> NSCollectionLayoutSection {
+        
+        // item
+        let itemInset: CGFloat = 0
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(
+            top: itemInset,
+            leading: itemInset,
+            bottom: itemInset,
+            trailing: itemInset
+        )
+        
+        // group
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(Screen.height(290))
+        )
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        // section
+        let section = NSCollectionLayoutSection(group: group)
         return section
     }
 }
