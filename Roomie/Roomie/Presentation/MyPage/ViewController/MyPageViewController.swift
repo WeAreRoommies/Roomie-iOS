@@ -68,9 +68,14 @@ extension MyPageViewController: UICollectionViewDelegate {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        if indexPath.row == 0 {
-            let wishListController = WishListViewController(viewModel: WishListViewModel())
-            self.navigationController?.pushViewController(wishListController, animated: true)
+        switch indexPath.section {
+        case 0:
+            if indexPath.row == 0 {
+                let wishListController = WishListViewController(viewModel: WishListViewModel())
+                self.navigationController?.pushViewController(wishListController, animated: true)
+            }
+        default:
+            break
         }
     }
 }
