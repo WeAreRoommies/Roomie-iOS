@@ -77,14 +77,16 @@ final class HomeViewController: BaseViewController {
         rootView.livelyCardView.moodButton
             .tapPublisher
             .sink {
-                // TODO: 화면 전환하기
+                let livelyMoodListViewController = MoodListViewController(viewModel: MoodListViewModel(), moodType: .lively)
+                self.navigationController?.pushViewController(livelyMoodListViewController, animated: true)
             }
             .store(in: cancelBag)
         
         rootView.neatCardView.moodButton
             .tapPublisher
             .sink {
-                // TODO: 화면 전환하기
+                let neatMoodListViewController = MoodListViewController(viewModel: MoodListViewModel(), moodType: .neat)
+                self.navigationController?.pushViewController(neatMoodListViewController, animated: true)
             }
             .store(in: cancelBag)
     }

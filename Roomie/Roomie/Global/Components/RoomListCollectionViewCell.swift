@@ -129,6 +129,7 @@ final class RoomListCollectionViewCell: BaseCollectionViewCell {
             $0.top.equalToSuperview().inset(10)
             $0.leading.equalToSuperview().inset(10)
             $0.height.equalTo(22)
+//            $0.width.lessThanOrEqualTo(48)
         }
         
         moodTagLabel.snp.makeConstraints{
@@ -248,6 +249,7 @@ extension RoomListCollectionViewCell {
         
         likedImageView.image = data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
         
+        moodTagView.isHidden = true
         monthlyRentLabel.text = "월세 \(data.monthlyRent)"
         depositLabel.text = "보증금 \(data.deposit)"
         termLabel.text = "\(data.contractTerm)개월"

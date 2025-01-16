@@ -28,7 +28,7 @@ final class MoodButtonView: UIView {
     
     // MARK: - Initializer
     
-    init(_ type: MoodType, image: UIImage) {
+    init(_ type: MoodType) {
         super.init(frame: .zero)
         
         setStyle()
@@ -38,7 +38,7 @@ final class MoodButtonView: UIView {
         
         moodTypeLabel.text = type.title
         moodSubLabel.text = type.subTitle
-        moodImageView.image = image
+        moodImageView.image = type.moodCardViewImage
     }
     
     override init(frame: CGRect) {

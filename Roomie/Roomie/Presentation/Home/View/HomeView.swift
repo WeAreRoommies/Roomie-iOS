@@ -29,9 +29,9 @@ final class HomeView: BaseView {
     private let moodView = UIView()
     private let moodLabel = UILabel()
     private let moodStackView = UIStackView()
-    let calmCardView = MoodButtonView(.calm, image: .imgCalm)
-    let livelyCardView = MoodButtonView(.lively, image: .imgExciting)
-    let neatCardView = MoodButtonView(.neat, image: .imgClean)
+    let calmCardView = MoodButtonView(.calm)
+    let livelyCardView = MoodButtonView(.lively)
+    let neatCardView = MoodButtonView(.neat)
     
     private let recentlyLabel = UILabel()
     

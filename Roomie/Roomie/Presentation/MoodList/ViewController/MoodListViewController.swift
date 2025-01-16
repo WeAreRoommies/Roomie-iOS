@@ -25,13 +25,18 @@ final class MoodListViewController: BaseViewController {
     
     private var moodListRooms: [MoodListRoom] = MoodListRoom.moodListRoomData()
     
+    private var moodInfo: [MoodInfo] = MoodInfo.mockMoodInfoData()
+    
     private let moodType: MoodType
+    
+    private var moodNavibarTitle: String
     
     // MARK: - Initializer
     
     init(viewModel: MoodListViewModel, moodType: MoodType) {
         self.viewModel = viewModel
         self.moodType = moodType
+        self.moodNavibarTitle = moodType.moodListTitle
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -55,7 +60,7 @@ final class MoodListViewController: BaseViewController {
     // MARK: - Functions
     
     override func setView() {
-        setNavigationBar(with: "dd")
+        setNavigationBar(with: "\(moodNavibarTitle)")
     }
     
     override func setDelegate() {
@@ -73,6 +78,12 @@ final class MoodListViewController: BaseViewController {
             MoodListCollectionHeaderView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: MoodListCollectionHeaderView.reuseIdentifier
+        )
+        
+        rootView.moodListCollectionView.register(
+            WishListCollectionFooterView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+            withReuseIdentifier: WishListCollectionFooterView.reuseIdentifier
         )
     }
 }
@@ -118,6 +129,14 @@ extension MoodListViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGSize {
         return CGSize(width: UIScreen.main.bounds.width, height: 183)
     }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        referenceSizeForFooterInSection section: Int
+    ) -> CGSize {
+        return CGSize(width: UIScreen.main.bounds.width, height: 100)
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -144,6 +163,7 @@ extension MoodListViewController: UICollectionViewDataSource {
         let data = moodListRooms[indexPath.row]
         cell.dataBind(data)
         
+        
         return cell
     }
     
@@ -152,15 +172,31 @@ extension MoodListViewController: UICollectionViewDataSource {
         viewForSupplementaryElementOfKind kind: String,
         at indexPath: IndexPath
     ) -> UICollectionReusableView {
-        guard kind == UICollectionView.elementKindSectionHeader else { return UICollectionReusableView() }
-        
-        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: MoodListCollectionHeaderView.reuseIdentifier, for: indexPath) as? MoodListCollectionHeaderView
-        else {
-            return UICollectionReusableView()
+        if kind == UICollectionView.elementKindSectionHeader {
+            guard let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: MoodListCollectionHeaderView.reuseIdentifier,
+                for: indexPath
+            ) as? MoodListCollectionHeaderView else {
+                return UICollectionReusableView()
+            }
+            
+            header.configure(with: moodType)
+            
+            return header
+            
+        } else if kind == UICollectionView.elementKindSectionFooter {
+            guard let footer = collectionView.dequeueReusableSupplementaryView(
+                ofKind: UICollectionView.elementKindSectionFooter,
+                withReuseIdentifier: WishListCollectionFooterView.reuseIdentifier,
+                for: indexPath
+            ) as? WishListCollectionFooterView else {
+                return UICollectionReusableView()
+            }
+            
+            return footer
         }
         
-        header.configure(with: moodType)
-        
-        return header
+        return UICollectionReusableView()
     }
 }
