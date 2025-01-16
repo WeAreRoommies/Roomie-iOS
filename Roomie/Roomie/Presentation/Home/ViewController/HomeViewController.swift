@@ -62,6 +62,7 @@ final class HomeViewController: BaseViewController {
                 let wishListViewController = WishListViewController(
                     viewModel: WishListViewModel()
                 )
+                wishListViewController.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(wishListViewController, animated: true)
             }
             .store(in: cancelBag)
@@ -73,6 +74,7 @@ final class HomeViewController: BaseViewController {
                     viewModel: MoodListViewModel(),
                     moodType: .calm
                 )
+                calmMoodListViewController.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(calmMoodListViewController, animated: true)
             }
             .store(in: cancelBag)
@@ -84,6 +86,7 @@ final class HomeViewController: BaseViewController {
                     viewModel: MoodListViewModel(),
                     moodType: .lively
                 )
+                livelyMoodListViewController.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(livelyMoodListViewController, animated: true)
             }
             .store(in: cancelBag)
@@ -95,6 +98,7 @@ final class HomeViewController: BaseViewController {
                     viewModel: MoodListViewModel(),
                     moodType: .neat
                 )
+                neatMoodListViewController.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(neatMoodListViewController, animated: true)
             }
             .store(in: cancelBag)
@@ -102,8 +106,7 @@ final class HomeViewController: BaseViewController {
         rootView.nextMapView.updateButton
             .tapPublisher
             .sink {
-                let mapViewController = MapViewController(viewModel: MapViewModel())
-                self.navigationController?.pushViewController(mapViewController, animated: true)
+                self.tabBarController?.selectedIndex = 1
             }
             .store(in: cancelBag)
     }
