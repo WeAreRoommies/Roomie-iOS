@@ -20,7 +20,7 @@ final class MapView: BaseView {
     private let searchImageView = UIImageView()
     let searchBarButton = UIButton()
     
-    let filteringButton = UIButton()
+    let filteringButton = RoomieIconButton(imageName: "icn_map_fillter_20")
     
     let mapView = NMFMapView(frame: .zero)
     
@@ -45,15 +45,6 @@ final class MapView: BaseView {
         
         searchImageView.do {
             $0.image = .icnSearch40
-        }
-        
-        filteringButton.do {
-            $0.setImage(.icnMapFillter20, for: .normal)
-            $0.backgroundColor = .grayscale1
-            $0.layer.cornerRadius = 8
-            $0.layer.shadowOpacity = 0.25
-            $0.layer.shadowRadius = 2
-            $0.layer.shadowOffset = CGSize(width: 0, height: 0)
         }
         
         mapView.do {
