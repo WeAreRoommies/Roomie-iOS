@@ -10,7 +10,7 @@ import Combine
 
 final class HouseDetailViewModel {
     private let houseDetailSubject = PassthroughSubject<HouseDetailModel, Never>()
-    // TODO: Published Data로 
+    // TODO: Published Data로
 }
 
 extension HouseDetailViewModel: ViewModelType {

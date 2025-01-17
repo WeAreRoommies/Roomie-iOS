@@ -126,5 +126,6 @@ final class RoomMoodCell: BaseCollectionViewCell {
     }
 }
 
-// TODO: dataBind 함수에서 moodTag 개수를 역순으로 빼서 .isHidden 처리 해야 함
-// TODO: 그라운드룰 개수에 따라 addArrangedSubviews 해야한다
+// TODO: Data Bind 함수 구현할 때 .isHidden구현, 그라운드룰 개수에 따라 addArrangedSubview해주기
+// dataBind 함수에서 moodTag 개수를 역순으로 빼서 .isHidden 처리 해야 함
+// 그라운드룰 개수에 따라 addArrangedSubviews 해야한다

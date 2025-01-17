@@ -83,26 +83,3 @@ private extension GroundRuleLabel {
         ruleLabel.setText(text, style: .body1, color: .grayscale12)
     }
 }
-
-// TODO: Data Bind 함수 구현할 때 .isHidden구현, 그라운드룰 개수에 따라 addArrangedSubview해주기
-
-private extension GroundRuleLabel {
-    func animateToast() {
-        UIView.animate(withDuration: 0.4, delay: 0.0, options: .curveEaseIn, animations: {
-            self.alpha = 1.0
-        }, completion: { _ in
-            UIView.animate(withDuration: 1, delay: 1.8, options: .curveEaseOut, animations: {
-                self.alpha = 0.0
-            }, completion: { _ in
-                self.removeFromSuperview()
-            })
-        })
-        
-        UIView.animate(withDuration: 0.4, delay: 0.0, options: .curveEaseIn) {
-            self.alpha = 1.0
-        }
-        
-        UIView.animate(withDuration: 0.4, delay: 0.0, options: <#T##UIView.AnimationOptions#>, animations: <#T##() -> Void#>)
-    }
-    
-}
