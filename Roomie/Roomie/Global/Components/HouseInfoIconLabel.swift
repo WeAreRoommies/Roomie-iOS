@@ -80,10 +80,6 @@ final class HouseInfoIconLabel: UIView {
             $0.contentMode = .scaleAspectFit
             $0.tintColor = .grayscale10
         }
-        
-//        infoLabel.do {
-//            $0.setText(style: .body1, color: .grayscale10)
-//        }
     }
     
     private func setUI() {
@@ -94,8 +90,7 @@ final class HouseInfoIconLabel: UIView {
         iconImageView.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview()
             $0.leading.equalToSuperview()
-            $0.height.equalTo(Screen.height(20))
-            $0.width.equalTo(Screen.width(20))
+            $0.size.equalTo(Screen.width(20))
         }
         
         infoLabel.snp.makeConstraints {

@@ -78,7 +78,7 @@ final class HouseInfoCell: BaseCollectionViewCell {
             firstIconLabelStackView,
             secondIconLabelStackView,
             contractTermIconLabel,
-            lookInsidePhotoButton, //
+            lookInsidePhotoButton,
             separatorView
         )
         
@@ -93,8 +93,6 @@ final class HouseInfoCell: BaseCollectionViewCell {
             occupancyStatusIconLabel,
             genderPolicyIconLabel
         )
-        
-//        contentView.addSubview(lookInsidePhotoButton)
     }
     
     override func setLayout() {

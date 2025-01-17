@@ -90,9 +90,9 @@ final class LookInsidePhotoButton: UIView {
     
     private func setLayout() {
         photoIconImageView.snp.makeConstraints {
-            $0.size.equalTo(24)
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(12)
+            $0.size.equalTo(Screen.width(24))
         }
         
         titleLabel.snp.makeConstraints {
@@ -103,7 +103,7 @@ final class LookInsidePhotoButton: UIView {
         chevronRigntIconImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(12)
-            $0.size.equalTo(24)
+            $0.size.equalTo(Screen.width(24))
         }
         
         updateButton.snp.makeConstraints {

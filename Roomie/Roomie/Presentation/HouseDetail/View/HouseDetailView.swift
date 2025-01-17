@@ -19,7 +19,7 @@ final class HouseDetailView: BaseView {
     
     // MARK: - UIComponent
     
-    lazy var collectionView = UICollectionView(frame: bounds, collectionViewLayout: UICollectionViewLayout())
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     
     // MARK: - UISetting
     
@@ -39,5 +39,4 @@ final class HouseDetailView: BaseView {
             $0.edges.equalToSuperview()
         }
     }
-    
 }
