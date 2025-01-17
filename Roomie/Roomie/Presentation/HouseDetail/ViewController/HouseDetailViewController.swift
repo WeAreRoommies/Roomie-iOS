@@ -16,9 +16,24 @@ final class HouseDetailViewController: BaseViewController {
     
     private let rootView = HouseDetailView()
     
+    private let viewModel: HouseDetailViewModel
+    
+    private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
+    
+    private let cancelBag = CancelBag()
+    
     private let houseDetailData = HouseDetailModel.mockData()
     
     // MARK: - Initializer
+    
+    init(viewModel: HouseDetailViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - LifeCycle
     
@@ -29,7 +44,14 @@ final class HouseDetailViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        bindViewModel()
         setRegister()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        viewWillAppearSubject.send(())
     }
     
     override func setDelegate() {
@@ -41,6 +63,27 @@ final class HouseDetailViewController: BaseViewController {
         rootView.collectionView.register(HouseInfoCell.self, forCellWithReuseIdentifier: HouseInfoCell.reuseIdentifier)
     }
 }
+
+// MARK: - Functions
+
+private extension HouseDetailViewController {
+    func bindViewModel() {
+        let input = HouseDetailViewModel.Input(
+            viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher()
+        )
+        
+        let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        
+        output.houseInfo
+            .sink { data in
+                // TODO: combine으로 collecionView 바인딩 해주는 거 찾아보기
+                dump(data)
+            }
+            .store(in: cancelBag)
+    }
+}
+
+// MARK: - UICollectionViewDataSource
 
 extension HouseDetailViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {

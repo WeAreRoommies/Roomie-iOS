@@ -25,7 +25,6 @@ final class HouseDetailView: BaseView {
     
     override func setStyle() {
         collectionView.do {
-            $0.backgroundColor = .blue
             $0.contentInsetAdjustmentBehavior = .never
             $0.collectionViewLayout = HouseDetailLayoutHelper.createCompositionalLayout()
         }
