@@ -20,10 +20,6 @@ struct MoodListRoom {
     let mainImageURL: String
 }
 
-struct MoodInfo {
-    let moodTag: String
-}
-
 extension MoodListRoom {
     static func calmListRoomData() -> [MoodListRoom] {
         return [
