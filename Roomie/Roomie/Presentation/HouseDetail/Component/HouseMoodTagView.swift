@@ -1,5 +1,5 @@
 //
-//  MoodTagView.swift
+//  HouseMoodTagView.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/17/25.
@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class MoodTagView: UIView {
+final class HouseMoodTagView: UIView {
     
     // MARK: - UIComponent
     
@@ -70,7 +70,7 @@ final class MoodTagView: UIView {
 
 // MARK: - Functions
 
-extension MoodTagView {
+extension HouseMoodTagView {
     func setMoodTagView(with roomMood: String = "") {
         let isMainMoodType = MoodType.allCases.contains(where: { $0.title == roomMood })
         backgroundColor = isMainMoodType ? .primaryLight4 : .grayscale3

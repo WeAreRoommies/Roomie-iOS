@@ -1,5 +1,5 @@
 //
-//  HouseInfoCell.swift
+//  HouseInfoCollectionViewCell.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/16/25.
@@ -11,7 +11,7 @@ import SnapKit
 import Then
 
 // TODO: dataBind() 함수 구현 후 각 text 삭제
-final class HouseInfoCell: BaseCollectionViewCell {
+final class HouseInfoCollectionViewCell: BaseCollectionViewCell {
     
     // MARK: - UIComponent
     
@@ -28,7 +28,7 @@ final class HouseInfoCell: BaseCollectionViewCell {
     private let firstIconLabelStackView = UIStackView()
     private let secondIconLabelStackView = UIStackView()
     
-    private let lookInsidePhotoButton = LookInsidePhotoButton()
+    private let lookInsidePhotoButton = HouseInnerPhotoButton()
     
     private let separatorView = UIView()
     
@@ -130,7 +130,7 @@ final class HouseInfoCell: BaseCollectionViewCell {
         lookInsidePhotoButton.snp.makeConstraints {
             $0.top.equalTo(contractTermIconLabel.snp.bottom).offset(40)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.height.equalTo(LookInsidePhotoButton.defaultHeight)
+            $0.height.equalTo(HouseInnerPhotoButton.defaultHeight)
         }
         
         separatorView.snp.makeConstraints {

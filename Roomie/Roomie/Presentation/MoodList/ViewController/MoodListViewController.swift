@@ -73,8 +73,8 @@ final class MoodListViewController: BaseViewController {
     
     private func setRegister() {
         rootView.moodListCollectionView.register(
-            RoomListCollectionViewCell.self,
-            forCellWithReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier
+            HouseListCollectionViewCell.self,
+            forCellWithReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier
         )
         
         rootView.moodListCollectionView.register(
@@ -84,9 +84,9 @@ final class MoodListViewController: BaseViewController {
         )
         
         rootView.moodListCollectionView.register(
-            WishListCollectionFooterView.self,
+            VersionFooterView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-            withReuseIdentifier: WishListCollectionFooterView.reuseIdentifier
+            withReuseIdentifier: VersionFooterView.reuseIdentifier
         )
     }
 }
@@ -157,9 +157,9 @@ extension MoodListViewController: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier,
+            withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier,
             for: indexPath
-        ) as? RoomListCollectionViewCell else {
+        ) as? HouseListCollectionViewCell else {
             return UICollectionViewCell()
         }
         
@@ -190,9 +190,9 @@ extension MoodListViewController: UICollectionViewDataSource {
         } else if kind == UICollectionView.elementKindSectionFooter {
             guard let footer = collectionView.dequeueReusableSupplementaryView(
                 ofKind: UICollectionView.elementKindSectionFooter,
-                withReuseIdentifier: WishListCollectionFooterView.reuseIdentifier,
+                withReuseIdentifier: VersionFooterView.reuseIdentifier,
                 for: indexPath
-            ) as? WishListCollectionFooterView else {
+            ) as? VersionFooterView else {
                 return UICollectionReusableView()
             }
             

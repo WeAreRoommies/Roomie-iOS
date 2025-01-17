@@ -1,5 +1,5 @@
 //
-//  HousePhotoCell.swift
+//  HousePhotoCollectionViewCell.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/16/25.
@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class HousePhotoCell: BaseCollectionViewCell {
+final class HousePhotoCollectionViewCell: BaseCollectionViewCell {
     
     // MARK: - UIComponent
     

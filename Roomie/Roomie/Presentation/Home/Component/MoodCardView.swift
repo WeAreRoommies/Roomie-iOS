@@ -1,5 +1,5 @@
 //
-//  MoodView.swift
+//  MoodCardView.swift
 //  Roomie
 //
 //  Created by MaengKim on 1/14/25.
@@ -12,7 +12,7 @@ import CombineCocoa
 import Then
 import SnapKit
 
-final class MoodButtonView: UIView {
+final class MoodCardView: UIView {
     
     // MARK: - Property
     

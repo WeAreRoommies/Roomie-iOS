@@ -1,5 +1,5 @@
 //
-//  OtherButton.swift
+//  OtherHouseButton.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/16/25.
@@ -10,13 +10,7 @@ import Combine
 
 import CombineCocoa
 
-/// 다른 방 둘러보기 버튼 컴포넌트입니다.
-///
-/// /// 초기화 시 버튼 타이틀을 설정할 수 있습니다.
-///
-/// - Parameters:
-///     - title: 버튼 제목을 나타내는 문자열입니다.
-final class OtherButton: UIButton {
+final class OtherHouseButton: UIButton {
     
     // MARK: - Property
     
@@ -51,7 +45,7 @@ final class OtherButton: UIButton {
 
 // MARK: - Functions
 
-private extension OtherButton {
+private extension OtherHouseButton {
     func setButton(with title: String = "") {
         setTitle(title, style: .title2, color: .grayscale8)
         setLayer(borderWidth: 1, borderColor: .grayscale6, cornerRadius: 8)

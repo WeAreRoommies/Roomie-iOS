@@ -63,14 +63,14 @@ final class WishListViewController: BaseViewController {
     
     private func setRegister() {
         rootView.wishListCollectionView.register(
-            RoomListCollectionViewCell.self,
-            forCellWithReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier
+            HouseListCollectionViewCell.self,
+            forCellWithReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier
         )
         
         rootView.wishListCollectionView.register(
-            WishListCollectionFooterView.self,
+            VersionFooterView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
-            withReuseIdentifier: WishListCollectionFooterView.reuseIdentifier
+            withReuseIdentifier: VersionFooterView.reuseIdentifier
         )
     }
 }
@@ -133,9 +133,9 @@ extension WishListViewController: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier,
+            withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier,
             for: indexPath
-        ) as? RoomListCollectionViewCell else {
+        ) as? HouseListCollectionViewCell else {
             return UICollectionViewCell()
         }
         
@@ -152,7 +152,7 @@ extension WishListViewController: UICollectionViewDataSource {
     ) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionFooter else { return UICollectionReusableView() }
         
-        guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: WishListCollectionFooterView.reuseIdentifier, for: indexPath) as? WishListCollectionFooterView
+        guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: VersionFooterView.reuseIdentifier, for: indexPath) as? VersionFooterView
         else {
             return UICollectionReusableView()
         }

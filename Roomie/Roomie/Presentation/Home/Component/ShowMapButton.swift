@@ -1,5 +1,5 @@
 //
-//  NextMapButtonView.swift
+//  ShowMapButton.swift
 //  Roomie
 //
 //  Created by MaengKim on 1/15/25.
@@ -12,7 +12,7 @@ import CombineCocoa
 import Then
 import SnapKit
 
-final class NextMapButtonView: UIView {
+final class ShowMapButton: UIView {
     
     // MARK: - Property
     

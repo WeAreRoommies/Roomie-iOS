@@ -58,8 +58,8 @@ final class MapListSheetViewController: BaseViewController {
 private extension MapListSheetViewController {
     func setRegister() {
         rootView.collectionView.register(
-            RoomListCollectionViewCell.self,
-            forCellWithReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier
+            HouseListCollectionViewCell.self,
+            forCellWithReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier
         )
     }
     
@@ -88,9 +88,9 @@ private extension MapListSheetViewController {
             collectionView: rootView.collectionView
         ) { collectionView, indexPath, model in
             guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier,
+                withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier,
                 for: indexPath
-            ) as? RoomListCollectionViewCell else {
+            ) as? HouseListCollectionViewCell else {
                 return UICollectionViewCell()
             }
             
