@@ -44,7 +44,6 @@ final class HomeView: BaseView {
         frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()
     )
 
-    
     let nextMapView = ShowMapButton()
     
     // MARK: - UISetting
