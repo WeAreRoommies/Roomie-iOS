@@ -45,9 +45,7 @@ final class TourUserViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setNavigationBar(with: "", isBorderHidden: true)
         bindViewModel()
-        hideKeyboardWhenDidTap()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,12 +60,18 @@ final class TourUserViewController: BaseViewController {
         removeKeyboardObserver()
     }
     
+    override func setView() {
+        setNavigationBar(with: "", isBorderHidden: true)
+    }
+    
     override func setDelegate() {
         rootView.birthPickerView.delegate = self
         rootView.phoneNumberTextField.delegate = self
     }
     
     override func setAction() {
+        hideKeyboardWhenDidTap()
+        
         rootView.nameTextField
             .textPublisher
             .compactMap { $0 }
