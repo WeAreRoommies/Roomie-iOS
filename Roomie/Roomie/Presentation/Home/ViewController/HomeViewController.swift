@@ -12,6 +12,8 @@ import SnapKit
 import Then
 import CombineCocoa
 
+// TODO: user name 연결
+
 final class HomeViewController: BaseViewController {
     
     // MARK: - Property
@@ -21,17 +23,19 @@ final class HomeViewController: BaseViewController {
     private let cancelBag = CancelBag()
     
     private let rootView = HomeView()
-    
+        
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
     
     private var recentlyRooms: [RecentlyRoom] = RecentlyRoom.mockHomeData()
+    private var userInfo: UserInfo = UserInfo.mockUserData()
     
     // MARK: - Initializer
     
     init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
+        rootView.nameLabel.text = userInfo.name
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -51,6 +55,12 @@ final class HomeViewController: BaseViewController {
         setDelegate()
         setRegister()
         updateCollectionViewHeight()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        rootView.gradientView.setGradient(for: .home)
     }
     
     // MARK: - Functions
