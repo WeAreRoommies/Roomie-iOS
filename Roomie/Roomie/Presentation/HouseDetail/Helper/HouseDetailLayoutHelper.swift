@@ -29,6 +29,8 @@ final class HouseDetailLayoutHelper {
                 layoutSection = createHousePhotoLayout()
             case .houseInfo:
                 layoutSection = createHouseInfoLayout()
+            case .roomMood:
+                layoutSection = createRoomMoodLayout()
             }
             
             return layoutSection
@@ -40,72 +42,71 @@ final class HouseDetailLayoutHelper {
 // MARK: - Layout 관련 private extension
 
 private extension HouseDetailLayoutHelper {
-    // 첫 번째 섹션 레이아웃
     static func createHousePhotoLayout() -> NSCollectionLayoutSection {
-        
-        // item
-        let itemInset: CGFloat = 0
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(
-            top: itemInset,
-            leading: itemInset,
-            bottom: itemInset,
-            trailing: itemInset
-        )
         
-        // group
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .absolute(Screen.height(312))
         )
+        let groupInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        group.contentInsets = groupInsets
         
-//        // header
-//        let headerSize = NSCollectionLayoutSize(
-//            widthDimension: .fractionalWidth(1.0),
-//            heightDimension: .absolute(50)
-//        )
-//        let headerElement = NSCollectionLayoutBoundarySupplementaryItem(
-//            layoutSize: headerSize,
-//            elementKind: FirstHeaderView.firstHeaderElementKind,
-//            alignment: .top
-//        )
-        
-        // section
         let section = NSCollectionLayoutSection(group: group)
-        //        section.boundarySupplementaryItems = [headerElement]
         return section
     }
     
     static func createHouseInfoLayout() -> NSCollectionLayoutSection {
-        
-        // item
-        let itemInset: CGFloat = 0
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalHeight(1.0)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(
-            top: itemInset,
-            leading: itemInset,
-            bottom: itemInset,
-            trailing: itemInset
-        )
         
-        // group
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .absolute(Screen.height(290))
         )
+        let groupInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        group.contentInsets = groupInsets
         
-        // section
         let section = NSCollectionLayoutSection(group: group)
+        return section
+    }
+    
+    static func createRoomMoodLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(Screen.height(344))
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
+        )
+        let groupInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 28, trailing: 20)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        group.contentInsets = groupInsets
+        
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(60)
+        )
+        let headerElement = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.boundarySupplementaryItems = [headerElement]
         return section
     }
 }
