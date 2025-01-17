@@ -4,6 +4,7 @@
 //
 //  Created by MaengKim on 1/17/25.
 //
+
 import Foundation
 
 enum Gradient {

@@ -58,8 +58,6 @@ final class MoodListViewController: BaseViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        
     }
     
     // MARK: - Functions
