@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MapModel {
+struct MapModel: Hashable {
     let houseID: Int
     let x: CGFloat
     let y: CGFloat
