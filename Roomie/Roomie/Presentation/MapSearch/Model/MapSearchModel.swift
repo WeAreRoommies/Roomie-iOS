@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MapSearchModel {
+struct MapSearchModel: Hashable {
     let location: String
     let address: String
     let roadAddress: String

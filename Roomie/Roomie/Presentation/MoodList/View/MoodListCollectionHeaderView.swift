@@ -20,6 +20,8 @@ final class MoodListCollectionHeaderView: BaseCollectionReusableView {
     
     // MARK: - UIComponent
     
+    let gradientView = UIView()
+    
     private let hashTagLabel = UILabel()
     private let moodLabel = UILabel()
     
@@ -62,6 +64,7 @@ final class MoodListCollectionHeaderView: BaseCollectionReusableView {
     
     override func setUI() {
         addSubviews(
+            gradientView,
             hashTagLabel,
             moodLabel,
             subMoodLabel,
@@ -73,6 +76,10 @@ final class MoodListCollectionHeaderView: BaseCollectionReusableView {
     }
     
     override func setLayout() {
+        gradientView.snp.makeConstraints{
+            $0.edges.equalToSuperview()
+        }
+        
         hashTagLabel.snp.makeConstraints{
             $0.top.equalToSuperview().inset(40)
             $0.leading.equalToSuperview().inset(20)
@@ -114,5 +121,12 @@ final class MoodListCollectionHeaderView: BaseCollectionReusableView {
         moodLabel.text = type.title
         subTitleMoodLabel.text = type.subTitleMood
         moodImageView.image = type.moodListViewImage
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        gradientView.frame = self.bounds
+        gradientView.setGradient(for: .moodList)
     }
 }

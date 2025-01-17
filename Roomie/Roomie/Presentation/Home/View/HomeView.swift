@@ -19,7 +19,11 @@ final class HomeView: BaseView {
     
     private let contentView = UIView()
     
-    private let nameLabel = UILabel()
+    let gradientView = UIView()
+    
+    var nameLabel = UILabel()
+    private let nameTitleLabel = UILabel()
+    
     private let greetingLabel = UILabel()
     private let subGreetingLabel = UILabel()
     private let roomieImageView = UIImageView()
@@ -45,11 +49,14 @@ final class HomeView: BaseView {
     // MARK: - UISetting
     
     override func setStyle() {
-        self.backgroundColor = .primaryLight4
-        
         nameLabel.do {
-            $0.setText("맹수님," ,style: .heading2, color: .primaryPurple)
+            $0.setText(style: .heading2, color: .primaryPurple)
         }
+        
+        nameTitleLabel.do {
+            $0.setText("님,", style: .heading2, color: .grayscale12)
+        }
+        
         greetingLabel.do {
             $0.setText("루미에 어서오세요!" ,style: .heading2, color: .grayscale12)
         }
@@ -101,7 +108,9 @@ final class HomeView: BaseView {
         addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubviews(
+            gradientView,
             nameLabel,
+            nameTitleLabel,
             greetingLabel,
             updateButton,
             subGreetingLabel,
@@ -124,6 +133,10 @@ final class HomeView: BaseView {
     }
     
     override func setLayout() {
+        gradientView.snp.makeConstraints{
+            $0.edges.equalToSuperview()
+        }
+        
         scrollView.snp.makeConstraints{
             $0.edges.equalToSuperview()
         }
@@ -138,6 +151,11 @@ final class HomeView: BaseView {
         nameLabel.snp.makeConstraints{
             $0.top.equalToSuperview().inset(41)
             $0.leading.equalToSuperview().inset(20)
+        }
+        
+        nameTitleLabel.snp.makeConstraints{
+            $0.top.equalToSuperview().inset(41)
+            $0.leading.equalTo(nameLabel.snp.trailing).offset(4)
         }
         
         greetingLabel.snp.makeConstraints{

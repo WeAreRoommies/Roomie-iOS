@@ -56,6 +56,10 @@ final class MoodListViewController: BaseViewController {
         setRegister()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+    }
+    
     // MARK: - Functions
     
     override func setView() {

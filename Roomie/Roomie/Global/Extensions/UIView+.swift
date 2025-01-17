@@ -19,4 +19,9 @@ extension UIView {
         layer.cornerRadius = cornerRadius
         layer.maskedCorners = CACornerMask(arrayLiteral: maskedCorners)
     }
+    
+    func setGradient(for style: Gradient) {
+        let gradientLayer = CAGradientLayer.gradientLayer(for: style, in: bounds)
+        layer.insertSublayer(gradientLayer, at: 0)
+    }
 }
