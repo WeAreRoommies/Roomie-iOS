@@ -44,6 +44,9 @@ final class TourCheckViewController: BaseViewController {
         super.viewDidLoad()
         
         bindViewModel()
+    }
+    
+    override func setView() {
         setNavigationBar(with: "", isBorderHidden: true)
     }
     
