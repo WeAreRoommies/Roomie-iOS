@@ -20,7 +20,7 @@ final class MapSearchViewController: BaseViewController {
     
     private let cancelBag = CancelBag()
     
-    private var mapSearchData: [MapSearchModel] = []
+    private lazy var dataSource = createDiffableDataSource()
     
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 40
     final let cellHeight: CGFloat = 118
@@ -68,7 +68,6 @@ final class MapSearchViewController: BaseViewController {
     
     override func setDelegate() {
         rootView.collectionView.delegate = self
-        rootView.collectionView.dataSource = self
     }
     
     override func setAction() {
@@ -111,14 +110,36 @@ private extension MapSearchViewController {
         output.mapSearchData
             .sink { [weak self] data in
                 guard let self = self else { return }
-                self.mapSearchData = data
                 self.rootView.emptyView.isHidden = data.isEmpty ? false : true
                 
                 if !data.isEmpty {
-                    self.rootView.collectionView.reloadData()
+                    self.updateSnapshot(with: data)
                 }
             }
             .store(in: cancelBag)
+    }
+    
+    func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, MapSearchModel> {
+        return UICollectionViewDiffableDataSource(
+            collectionView: rootView.collectionView
+        ) { collectionView, indexPath, model in
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: MapSearchCollectionViewCell.reuseIdentifier,
+                for: indexPath
+            ) as? MapSearchCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.dataBind(model)
+            return cell
+        }
+    }
+    
+    func updateSnapshot(with data: [MapSearchModel]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, MapSearchModel>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(data, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
 
@@ -139,33 +160,5 @@ extension MapSearchViewController: UICollectionViewDelegateFlowLayout {
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
         return contentInset
-    }
-}
-
-// MARK: - UICollectionViewDataSource
-
-extension MapSearchViewController: UICollectionViewDataSource {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
-        return mapSearchData.count
-    }
-    
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: MapSearchCollectionViewCell.reuseIdentifier,
-            for: indexPath
-        ) as? MapSearchCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        
-        let data = mapSearchData[indexPath.row]
-        cell.dataBind(data)
-        
-        return cell
     }
 }
