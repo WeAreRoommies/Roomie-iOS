@@ -1,8 +1,8 @@
 //
-//  NextMapButtonView.swift
+//  ShowUpdateView.swift
 //  Roomie
 //
-//  Created by MaengKim on 1/15/25.
+//  Created by MaengKim on 1/14/25.
 //
 
 import UIKit
@@ -12,7 +12,7 @@ import CombineCocoa
 import Then
 import SnapKit
 
-final class NextMapButtonView: UIView {
+final class ShowUpdateButton: UIView {
     
     // MARK: - Property
     
@@ -22,7 +22,6 @@ final class NextMapButtonView: UIView {
     
     let titleLabel = UILabel()
     private let nextImageView = UIImageView()
-    private let pinImageView = UIImageView()
     let updateButton = UIButton()
     
     // MARK: - Initializer
@@ -49,24 +48,16 @@ final class NextMapButtonView: UIView {
 
     private func setStyle() {
         self.do {
-            $0.backgroundColor = .grayscale1
+            $0.backgroundColor = .transpGray160
             $0.layer.cornerRadius = 8
-            $0.layer.borderColor = UIColor.primaryLight2.cgColor
-            $0.layer.borderWidth = 1
         }
         
         titleLabel.do {
-            $0.setText("지도에서 더 많은 쉐어하우스 찾기" ,style: .body2, color: .grayscale12)
+            $0.setText("1월 1일 루미 업데이트 알아보기" ,style: .body2, color: .grayscale10)
         }
         
         nextImageView.do {
             $0.image = .icnArrowRightLine24
-            $0.tintColor = .grayscale10
-        }
-        
-        pinImageView.do {
-            $0.image = .icnMapLine24
-            $0.tintColor = .grayscale10
         }
     }
     
@@ -74,33 +65,25 @@ final class NextMapButtonView: UIView {
         addSubviews(
             titleLabel,
             updateButton,
-            nextImageView,
-            pinImageView
+            nextImageView
         )
     }
     
     private func setLayout() {
-        pinImageView.snp.makeConstraints{
-            $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().inset(24)
-            $0.size.equalTo(16)
-        }
-        
         titleLabel.snp.makeConstraints{
             $0.centerY.equalToSuperview()
-            $0.leading.equalTo(pinImageView.snp.trailing).offset(4)
+            $0.leading.equalToSuperview().inset(24)
         }
         
         nextImageView.snp.makeConstraints{
-            $0.size.equalTo(24)
+            $0.size.equalTo(CGSize(width: 20, height: 20))
             $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().inset(24)
+            $0.trailing.equalToSuperview().inset(16)
         }
         
         updateButton.snp.makeConstraints{
             $0.edges.equalToSuperview()
         }
-        
     }
     
     private func setUpdateButtonView() {

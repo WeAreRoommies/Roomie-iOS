@@ -65,18 +65,18 @@ private extension HouseDetailViewController {
     func setRegister() {
         rootView.collectionView
             .register(
-                HousePhotoCell.self,
-                forCellWithReuseIdentifier: HousePhotoCell.reuseIdentifier
+                HousePhotoCollectionViewCell.self,
+                forCellWithReuseIdentifier: HousePhotoCollectionViewCell.reuseIdentifier
             )
         rootView.collectionView
             .register(
-                HouseInfoCell.self,
-                forCellWithReuseIdentifier: HouseInfoCell.reuseIdentifier
+                HouseInfoCollectionViewCell.self,
+                forCellWithReuseIdentifier: HouseInfoCollectionViewCell.reuseIdentifier
             )
         rootView.collectionView
             .register(
-                RoomMoodCell.self,
-                forCellWithReuseIdentifier: RoomMoodCell.reuseIdentifier
+                RoomMoodCollectionViewCell.self,
+                forCellWithReuseIdentifier: RoomMoodCollectionViewCell.reuseIdentifier
             )
         rootView.collectionView
             .register(
@@ -132,21 +132,21 @@ extension HouseDetailViewController: UICollectionViewDataSource {
         switch HouseDetailSection(rawValue: indexPath.section) {
         case .housePhoto:
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: HousePhotoCell.reuseIdentifier,
+                withReuseIdentifier: HousePhotoCollectionViewCell.reuseIdentifier,
                 for: indexPath
             )
             // TODO: housePhotoCell 데이터 바인딩
             return cell
         case .houseInfo:
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: HouseInfoCell.reuseIdentifier,
+                withReuseIdentifier: HouseInfoCollectionViewCell.reuseIdentifier,
                 for: indexPath
             )
             // TODO: houseInfoCell 데이터 바인딩
             return cell
         case .roomMood:
             let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: RoomMoodCell.reuseIdentifier,
+                withReuseIdentifier: RoomMoodCollectionViewCell.reuseIdentifier,
                 for: indexPath
             )
             // TODO: roomMoodCell 데이터 바인딩

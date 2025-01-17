@@ -1,5 +1,5 @@
 //
-//  GenderButton.swift
+//  TourHalfButton.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/14/25.
@@ -10,7 +10,7 @@ import Combine
 
 import CombineCocoa
 
-final class GenderButton: UIButton {
+final class TourHalfButton: UIButton {
     
     // MARK: - Property
     
@@ -49,7 +49,7 @@ final class GenderButton: UIButton {
     }
 }
 
-private extension GenderButton {
+private extension TourHalfButton {
     func setButton(with gender: Gender  = .male) {
         setTitle(gender.genderString, style: .body1, color: .grayscale12)
         setLayer(borderWidth: 1, borderColor: .grayscale5, cornerRadius: 8)

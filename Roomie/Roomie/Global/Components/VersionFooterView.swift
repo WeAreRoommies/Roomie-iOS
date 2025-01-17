@@ -1,5 +1,5 @@
 //
-//  WishListCollectionFooterView.swift
+//  VersionFooterView.swift
 //  Roomie
 //
 //  Created by MaengKim on 1/16/25.
@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class WishListCollectionFooterView: BaseCollectionReusableView {
+final class VersionFooterView: BaseCollectionReusableView {
     
     // MARK: - UIComponents
     

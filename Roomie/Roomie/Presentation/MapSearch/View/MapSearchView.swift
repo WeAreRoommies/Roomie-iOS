@@ -16,7 +16,7 @@ final class MapSearchView: BaseView {
     
     let backButton = UIButton()
     
-    let searchTextField = MapTextField("원하는 장소를 찾아보세요")
+    let searchTextField = MapSearchTextField("원하는 장소를 찾아보세요")
     private let searchImageView = UIImageView()
     private let seperatorView = UIView()
     

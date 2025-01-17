@@ -24,8 +24,8 @@ final class TourUserView: BaseView {
     let birthPickerView = DatePickerView()
     
     private let genderLabel = UILabel()
-    let maleButton = GenderButton(gender: .male)
-    let femaleButton = GenderButton(gender: .female)
+    let maleButton = TourHalfButton(gender: .male)
+    let femaleButton = TourHalfButton(gender: .female)
     private let genderButtonStackView = UIStackView()
     
     private let phoneNumberLabel = UILabel()
@@ -161,7 +161,7 @@ final class TourUserView: BaseView {
         genderButtonStackView.snp.makeConstraints {
             $0.top.equalTo(genderLabel.snp.bottom).offset(6)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.height.equalTo(GenderButton.defaultHeight)
+            $0.height.equalTo(TourHalfButton.defaultHeight)
         }
         
         phoneNumberLabel.snp.makeConstraints {

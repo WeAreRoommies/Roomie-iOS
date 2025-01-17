@@ -2,8 +2,9 @@
 //  HomeView.swift
 //  Roomie
 //
-//  Created by 예삐 on 1/7/25.
+//  Created by MaengKim on 1/7/25.
 //
+
 import UIKit
 
 import Then
@@ -28,14 +29,14 @@ final class HomeView: BaseView {
     private let subGreetingLabel = UILabel()
     private let roomieImageView = UIImageView()
     
-    let updateButton = UpdateButtonView()
+    let updateButton = ShowUpdateButton()
     
     private let moodView = UIView()
     private let moodLabel = UILabel()
     private let moodStackView = UIStackView()
-    let calmCardView = MoodButtonView(.calm)
-    let livelyCardView = MoodButtonView(.lively)
-    let neatCardView = MoodButtonView(.neat)
+    let calmCardView = MoodCardView(.calm)
+    let livelyCardView = MoodCardView(.lively)
+    let neatCardView = MoodCardView(.neat)
     
     private let recentlyLabel = UILabel()
     
@@ -44,7 +45,7 @@ final class HomeView: BaseView {
     )
 
     
-    let nextMapView = NextMapButtonView()
+    let nextMapView = ShowMapButton()
     
     // MARK: - UISetting
     

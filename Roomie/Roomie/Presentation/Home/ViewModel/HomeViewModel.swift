@@ -2,7 +2,7 @@
 //  HomeViewModel.swift
 //  Roomie
 //
-//  Created by 예삐 on 1/7/25.
+//  Created by MaengKim on 1/7/25.
 //
 
 import Foundation

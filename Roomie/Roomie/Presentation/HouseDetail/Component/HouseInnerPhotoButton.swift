@@ -1,5 +1,5 @@
 //
-//  LookInsidePhotoButton.swift
+//  HouseInnerPhotoButton.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/17/25.
@@ -12,7 +12,7 @@ import CombineCocoa
 import SnapKit
 import Then
 
-final class LookInsidePhotoButton: UIView {
+final class HouseInnerPhotoButton: UIView {
     
     // MARK: - Property
     
@@ -112,7 +112,7 @@ final class LookInsidePhotoButton: UIView {
     }
 }
 
-extension LookInsidePhotoButton {
+extension HouseInnerPhotoButton {
     func setButtonColor() {
         updateButton.controlEventPublisher(for: .touchDown)
             .map { UIColor.grayscale2 }

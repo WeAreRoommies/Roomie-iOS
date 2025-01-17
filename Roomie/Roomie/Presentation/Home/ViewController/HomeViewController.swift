@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  Roomie
 //
-//  Created by 예삐 on 1/7/25.
+//  Created by MaengKim on 1/7/25.
 //
 
 import UIKit
@@ -124,8 +124,8 @@ final class HomeViewController: BaseViewController {
     
     private func setRegister() {
         rootView.roomListCollectionView.register(
-            RoomListCollectionViewCell.self,
-            forCellWithReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier
+            HouseListCollectionViewCell.self,
+            forCellWithReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier
         )
     }
     
@@ -182,9 +182,9 @@ extension HomeViewController: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier,
+            withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier,
             for: indexPath
-        ) as? RoomListCollectionViewCell else {
+        ) as? HouseListCollectionViewCell else {
             return UICollectionViewCell()
         }
         

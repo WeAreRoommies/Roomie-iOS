@@ -1,5 +1,5 @@
 //
-//  RoomListCollectionCell.swift
+//  HouseListCollectionCell.swift
 //  Roomie
 //
 //  Created by MaengKim on 1/14/25.
@@ -12,7 +12,7 @@ import CombineCocoa
 import SnapKit
 import Then
 
-final class RoomListCollectionViewCell: BaseCollectionViewCell {
+final class HouseListCollectionViewCell: BaseCollectionViewCell {
     
     // MARK: - UIComponent
     
@@ -174,7 +174,7 @@ final class RoomListCollectionViewCell: BaseCollectionViewCell {
 
 // MARK: - DataBinding
 
-extension RoomListCollectionViewCell {
+extension HouseListCollectionViewCell {
     func dataBind(_ data: MapModel) {
         if let image = UIImage(named: data.mainImageURL) {
             roomImageView.image = image

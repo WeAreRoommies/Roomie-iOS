@@ -1,5 +1,5 @@
 //
-//  RoomMoodCell.swift
+//  RoomMoodCollectionViewCell.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/17/25.
@@ -10,16 +10,16 @@ import UIKit
 import SnapKit
 import Then
 
-final class RoomMoodCell: BaseCollectionViewCell {
+final class RoomMoodCollectionViewCell: BaseCollectionViewCell {
     
     // MARK: - UIComponent
     
     private let roomMoodLabel = UILabel()
     
-    private let firstMoodTag = MoodTagView(roomMood: "차분한")
-    private let secondMoodTag = MoodTagView(roomMood: "조용한")
-    private let thirdMoodTag = MoodTagView(roomMood: "재미있는")
-    private let fourthMoodTag = MoodTagView(roomMood: "Chill한")
+    private let firstMoodTag = HouseMoodTagView(roomMood: "차분한")
+    private let secondMoodTag = HouseMoodTagView(roomMood: "조용한")
+    private let thirdMoodTag = HouseMoodTagView(roomMood: "재미있는")
+    private let fourthMoodTag = HouseMoodTagView(roomMood: "Chill한")
     
     private let separatorView = UIView()
     
