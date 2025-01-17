@@ -143,6 +143,11 @@ final class HomeViewController: BaseViewController {
         rootView.roomListTableViewHeightConstraint?.update(offset: totalHeight)
         rootView.layoutIfNeeded()
     }
+    
+    private func updateEmtpyView() {
+        rootView.emptyView.isHidden = !recentlyRooms.isEmpty
+        rootView.roomListCollectionView.isHidden = recentlyRooms.isEmpty
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout

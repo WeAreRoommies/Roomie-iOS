@@ -22,6 +22,8 @@ final class HomeView: BaseView {
     
     let gradientView = UIView()
     
+    let emptyView = HomeEmptyView()
+    
     var nameLabel = UILabel()
     private let nameTitleLabel = UILabel()
     
@@ -102,6 +104,10 @@ final class HomeView: BaseView {
             $0.isPagingEnabled = true
             $0.isUserInteractionEnabled = true
         }
+        
+        emptyView.do {
+            $0.isHidden = true
+        }
     }
     
     override func setUI() {
@@ -123,6 +129,7 @@ final class HomeView: BaseView {
             moodStackView,
             recentlyLabel,
             roomListCollectionView,
+            emptyView,
             nextMapView
         )
         moodStackView.addArrangedSubviews(
@@ -221,6 +228,11 @@ final class HomeView: BaseView {
             $0.top.equalTo(recentlyLabel.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview().inset(16)
             self.roomListTableViewHeightConstraint = $0.height.equalTo(0).constraint
+        }
+        
+        emptyView.snp.makeConstraints{
+            $0.top.equalTo(recentlyLabel.snp.bottom).offset(12)
+            $0.horizontalEdges.equalToSuperview()
         }
         
         nextMapView.snp.makeConstraints{

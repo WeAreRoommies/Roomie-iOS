@@ -73,6 +73,11 @@ final class WishListViewController: BaseViewController {
             withReuseIdentifier: VersionFooterView.reuseIdentifier
         )
     }
+    
+    private func updateEmtpyView() {
+        rootView.emptyView.isHidden = !wishListRooms.isEmpty
+        rootView.wishListCollectionView.isHidden = wishListRooms.isEmpty
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -125,6 +130,8 @@ extension WishListViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
+        updateEmtpyView()
+        
         return wishListRooms.count
     }
     

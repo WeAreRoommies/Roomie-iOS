@@ -18,6 +18,8 @@ final class WishListView: BaseView {
         frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()
     )
     
+    let emptyView = WishListEmptyView()
+    
     // MARK: - UISetting
     
     override func setStyle() {
@@ -32,10 +34,14 @@ final class WishListView: BaseView {
             $0.showsHorizontalScrollIndicator = false
             $0.showsVerticalScrollIndicator = true
         }
+        
+        emptyView.do {
+            $0.isHidden = true
+        }
     }
     
     override func setUI() {
-        addSubview(wishListCollectionView)
+        addSubviews(emptyView, wishListCollectionView)
     }
     
     override func setLayout() {
@@ -43,6 +49,10 @@ final class WishListView: BaseView {
             $0.top.equalTo(safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
+        }
+        
+        emptyView.snp.makeConstraints{
+            $0.edges.equalToSuperview()
         }
     }
 }
