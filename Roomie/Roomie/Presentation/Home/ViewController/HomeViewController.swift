@@ -68,8 +68,13 @@ final class HomeViewController: BaseViewController {
     override func setAction() {
         rootView.updateButton.updateButton
             .tapPublisher
-            .sink {
-                // TODO: 업데이트 연결
+            .sink { [weak self] in
+                // TODO: 추후 재 화면연결 필요
+                let houseDetailViewController = HouseDetailViewController(
+                    viewModel: HouseDetailViewModel()
+                )
+                houseDetailViewController.hidesBottomBarWhenPushed = true
+                self?.navigationController?.pushViewController(houseDetailViewController, animated: true)
             }
             .store(in: cancelBag)
         
