@@ -1,5 +1,5 @@
 //
-//  GroundRuleLabel.swift
+//  CheckIconLabel.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/17/25.
@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class GroundRuleLabel: UIView {
+final class CheckIconLabel: UIView {
     
     // MARK: - UIComponent
     
@@ -78,7 +78,7 @@ final class GroundRuleLabel: UIView {
     }
 }
 
-private extension GroundRuleLabel {
+private extension CheckIconLabel {
     func setGroundRulelabel(with text: String = "") {
         ruleLabel.setText(text, style: .body1, color: .grayscale12)
     }

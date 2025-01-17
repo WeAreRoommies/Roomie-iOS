@@ -26,10 +26,10 @@ final class RoomMoodCell: BaseCollectionViewCell {
     private let groundRuleTitleLabel = UILabel()
     private let groundRuleStackView = UIStackView()
     
-    private let groundRuleLabel1 = GroundRuleLabel(text: "아침마다 뉴진스 디토를 들으며 요가를 해요, 그리고 두 줄이면 이렇게 됩니다.")
-    private let groundRuleLabel2 = GroundRuleLabel(text: "chill 코드는 굉장히 많지만, 신경도 안 쓰는 chill guy일 때")
-    private let groundRuleLabel3 = GroundRuleLabel(text: "chill 코드는 굉장히 많지만, 신경도 안 쓰는 chill guy일 때")
-    private let groundRuleLabel4 = GroundRuleLabel(text: "chill 코드는 굉장히 많지만, 신경도 안 쓰는 chill guy일 때")
+    private let groundRuleLabel1 = CheckIconLabel(text: "아침마다 뉴진스 디토를 들으며 요가를 해요, 그리고 두 줄이면 이렇게 됩니다.")
+    private let groundRuleLabel2 = CheckIconLabel(text: "chill 코드는 굉장히 많지만, 신경도 안 쓰는 chill guy일 때")
+    private let groundRuleLabel3 = CheckIconLabel(text: "chill 코드는 굉장히 많지만, 신경도 안 쓰는 chill guy일 때")
+    private let groundRuleLabel4 = CheckIconLabel(text: "chill 코드는 굉장히 많지만, 신경도 안 쓰는 chill guy일 때")
     
     // MARK: - UISetting
     
