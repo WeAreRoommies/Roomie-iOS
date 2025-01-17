@@ -36,7 +36,7 @@ final class TourCompleteView: BaseView {
         }
         
         completeImageView.do {
-            $0.image = .imgCompleteview
+            $0.image = .imgGomiExcited
         }
     }
     
