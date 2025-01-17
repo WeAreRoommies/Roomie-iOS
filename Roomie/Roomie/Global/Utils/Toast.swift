@@ -43,14 +43,14 @@ final class Toast: UIView {
 
 private extension Toast {
     func animateToast() {
-        UIView.animate(withDuration: 0.4, delay: 0.0, options: .curveEaseIn, animations: {
+        UIView.animate(withDuration: 0.4, delay: 0.0, options: .curveEaseIn) {
             self.alpha = 1.0
-        }, completion: { _ in
-            UIView.animate(withDuration: 1, delay: 1.8, options: .curveEaseOut, animations: {
+        } completion: { _ in
+            UIView.animate(withDuration: 1, delay: 1.8, options: .curveEaseOut) {
                 self.alpha = 0.0
-            }, completion: { _ in
+            } completion: { _ in
                 self.removeFromSuperview()
-            })
-        })
+            }
+        }
     }
 }
