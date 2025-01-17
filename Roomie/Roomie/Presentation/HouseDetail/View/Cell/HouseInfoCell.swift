@@ -142,3 +142,5 @@ final class HouseInfoCell: BaseCollectionViewCell {
         }
     }
 }
+
+// TODO: dataBind 함수 구현

@@ -48,3 +48,5 @@ final class HousePhotoCell: BaseCollectionViewCell {
         }
     }
 }
+
+// TODO: dataBind 함수 구현
