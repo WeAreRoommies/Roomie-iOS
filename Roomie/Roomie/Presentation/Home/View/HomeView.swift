@@ -29,20 +29,18 @@ final class HomeView: BaseView {
     private let moodView = UIView()
     private let moodLabel = UILabel()
     private let moodStackView = UIStackView()
-    let calmCardView = MoodButtonView(.calm, image: .imgCalm)
-    let livelyCardView = MoodButtonView(.lively, image: .imgExciting)
-    let neatCardView = MoodButtonView(.neat, image: .imgClean)
+    let calmCardView = MoodButtonView(.calm)
+    let livelyCardView = MoodButtonView(.lively)
+    let neatCardView = MoodButtonView(.neat)
     
     private let recentlyLabel = UILabel()
     
-    let roomListCollectionView = UICollectionView(
-        frame: .zero,
-        collectionViewLayout: UICollectionViewFlowLayout().then {
-            $0.scrollDirection = .vertical
-        }
+    let roomListCollectionView: UICollectionView = UICollectionView(
+        frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()
     )
+
     
-    private let nextMapView = NextMapButtonView()
+    let nextMapView = NextMapButtonView()
     
     // MARK: - UISetting
     
@@ -87,6 +85,10 @@ final class HomeView: BaseView {
         }
         
         roomListCollectionView.do {
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .vertical
+            
+            $0.collectionViewLayout = layout
             $0.backgroundColor = UIColor.clear
             $0.showsHorizontalScrollIndicator = false
             $0.showsVerticalScrollIndicator = false

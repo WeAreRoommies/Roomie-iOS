@@ -59,28 +59,50 @@ final class HomeViewController: BaseViewController {
         rootView.updateButton.updateButton
             .tapPublisher
             .sink {
-                // TODO: 화면 전환하기
+                // TODO: 업데이트 연결
             }
             .store(in: cancelBag)
         
         rootView.calmCardView.moodButton
             .tapPublisher
             .sink {
-                // TODO: 화면 전환하기
+                let calmMoodListViewController = MoodListViewController(
+                    viewModel: MoodListViewModel(),
+                    moodType: .calm
+                )
+                calmMoodListViewController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(calmMoodListViewController, animated: true)
             }
             .store(in: cancelBag)
         
         rootView.livelyCardView.moodButton
             .tapPublisher
             .sink {
-                // TODO: 화면 전환하기
+                let livelyMoodListViewController = MoodListViewController(
+                    viewModel: MoodListViewModel(),
+                    moodType: .lively
+                )
+                livelyMoodListViewController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(livelyMoodListViewController, animated: true)
             }
             .store(in: cancelBag)
         
         rootView.neatCardView.moodButton
             .tapPublisher
             .sink {
-                // TODO: 화면 전환하기
+                let neatMoodListViewController = MoodListViewController(
+                    viewModel: MoodListViewModel(),
+                    moodType: .neat
+                )
+                neatMoodListViewController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(neatMoodListViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
+        rootView.nextMapView.updateButton
+            .tapPublisher
+            .sink {
+                self.tabBarController?.selectedIndex = 1
             }
             .store(in: cancelBag)
     }
@@ -131,8 +153,6 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        self.editButtonItem.isSelected = true
-        print("selected")
         // TODO: 상세매물 페이지와 연결
     }
 }
@@ -159,20 +179,8 @@ extension HomeViewController: UICollectionViewDataSource {
         }
         
         let data = recentlyRooms[indexPath.row]
+        cell.dataBind(data)
         
-        cell.dataBind(
-            data.mainImageURL,
-            houseId: data.houseID,
-            montlyRent: data.monthlyRent,
-            deposit: data.deposit,
-            occupanyTypes: data.occupancyType,
-            location: data.location,
-            genderPolicy: data.genderPolicy,
-            locationDescription: data.locationDescription,
-            isPinned: data.isPinned,
-            moodTag: data.moodTag,
-            contract_term: data.contractTerm
-        )
         return cell
     }
 }

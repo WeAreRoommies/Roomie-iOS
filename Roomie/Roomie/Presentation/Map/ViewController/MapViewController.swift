@@ -69,6 +69,16 @@ final class MapViewController: BaseViewController {
     }
     
     override func setAction() {
+        rootView.searchBarButton
+            .tapPublisher
+            .sink {
+                let mapSearchViewController = MapSearchViewController(
+                    viewModel: MapSearchViewModel()
+                )
+                self.navigationController?.pushViewController(mapSearchViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
         rootView.filteringButton
             .tapPublisher
             .sink {
@@ -76,6 +86,13 @@ final class MapViewController: BaseViewController {
                     viewModel: MapFilterViewModel()
                 )
                 self.navigationController?.pushViewController(mapFilterViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
+        rootView.mapListButton
+            .tapPublisher
+            .sink { [weak self] in
+                self?.presentMapListSheetSheet()
             }
             .store(in: cancelBag)
         
@@ -158,12 +175,32 @@ private extension MapViewController {
 
 extension MapViewController: NMFMapViewTouchDelegate {
     func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
-        view.endEditing(true)
-        
         if !rootView.mapDetailCardView.isHidden {
             erasePreviousSelectedMarker()
             
             rootView.mapDetailCardView.isHidden = true
         }
+    }
+}
+
+// MARK: - UIAdaptivePresentationControllerDelegate
+
+extension MapViewController: UIAdaptivePresentationControllerDelegate {
+    func presentMapListSheetSheet() {
+        let mapListSheetViewController = MapListSheetViewController(
+            viewModel: MapViewModel()
+        )
+        
+        let mediumDetent = UISheetPresentationController.Detent.custom { _ in 348 }
+        let largeDetent = UISheetPresentationController.Detent.custom { _ in 648 }
+        
+        if let sheet = mapListSheetViewController.sheetPresentationController {
+            sheet.detents = [mediumDetent, largeDetent]
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 16
+        }
+        mapListSheetViewController.isModalInPresentation = false
+        
+        self.present(mapListSheetViewController, animated: true)
     }
 }
