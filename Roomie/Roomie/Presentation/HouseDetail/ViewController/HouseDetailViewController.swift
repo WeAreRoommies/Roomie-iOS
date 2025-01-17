@@ -62,7 +62,7 @@ final class HouseDetailViewController: BaseViewController {
 // MARK: - Functions
 
 private extension HouseDetailViewController {
-    func setRegister() { // 아래로 빼
+    func setRegister() {
         rootView.collectionView
             .register(
                 HousePhotoCell.self,
@@ -95,7 +95,7 @@ private extension HouseDetailViewController {
         
         output.houseInfo
             .sink { data in
-                // TODO: combine으로 collecionView 바인딩 해주는 거 찾아보기
+                // TODO: ViewModel -> CollectionView dataBinding
                 dump(data)
             }
             .store(in: cancelBag)
@@ -170,7 +170,7 @@ extension HouseDetailViewController: UICollectionViewDataSource {
             ) as? HouseDetailHeaderView else { return UICollectionReusableView() }
             return header
         default:
-            return UICollectionReusableView() // 빈 헤더 반환
+            return UICollectionReusableView()
         }
     }
 }

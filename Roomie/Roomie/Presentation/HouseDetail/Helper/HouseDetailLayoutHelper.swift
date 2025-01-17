@@ -39,8 +39,6 @@ final class HouseDetailLayoutHelper {
     }
 }
 
-// MARK: - Layout 관련 private extension
-
 private extension HouseDetailLayoutHelper {
     static func createHousePhotoLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
