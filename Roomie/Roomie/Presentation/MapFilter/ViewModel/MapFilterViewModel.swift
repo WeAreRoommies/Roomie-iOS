@@ -12,11 +12,11 @@ final class MapFilterViewModel {
     private let depositMaxValue: Int = 500
     private let monthlyRentMaxValue: Int = 150
     
-    private let depositMinSubject = CurrentValueSubject<Int, Never>(0)
-    private let depositMaxSubject = CurrentValueSubject<Int, Never>(500)
+    private let depositMinSubject = PassthroughSubject<Int, Never>()
+    private let depositMaxSubject = PassthroughSubject<Int, Never>()
     
-    private let monthlyRentMinSubject = CurrentValueSubject<Int, Never>(0)
-    private let monthlyRentMaxSubject = CurrentValueSubject<Int, Never>(150)
+    private let monthlyRentMinSubject = PassthroughSubject<Int, Never>()
+    private let monthlyRentMaxSubject = PassthroughSubject<Int, Never>()
     
     private let genderSubject = CurrentValueSubject<[String], Never>([])
     private let occupancyTypeSubject = CurrentValueSubject<[String], Never>([])
@@ -31,17 +31,9 @@ extension MapFilterViewModel: ViewModelType {
         let depositMinText: AnyPublisher<Int, Never>
         let depositMaxText: AnyPublisher<Int, Never>
         
-        /// 보증금 슬라이더 값
-        let depositMinRange: AnyPublisher<Int, Never>
-        let depositMaxRange: AnyPublisher<Int, Never>
-        
         /// 월세 텍스트필드 값
         let monthlyRentMinText: AnyPublisher<Int, Never>
         let monthlyRentMaxText: AnyPublisher<Int, Never>
-        
-        /// 월세 슬라이더 값
-        let monthlyRentMinRange: AnyPublisher<Int, Never>
-        let monthlyRentMaxRange: AnyPublisher<Int, Never>
         
         /// 성별 옵션
         let maleButtonDidTap: AnyPublisher<Void, Never>
@@ -73,17 +65,9 @@ extension MapFilterViewModel: ViewModelType {
         let depositMinText: AnyPublisher<Int, Never>
         let depositMaxText: AnyPublisher<Int, Never>
         
-        /// 보증금 슬라이더 값
-        let depositMinRange: AnyPublisher<Int, Never>
-        let depositMaxRange: AnyPublisher<Int, Never>
-        
         /// 월세 텍스트필드 값
         let monthlyRentMinText: AnyPublisher<Int, Never>
         let monthlyRentMaxText: AnyPublisher<Int, Never>
-        
-        /// 월세 슬라이더 값
-        let monthlyRentMinRange: AnyPublisher<Int, Never>
-        let monthlyRentMaxRange: AnyPublisher<Int, Never>
         
         /// 방 형태
         let isGenderEmpty: AnyPublisher<Bool, Never>
@@ -110,20 +94,6 @@ extension MapFilterViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
-        input.depositMinRange
-            .sink { [weak self] in
-                guard let self = self else { return }
-                self.depositMinSubject.send($0)
-            }
-            .store(in: cancelBag)
-        
-        input.depositMaxRange
-            .sink { [weak self] in
-                guard let self = self else { return }
-                self.depositMaxSubject.send($0)
-            }
-            .store(in: cancelBag)
-        
         input.monthlyRentMinText
             .sink { [weak self] in
                 guard let self = self else { return }
@@ -133,20 +103,6 @@ extension MapFilterViewModel: ViewModelType {
         
         input.monthlyRentMaxText
             .map { $0 > self.monthlyRentMaxValue ? self.monthlyRentMaxValue : $0 }
-            .sink { [weak self] in
-                guard let self = self else { return }
-                self.monthlyRentMaxSubject.send($0)
-            }
-            .store(in: cancelBag)
-        
-        input.monthlyRentMinRange
-            .sink { [weak self] in
-                guard let self = self else { return }
-                self.monthlyRentMinSubject.send($0)
-            }
-            .store(in: cancelBag)
-        
-        input.monthlyRentMaxRange
             .sink { [weak self] in
                 guard let self = self else { return }
                 self.monthlyRentMaxSubject.send($0)
@@ -373,12 +329,8 @@ extension MapFilterViewModel: ViewModelType {
         return Output(
             depositMinText: depositMin,
             depositMaxText: depositMax,
-            depositMinRange: depositMin,
-            depositMaxRange: depositMax,
             monthlyRentMinText: monthlyRentMin,
             monthlyRentMaxText: monthlyRentMax,
-            monthlyRentMinRange: monthlyRentMin,
-            monthlyRentMaxRange: monthlyRentMax,
             isGenderEmpty: isGenderEmpty,
             isOccupancyTypeEmpty: isOccupancyTypeEmpty,
             isPreferredDateEmpty: isPreferredEmpty,
