@@ -110,8 +110,13 @@ private extension MapSearchViewController {
         
         output.mapSearchData
             .sink { [weak self] data in
-                self?.mapSearchData = data
-                self?.rootView.collectionView.reloadData()
+                guard let self = self else { return }
+                self.mapSearchData = data
+                self.rootView.emptyView.isHidden = data.isEmpty ? false : true
+                
+                if !data.isEmpty {
+                    self.rootView.collectionView.reloadData()
+                }
             }
             .store(in: cancelBag)
     }

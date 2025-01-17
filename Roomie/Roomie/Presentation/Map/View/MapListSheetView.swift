@@ -11,6 +11,9 @@ import SnapKit
 import Then
 
 final class MapListSheetView: BaseView {
+    
+    // MARK: - UIComponent
+
     private let titleLabel = UILabel()
     
     private let seperatorView = UIView()
@@ -23,6 +26,10 @@ final class MapListSheetView: BaseView {
         }
     )
     
+    let emptyView = MapListSheetEmptyView()
+    
+    // MARK: - UISetting
+
     override func setStyle() {
         titleLabel.do {
             $0.setText("매물", style: .title2, color: .grayscale12)
@@ -40,7 +47,7 @@ final class MapListSheetView: BaseView {
     }
     
     override func setUI() {
-        addSubviews(titleLabel, seperatorView, collectionView)
+        addSubviews(titleLabel, seperatorView, collectionView, emptyView)
     }
     
     override func setLayout() {
@@ -61,5 +68,10 @@ final class MapListSheetView: BaseView {
             $0.bottom.equalToSuperview()
         }
         
+        emptyView.snp.makeConstraints {
+            $0.top.equalTo(seperatorView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
     }
 }

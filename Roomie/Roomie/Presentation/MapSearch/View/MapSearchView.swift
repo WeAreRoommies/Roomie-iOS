@@ -28,6 +28,8 @@ final class MapSearchView: BaseView {
         }
     )
     
+    let emptyView = MapSearchEmptyView()
+    
     // MARK: - UISetting
     
     override func setStyle() {
@@ -52,10 +54,21 @@ final class MapSearchView: BaseView {
             $0.showsVerticalScrollIndicator = true
             $0.showsHorizontalScrollIndicator = false
         }
+        
+        emptyView.do {
+            $0.isHidden = true
+        }
     }
     
     override func setUI() {
-        addSubviews(backButton, searchTextField, searchImageView, seperatorView, collectionView)
+        addSubviews(
+            backButton,
+            searchTextField,
+            searchImageView,
+            seperatorView,
+            collectionView,
+            emptyView
+        )
     }
     
     override func setLayout() {
@@ -85,6 +98,12 @@ final class MapSearchView: BaseView {
         }
         
         collectionView.snp.makeConstraints {
+            $0.top.equalTo(seperatorView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        
+        emptyView.snp.makeConstraints {
             $0.top.equalTo(seperatorView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()

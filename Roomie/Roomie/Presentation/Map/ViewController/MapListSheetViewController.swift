@@ -74,8 +74,13 @@ private extension MapListSheetViewController {
         
         output.mapListData
             .sink { [weak self] data in
-                self?.mapListData = data
-                self?.rootView.collectionView.reloadData()
+                guard let self = self else { return }
+                self.mapListData = data
+                self.rootView.emptyView.isHidden = data.isEmpty ? false : true
+                
+                if !data.isEmpty {
+                    self.rootView.collectionView.reloadData()
+                }
             }
             .store(in: cancelBag)
     }

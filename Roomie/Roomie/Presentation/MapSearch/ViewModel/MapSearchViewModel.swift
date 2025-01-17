@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 final class MapSearchViewModel {
-    private let mapSearchDataSubject = CurrentValueSubject<[MapSearchModel], Never>([])
+    private let mapSearchDataSubject = PassthroughSubject<[MapSearchModel], Never>()
 }
 
 extension MapSearchViewModel: ViewModelType {
