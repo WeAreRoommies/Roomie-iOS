@@ -22,6 +22,14 @@ extension HouseDetailViewModel: ViewModelType {
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
+        
+        input.viewWillAppear
+            .sink { [weak self] in
+                guard let self else { return }
+                self.fetchHouseDetailData()
+            }
+            .store(in: cancelBag)
+        
         let houseInfoData = houseDetailSubject
             .map { data in
                 HouseInfoData(
