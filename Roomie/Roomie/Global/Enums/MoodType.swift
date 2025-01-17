@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum MoodType {
+enum MoodType: CaseIterable {
     case calm
     case lively
     case neat

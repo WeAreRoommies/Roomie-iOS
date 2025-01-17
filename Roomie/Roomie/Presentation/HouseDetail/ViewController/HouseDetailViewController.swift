@@ -57,16 +57,35 @@ final class HouseDetailViewController: BaseViewController {
     override func setDelegate() {
         rootView.collectionView.dataSource = self
     }
-    
-    private func setRegister() {
-        rootView.collectionView.register(HousePhotoCell.self, forCellWithReuseIdentifier: HousePhotoCell.reuseIdentifier)
-        rootView.collectionView.register(HouseInfoCell.self, forCellWithReuseIdentifier: HouseInfoCell.reuseIdentifier)
-    }
 }
 
 // MARK: - Functions
 
 private extension HouseDetailViewController {
+    func setRegister() { // 아래로 빼
+        rootView.collectionView
+            .register(
+                HousePhotoCell.self,
+                forCellWithReuseIdentifier: HousePhotoCell.reuseIdentifier
+            )
+        rootView.collectionView
+            .register(
+                HouseInfoCell.self,
+                forCellWithReuseIdentifier: HouseInfoCell.reuseIdentifier
+            )
+        rootView.collectionView
+            .register(
+                RoomMoodCell.self,
+                forCellWithReuseIdentifier: RoomMoodCell.reuseIdentifier
+            )
+        rootView.collectionView
+            .register(
+                HouseDetailHeaderView.self,
+                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: HouseDetailHeaderView.reuseIdentifier
+            )
+    }
+    
     func bindViewModel() {
         let input = HouseDetailViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher()
@@ -99,6 +118,8 @@ extension HouseDetailViewController: UICollectionViewDataSource {
             return 1
         case .houseInfo:
             return 1
+        case .roomMood:
+            return 1
         default:
             return 0
         }
@@ -114,17 +135,42 @@ extension HouseDetailViewController: UICollectionViewDataSource {
                 withReuseIdentifier: HousePhotoCell.reuseIdentifier,
                 for: indexPath
             )
-            // 필요한 데이터 설정
+            // TODO: housePhotoCell 데이터 바인딩
             return cell
         case .houseInfo:
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: HouseInfoCell.reuseIdentifier,
                 for: indexPath
             )
-            // 데이터를 셀에 설정 (예: houseDetailData[indexPath.row]의 값을 설정)
+            // TODO: houseInfoCell 데이터 바인딩
+            return cell
+        case .roomMood:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: RoomMoodCell.reuseIdentifier,
+                for: indexPath
+            )
+            // TODO: roomMoodCell 데이터 바인딩
             return cell
         default:
             return UICollectionViewCell()
+        }
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
+        switch HouseDetailSection(rawValue: indexPath.section) {
+        case .roomMood:
+            guard let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: HouseDetailHeaderView.reuseIdentifier,
+                for: indexPath
+            ) as? HouseDetailHeaderView else { return UICollectionReusableView() }
+            return header
+        default:
+            return UICollectionReusableView() // 빈 헤더 반환
         }
     }
 }

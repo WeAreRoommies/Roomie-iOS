@@ -107,6 +107,7 @@ private extension HouseInfoIconLabel {
     }
 }
 
+// TODO: Cell DataBind함수를 위함
 extension HouseInfoIconLabel {
     func updateText(with text: String) {
         infoLabel.updateText(text)

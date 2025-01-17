@@ -13,6 +13,7 @@ import Then
 enum HouseDetailSection: Int, CaseIterable {
     case housePhoto
     case houseInfo
+    case roomMood
 }
 
 final class HouseDetailView: BaseView {
