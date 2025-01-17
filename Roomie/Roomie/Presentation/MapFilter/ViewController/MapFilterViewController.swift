@@ -90,8 +90,10 @@ final class MapFilterViewController: BaseViewController {
             .store(in: cancelBag)
         
         rootView.filterPriceView.depositMinTextField
-            .textPublisher
-            .compactMap { $0 }
+            .controlEventPublisher(for: .editingDidEnd)
+            .compactMap { [weak self] _ in
+                self?.rootView.filterPriceView.depositMinTextField.text
+            }
             .compactMap { Int($0) }
             .sink { [weak self] depositMinText in
                 guard let self = self else { return }
@@ -100,8 +102,10 @@ final class MapFilterViewController: BaseViewController {
             .store(in: cancelBag)
         
         rootView.filterPriceView.depositMaxTextField
-            .textPublisher
-            .compactMap { $0 }
+            .controlEventPublisher(for: .editingDidEnd)
+            .compactMap { [weak self] _ in
+                self?.rootView.filterPriceView.depositMaxTextField.text
+            }
             .compactMap { Int($0) }
             .sink { [weak self] depositMaxText in
                 guard let self = self else { return }
@@ -110,8 +114,10 @@ final class MapFilterViewController: BaseViewController {
             .store(in: cancelBag)
         
         rootView.filterPriceView.monthlyRentMinTextField
-            .textPublisher
-            .compactMap { $0 }
+            .controlEventPublisher(for: .editingDidEnd)
+            .compactMap { [weak self] _ in
+                self?.rootView.filterPriceView.monthlyRentMinTextField.text
+            }
             .compactMap { Int($0) }
             .sink { [weak self] monthlyRentMinText in
                 guard let self = self else { return }
@@ -120,8 +126,10 @@ final class MapFilterViewController: BaseViewController {
             .store(in: cancelBag)
         
         rootView.filterPriceView.monthlyRentMaxTextField
-            .textPublisher
-            .compactMap { $0 }
+            .controlEventPublisher(for: .editingDidEnd)
+            .compactMap { [weak self] _ in
+                self?.rootView.filterPriceView.monthlyRentMaxTextField.text
+            }
             .compactMap { Int($0) }
             .sink { [weak self] monthlyRentMaxText in
                 guard let self = self else { return }
@@ -278,11 +286,27 @@ private extension MapFilterViewController {
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
         
+        output.depositMinText
+            .map { String($0) }
+            .sink { [weak self] depositMin in
+                guard let self = self else { return }
+                self.rootView.filterPriceView.depositMinTextField.text = depositMin
+            }
+            .store(in: cancelBag)
+        
         output.depositMaxText
             .map { String($0) }
             .sink { [weak self] depositMax in
                 guard let self = self else { return }
                 self.rootView.filterPriceView.depositMaxTextField.text = depositMax
+            }
+            .store(in: cancelBag)
+        
+        output.monthlyRentMinText
+            .map { String($0) }
+            .sink { [weak self] monthlyRentMin in
+                guard let self = self else { return }
+                self.rootView.filterPriceView.monthlyRentMinTextField.text = monthlyRentMin
             }
             .store(in: cancelBag)
         

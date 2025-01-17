@@ -22,7 +22,7 @@ final class FilterPriceView: BaseView {
     private let monthlyRentTitleLabel = UILabel()
     private let monthlyRentCenterView = UIView()
     let monthlyRentMinTextField = PriceTextField(placeHolder: "0")
-    let monthlyRentMaxTextField = PriceTextField(placeHolder: "500")
+    let monthlyRentMaxTextField = PriceTextField(placeHolder: "150")
     
     // MARK: - UISetting
     

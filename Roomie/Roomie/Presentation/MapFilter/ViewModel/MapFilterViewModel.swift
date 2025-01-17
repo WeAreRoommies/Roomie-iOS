@@ -12,11 +12,11 @@ final class MapFilterViewModel {
     private let depositMaxValue: Int = 500
     private let monthlyRentMaxValue: Int = 150
     
-    private let depositMinSubject = PassthroughSubject<Int, Never>()
-    private let depositMaxSubject = PassthroughSubject<Int, Never>()
+    private let depositMinSubject = CurrentValueSubject<Int, Never>(0)
+    private let depositMaxSubject = CurrentValueSubject<Int, Never>(500)
     
-    private let monthlyRentMinSubject = PassthroughSubject<Int, Never>()
-    private let monthlyRentMaxSubject = PassthroughSubject<Int, Never>()
+    private let monthlyRentMinSubject = CurrentValueSubject<Int, Never>(0)
+    private let monthlyRentMaxSubject = CurrentValueSubject<Int, Never>(150)
     
     private let genderSubject = CurrentValueSubject<[String], Never>([])
     private let occupancyTypeSubject = CurrentValueSubject<[String], Never>([])
@@ -80,32 +80,54 @@ extension MapFilterViewModel: ViewModelType {
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
         input.depositMinText
-            .sink { [weak self] in
+            .map { $0 > self.depositMaxValue ? self.depositMaxValue : $0 }
+            .sink { [weak self] depositMin in
                 guard let self = self else { return }
-                self.depositMinSubject.send($0)
+                if depositMin > depositMaxSubject.value {
+                    self.depositMinSubject.send(depositMaxSubject.value)
+                    self.depositMaxSubject.send(depositMin)
+                } else {
+                    self.depositMinSubject.send(depositMin)
+                }
             }
             .store(in: cancelBag)
         
         input.depositMaxText
             .map { $0 > self.depositMaxValue ? self.depositMaxValue : $0 }
-            .sink { [weak self] in
+            .sink { [weak self] depositMax in
                 guard let self = self else { return }
-                self.depositMaxSubject.send($0)
+                if depositMax < depositMinSubject.value {
+                    self.depositMaxSubject.send(depositMinSubject.value)
+                    self.depositMinSubject.send(depositMax)
+                } else {
+                    self.depositMaxSubject.send(depositMax)
+                }
             }
             .store(in: cancelBag)
         
         input.monthlyRentMinText
-            .sink { [weak self] in
+            .map { $0 > self.monthlyRentMaxValue ? self.monthlyRentMaxValue : $0 }
+            .sink { [weak self] monthlyRentMin in
                 guard let self = self else { return }
-                self.monthlyRentMinSubject.send($0)
+                if monthlyRentMin > monthlyRentMaxSubject.value {
+                    self.monthlyRentMinSubject.send(monthlyRentMaxSubject.value)
+                    self.monthlyRentMaxSubject.send(monthlyRentMin)
+                } else {
+                    self.monthlyRentMinSubject.send(monthlyRentMin)
+                }
             }
             .store(in: cancelBag)
         
         input.monthlyRentMaxText
             .map { $0 > self.monthlyRentMaxValue ? self.monthlyRentMaxValue : $0 }
-            .sink { [weak self] in
+            .sink { [weak self] monthlyRentMax in
                 guard let self = self else { return }
-                self.monthlyRentMaxSubject.send($0)
+                if monthlyRentMax < monthlyRentMinSubject.value {
+                    self.monthlyRentMaxSubject.send(monthlyRentMinSubject.value)
+                    self.monthlyRentMinSubject.send(monthlyRentMax)
+                } else {
+                    self.monthlyRentMaxSubject.send(monthlyRentMax)
+                }
             }
             .store(in: cancelBag)
         
