@@ -22,7 +22,7 @@ final class MapListSheetViewController: BaseViewController {
     final let cellHeight: CGFloat = 112
     final let contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     
-    private var mapListData: [MapModel] = []
+    private lazy var dataSource = createDiffableDataSource()
     
     // MARK: - Initializer
 
@@ -52,7 +52,6 @@ final class MapListSheetViewController: BaseViewController {
     
     override func setDelegate() {
         rootView.collectionView.delegate = self
-        rootView.collectionView.dataSource = self
     }
 }
 
@@ -75,14 +74,36 @@ private extension MapListSheetViewController {
         output.mapListData
             .sink { [weak self] data in
                 guard let self = self else { return }
-                self.mapListData = data
                 self.rootView.emptyView.isHidden = data.isEmpty ? false : true
                 
                 if !data.isEmpty {
-                    self.rootView.collectionView.reloadData()
+                    self.updateSnapshot(with: data)
                 }
             }
             .store(in: cancelBag)
+    }
+    
+    func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, MapModel> {
+        return UICollectionViewDiffableDataSource(
+            collectionView: rootView.collectionView
+        ) { collectionView, indexPath, model in
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier,
+                for: indexPath
+            ) as? RoomListCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.dataBind(model)
+            return cell
+        }
+    }
+    
+    func updateSnapshot(with data: [MapModel]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, MapModel>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(data, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
 
@@ -103,33 +124,5 @@ extension MapListSheetViewController: UICollectionViewDelegateFlowLayout {
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
         return contentInset
-    }
-}
-
-// MARK: - UICollectionViewDataSource
-
-extension MapListSheetViewController: UICollectionViewDataSource {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
-        return mapListData.count
-    }
-    
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: RoomListCollectionViewCell.reuseIdentifier,
-            for: indexPath
-        ) as? RoomListCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        
-        let data = mapListData[indexPath.row]
-        cell.dataBind(data)
-        
-        return cell
     }
 }
