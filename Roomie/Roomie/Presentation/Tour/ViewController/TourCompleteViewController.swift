@@ -41,6 +41,10 @@ final class TourCompleteViewController: BaseViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
+    override func setView() {
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+    }
+    
     override func setAction() {
         rootView.lookOtherButton
             .tapPublisher
