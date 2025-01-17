@@ -14,6 +14,7 @@ enum HouseDetailSection: Int, CaseIterable {
     case housePhoto
     case houseInfo
     case roomMood
+    case roomStatus
 }
 
 final class HouseDetailView: BaseView {
