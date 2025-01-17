@@ -21,6 +21,7 @@ final class TourCompleteView: BaseView {
     
     let lookOtherButton = OtherHouseButton(title: "다른 방 보러가기")
     let completeButton = RoomieButton(title: "완료하기", isEnabled: true)
+    private let completeImageView = UIImageView()
     
     // MARK: - UISetting
     
@@ -33,12 +34,17 @@ final class TourCompleteView: BaseView {
         subTitleLabel.do {
             $0.setText("신청내용은 카카오톡으로 전달드렸어요", style: .body4, color: .grayscale8)
         }
+        
+        completeImageView.do {
+            $0.image = .imgGomiExcited
+        }
     }
     
     override func setUI() {
         addSubviews(
             titleLabel,
             subTitleLabel,
+            completeImageView,
             lookOtherButton,
             completeButton
         )
@@ -46,13 +52,19 @@ final class TourCompleteView: BaseView {
     
     override func setLayout() {
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(safeAreaLayoutGuide.snp.top).offset(168)
+            $0.top.equalTo(safeAreaLayoutGuide.snp.top).offset(200)
             $0.centerX.equalToSuperview()
         }
         
         subTitleLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(8)
             $0.centerX.equalToSuperview()
+        }
+        
+        completeImageView.snp.makeConstraints {
+            $0.top.equalTo(subTitleLabel.snp.bottom).offset(8)
+            $0.centerX.equalToSuperview()
+            $0.size.equalTo(Screen.width(220))
         }
         
         lookOtherButton.snp.makeConstraints {

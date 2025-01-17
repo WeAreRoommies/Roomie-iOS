@@ -43,9 +43,7 @@ final class TourDateViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setNavigationBar(with: "", isBorderHidden: true)
         bindViewModel()
-        hideKeyboardWhenDidTap()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -60,11 +58,17 @@ final class TourDateViewController: BaseViewController {
         removeKeyboardObserver()
     }
     
+    override func setView() {
+        setNavigationBar(with: "", isBorderHidden: true)
+    }
+    
     override func setDelegate() {
         rootView.preferredDatePickerView.delegate = self
     }
     
     override func setAction() {
+        hideKeyboardWhenDidTap()
+        
         rootView.messageTextView
             .textPublisher
             .compactMap { $0 }
