@@ -29,7 +29,7 @@ final class HomeView: BaseView {
     private let subGreetingLabel = UILabel()
     private let roomieImageView = UIImageView()
     
-    let updateButton = ShowUpdateButton()
+    let updateButton = AppleLoverClub()
     
     private let moodView = UIView()
     private let moodLabel = UILabel()

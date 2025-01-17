@@ -1,5 +1,5 @@
 //
-//  ShowUpdateView.swift
+//  AppleLoverClub.swift
 //  Roomie
 //
 //  Created by MaengKim on 1/14/25.
@@ -12,7 +12,7 @@ import CombineCocoa
 import Then
 import SnapKit
 
-final class ShowUpdateButton: UIView {
+final class AppleLoverClub: UIView {
     
     // MARK: - Property
     
@@ -53,7 +53,7 @@ final class ShowUpdateButton: UIView {
         }
         
         titleLabel.do {
-            $0.setText("1월 1일 루미 업데이트 알아보기" ,style: .body2, color: .grayscale10)
+            $0.setText("루미가 궁금하다면?" ,style: .body2, color: .grayscale10)
         }
         
         nextImageView.do {
