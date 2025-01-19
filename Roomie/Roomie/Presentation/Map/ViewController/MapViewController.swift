@@ -85,6 +85,7 @@ final class MapViewController: BaseViewController {
                 let mapFilterViewController = MapFilterViewController(
                     viewModel: MapFilterViewModel()
                 )
+                mapFilterViewController.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(mapFilterViewController, animated: true)
             }
             .store(in: cancelBag)
