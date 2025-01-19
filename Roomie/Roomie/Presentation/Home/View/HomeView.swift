@@ -14,13 +14,13 @@ final class HomeView: BaseView {
 
     // MARK: - UIComponents
     
-    var roomListTableViewHeightConstraint: Constraint?
-    
     private let scrollView = UIScrollView()
     
     private let contentView = UIView()
     
     let gradientView = UIView()
+    
+    let emptyView = HomeEmptyView()
     
     var nameLabel = UILabel()
     private let nameTitleLabel = UILabel()
@@ -65,7 +65,7 @@ final class HomeView: BaseView {
             $0.numberOfLines = 2
         }
         roomieImageView.do {
-            $0.image = .imgHomeCharacter1
+            $0.image = .imgHomeGomi
         }
         
         contentView.do {
@@ -99,8 +99,12 @@ final class HomeView: BaseView {
             $0.backgroundColor = UIColor.clear
             $0.showsHorizontalScrollIndicator = false
             $0.showsVerticalScrollIndicator = false
-            $0.isPagingEnabled = true
+            $0.isPagingEnabled = false
             $0.isUserInteractionEnabled = true
+        }
+        
+        emptyView.do {
+            $0.isHidden = true
         }
     }
     
@@ -123,6 +127,7 @@ final class HomeView: BaseView {
             moodStackView,
             recentlyLabel,
             roomListCollectionView,
+            emptyView,
             nextMapView
         )
         moodStackView.addArrangedSubviews(
@@ -144,7 +149,6 @@ final class HomeView: BaseView {
         contentView.snp.makeConstraints{
             $0.edges.equalToSuperview()
             $0.height.greaterThanOrEqualToSuperview().priority(.low)
-            $0.bottom.equalTo(moodView.snp.bottom)
             $0.width.equalToSuperview()
         }
         
@@ -219,8 +223,14 @@ final class HomeView: BaseView {
         
         roomListCollectionView.snp.makeConstraints{
             $0.top.equalTo(recentlyLabel.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview().inset(16)
-            self.roomListTableViewHeightConstraint = $0.height.equalTo(0).constraint
+            $0.horizontalEdges.equalToSuperview().inset(16)
+            $0.height.equalTo(0)
+        }
+        
+        emptyView.snp.makeConstraints{
+            $0.top.equalTo(recentlyLabel.snp.bottom).offset(12)
+            $0.bottom.equalTo(nextMapView.snp.top).offset(-20)
+            $0.leading.trailing.equalToSuperview().inset(20)
         }
         
         nextMapView.snp.makeConstraints{

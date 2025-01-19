@@ -54,12 +54,14 @@ final class HomeViewController: BaseViewController {
         
         setDelegate()
         setRegister()
-        updateCollectionViewHeight()
+        updateEmtpyView()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        updateEmtpyView()
+        rootView.layoutIfNeeded()
         rootView.gradientView.setGradient(for: .home)
     }
     
@@ -133,15 +135,35 @@ final class HomeViewController: BaseViewController {
             forCellWithReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier
         )
     }
-    
-    private func updateCollectionViewHeight() {
+}
+
+// MARK: - Functions
+
+private extension HomeViewController {
+    func updateCollectionViewHeight() -> CGFloat{
         let numberOfItems = recentlyRooms.count
         let cellsHeight = CGFloat(numberOfItems) * cellHeight
         let totalSpacing = CGFloat(numberOfItems - 1) * contentInterSpacing
         let totalHeight = cellsHeight + totalSpacing
+
+        return totalHeight
+    }
+    
+    func updateEmtpyView() {
+        let isEmpty = recentlyRooms.isEmpty
+        rootView.emptyView.isHidden = !isEmpty
+        rootView.roomListCollectionView.isHidden = isEmpty
         
-        rootView.roomListTableViewHeightConstraint?.update(offset: totalHeight)
-        rootView.layoutIfNeeded()
+        if !isEmpty {
+            let totalHeight = updateCollectionViewHeight()
+            rootView.roomListCollectionView.snp.updateConstraints {
+                $0.height.equalTo(max(totalHeight, 0))
+            }
+        } else {
+            rootView.roomListCollectionView.snp.updateConstraints {
+                $0.height.equalTo(226)
+            }
+        }
     }
 }
 
