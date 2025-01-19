@@ -65,9 +65,9 @@ final class HomeViewController: BaseViewController {
         rootView.gradientView.setGradient(for: .home)
     }
     
-//    override func setView() {
-//        setNavigationBar(with: "")
-//    }
+    override func setView() {
+        setHomeNavigationBar()
+    }
     
     // MARK: - Functions
     
@@ -171,7 +171,43 @@ private extension HomeViewController {
     }
     
     func setHomeNavigationBar() {
+        title = nil
+        navigationItem.leftBarButtonItem = nil
         
+        let barAppearance = UINavigationBarAppearance()
+        let locationLabel = UILabel()
+        let likedButton = UIBarButtonItem(
+            image: .icnHeartLine24,
+            style: .plain,
+            target: self,
+            action: #selector(wishLishButtonDidTap)
+        )
+        let dropDownImageView = UIImageView(image: .icnArrowDownFilled16)
+        
+        let locationItem = UIBarButtonItem(customView: locationLabel)
+        let dropDownItem = UIBarButtonItem(customView: dropDownImageView)
+        likedButton.tintColor = .grayscale10
+        barAppearance.backgroundColor = .primaryLight4
+        barAppearance.shadowColor = nil
+        locationLabel.do {
+            $0.setText(userInfo.location, style: .title2, color: .grayscale10)
+        }
+        
+        navigationItem.rightBarButtonItem = likedButton
+        navigationItem.leftBarButtonItems = [locationItem, dropDownItem]
+        
+        
+        navigationController?.navigationBar.standardAppearance = barAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = barAppearance
+        
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
+    }
+    
+    @objc
+    func wishLishButtonDidTap() {
+        let wishListViewController = WishListViewController(viewModel: WishListViewModel())
+        self.navigationController?.pushViewController(wishListViewController, animated: true)
     }
 }
 
