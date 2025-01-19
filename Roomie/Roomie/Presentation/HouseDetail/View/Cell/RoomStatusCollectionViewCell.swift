@@ -151,15 +151,15 @@ final class RoomStatusCollectionViewCell: BaseCollectionViewCell {
         }
         
         nameLabel.snp.makeConstraints {
-            $0.top.equalTo(statusView.snp.bottom).offset(8)
+            $0.top.equalTo(statusView.snp.bottom).offset(Screen.height(8))
             $0.leading.equalToSuperview().inset(16)
             $0.trailing.equalTo(chevronRightIcon.snp.leading).offset(19)
         }
         
         infoContentView.snp.makeConstraints {
-            $0.top.equalTo(nameLabel.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.bottom.equalToSuperview().inset(16)
+            $0.height.equalTo(Screen.height(76))
         }
         
         roomTypeTitleLabel.snp.makeConstraints {
