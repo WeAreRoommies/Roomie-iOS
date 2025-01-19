@@ -22,8 +22,6 @@ final class HouseDetailViewController: BaseViewController {
     
     private let cancelBag = CancelBag()
     
-    private let houseDetailData = HouseDetailModel.mockData()
-    
     // MARK: - Initializer
     
     init(viewModel: HouseDetailViewModel) {
