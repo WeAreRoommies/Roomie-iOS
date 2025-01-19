@@ -135,7 +135,11 @@ final class HomeViewController: BaseViewController {
             forCellWithReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier
         )
     }
-    
+}
+
+// MARK: - Functions
+
+private extension HomeViewController {
     func updateCollectionViewHeight() -> CGFloat{
         let numberOfItems = recentlyRooms.count
         let cellsHeight = CGFloat(numberOfItems) * cellHeight
@@ -145,7 +149,7 @@ final class HomeViewController: BaseViewController {
         return totalHeight
     }
     
-    private func updateEmtpyView() {
+    func updateEmtpyView() {
         let isEmpty = recentlyRooms.isEmpty
         rootView.emptyView.isHidden = !isEmpty
         rootView.roomListCollectionView.isHidden = isEmpty

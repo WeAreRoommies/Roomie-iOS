@@ -71,10 +71,10 @@ extension MyPageViewController: UICollectionViewDelegate {
         switch indexPath.section {
         case 0:
             if indexPath.row == 0 {
-                let wishListController = WishListViewController(viewModel: WishListViewModel())
-                wishListController.hidesBottomBarWhenPushed = true
+                let wishListViewController = WishListViewController(viewModel: WishListViewModel())
+                wishListViewController.hidesBottomBarWhenPushed = true
                 self.navigationController?
-                    .pushViewController(wishListController, animated: true)
+                    .pushViewController(wishListViewController, animated: true)
             }
         default:
             break
