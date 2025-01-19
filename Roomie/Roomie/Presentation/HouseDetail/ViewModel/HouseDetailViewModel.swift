@@ -53,6 +53,6 @@ private extension HouseDetailViewModel {
     
     // TODO: 이후 API 통신으로 변경
     func fetchHouseDetailData() {
-        houseDetailSubject.send(HouseDetailModel.mockData())
+
     }
 }

@@ -21,7 +21,7 @@ final class HouseInfoCollectionViewCell: BaseCollectionViewCell {
     private let titleLabel = UILabel()
     
     private let locationIconLabel = HouseInfoIconLabel("서대문구 연희동", houseInfoType: .location)
-    private let occupancyTypesIconLabel = HouseInfoIconLabel("1, 2인실", houseInfoType: .occupancyTypes)
+    private let occupancyTypesIconLabel = HouseInfoIconLabel("1,2인실", houseInfoType: .occupancyTypes)
     private let occupancyStatusIconLabel = HouseInfoIconLabel("2/4인", houseInfoType: .occupancyStatus)
     private let genderPolicyIconLabel = HouseInfoIconLabel("여성전용", houseInfoType: .genderPolicy)
     private let contractTermIconLabel = HouseInfoIconLabel("3개월 이상 계약", houseInfoType: .contractTerm)
