@@ -22,8 +22,6 @@ final class MapFilterViewController: BaseViewController {
     
     private let depositMinTextSubject = PassthroughSubject<Int, Never>()
     private let depositMaxTextSubject = PassthroughSubject<Int, Never>()
-    private let depositMinRangeSubject = PassthroughSubject<Int, Never>()
-    private let depositMaxRangeSubject = PassthroughSubject<Int, Never>()
     
     private let monthlyRentMinTextSubject = PassthroughSubject<Int, Never>()
     private let monthlyRentMaxTextSubject = PassthroughSubject<Int, Never>()
@@ -92,8 +90,10 @@ final class MapFilterViewController: BaseViewController {
             .store(in: cancelBag)
         
         rootView.filterPriceView.depositMinTextField
-            .textPublisher
-            .compactMap { $0 }
+            .controlEventPublisher(for: .editingDidEnd)
+            .compactMap { [weak self] _ in
+                self?.rootView.filterPriceView.depositMinTextField.text
+            }
             .compactMap { Int($0) }
             .sink { [weak self] depositMinText in
                 guard let self = self else { return }
@@ -102,8 +102,10 @@ final class MapFilterViewController: BaseViewController {
             .store(in: cancelBag)
         
         rootView.filterPriceView.depositMaxTextField
-            .textPublisher
-            .compactMap { $0 }
+            .controlEventPublisher(for: .editingDidEnd)
+            .compactMap { [weak self] _ in
+                self?.rootView.filterPriceView.depositMaxTextField.text
+            }
             .compactMap { Int($0) }
             .sink { [weak self] depositMaxText in
                 guard let self = self else { return }
@@ -111,18 +113,11 @@ final class MapFilterViewController: BaseViewController {
             }
             .store(in: cancelBag)
         
-        rootView.filterPriceView.depositSlider
-            .controlEventPublisher(for: .valueChanged)
-            .sink { [weak self] in
-                guard let self = self else { return }
-                self.depositMinRangeSubject.send(Int(rootView.filterPriceView.depositSlider.min))
-                self.depositMaxRangeSubject.send(Int(rootView.filterPriceView.depositSlider.max))
-            }
-            .store(in: cancelBag)
-        
         rootView.filterPriceView.monthlyRentMinTextField
-            .textPublisher
-            .compactMap { $0 }
+            .controlEventPublisher(for: .editingDidEnd)
+            .compactMap { [weak self] _ in
+                self?.rootView.filterPriceView.monthlyRentMinTextField.text
+            }
             .compactMap { Int($0) }
             .sink { [weak self] monthlyRentMinText in
                 guard let self = self else { return }
@@ -131,21 +126,14 @@ final class MapFilterViewController: BaseViewController {
             .store(in: cancelBag)
         
         rootView.filterPriceView.monthlyRentMaxTextField
-            .textPublisher
-            .compactMap { $0 }
+            .controlEventPublisher(for: .editingDidEnd)
+            .compactMap { [weak self] _ in
+                self?.rootView.filterPriceView.monthlyRentMaxTextField.text
+            }
             .compactMap { Int($0) }
             .sink { [weak self] monthlyRentMaxText in
                 guard let self = self else { return }
                 self.monthlyRentMaxTextSubject.send(monthlyRentMaxText)
-            }
-            .store(in: cancelBag)
-        
-        rootView.filterPriceView.monthlyRentSlider
-            .controlEventPublisher(for: .valueChanged)
-            .sink { [weak self] in
-                guard let self = self else { return }
-                self.monthlyRentMinRangeSubject.send(Int(rootView.filterPriceView.monthlyRentSlider.min))
-                self.monthlyRentMaxRangeSubject.send(Int(rootView.filterPriceView.monthlyRentSlider.max))
             }
             .store(in: cancelBag)
         
@@ -276,12 +264,8 @@ private extension MapFilterViewController {
         let input = MapFilterViewModel.Input(
             depositMinText: depositMinTextSubject.eraseToAnyPublisher(),
             depositMaxText: depositMaxTextSubject.eraseToAnyPublisher(),
-            depositMinRange: depositMinRangeSubject.eraseToAnyPublisher(),
-            depositMaxRange: depositMaxRangeSubject.eraseToAnyPublisher(),
             monthlyRentMinText: monthlyRentMinTextSubject.eraseToAnyPublisher(),
             monthlyRentMaxText: monthlyRentMaxTextSubject.eraseToAnyPublisher(),
-            monthlyRentMinRange: monthlyRentMinRangeSubject.eraseToAnyPublisher(),
-            monthlyRentMaxRange: monthlyRentMaxRangeSubject.eraseToAnyPublisher(),
             maleButtonDidTap: maleButtonDidTapSubject.eraseToAnyPublisher(),
             femaleButtonDidTap: femaleButtonDidTapSubject.eraseToAnyPublisher(),
             genderDivisionButtonDidTap: genderDivisionButtonDidTapSubject.eraseToAnyPublisher(),
@@ -302,22 +286,6 @@ private extension MapFilterViewController {
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
         
-        output.depositMinRange
-            .map { Double($0) }
-            .sink { [weak self] depositMin in
-                guard let self = self else { return }
-                self.rootView.filterPriceView.depositSlider.min = depositMin
-            }
-            .store(in: cancelBag)
-        
-        output.depositMaxRange
-            .map { Double($0) }
-            .sink { [weak self] depositMax in
-                guard let self = self else { return }
-                self.rootView.filterPriceView.depositSlider.max = depositMax
-            }
-            .store(in: cancelBag)
-        
         output.depositMinText
             .map { String($0) }
             .sink { [weak self] depositMin in
@@ -331,22 +299,6 @@ private extension MapFilterViewController {
             .sink { [weak self] depositMax in
                 guard let self = self else { return }
                 self.rootView.filterPriceView.depositMaxTextField.text = depositMax
-            }
-            .store(in: cancelBag)
-        
-        output.monthlyRentMinRange
-            .map { Double($0) }
-            .sink { [weak self] monthlyRentMin in
-                guard let self = self else { return }
-                self.rootView.filterPriceView.monthlyRentSlider.min = monthlyRentMin
-            }
-            .store(in: cancelBag)
-        
-        output.monthlyRentMaxRange
-            .map { Double($0) }
-            .sink { [weak self] monthlyRentMax in
-                guard let self = self else { return }
-                self.rootView.filterPriceView.monthlyRentSlider.max = monthlyRentMax
             }
             .store(in: cancelBag)
         
