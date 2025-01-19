@@ -65,7 +65,7 @@ final class HomeView: BaseView {
             $0.numberOfLines = 2
         }
         roomieImageView.do {
-            $0.image = .imgHomeCharacter1
+            $0.image = .imgHomeGomi
         }
         
         contentView.do {
