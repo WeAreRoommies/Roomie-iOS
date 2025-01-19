@@ -36,13 +36,13 @@ final class HomeEmptyView: BaseView {
     
     override func setLayout() {
         emptyTitle.snp.makeConstraints{
-            $0.top.equalToSuperview().inset(16)
-            $0.horizontalEdges.equalToSuperview()
+            $0.top.equalToSuperview().inset(84)
+            $0.centerX.equalToSuperview()
         }
         
         emptySubTitle.snp.makeConstraints{
             $0.top.equalTo(emptyTitle.snp.bottom).offset(10)
-            $0.horizontalEdges.equalToSuperview()
+            $0.centerX.equalToSuperview()
         }
     }
 }

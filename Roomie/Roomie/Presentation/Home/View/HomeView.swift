@@ -14,8 +14,6 @@ final class HomeView: BaseView {
 
     // MARK: - UIComponents
     
-    var roomListTableViewHeightConstraint: Constraint?
-    
     private let scrollView = UIScrollView()
     
     private let contentView = UIView()
@@ -101,7 +99,7 @@ final class HomeView: BaseView {
             $0.backgroundColor = UIColor.clear
             $0.showsHorizontalScrollIndicator = false
             $0.showsVerticalScrollIndicator = false
-            $0.isPagingEnabled = true
+            $0.isPagingEnabled = false
             $0.isUserInteractionEnabled = true
         }
         
@@ -151,7 +149,6 @@ final class HomeView: BaseView {
         contentView.snp.makeConstraints{
             $0.edges.equalToSuperview()
             $0.height.greaterThanOrEqualToSuperview().priority(.low)
-            $0.bottom.equalTo(moodView.snp.bottom)
             $0.width.equalToSuperview()
         }
         
@@ -226,13 +223,14 @@ final class HomeView: BaseView {
         
         roomListCollectionView.snp.makeConstraints{
             $0.top.equalTo(recentlyLabel.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview().inset(16)
-            self.roomListTableViewHeightConstraint = $0.height.equalTo(0).constraint
+            $0.horizontalEdges.equalToSuperview().inset(16)
+            $0.height.equalTo(0)
         }
         
         emptyView.snp.makeConstraints{
             $0.top.equalTo(recentlyLabel.snp.bottom).offset(12)
-            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalTo(nextMapView.snp.top).offset(-20)
+            $0.leading.trailing.equalToSuperview().inset(20)
         }
         
         nextMapView.snp.makeConstraints{

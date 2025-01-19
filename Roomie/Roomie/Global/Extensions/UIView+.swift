@@ -21,7 +21,12 @@ extension UIView {
     }
     
     func setGradient(for style: Gradient) {
+        layer.sublayers?
+            .filter { $0 is CAGradientLayer }
+            .forEach { $0.removeFromSuperlayer() }
+
         let gradientLayer = CAGradientLayer.gradientLayer(for: style, in: bounds)
+        gradientLayer.frame = bounds
         layer.insertSublayer(gradientLayer, at: 0)
     }
 }
