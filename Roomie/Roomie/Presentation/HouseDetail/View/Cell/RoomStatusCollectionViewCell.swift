@@ -69,6 +69,7 @@ final class RoomStatusCollectionViewCell: BaseCollectionViewCell {
         roomTypeTitleLabel.do {
             $0.setText("방 형태", style: .body3, color: .grayscale8)
         }
+        
         roomTypeLabel.do {
             $0.setText("2인실 · 여성", style: .body1, color: .grayscale11)
         }
