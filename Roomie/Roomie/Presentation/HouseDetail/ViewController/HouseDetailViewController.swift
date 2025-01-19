@@ -80,6 +80,12 @@ private extension HouseDetailViewController {
             )
         rootView.collectionView
             .register(
+                RoomStatusCollectionViewCell.self,
+                forCellWithReuseIdentifier: RoomStatusCollectionViewCell.reuseIdentifier
+            )
+        
+        rootView.collectionView
+            .register(
                 HouseDetailHeaderView.self,
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                 withReuseIdentifier: HouseDetailHeaderView.reuseIdentifier
@@ -95,7 +101,9 @@ private extension HouseDetailViewController {
         
         output.houseInfo
             .sink { data in
+                
                 // TODO: ViewModel -> CollectionView dataBinding
+                
                 dump(data)
             }
             .store(in: cancelBag)
@@ -120,10 +128,14 @@ extension HouseDetailViewController: UICollectionViewDataSource {
             return 1
         case .roomMood:
             return 1
+        case .roomStatus:
+            return 3 // TODO: Data Binding 필요
         default:
             return 0
         }
     }
+    
+    // TODO: 각 cell 마다 데이터 바인딩 필요
     
     func collectionView(
         _ collectionView: UICollectionView,
@@ -135,21 +147,28 @@ extension HouseDetailViewController: UICollectionViewDataSource {
                 withReuseIdentifier: HousePhotoCollectionViewCell.reuseIdentifier,
                 for: indexPath
             )
-            // TODO: housePhotoCell 데이터 바인딩
+            
             return cell
         case .houseInfo:
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: HouseInfoCollectionViewCell.reuseIdentifier,
                 for: indexPath
             )
-            // TODO: houseInfoCell 데이터 바인딩
+            
             return cell
         case .roomMood:
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: RoomMoodCollectionViewCell.reuseIdentifier,
                 for: indexPath
             )
-            // TODO: roomMoodCell 데이터 바인딩
+            
+            return cell
+        case .roomStatus:
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: RoomStatusCollectionViewCell.reuseIdentifier,
+                for: indexPath
+            )
+            
             return cell
         default:
             return UICollectionViewCell()
@@ -169,6 +188,15 @@ extension HouseDetailViewController: UICollectionViewDataSource {
                 for: indexPath
             ) as? HouseDetailHeaderView else { return UICollectionReusableView() }
             return header
+            
+        case .roomStatus:
+            guard let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: HouseDetailHeaderView.reuseIdentifier,
+                for: indexPath
+            ) as? HouseDetailHeaderView else { return UICollectionReusableView() }
+            return header
+            
         default:
             return UICollectionReusableView()
         }
