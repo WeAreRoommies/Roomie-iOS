@@ -49,6 +49,10 @@ final class HomeView: BaseView {
     // MARK: - UISetting
     
     override func setStyle() {
+        self.do {
+            $0.backgroundColor = .primaryLight4
+        }
+        
         nameLabel.do {
             $0.setText(style: .heading2, color: .primaryPurple)
         }
@@ -139,7 +143,9 @@ final class HomeView: BaseView {
     
     override func setLayout() {
         gradientView.snp.makeConstraints{
-            $0.edges.equalToSuperview()
+            $0.top.equalToSuperview().inset(64)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(266)
         }
         
         scrollView.snp.makeConstraints{

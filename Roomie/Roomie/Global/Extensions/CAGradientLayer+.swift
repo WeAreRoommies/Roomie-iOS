@@ -23,8 +23,8 @@ extension CAGradientLayer {
         
         switch style {
         case .home:
-            beginColor = UIColor(hexCode: "#FAFAFA")
-            endColor = UIColor(hexCode: "#626CF6")
+            beginColor = UIColor(hexCode: "#B2B6F4", alpha: 0)
+            endColor = UIColor(hexCode: "#B2B6F4")
         case .moodList:
             beginColor = UIColor(hexCode: "#EEEFFE")
             endColor = UIColor(hexCode: "#FFFFFF")

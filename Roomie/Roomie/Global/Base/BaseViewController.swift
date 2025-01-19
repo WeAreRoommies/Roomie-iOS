@@ -39,6 +39,7 @@ extension BaseViewController {
     /// 네비게이션 바 커스텀
     func setNavigationBar(with string: String, isBorderHidden: Bool = false) {
         title = string
+        navigationItem.leftBarButtonItem = nil
         
         let barAppearance = UINavigationBarAppearance()
         barAppearance.backgroundColor = .grayscale1
@@ -53,7 +54,7 @@ extension BaseViewController {
         navigationController?.navigationBar.scrollEdgeAppearance = barAppearance
         
         let backButton = UIBarButtonItem(
-            image: .icnArrowLeftLine24,
+            image: .btnBack,
             style: .plain,
             target: self,
             action: #selector(backButtonDidTap)
