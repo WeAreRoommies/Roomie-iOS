@@ -165,7 +165,7 @@ final class RoomStatusCollectionViewCell: BaseCollectionViewCell {
         roomTypeTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview()
-            $0.width.equalTo(Screen.width(60))
+            $0.width.equalTo(Screen.width(61))
         }
         
         roomTypeLabel.snp.makeConstraints {
@@ -189,7 +189,7 @@ final class RoomStatusCollectionViewCell: BaseCollectionViewCell {
         prepaidUtilitiesTitleLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview()
-            $0.width.equalTo(Screen.width(60))
+            $0.width.equalTo(Screen.width(61))
         }
         
         prepaidUtilitiesLabel.snp.makeConstraints {
@@ -213,7 +213,7 @@ final class RoomStatusCollectionViewCell: BaseCollectionViewCell {
         contractPeriodTitleLabel.snp.makeConstraints {
             $0.bottom.equalToSuperview()
             $0.leading.equalToSuperview()
-            $0.width.equalTo(Screen.width(60))
+            $0.width.equalTo(Screen.width(61))
         }
         
         contractPeriodLabel.snp.makeConstraints {
