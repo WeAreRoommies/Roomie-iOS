@@ -65,6 +65,10 @@ final class HomeViewController: BaseViewController {
         rootView.gradientView.setGradient(for: .home)
     }
     
+//    override func setView() {
+//        setNavigationBar(with: "")
+//    }
+    
     // MARK: - Functions
     
     override func setAction() {
@@ -164,6 +168,10 @@ private extension HomeViewController {
                 $0.height.equalTo(226)
             }
         }
+    }
+    
+    func setHomeNavigationBar() {
+        
     }
 }
 
