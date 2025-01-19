@@ -24,32 +24,32 @@ struct WishListRoom {
 extension WishListRoom {
     static func mockHomeData() -> [WishListRoom] {
         return [
-//            WishListRoom(
-//                houseID: 1,
-//                monthlyRent: "30~50",
-//                deposit: "200~300",
-//                occupancyType: "1,2인실",
-//                location: "서대문구 연희동",
-//                genderPolicy: "여성전용",
-//                locationDescription: "자이아파트",
-//                isPinned: false,
-//                moodTag: "#차분한",
-//                contractTerm: 6,
-//                mainImageURL: ""
-//            ),
-//            WishListRoom(
-//                houseID: 2,
-//                monthlyRent: "30~50",
-//                deposit: "200~300",
-//                occupancyType: "1,2,3인실",
-//                location: "서대문구 대현동",
-//                genderPolicy: "성별무관",
-//                locationDescription: "자이아파트",
-//                isPinned: true,
-//                moodTag: "#활기찬",
-//                contractTerm: 6,
-//                mainImageURL: ""
-//            )
+            WishListRoom(
+                houseID: 1,
+                monthlyRent: "30~50",
+                deposit: "200~300",
+                occupancyType: "1,2인실",
+                location: "서대문구 연희동",
+                genderPolicy: "여성전용",
+                locationDescription: "자이아파트",
+                isPinned: false,
+                moodTag: "#차분한",
+                contractTerm: 6,
+                mainImageURL: ""
+            ),
+            WishListRoom(
+                houseID: 2,
+                monthlyRent: "30~50",
+                deposit: "200~300",
+                occupancyType: "1,2,3인실",
+                location: "서대문구 대현동",
+                genderPolicy: "성별무관",
+                locationDescription: "자이아파트",
+                isPinned: true,
+                moodTag: "#활기찬",
+                contractTerm: 6,
+                mainImageURL: ""
+            )
         ]
     }
 }

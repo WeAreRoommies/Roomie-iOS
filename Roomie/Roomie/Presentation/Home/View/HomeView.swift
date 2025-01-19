@@ -49,7 +49,9 @@ final class HomeView: BaseView {
     // MARK: - UISetting
     
     override func setStyle() {
-        self.backgroundColor = .primaryLight4
+        self.do {
+            $0.backgroundColor = .primaryLight4
+        }
         
         nameLabel.do {
             $0.setText(style: .heading2, color: .primaryPurple)

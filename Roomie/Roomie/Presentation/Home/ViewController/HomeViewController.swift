@@ -196,7 +196,6 @@ private extension HomeViewController {
         navigationItem.rightBarButtonItem = likedButton
         navigationItem.leftBarButtonItems = [locationItem, dropDownItem]
         
-        
         navigationController?.navigationBar.standardAppearance = barAppearance
         navigationController?.navigationBar.scrollEdgeAppearance = barAppearance
         
