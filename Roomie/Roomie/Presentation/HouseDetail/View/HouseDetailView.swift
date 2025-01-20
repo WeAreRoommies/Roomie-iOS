@@ -51,8 +51,8 @@ final class HouseDetailView: BaseView {
     let groundRuleLabel3 = CheckIconLabel(text: "chill 코드는 굉장히 많지만, 신경도 안 쓰는 chill guy일 때")
     let groundRuleLabel4 = CheckIconLabel(text: "chill 코드는 굉장히 많지만, 신경도 안 쓰는 chill guy일 때")
     
-    
-    // 리팩을 쉽게 하기 위한 개행입니다.. 나중에 다 수정할게요!
+    // roomStatus Section
+    private let roomStatusTitleLabel = UILabel()
     
     
     private let bottomButtonbackView = UIView()
@@ -125,7 +125,7 @@ final class HouseDetailView: BaseView {
         }
         
         groundRuleTitleLabel.do {
-            $0.setText("그라운드 룰", style: .body2, color: .grayscale12)
+            $0.setText("숙소 규칙", style: .body2, color: .grayscale12)
         }
         
         groundRuleStackView.do {
@@ -135,8 +135,11 @@ final class HouseDetailView: BaseView {
             $0.distribution = .fill
         }
         
+        roomStatusTitleLabel.do {
+            $0.setText("입주현황", style: .heading5, color: .grayscale12)
+        }
         
-        // 리팩을 쉽게 하기 위한 개행입니다.. 나중에 다 수정할게요!
+        
         
         
         bottomButtonbackView.do {
@@ -168,7 +171,8 @@ final class HouseDetailView: BaseView {
             lookInsidePhotoButton,
             houseInfoSeparatorView,
             roomMoodTitleLabel,
-            roomMoodBackView
+            roomMoodBackView,
+            roomStatusTitleLabel
         )
         
         
@@ -294,7 +298,6 @@ final class HouseDetailView: BaseView {
         roomMoodBackView.snp.makeConstraints {
             $0.top.equalTo(roomMoodTitleLabel.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.bottom.equalToSuperview().inset(16) ///
         }
         
         roomMoodLabel.snp.makeConstraints {
@@ -339,6 +342,13 @@ final class HouseDetailView: BaseView {
             $0.bottom.equalToSuperview().inset(16)
             $0.bottom.equalToSuperview().inset(16)
         }
+        
+        roomStatusTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(roomMoodBackView.snp.bottom).offset(48)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.bottom.equalToSuperview().inset(16) ///
+        }
+        
         
         
         // 리팩을 쉽게 하기 위한 개행입니다.. 나중에 다 수정할게요!
