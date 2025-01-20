@@ -51,8 +51,10 @@ final class HouseDetailView: BaseView {
     let groundRuleLabel3 = CheckIconLabel(text: "chill 코드는 굉장히 많지만, 신경도 안 쓰는 chill guy일 때")
     let groundRuleLabel4 = CheckIconLabel(text: "chill 코드는 굉장히 많지만, 신경도 안 쓰는 chill guy일 때")
     
+    // roomStatus Section
+    private let roomStatusTitleLabel = UILabel()
+    let roomStatusTableView = UITableView()
     
-    // 리팩을 쉽게 하기 위한 개행입니다.. 나중에 다 수정할게요!
     
     
     private let bottomButtonbackView = UIView()
@@ -125,7 +127,7 @@ final class HouseDetailView: BaseView {
         }
         
         groundRuleTitleLabel.do {
-            $0.setText("그라운드 룰", style: .body2, color: .grayscale12)
+            $0.setText("숙소 규칙", style: .body2, color: .grayscale12)
         }
         
         groundRuleStackView.do {
@@ -133,6 +135,15 @@ final class HouseDetailView: BaseView {
             $0.spacing = 8
             $0.alignment = .fill
             $0.distribution = .fill
+        }
+        
+        roomStatusTitleLabel.do {
+            $0.setText("입주현황", style: .heading5, color: .grayscale12)
+        }
+        
+        roomStatusTableView.do {
+            $0.separatorStyle = .none
+            $0.backgroundColor = .yellow
         }
         
         
@@ -149,15 +160,8 @@ final class HouseDetailView: BaseView {
     }
     
     override func setUI() {
-        addSubviews(
-            scrollView,
-            bottomButtonbackView
-        )
-        
-        scrollView.addSubviews(
-            contentView
-        )
-        
+        addSubviews(scrollView, bottomButtonbackView)
+        scrollView.addSubviews(contentView)
         contentView.addSubviews(
             photoImageView,
             nameBackView,
@@ -168,7 +172,9 @@ final class HouseDetailView: BaseView {
             lookInsidePhotoButton,
             houseInfoSeparatorView,
             roomMoodTitleLabel,
-            roomMoodBackView
+            roomMoodBackView,
+            roomStatusTitleLabel,
+            roomStatusTableView
         )
         
         
@@ -179,15 +185,9 @@ final class HouseDetailView: BaseView {
         
         nameBackView.addSubview(nameLabel)
         
-        firstIconLabelStackView.addArrangedSubviews(
-            locationIconLabel,
-            occupancyTypesIconLabel
-        )
+        firstIconLabelStackView.addArrangedSubviews(locationIconLabel, occupancyTypesIconLabel)
         
-        secondIconLabelStackView.addArrangedSubviews(
-            occupancyStatusIconLabel,
-            genderPolicyIconLabel
-        )
+        secondIconLabelStackView.addArrangedSubviews(occupancyStatusIconLabel, genderPolicyIconLabel)
         
         roomMoodBackView.addSubviews(
             roomMoodLabel,
@@ -200,6 +200,7 @@ final class HouseDetailView: BaseView {
             groundRuleStackView
         )
         
+        // TODO: DataBind & 순서대로 addArrangedSubviews
         groundRuleStackView.addArrangedSubviews(
             groundRuleLabel1,
             groundRuleLabel2,
@@ -213,11 +214,7 @@ final class HouseDetailView: BaseView {
         
         
         
-        bottomButtonbackView
-            .addSubviews(
-                bottomButtonSeparatorView,
-                tourApplyButton
-            )
+        bottomButtonbackView.addSubviews(bottomButtonSeparatorView, tourApplyButton)
     }
     
     override func setLayout() {
@@ -294,7 +291,6 @@ final class HouseDetailView: BaseView {
         roomMoodBackView.snp.makeConstraints {
             $0.top.equalTo(roomMoodTitleLabel.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.bottom.equalToSuperview().inset(16) ///
         }
         
         roomMoodLabel.snp.makeConstraints {
@@ -340,6 +336,19 @@ final class HouseDetailView: BaseView {
             $0.bottom.equalToSuperview().inset(16)
         }
         
+        roomStatusTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(roomMoodBackView.snp.bottom).offset(48)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+        }
+        
+        roomStatusTableView.snp.makeConstraints {
+            $0.top.equalTo(roomStatusTitleLabel.snp.bottom).offset(16)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.height.equalTo(Screen.height(182 + 12))
+            $0.bottom.equalToSuperview().inset(16) ///
+        }
+        
+        
         
         // 리팩을 쉽게 하기 위한 개행입니다.. 나중에 다 수정할게요!
         
@@ -361,6 +370,22 @@ final class HouseDetailView: BaseView {
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
             $0.trailing.equalToSuperview().inset(20)
             $0.width.equalTo(Screen.width(207))
+        }
+    }
+}
+
+// MARK: - Functions
+
+extension HouseDetailView {
+    /// roomStatusTableView의 높이를 동적으로 계산하는 함수입니다.
+    func updateRoomStatusTableViewHeight(
+        _ numberOfItems: Int,
+        height roomStatusCellHeight: CGFloat
+    ){
+        let tableViewHeight = CGFloat(numberOfItems) * roomStatusCellHeight
+    
+        roomStatusTableView.snp.updateConstraints {
+            $0.height.equalTo(tableViewHeight)
         }
     }
 }
