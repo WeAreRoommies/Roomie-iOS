@@ -16,7 +16,7 @@ final class HouseDetailViewController: BaseViewController {
     
     private let rootView = HouseDetailView()
     
-    private let roomStatusCellHeight: CGFloat = 182 + 12
+    private let roomStatusCellHeight: CGFloat = Screen.height(182 + 12)
     private let roomStatusCellCount = 2 // TODO: DataBind
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
@@ -34,6 +34,9 @@ final class HouseDetailViewController: BaseViewController {
        
         print("HouseDetailViewController: ViewDidLoad()")
         setRegister()
+        
+        rootView.safetyLivingFacilityView.dataBind(["침대", "침구", "옷장", "냉장고", "세탁기", "믹서", "드라이기"])
+        rootView.kitchenFacilityView.dataBind(["냉장고", "세탁기", "믹서", "드라이기"])
     }
     
     override func viewWillAppear(_ animated: Bool) {
