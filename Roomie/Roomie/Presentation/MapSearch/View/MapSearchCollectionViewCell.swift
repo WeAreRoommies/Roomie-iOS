@@ -140,7 +140,7 @@ final class MapSearchCollectionViewCell: BaseCollectionViewCell {
 // MARK: - DataBind
 
 extension MapSearchCollectionViewCell {
-    func dataBind(_ data: MapSearchModel) {
+    func dataBind(_ data: Location) {
         titleLabel.updateText(data.location)
         roadAdressLabel.updateText(data.roadAddress)
         lotAdressLabel.updateText(data.address)
