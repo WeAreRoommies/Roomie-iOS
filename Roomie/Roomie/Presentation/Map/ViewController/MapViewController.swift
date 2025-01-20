@@ -83,7 +83,7 @@ final class MapViewController: BaseViewController {
             .tapPublisher
             .sink {
                 let mapFilterViewController = MapFilterViewController(
-                    viewModel: MapFilterViewModel()
+                    viewModel: MapFilterViewModel(builder: MapRequestDTO.Builder())
                 )
                 mapFilterViewController.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(mapFilterViewController, animated: true)

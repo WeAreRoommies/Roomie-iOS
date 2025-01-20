@@ -40,7 +40,7 @@ final class MapFilterViewController: BaseViewController {
     private let quintButtonDidTapSubject = PassthroughSubject<Void, Never>()
     private let sextButtonDidTapSubject = PassthroughSubject<Void, Never>()
     
-    private let preferredDateSubject = PassthroughSubject<String, Never>()
+    private let preferredDateSubject = PassthroughSubject<String?, Never>()
     
     private let threeMonthButtonDidTapSubject = PassthroughSubject<Void, Never>()
     private let sixMonthButtonDidTapSubject = PassthroughSubject<Void, Never>()
@@ -253,6 +253,7 @@ final class MapFilterViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
+                self.applyButtonDidTapSubject.send(())
                 self.navigationController?.popViewController(animated: true)
             }
             .store(in: cancelBag)
@@ -405,6 +406,8 @@ private extension MapFilterViewController {
 
 extension MapFilterViewController: DatePickerViewDelegate {
     func dateDidPick(date: String) {
-        preferredDateSubject.send(date)
+        // TODO: 함수 호출 안 되는 거 해결
+        let formattedData = String.formattedDateString(date)
+        preferredDateSubject.send(formattedData ?? nil)
     }
 }

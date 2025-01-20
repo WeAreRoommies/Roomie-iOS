@@ -9,6 +9,8 @@ import Foundation
 import Combine
 
 final class MapFilterViewModel {
+    private let builder: MapRequestDTO.Builder
+    
     private let depositMaxValue: Int = 500
     private let monthlyRentMaxValue: Int = 150
     
@@ -21,8 +23,12 @@ final class MapFilterViewModel {
     private let genderSubject = CurrentValueSubject<[String], Never>([])
     private let occupancyTypeSubject = CurrentValueSubject<[String], Never>([])
     
-    private let preferredDateSubject = CurrentValueSubject<String, Never>("")
+    private let preferredDateSubject = CurrentValueSubject<String?, Never>(nil)
     private let contractPeriodSubject = CurrentValueSubject<[Int], Never>([])
+    
+    init(builder: MapRequestDTO.Builder) {
+        self.builder = builder
+    }
 }
 
 extension MapFilterViewModel: ViewModelType {
@@ -50,7 +56,7 @@ extension MapFilterViewModel: ViewModelType {
         let sextButtonDidTap: AnyPublisher<Void, Never>
         
         /// 계약기간 옵션
-        let preferredDate: AnyPublisher<String, Never>
+        let preferredDate: AnyPublisher<String?, Never>
         let threeMonthButtonDidTap: AnyPublisher<Void, Never>
         let sixMonthButtonDidTap: AnyPublisher<Void, Never>
         let oneYearButtonDidTap: AnyPublisher<Void, Never>
@@ -315,8 +321,28 @@ extension MapFilterViewModel: ViewModelType {
             .store(in: cancelBag)
         
         input.applyButtonDidTap
-            .sink {
-                // TODO: 데이터 전달
+            .sink { [weak self] in
+                guard let self = self else { return }
+                
+                self.builder
+                    .setDepositRange(
+                        MinMaxRange(
+                            min: self.depositMinSubject.value,
+                            max: self.depositMaxSubject.value
+                        )
+                    )
+                    .setMonthlyRentRange(
+                        MinMaxRange(
+                            min: self.monthlyRentMinSubject.value,
+                            max: self.monthlyRentMaxSubject.value
+                        )
+                    )
+                    .setGenderPolicy(genderSubject.value)
+                    .setOccupancyTypes(occupancyTypeSubject.value)
+                    .setPreferredDate(preferredDateSubject.value)
+                    .setContractPeroid(contractPeriodSubject.value)
+                
+                print("build: \(self.builder.build())")
             }
             .store(in: cancelBag)
         
@@ -341,7 +367,7 @@ extension MapFilterViewModel: ViewModelType {
             .eraseToAnyPublisher()
         
         let isPreferredEmpty = preferredDateSubject
-            .map { $0.isEmpty }
+            .map { $0?.isEmpty ?? true }
             .eraseToAnyPublisher()
         
         let isContractPeriodEmpty = contractPeriodSubject
