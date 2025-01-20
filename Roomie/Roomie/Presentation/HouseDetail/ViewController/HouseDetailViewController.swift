@@ -113,5 +113,4 @@ extension HouseDetailViewController: UITableViewDelegate {
         
         return 0
     }
-    
 }
