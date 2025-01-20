@@ -67,6 +67,7 @@ final class HomeViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         setHomeNavigationBar()
+        updateSeletedCell()
     }
     
     // MARK: - Functions
@@ -201,6 +202,14 @@ private extension HomeViewController {
         
         view.setNeedsLayout()
         view.layoutIfNeeded()
+    }
+    
+    func updateSeletedCell() {
+        for index in rootView.roomListCollectionView.indexPathsForVisibleItems {
+            if let cell = rootView.roomListCollectionView.cellForItem(at: index) as? HouseListCollectionViewCell {
+                cell.isSelected = false
+            }
+        }
     }
     
     @objc
