@@ -108,18 +108,20 @@ private extension MapSearchViewController {
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
         
         output.mapSearchData
+            .receive(on: RunLoop.main)
             .sink { [weak self] data in
                 guard let self = self else { return }
-                self.rootView.emptyView.isHidden = data.isEmpty ? false : true
+                let result = data.locations
+                self.rootView.emptyView.isHidden = result.isEmpty ? false : true
                 
-                if !data.isEmpty {
-                    self.updateSnapshot(with: data)
+                if !result.isEmpty {
+                    self.updateSnapshot(with: result)
                 }
             }
             .store(in: cancelBag)
     }
     
-    func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, MapSearchModel> {
+    func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, Location> {
         return UICollectionViewDiffableDataSource(
             collectionView: rootView.collectionView
         ) { collectionView, indexPath, model in
@@ -135,8 +137,8 @@ private extension MapSearchViewController {
         }
     }
     
-    func updateSnapshot(with data: [MapSearchModel]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, MapSearchModel>()
+    func updateSnapshot(with data: [Location]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Location>()
         snapshot.appendSections([0])
         snapshot.appendItems(data, toSection: 0)
         dataSource.apply(snapshot, animatingDifferences: true)
