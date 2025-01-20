@@ -35,7 +35,6 @@ final class HouseDetailViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
        
-        print("HouseDetailViewController: ViewDidLoad()")
         setRegister()
         
         rootView.safetyLivingFacilityView.dataBind(["침대", "침구", "옷장", "냉장고", "세탁기", "믹서", "드라이기"])
@@ -133,7 +132,7 @@ extension HouseDetailViewController: UITableViewDataSource {
                     return UITableViewCell()
                 }
                 cell.selectionStyle = .none
-                print("기본 셀 출력")
+                
                 // TODO: DataBind
                 return cell
             } else {
