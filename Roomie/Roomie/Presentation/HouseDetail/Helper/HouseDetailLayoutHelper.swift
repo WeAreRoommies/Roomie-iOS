@@ -7,37 +7,38 @@
 
 import UIKit
 
+// TODO: 나중에 한번에 삭제할 예정입니다.. 일단 이 파일은 무시해주세요
 final class HouseDetailLayoutHelper {
     
     // MARK: - Compositional Layout 생성
     
     /// CompositionalLayout을 생성하는 함수입니다.
     /// View에서 collectionView의 collectionViewLayout 인자값으로 전달합니다.
-    static func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { (
-            sectionIndex: Int,
-            environment: NSCollectionLayoutEnvironment
-        ) -> NSCollectionLayoutSection? in
-            let layoutSection: NSCollectionLayoutSection
-            
-            guard let section = HouseDetailSection(rawValue: sectionIndex) else {
-                return nil
-            }
-            
-            switch section {
-            case .housePhoto:
-                layoutSection = createHousePhotoLayout()
-            case .houseInfo:
-                layoutSection = createHouseInfoLayout()
-            case .roomMood:
-                layoutSection = createRoomMoodLayout()
-            case .roomStatus:
-                layoutSection = createRoomStatusLayout()
-            }
-            
-            return layoutSection
-        }
-        return layout
+    static func createCompositionalLayout() /*-> UICollectionViewCompositionalLayout */{
+//        let layout = UICollectionViewCompositionalLayout { (
+//            sectionIndex: Int,
+//            environment: NSCollectionLayoutEnvironment
+//        ) -> NSCollectionLayoutSection? in
+//            let layoutSection: NSCollectionLayoutSection
+//            
+//            guard let section = HouseDetailSection(rawValue: sectionIndex) else {
+//                return nil
+//            }
+//            
+//            switch section {
+//            case .housePhoto:
+//                layoutSection = createHousePhotoLayout()
+//            case .houseInfo:
+//                layoutSection = createHouseInfoLayout()
+//            case .roomMood:
+//                layoutSection = createRoomMoodLayout()
+//            case .roomStatus:
+//                layoutSection = createRoomStatusLayout()
+//            }
+//            
+//            return layoutSection
+//        }
+//        return layout
     }
 }
 
