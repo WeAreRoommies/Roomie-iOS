@@ -40,6 +40,12 @@ final class MapsService {
     }
 }
 
+extension MapsService: MapServiceProtocol {
+    func fetchMapData(request: MapRequestDTO) async throws -> BaseResponseBody<MapResponseDTO>? {
+        return try await self.request(with: .fetchMapData(request: request))
+    }
+}
+
 extension MapsService: MapSearchServiceProtocol {
     func fetchMapSearchData(query: String) async throws -> BaseResponseBody<MapSearchResponseDTO>? {
         return try await self.request(with: .fetchMapSearchData(query: query))
