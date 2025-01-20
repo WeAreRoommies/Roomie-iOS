@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RecentlyRoom {
+struct RecentlyHouse: Hashable {
     let houseID: Int
     let monthlyRent: String
     let deposit: String
@@ -21,15 +21,15 @@ struct RecentlyRoom {
     let mainImageURL: String
 }
 
-struct UserInfo {
+struct UserInfo: Hashable {
     let name: String
     let location: String
 }
 
-extension RecentlyRoom {
-    static func mockHomeData() -> [RecentlyRoom] {
+extension RecentlyHouse {
+    static func mockHomeData() -> [RecentlyHouse] {
         return [
-            RecentlyRoom(
+            RecentlyHouse(
                 houseID: 1,
                 monthlyRent: "30~50",
                 deposit: "200~300",
@@ -42,7 +42,7 @@ extension RecentlyRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            RecentlyRoom(
+            RecentlyHouse(
                 houseID: 2,
                 monthlyRent: "30~50",
                 deposit: "200~300",

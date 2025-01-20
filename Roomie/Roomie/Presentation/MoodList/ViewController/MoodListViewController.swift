@@ -23,7 +23,7 @@ final class MoodListViewController: BaseViewController {
     final let contentInterSpacing: CGFloat = 4
     final let contentInset = UIEdgeInsets(top: 12, left: 16, bottom: 24, right: 16)
     
-    private var moodListRooms: [MoodListRoom]
+    private var moodListRooms: [MoodListHouse]
     
     private let moodType: MoodType
     

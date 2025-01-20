@@ -40,7 +40,7 @@ final class HomeView: BaseView {
     
     private let recentlyLabel = UILabel()
     
-    let roomListCollectionView: UICollectionView = UICollectionView(
+    let houseListCollectionView: UICollectionView = UICollectionView(
         frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()
     )
 
@@ -95,7 +95,7 @@ final class HomeView: BaseView {
             $0.setText("최근 본 방" ,style: .heading5, color: .grayscale12)
         }
         
-        roomListCollectionView.do {
+        houseListCollectionView.do {
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .vertical
             
@@ -130,7 +130,7 @@ final class HomeView: BaseView {
             moodLabel,
             moodStackView,
             recentlyLabel,
-            roomListCollectionView,
+            houseListCollectionView,
             emptyView,
             nextMapView
         )
@@ -227,7 +227,7 @@ final class HomeView: BaseView {
             $0.leading.equalToSuperview().inset(20)
         }
         
-        roomListCollectionView.snp.makeConstraints{
+        houseListCollectionView.snp.makeConstraints{
             $0.top.equalTo(recentlyLabel.snp.bottom).offset(12)
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.height.equalTo(0)
@@ -240,7 +240,7 @@ final class HomeView: BaseView {
         }
         
         nextMapView.snp.makeConstraints{
-            $0.top.equalTo(roomListCollectionView.snp.bottom).offset(20)
+            $0.top.equalTo(houseListCollectionView.snp.bottom).offset(20)
             $0.bottom.equalToSuperview().inset(20)
             $0.leading.trailing.equalToSuperview().inset(16)
             $0.height.equalTo(48)

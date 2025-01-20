@@ -23,19 +23,22 @@ final class HomeViewController: BaseViewController {
     private let cancelBag = CancelBag()
     
     private let rootView = HomeView()
+    
+    private lazy var dataSource = createDiffableDataSource()
+    
+    private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
         
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
     
-    private var recentlyRooms: [RecentlyRoom] = RecentlyRoom.mockHomeData()
+    private var recentlyRooms: [RecentlyHouse] = RecentlyHouse.mockHomeData()
     private var userInfo: UserInfo = UserInfo.mockUserData()
     
     // MARK: - Initializer
     
     init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
-        rootView.nameLabel.text = userInfo.name
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -52,7 +55,7 @@ final class HomeViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setDelegate()
+        bindViewModel()
         setRegister()
         updateEmtpyView()
     }
@@ -61,13 +64,13 @@ final class HomeViewController: BaseViewController {
         super.viewDidLayoutSubviews()
         
         updateEmtpyView()
-        rootView.layoutIfNeeded()
+        rootView.houseListCollectionView.layoutIfNeeded()
         rootView.gradientView.setGradient(for: .home)
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        setHomeNavigationBar()
         updateSeletedCell()
+        viewWillAppearSubject.send()
     }
     
     // MARK: - Functions
@@ -130,21 +133,63 @@ final class HomeViewController: BaseViewController {
     }
     
     override func setDelegate() {
-        rootView.roomListCollectionView.delegate = self
-        rootView.roomListCollectionView.dataSource = self
-    }
-    
-    private func setRegister() {
-        rootView.roomListCollectionView.register(
-            HouseListCollectionViewCell.self,
-            forCellWithReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier
-        )
+        rootView.houseListCollectionView.delegate = self
     }
 }
 
 // MARK: - Functions
 
 private extension HomeViewController {
+    func setRegister() {
+        rootView.houseListCollectionView.register(
+            HouseListCollectionViewCell.self,
+            forCellWithReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier
+        )
+    }
+    
+    func bindViewModel() {
+        let input = HomeViewModel.Input(
+            viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher()
+        )
+        
+        let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        
+        output.userInfo
+            .sink { [weak self] data in
+                guard let self else { return }
+                self.rootView.nameLabel.text = data.name
+                self.setHomeNavigationBar(locaton: data.location)
+            }
+            .store(in: cancelBag)
+        
+        output.houseList
+            .sink { [weak self] data in
+                guard let self else { return }
+                if !data.isEmpty {
+                    self.updateSnapshot(with: data)
+                }
+            }
+            .store(in: cancelBag)
+    }
+    
+    func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, RecentlyHouse> {
+        return UICollectionViewDiffableDataSource(collectionView: rootView.houseListCollectionView) {
+            collectionView, indexPath, model in guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier, for: indexPath) as? HouseListCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.dataBind(model)
+            return cell
+        }
+    }
+    
+    func updateSnapshot(with data: [RecentlyHouse]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, RecentlyHouse>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(data, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
     func updateCollectionViewHeight() -> CGFloat{
         let numberOfItems = recentlyRooms.count
         let cellsHeight = CGFloat(numberOfItems) * cellHeight
@@ -157,21 +202,21 @@ private extension HomeViewController {
     func updateEmtpyView() {
         let isEmpty = recentlyRooms.isEmpty
         rootView.emptyView.isHidden = !isEmpty
-        rootView.roomListCollectionView.isHidden = isEmpty
+        rootView.houseListCollectionView.isHidden = isEmpty
         
         if !isEmpty {
             let totalHeight = updateCollectionViewHeight()
-            rootView.roomListCollectionView.snp.updateConstraints {
+            rootView.houseListCollectionView.snp.updateConstraints {
                 $0.height.equalTo(max(totalHeight, 0))
             }
         } else {
-            rootView.roomListCollectionView.snp.updateConstraints {
+            rootView.houseListCollectionView.snp.updateConstraints {
                 $0.height.equalTo(226)
             }
         }
     }
     
-    func setHomeNavigationBar() {
+    func setHomeNavigationBar(locaton location:String) {
         title = nil
         navigationItem.leftBarButtonItem = nil
         
@@ -191,7 +236,7 @@ private extension HomeViewController {
         barAppearance.backgroundColor = .primaryLight4
         barAppearance.shadowColor = nil
         locationLabel.do {
-            $0.setText(userInfo.location, style: .title2, color: .grayscale10)
+            $0.setText(location, style: .title2, color: .grayscale10)
         }
         
         navigationItem.rightBarButtonItem = likedButton
@@ -205,8 +250,9 @@ private extension HomeViewController {
     }
     
     func updateSeletedCell() {
-        for index in rootView.roomListCollectionView.indexPathsForVisibleItems {
-            if let cell = rootView.roomListCollectionView.cellForItem(at: index) as? HouseListCollectionViewCell {
+        for index in rootView.houseListCollectionView.indexPathsForVisibleItems {
+            if let cell = rootView.houseListCollectionView.cellForItem(at: index) as?
+                HouseListCollectionViewCell {
                 cell.isSelected = false
             }
         }
@@ -243,33 +289,5 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         didSelectItemAt indexPath: IndexPath
     ) {
         // TODO: 상세매물 페이지와 연결
-    }
-}
-
-// MARK: - UICollectionViewDataSource
-
-extension HomeViewController: UICollectionViewDataSource {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
-        return recentlyRooms.count
-    }
-    
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier,
-            for: indexPath
-        ) as? HouseListCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        
-        let data = recentlyRooms[indexPath.row]
-        cell.dataBind(data)
-        
-        return cell
     }
 }

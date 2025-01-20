@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MoodListRoom {
+struct MoodListHouse {
     let houseID: Int
     let monthlyRent: String
     let deposit: String
@@ -20,10 +20,10 @@ struct MoodListRoom {
     let mainImageURL: String
 }
 
-extension MoodListRoom {
-    static func calmListRoomData() -> [MoodListRoom] {
+extension MoodListHouse {
+    static func calmListRoomData() -> [MoodListHouse] {
         return [
-            MoodListRoom(
+            MoodListHouse(
                 houseID: 1,
                 monthlyRent: "30~50",
                 deposit: "200~300",
@@ -35,7 +35,7 @@ extension MoodListRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            MoodListRoom(
+            MoodListHouse(
                 houseID: 2,
                 monthlyRent: "30~50",
                 deposit: "200~300",
@@ -51,10 +51,10 @@ extension MoodListRoom {
     }
 }
 
-extension MoodListRoom {
-    static func livelyListRoomData() -> [MoodListRoom] {
+extension MoodListHouse {
+    static func livelyListRoomData() -> [MoodListHouse] {
         return [
-            MoodListRoom(
+            MoodListHouse(
                 houseID: 1,
                 monthlyRent: "30~50",
                 deposit: "200~300",
@@ -66,7 +66,7 @@ extension MoodListRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            MoodListRoom(
+            MoodListHouse(
                 houseID: 2,
                 monthlyRent: "30~50",
                 deposit: "200~300",
@@ -78,7 +78,7 @@ extension MoodListRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            MoodListRoom(
+            MoodListHouse(
                 houseID: 2,
                 monthlyRent: "30~50",
                 deposit: "200~300",
@@ -90,7 +90,7 @@ extension MoodListRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            MoodListRoom(
+            MoodListHouse(
                 houseID: 2,
                 monthlyRent: "30~50",
                 deposit: "200~300",
@@ -102,7 +102,7 @@ extension MoodListRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            MoodListRoom(
+            MoodListHouse(
                 houseID: 2,
                 monthlyRent: "30~50",
                 deposit: "200~300",
@@ -118,10 +118,10 @@ extension MoodListRoom {
     }
 }
 
-extension MoodListRoom {
-    static func neatListRoomData() -> [MoodListRoom] {
+extension MoodListHouse {
+    static func neatListRoomData() -> [MoodListHouse] {
         return [
-            MoodListRoom(
+            MoodListHouse(
                 houseID: 1,
                 monthlyRent: "30~50",
                 deposit: "200~300",
@@ -133,7 +133,7 @@ extension MoodListRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            MoodListRoom(
+            MoodListHouse(
                 houseID: 2,
                 monthlyRent: "30~50",
                 deposit: "200~300",
@@ -145,7 +145,7 @@ extension MoodListRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            MoodListRoom(
+            MoodListHouse(
                 houseID: 2,
                 monthlyRent: "30~50",
                 deposit: "200~300",
