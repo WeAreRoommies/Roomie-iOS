@@ -55,6 +55,12 @@ final class HouseDetailView: BaseView {
     private let roomStatusTitleLabel = UILabel()
     let roomStatusTableView = UITableView()
     
+    // facility Section
+    private let facilityTitleLabel = UILabel()
+    let safetyLivingFacilityView = HouseFacilityView(title: "안전 및 생활시설")
+    let kitchenFacilityView = HouseFacilityView(title: "주방시설")
+    private let facilityStackView = UIStackView()
+    
     
     
     private let bottomButtonbackView = UIView()
@@ -143,8 +149,19 @@ final class HouseDetailView: BaseView {
         
         roomStatusTableView.do {
             $0.separatorStyle = .none
-            $0.backgroundColor = .yellow
         }
+        
+        facilityTitleLabel.do {
+            $0.setText("내부시설 및 관리", style: .heading5, color: .grayscale12)
+        }
+        
+        facilityStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 12
+            $0.alignment = .fill
+            $0.distribution = .fill
+        }
+        
         
         
         // 리팩을 쉽게 하기 위한 개행입니다.. 나중에 다 수정할게요!
@@ -174,7 +191,9 @@ final class HouseDetailView: BaseView {
             roomMoodTitleLabel,
             roomMoodBackView,
             roomStatusTitleLabel,
-            roomStatusTableView
+            roomStatusTableView,
+            facilityTitleLabel,
+            facilityStackView
         )
         
         
@@ -207,6 +226,8 @@ final class HouseDetailView: BaseView {
             groundRuleLabel3,
             groundRuleLabel4
         )
+        
+        facilityStackView.addArrangedSubviews(safetyLivingFacilityView, kitchenFacilityView)
         
         
         
@@ -345,12 +366,23 @@ final class HouseDetailView: BaseView {
             $0.top.equalTo(roomStatusTitleLabel.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(Screen.height(182 + 12))
+        }
+        
+        facilityTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(roomStatusTableView.snp.bottom).offset(36)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+        }
+        
+        facilityStackView.snp.makeConstraints {
+            $0.top.equalTo(facilityTitleLabel.snp.bottom).offset(16)
+            $0.horizontalEdges.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview().inset(16) ///
         }
         
         
         
         // 리팩을 쉽게 하기 위한 개행입니다.. 나중에 다 수정할게요!
+        
         
         
         bottomButtonbackView.snp.makeConstraints {
