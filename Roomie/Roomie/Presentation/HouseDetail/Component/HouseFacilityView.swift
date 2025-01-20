@@ -186,7 +186,6 @@ extension HouseFacilityView {
         let itemHeight: CGFloat = 20
         let spacing: CGFloat = 8
         let stackViewHeight = CGFloat(evenDataCount) * itemHeight + CGFloat(evenDataCount - 1) * spacing
-//        self.expendedHeight = Screen.height(56) + Screen.height(stackViewHeight) + Screen.height(12)
         self.expendedHeight = 56 + stackViewHeight + 12
         
         for index in 0..<data.count {
