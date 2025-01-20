@@ -8,12 +8,13 @@
 import Foundation
 
 struct MapRequestDTO: RequestModelType {
-    let location, moodTag: String
+    let location: String
+    let moodTag: String?
     let depositRange, monthlyRentRange: MinMaxRange
-    let genderPolicy: [String]
-    let preferredDate: String
-    let occupancyType: [String]
-    let contractPeriod: [Int]
+    let genderPolicy: [String]?
+    let preferredDate: String?
+    let occupancyTypes: [String]?
+    let contractPeriod: [Int]?
 }
 
 struct MinMaxRange: Codable {

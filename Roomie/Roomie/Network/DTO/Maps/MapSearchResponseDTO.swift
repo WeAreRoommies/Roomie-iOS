@@ -11,7 +11,7 @@ struct MapSearchResponseDTO: ResponseModelType {
     let locations: [Location]
 }
 
-struct Location: Codable {
+struct Location: Codable, Hashable {
     let x, y: Double
     let location, address, roadAddress: String
 }
