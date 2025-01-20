@@ -65,7 +65,7 @@ final class HomeViewController: BaseViewController {
         rootView.gradientView.setGradient(for: .home)
     }
     
-    override func setView() {
+    override func viewWillAppear(_ animated: Bool) {
         setHomeNavigationBar()
     }
     
