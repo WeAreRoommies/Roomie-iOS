@@ -86,6 +86,23 @@ final class HouseDetailViewController: BaseViewController {
 // MARK: - Functions
 
 private extension HouseDetailViewController {
+    func setRegister() {
+        rootView.roomStatusTableView.register(
+            RoomStatusTableViewCell.self,
+            forCellReuseIdentifier: RoomStatusTableViewCell.reuseIdentifier
+        )
+        
+        rootView.roommateTableView.register(
+            RoommateTableViewCell.self,
+            forCellReuseIdentifier: RoommateTableViewCell.reuseIdentifier
+        )
+        
+        rootView.roommateTableView.register(
+            RoommateNotFoundTableViewCell.self,
+            forCellReuseIdentifier: RoommateNotFoundTableViewCell.reuseIdentifier
+        )
+    }
+    
     func setClearNavigationBar() {
         navigationController?.navigationBar.isHidden = false
         
@@ -148,23 +165,6 @@ private extension HouseDetailViewController {
                 $0.bottom.equalToSuperview()
             }
         }
-    }
-    
-    func setRegister() {
-        rootView.roomStatusTableView.register(
-            RoomStatusTableViewCell.self,
-            forCellReuseIdentifier: RoomStatusTableViewCell.reuseIdentifier
-        )
-        
-        rootView.roommateTableView.register(
-            RoommateTableViewCell.self,
-            forCellReuseIdentifier: RoommateTableViewCell.reuseIdentifier
-        )
-        
-        rootView.roommateTableView.register(
-            RoommateNotFoundTableViewCell.self,
-            forCellReuseIdentifier: RoommateNotFoundTableViewCell.reuseIdentifier
-        )
     }
 }
 
