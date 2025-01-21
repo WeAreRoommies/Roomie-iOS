@@ -11,10 +11,10 @@ struct MapRequestDTO: RequestModelType {
     let location: String
     let moodTag: String?
     let depositRange, monthlyRentRange: MinMaxRange
-    let genderPolicy: [String]?
+    let genderPolicy: [String]
     let preferredDate: String?
-    let occupancyTypes: [String]?
-    let contractPeriod: [Int]?
+    let occupancyTypes: [String]
+    let contractPeriod: [Int]
 }
 
 struct MinMaxRange: Codable {

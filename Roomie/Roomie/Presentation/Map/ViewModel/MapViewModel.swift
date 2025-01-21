@@ -9,9 +9,17 @@ import Foundation
 import Combine
 
 final class MapViewModel {
+    private let service: MapServiceProtocol
+    private let builder: MapRequestDTO.Builder
+    
     private var houseID: Int?
     
-    private let mapDataSubject = CurrentValueSubject<[MapModel], Never>([])
+    private let mapDataSubject = CurrentValueSubject<MapResponseDTO?, Never>(nil)
+    
+    init(service: MapServiceProtocol, builder: MapRequestDTO.Builder) {
+        self.service = service
+        self.builder = builder
+    }
 }
 
 extension MapViewModel: ViewModelType {
@@ -23,13 +31,14 @@ extension MapViewModel: ViewModelType {
     struct Output {
         let markersInfo: AnyPublisher<[MarkerInfo], Never>
         let markerDetailInfo: AnyPublisher<MarkerDetailInfo, Never>
-        let mapListData: AnyPublisher<[MapModel], Never>
+        let mapListData: AnyPublisher<MapResponseDTO, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
         input.viewWillAppear
             .sink { [weak self] in
-                self?.fetchMapData()
+                guard let self = self else { return }
+                self.fetchMapData(request: builder.build())
             }
             .store(in: cancelBag)
         
@@ -40,23 +49,24 @@ extension MapViewModel: ViewModelType {
             .store(in: cancelBag)
         
         let mapListData = mapDataSubject
+            .compactMap { $0 }
             .eraseToAnyPublisher()
         
         let markersInfo = mapDataSubject
-            .map { data in
-                data.map { MarkerInfo(houseID: $0.houseID, x: $0.x, y: $0.y) }
+            .compactMap { data in
+                data?.houses.map { MarkerInfo(houseID: $0.houseID, x: $0.x, y: $0.y) }
             }
             .eraseToAnyPublisher()
         
         let markerDetailInfo = input.markerDidSelect
             .map { [weak self] houseID in
                 self?.houseID = houseID
-                return self?.mapDataSubject.value.first { $0.houseID == houseID }
+                return self?.mapDataSubject.value?.houses.first { $0.houseID == houseID }
                     .map { data in
                         MarkerDetailInfo(
                             monthlyRent: data.monthlyRent,
                             deposit: data.deposit,
-                            occupancyType: data.occupancyType,
+                            occupancyType: data.occupancyTypes,
                             location: data.location,
                             genderPolicy: data.genderPolicy,
                             locationDescription: data.locationDescription,
@@ -78,9 +88,15 @@ extension MapViewModel: ViewModelType {
 }
 
 private extension MapViewModel {
-    
-    // TODO: 이후 API 통신으로 변경
-    func fetchMapData() {
-        mapDataSubject.send(MapModel.mockMapData())
+    func fetchMapData(request: MapRequestDTO) {
+        Task {
+            do {
+                guard let responseBody = try await service.fetchMapData(request: request),
+                      let data = responseBody.data else { return }
+                mapDataSubject.send(data)
+            } catch {
+                print(">>> \(error.localizedDescription) : \(#function)")
+            }
+        }
     }
 }

@@ -38,7 +38,7 @@ final class DatePickerView: UIView {
         message: nil,
         preferredStyle: .actionSheet
     )
-    private let datePicker = UIDatePicker()
+    let datePicker = UIDatePicker()
     
     // MARK: - Initializer
     

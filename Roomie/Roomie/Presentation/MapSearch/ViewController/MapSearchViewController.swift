@@ -27,6 +27,7 @@ final class MapSearchViewController: BaseViewController {
     final let contentInset = UIEdgeInsets(top: 16, left: 20, bottom: 16, right: 20)
     
     private let searchTextFieldEnterSubject = PassthroughSubject<String, Never>()
+    private let locationDidSelectSubject = PassthroughSubject<String, Never>()
     
     // MARK: - Initializer
 
@@ -102,7 +103,8 @@ private extension MapSearchViewController {
     
     func bindViewModel() {
         let input = MapSearchViewModel.Input(
-            searchTextFieldEnterSubject: searchTextFieldEnterSubject.eraseToAnyPublisher()
+            searchTextFieldEnterSubject: searchTextFieldEnterSubject.eraseToAnyPublisher(),
+            locationDidSelectSubject: locationDidSelectSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -162,5 +164,17 @@ extension MapSearchViewController: UICollectionViewDelegateFlowLayout {
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
         return contentInset
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        let selectedLocation = dataSource.itemIdentifier(for: indexPath)
+        if let location = selectedLocation {
+            self.locationDidSelectSubject.send(location.address)
+        }
+        
+        self.navigationController?.popViewController(animated: true)
     }
 }

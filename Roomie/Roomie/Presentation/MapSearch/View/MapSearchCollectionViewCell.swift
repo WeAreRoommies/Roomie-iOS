@@ -60,7 +60,7 @@ final class MapSearchCollectionViewCell: BaseCollectionViewCell {
         }
         
         roadAdressLabel.do {
-            $0.setText(style: .body4, color: .grayscale9)
+            $0.setText(style: .body4, color: .grayscale9, isSingleLine: true)
         }
         
         lotAdressTitleView.do {
@@ -75,7 +75,7 @@ final class MapSearchCollectionViewCell: BaseCollectionViewCell {
         }
         
         lotAdressLabel.do {
-            $0.setText(style: .body4, color: .grayscale9)
+            $0.setText(style: .body4, color: .grayscale9, isSingleLine: true)
         }
     }
     
@@ -116,6 +116,7 @@ final class MapSearchCollectionViewCell: BaseCollectionViewCell {
         roadAdressLabel.snp.makeConstraints {
             $0.centerY.equalTo(roadAdressTitleView.snp.centerY)
             $0.leading.equalTo(roadAdressTitleView.snp.trailing).offset(8)
+            $0.trailing.equalToSuperview().inset(12)
         }
         
         lotAdressTitleView.snp.makeConstraints {
@@ -133,6 +134,7 @@ final class MapSearchCollectionViewCell: BaseCollectionViewCell {
         lotAdressLabel.snp.makeConstraints {
             $0.centerY.equalTo(lotAdressTitleView.snp.centerY)
             $0.leading.equalTo(lotAdressTitleView.snp.trailing).offset(8)
+            $0.trailing.equalToSuperview().inset(12)
         }
     }
 }
