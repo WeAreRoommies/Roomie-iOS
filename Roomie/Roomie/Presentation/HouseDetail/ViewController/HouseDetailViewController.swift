@@ -266,7 +266,7 @@ extension HouseDetailViewController: UIScrollViewDelegate {
         }
         
         if offsetY > navigationTitleThreshold {
-            navigationItem.title = "43~50/90~100" // TODO: DataBind
+            navigationItem.title = "43~50/90~100"// TODO: DataBind
         } else {
             navigationItem.title = nil
         }
@@ -277,7 +277,7 @@ extension HouseDetailViewController: UIScrollViewDelegate {
 
 extension HouseDetailViewController: UIAdaptivePresentationControllerDelegate {
     func presentHouseDetailSheet() {
-        let houseDetailSheetViewController = HouseDetailSheetViewController()
+        let houseDetailSheetViewController = HouseDetailSheetViewController(viewModel: HouseDetailViewModel())
         
         let fullDetent = UISheetPresentationController.Detent.custom { _ in Screen.height(380) }
         
@@ -286,6 +286,7 @@ extension HouseDetailViewController: UIAdaptivePresentationControllerDelegate {
             sheet.prefersGrabberVisible = false
             sheet.preferredCornerRadius = 16
         }
+        
         houseDetailSheetViewController.isModalInPresentation = false
         
         self.present(houseDetailSheetViewController, animated: true)
