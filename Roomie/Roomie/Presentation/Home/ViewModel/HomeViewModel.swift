@@ -12,8 +12,7 @@ final class HomeViewModel {
     
     // MARK: - Property
     private let service: HomeServiceProtocol
-    private let homeDataSubject = PassthroughSubject<[RecentlyHouse], Never>()
-    private let userDataSubject = PassthroughSubject<UserInfo, Never>()
+    private let homeDataSubject = PassthroughSubject<HomeResponseDTO, Never>()
     
     init(service: HomeServiceProtocol) {
         self.service = service
@@ -28,6 +27,7 @@ extension HomeViewModel: ViewModelType {
     struct Output {
         let userInfo: AnyPublisher<UserInfo, Never>
         let houseList: AnyPublisher<[RecentlyHouse], Never>
+        let houseCount: AnyPublisher<Int, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -38,28 +38,9 @@ extension HomeViewModel: ViewModelType {
             .store(in: cancelBag)
         
         
-        let houseListData = homeDataSubject.eraseToAnyPublisher()
-        let userInfo = userDataSubject.eraseToAnyPublisher()
-        
-        return Output(
-            userInfo: userInfo,
-            houseList: houseListData
-        )
-    }
-}
-
-private extension HomeViewModel {
-    func fetchHomeData() {
-        Task {
-            do {
-                guard let responseBody = try await service.fetchHomeData(),
-                      let data = responseBody.data else { return }
-                
-                let userInfo = UserInfo(
-                    name: data.name,
-                    location: data.location
-                )
-                let houses = data.recentlyViewedHouses.map { data in
+        let houseListData = homeDataSubject
+            .map { house in
+                house.recentlyViewedHouses.map { data in
                     RecentlyHouse(
                         houseID: data.houseID,
                         monthlyRent: data.monthlyRent,
@@ -74,9 +55,34 @@ private extension HomeViewModel {
                         mainImageURL: data.mainImageURL
                     )
                 }
-                    .compactMap { $0 }
-                userDataSubject.send(userInfo)
-                homeDataSubject.send(houses)
+            }
+            .eraseToAnyPublisher()
+        
+        let userInfo = homeDataSubject
+            .map { data in
+                UserInfo(name: data.name, location: data.location)
+            }
+            .eraseToAnyPublisher()
+        
+        let houseCount = homeDataSubject
+            .map { $0.recentlyViewedHouses.count }
+            .eraseToAnyPublisher()
+        
+        return Output(
+            userInfo: userInfo,
+            houseList: houseListData,
+            houseCount: houseCount
+        )
+    }
+}
+
+private extension HomeViewModel {
+    func fetchHomeData() {
+        Task {
+            do {
+                guard let responseBody = try await service.fetchHomeData(),
+                      let data = responseBody.data else { return }
+                homeDataSubject.send(data)
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
             }
