@@ -9,6 +9,8 @@ import Foundation
 
 extension MapRequestDTO {
     final class Builder {
+        static let shared = MapRequestDTO.Builder()
+        
         private var location: String = "서울특별시 마포구 노고산동"
         private var moodTag: String? = nil
         private var depositRange: MinMaxRange = MinMaxRange(min: 0, max: 500)

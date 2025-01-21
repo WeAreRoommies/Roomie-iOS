@@ -23,7 +23,7 @@ final class MapViewController: BaseViewController {
     
     private var selectedMarker: NMFMarker?
     
-    private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
+    private let viewWillAppearSubject = CurrentValueSubject<Void, Never>(())
     private let markerDidSelectSubject = PassthroughSubject<Int, Never>()
     
     // MARK: - Initializer
@@ -83,7 +83,7 @@ final class MapViewController: BaseViewController {
             .tapPublisher
             .sink {
                 let mapFilterViewController = MapFilterViewController(
-                    viewModel: MapFilterViewModel(builder: MapRequestDTO.Builder())
+                    viewModel: MapFilterViewModel(builder: MapRequestDTO.Builder.shared)
                 )
                 mapFilterViewController.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(mapFilterViewController, animated: true)
@@ -191,7 +191,7 @@ extension MapViewController: NMFMapViewTouchDelegate {
 extension MapViewController: UIAdaptivePresentationControllerDelegate {
     func presentMapListSheetSheet() {
         let mapListSheetViewController = MapListSheetViewController(
-            viewModel: MapViewModel(service: MapsService(), builder: MapRequestDTO.Builder())
+            viewModel: MapViewModel(service: MapsService(), builder: MapRequestDTO.Builder.shared)
         )
         
         let mediumDetent = UISheetPresentationController.Detent.custom { _ in 348 }

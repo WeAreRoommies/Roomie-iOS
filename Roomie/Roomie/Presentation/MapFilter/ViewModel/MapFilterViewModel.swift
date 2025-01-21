@@ -341,8 +341,6 @@ extension MapFilterViewModel: ViewModelType {
                     .setOccupancyTypes(occupancyTypeSubject.value)
                     .setPreferredDate(preferredDateSubject.value)
                     .setContractPeroid(contractPeriodSubject.value)
-                
-                print("build: \(self.builder.build())")
             }
             .store(in: cancelBag)
         

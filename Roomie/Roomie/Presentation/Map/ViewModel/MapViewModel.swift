@@ -38,7 +38,7 @@ extension MapViewModel: ViewModelType {
         input.viewWillAppear
             .sink { [weak self] in
                 guard let self = self else { return }
-                self.fetchMapData(request: self.builder.build())
+                self.fetchMapData(request: builder.build())
             }
             .store(in: cancelBag)
         
