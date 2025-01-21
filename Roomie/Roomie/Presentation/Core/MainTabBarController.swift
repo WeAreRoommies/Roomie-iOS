@@ -8,13 +8,14 @@
 import UIKit
 
 import Then
+import Moya
 
 final class MainTabBarController: UITabBarController {
     
     // MARK: - Property
     
     let homeViewController: HomeViewController = HomeViewController(
-        viewModel: HomeViewModel()
+        viewModel: HomeViewModel(service: UserService())
     ).then {
         $0.tabBarItem.title = "홈"
         $0.tabBarItem.image = .icnHomeLine24

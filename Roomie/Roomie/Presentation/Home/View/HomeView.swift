@@ -230,7 +230,7 @@ final class HomeView: BaseView {
         houseListCollectionView.snp.makeConstraints{
             $0.top.equalTo(recentlyLabel.snp.bottom).offset(12)
             $0.horizontalEdges.equalToSuperview().inset(16)
-            $0.height.equalTo(0)
+            $0.height.equalTo(226)
         }
         
         emptyView.snp.makeConstraints{
