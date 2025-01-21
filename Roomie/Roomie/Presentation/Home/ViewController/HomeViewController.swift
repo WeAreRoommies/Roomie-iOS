@@ -173,9 +173,7 @@ private extension HomeViewController {
             collectionView, indexPath, model in guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier,
                 for: indexPath) as? HouseListCollectionViewCell
-            else {
-                return UICollectionViewCell()
-            }
+            else { return UICollectionViewCell() }
             
             cell.dataBind(model)
             return cell

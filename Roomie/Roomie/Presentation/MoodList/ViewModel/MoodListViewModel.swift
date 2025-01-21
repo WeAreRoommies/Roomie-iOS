@@ -33,7 +33,8 @@ extension MoodListViewModel: ViewModelType {
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
         input.moodListTypeSubject
-            .sink { [weak self] in self?.fetchMoodListData(type: $0)
+            .sink { [weak self] in
+                self?.fetchMoodListData(type: $0)
             }
             .store(in: cancelBag)
         
@@ -47,12 +48,15 @@ extension MoodListViewModel: ViewModelType {
 
 private extension MoodListViewModel {
     func fetchMoodListData(type:String) {
-        if type == MoodType.calm.title {
-            moodListDataSubject.send(MoodListHouse.calmListRoomData())
-        } else if type == MoodType.lively.title {
-            moodListDataSubject.send(MoodListHouse.livelyListRoomData())
-        } else if type == MoodType.neat.title {
-            moodListDataSubject.send(MoodListHouse.neatListRoomData())
+        switch type {
+        case MoodType.calm.title:
+            return moodListDataSubject.send(MoodListHouse.calmListRoomData())
+        case MoodType.lively.title:
+            return moodListDataSubject.send(MoodListHouse.livelyListRoomData())
+        case MoodType.neat.title:
+            return moodListDataSubject.send(MoodListHouse.neatListRoomData())
+        default:
+            return
         }
     }
 }
