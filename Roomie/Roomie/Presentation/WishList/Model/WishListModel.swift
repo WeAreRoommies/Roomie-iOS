@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WishListHouse {
+struct WishListHouse: Hashable {
     let houseID: Int
     let monthlyRent: String
     let deposit: String

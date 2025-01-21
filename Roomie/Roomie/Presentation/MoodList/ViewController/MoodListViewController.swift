@@ -6,7 +6,9 @@
 //
 
 import UIKit
+import Combine
 
+import CombineCocoa
 import SnapKit
 import Then
 
@@ -16,14 +18,20 @@ final class MoodListViewController: BaseViewController {
     
     let rootView = MoodListView()
     
+    private let cancelBag = CancelBag()
+    
     private let viewModel: MoodListViewModel
+    
+    private lazy var dataSource = createDiffableDataSource()
+    
+    private let moodListTypeSubject = PassthroughSubject<String, Never>()
     
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
     final let contentInset = UIEdgeInsets(top: 12, left: 16, bottom: 24, right: 16)
     
-    private var moodListRooms: [MoodListHouse]
+    private var moodListRooms: [MoodListHouse] = []
     
     private let moodType: MoodType
     
@@ -31,11 +39,10 @@ final class MoodListViewController: BaseViewController {
     
     // MARK: - Initializer
     
-    init(viewModel: MoodListViewModel, moodType: MoodType) {
-        self.viewModel = viewModel
+    init(moodType: MoodType) {
         self.moodType = moodType
         self.moodNavibarTitle = moodType.title
-        self.moodListRooms = moodType.moodListData
+        self.viewModel = MoodListViewModel(moodType: moodType)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -60,6 +67,12 @@ final class MoodListViewController: BaseViewController {
         super.viewDidLayoutSubviews()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        bindViewModel()
+        moodListTypeSubject.send(moodType.title)
+    }
+    
     // MARK: - Functions
     
     override func setView() {
@@ -68,10 +81,13 @@ final class MoodListViewController: BaseViewController {
     
     override func setDelegate() {
         rootView.moodListCollectionView.delegate = self
-        rootView.moodListCollectionView.dataSource = self
     }
-    
-    private func setRegister() {
+}
+
+// MARK: - Function
+
+private extension MoodListViewController {
+    func setRegister() {
         rootView.moodListCollectionView.register(
             HouseListCollectionViewCell.self,
             forCellWithReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier
@@ -88,6 +104,70 @@ final class MoodListViewController: BaseViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
             withReuseIdentifier: VersionFooterView.reuseIdentifier
         )
+    }
+    
+    func bindViewModel() {
+        let input = MoodListViewModel.Input(
+            moodListTypeSubject: moodListTypeSubject.eraseToAnyPublisher()
+        )
+        
+        let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        
+        output.moodList
+            .sink { [weak self] data in guard let self else { return }
+                if !data.isEmpty {
+                    self.moodListRooms = data
+                    self.updateSnapshot(with: data)
+                }
+            }
+            .store(in: cancelBag)
+    }
+    
+    func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, MoodListHouse> {
+        let dataSource = UICollectionViewDiffableDataSource<Int, MoodListHouse> (
+            collectionView: rootView.moodListCollectionView, cellProvider: {
+                collectionView, indexPath, model in guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier,
+                    for: indexPath) as? HouseListCollectionViewCell
+                else {
+                    return UICollectionViewCell()
+                }
+                cell.dataBind(model)
+                return cell
+            }
+        )
+        
+        dataSource.supplementaryViewProvider = {
+            collectionView, kind, indexPath in if kind == UICollectionView.elementKindSectionHeader {
+                guard let header = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: UICollectionView.elementKindSectionHeader,
+                    withReuseIdentifier: MoodListCollectionHeaderView.reuseIdentifier,
+                    for: indexPath
+                ) as? MoodListCollectionHeaderView else {
+                    return UICollectionReusableView()
+                }
+                header.configure(with: self.moodType)
+                return header
+            } else if kind == UICollectionView.elementKindSectionFooter {
+                guard let footer = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: UICollectionView.elementKindSectionFooter,
+                    withReuseIdentifier: VersionFooterView.reuseIdentifier,
+                    for: indexPath
+                ) as? VersionFooterView else {
+                    return UICollectionReusableView()
+                }
+                return footer
+            }
+            return nil
+        }
+        return dataSource
+    }
+    
+    func updateSnapshot(with data: [MoodListHouse]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, MoodListHouse>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(data, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
 
@@ -139,66 +219,5 @@ extension MoodListViewController: UICollectionViewDelegateFlowLayout {
         referenceSizeForFooterInSection section: Int
     ) -> CGSize {
         return CGSize(width: UIScreen.main.bounds.width, height: 100)
-    }
-}
-
-// MARK: - UICollectionViewDataSource
-
-extension MoodListViewController: UICollectionViewDataSource {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
-        return moodListRooms.count
-    }
-    
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier,
-            for: indexPath
-        ) as? HouseListCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        
-        let data = moodListRooms[indexPath.row]
-        cell.dataBind(data)
-        
-        return cell
-    }
-    
-    func collectionView(
-        _ collectionView: UICollectionView,
-        viewForSupplementaryElementOfKind kind: String,
-        at indexPath: IndexPath
-    ) -> UICollectionReusableView {
-        if kind == UICollectionView.elementKindSectionHeader {
-            guard let header = collectionView.dequeueReusableSupplementaryView(
-                ofKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: MoodListCollectionHeaderView.reuseIdentifier,
-                for: indexPath
-            ) as? MoodListCollectionHeaderView else {
-                return UICollectionReusableView()
-            }
-            
-            header.configure(with: moodType)
-            
-            return header
-            
-        } else if kind == UICollectionView.elementKindSectionFooter {
-            guard let footer = collectionView.dequeueReusableSupplementaryView(
-                ofKind: UICollectionView.elementKindSectionFooter,
-                withReuseIdentifier: VersionFooterView.reuseIdentifier,
-                for: indexPath
-            ) as? VersionFooterView else {
-                return UICollectionReusableView()
-            }
-            
-            return footer
-        }
-        
-        return UICollectionReusableView()
     }
 }

@@ -17,7 +17,7 @@ final class WishListViewController: BaseViewController {
     // MARK: - Property
     
     private let rootView = WishListView()
-    
+
     private let viewModel: WishListViewModel
     
     private let cancelBag = CancelBag()
@@ -69,7 +69,6 @@ final class WishListViewController: BaseViewController {
     
     override func setDelegate() {
         rootView.wishListCollectionView.delegate = self
-//        rootView.wishListCollectionView.dataSource = self
     }
 }
 
@@ -118,9 +117,10 @@ private extension WishListViewController {
                 collectionView, indexPath, model in guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier,
                     for: indexPath
-                ) as? HouseListCollectionViewCell else { return UICollectionViewCell()
+                ) as? HouseListCollectionViewCell
+                else {
+                    return UICollectionViewCell()
                 }
-//                self.updateEmtpyView()
                 cell.dataBind(model)
                 return cell
             }
@@ -190,48 +190,3 @@ extension WishListViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: UIScreen.main.bounds.width, height: 100)
     }
 }
-
-// MARK: - UICollectionViewDataSource
-
-//extension WishListViewController: UICollectionViewDataSource {
-//    func collectionView(
-//        _ collectionView: UICollectionView,
-//        numberOfItemsInSection section: Int
-//    ) -> Int {
-//        updateEmtpyView()
-//        
-//        return wishListRooms.count
-//    }
-//    
-//    func collectionView(
-//        _ collectionView: UICollectionView,
-//        cellForItemAt indexPath: IndexPath
-//    ) -> UICollectionViewCell {
-//        guard let cell = collectionView.dequeueReusableCell(
-//            withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier,
-//            for: indexPath
-//        ) as? HouseListCollectionViewCell else {
-//            return UICollectionViewCell()
-//        }
-//        
-//        let data = wishListRooms[indexPath.row]
-//        cell.dataBind(data)
-//        
-//        return cell
-//    }
-//    
-//    func collectionView(
-//        _ collectionView: UICollectionView,
-//        viewForSupplementaryElementOfKind kind: String,
-//        at indexPath: IndexPath
-//    ) -> UICollectionReusableView {
-//        guard kind == UICollectionView.elementKindSectionFooter else { return UICollectionReusableView() }
-//        
-//        guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: VersionFooterView.reuseIdentifier, for: indexPath) as? VersionFooterView
-//        else {
-//            return UICollectionReusableView()
-//        }
-//        
-//        return footer
-//    }
-//}

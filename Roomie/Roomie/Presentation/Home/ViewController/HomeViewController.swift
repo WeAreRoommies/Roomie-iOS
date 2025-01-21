@@ -90,7 +90,6 @@ final class HomeViewController: BaseViewController {
             .tapPublisher
             .sink {
                 let calmMoodListViewController = MoodListViewController(
-                    viewModel: MoodListViewModel(),
                     moodType: .calm
                 )
                 calmMoodListViewController.hidesBottomBarWhenPushed = true
@@ -102,7 +101,6 @@ final class HomeViewController: BaseViewController {
             .tapPublisher
             .sink {
                 let livelyMoodListViewController = MoodListViewController(
-                    viewModel: MoodListViewModel(),
                     moodType: .lively
                 )
                 livelyMoodListViewController.hidesBottomBarWhenPushed = true
@@ -114,7 +112,7 @@ final class HomeViewController: BaseViewController {
             .tapPublisher
             .sink {
                 let neatMoodListViewController = MoodListViewController(
-                    viewModel: MoodListViewModel(),
+                    
                     moodType: .neat
                 )
                 neatMoodListViewController.hidesBottomBarWhenPushed = true
@@ -172,7 +170,10 @@ private extension HomeViewController {
     
     func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, RecentlyHouse> {
         return UICollectionViewDiffableDataSource(collectionView: rootView.houseListCollectionView) {
-            collectionView, indexPath, model in guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier, for: indexPath) as? HouseListCollectionViewCell else {
+            collectionView, indexPath, model in guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier,
+                for: indexPath) as? HouseListCollectionViewCell
+            else {
                 return UICollectionViewCell()
             }
             

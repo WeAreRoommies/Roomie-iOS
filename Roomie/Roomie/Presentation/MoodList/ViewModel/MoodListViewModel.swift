@@ -13,11 +13,18 @@ final class MoodListViewModel {
     // MARK: - Property
     
     private let moodListDataSubject = PassthroughSubject<[MoodListHouse], Never>()
+    private let moodType: MoodType
+    
+    // MARK: - Initializer
+    
+    init(moodType: MoodType) {
+        self.moodType = moodType
+    }
 }
 
 extension MoodListViewModel: ViewModelType {
     struct Input {
-        let viewWillAppear: AnyPublisher<Void, Never>
+        let moodListTypeSubject: AnyPublisher<String, Never>
     }
     
     struct Output {
@@ -25,8 +32,8 @@ extension MoodListViewModel: ViewModelType {
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
-        input.viewWillAppear
-            .sink { [weak self] in self?.fetchMoodData()
+        input.moodListTypeSubject
+            .sink { [weak self] in self?.fetchMoodListData(type: $0)
             }
             .store(in: cancelBag)
         
@@ -39,7 +46,13 @@ extension MoodListViewModel: ViewModelType {
 }
 
 private extension MoodListViewModel {
-    func fetchMoodData() {
-        moodListDataSubject.send(MoodListHouse.calmListRoomData())
+    func fetchMoodListData(type:String) {
+        if type == MoodType.calm.title {
+            moodListDataSubject.send(MoodListHouse.calmListRoomData())
+        } else if type == MoodType.lively.title {
+            moodListDataSubject.send(MoodListHouse.livelyListRoomData())
+        } else if type == MoodType.neat.title {
+            moodListDataSubject.send(MoodListHouse.neatListRoomData())
+        }
     }
 }

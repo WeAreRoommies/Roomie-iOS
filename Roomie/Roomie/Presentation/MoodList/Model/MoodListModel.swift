@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MoodListHouse {
+struct MoodListHouse: Hashable {
     let houseID: Int
     let monthlyRent: String
     let deposit: String
@@ -55,7 +55,7 @@ extension MoodListHouse {
     static func livelyListRoomData() -> [MoodListHouse] {
         return [
             MoodListHouse(
-                houseID: 1,
+                houseID: 3,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2인실",
@@ -67,7 +67,7 @@ extension MoodListHouse {
                 mainImageURL: ""
             ),
             MoodListHouse(
-                houseID: 2,
+                houseID: 4,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2,3인실",
@@ -79,7 +79,7 @@ extension MoodListHouse {
                 mainImageURL: ""
             ),
             MoodListHouse(
-                houseID: 2,
+                houseID: 5,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2,3인실",
@@ -91,7 +91,7 @@ extension MoodListHouse {
                 mainImageURL: ""
             ),
             MoodListHouse(
-                houseID: 2,
+                houseID: 6,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2,3인실",
@@ -103,7 +103,7 @@ extension MoodListHouse {
                 mainImageURL: ""
             ),
             MoodListHouse(
-                houseID: 2,
+                houseID: 7,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2,3인실",
@@ -122,7 +122,7 @@ extension MoodListHouse {
     static func neatListRoomData() -> [MoodListHouse] {
         return [
             MoodListHouse(
-                houseID: 1,
+                houseID: 8,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2인실",
@@ -134,7 +134,7 @@ extension MoodListHouse {
                 mainImageURL: ""
             ),
             MoodListHouse(
-                houseID: 2,
+                houseID: 9,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2,3인실",
@@ -146,7 +146,7 @@ extension MoodListHouse {
                 mainImageURL: ""
             ),
             MoodListHouse(
-                houseID: 2,
+                houseID: 10,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2,3인실",
