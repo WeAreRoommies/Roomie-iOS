@@ -19,7 +19,9 @@ final class RoomTourButton: UIView {
     static let defaultWidth: CGFloat = Screen.width(162)
     static let defaultHeight: CGFloat = Screen.height(60)
     
-    private var isSelected: Bool = false {
+    private var isTourAvailable: Bool = false
+    
+    var isSelected: Bool = false {
         didSet {
             updateColor()
         }
@@ -32,14 +34,16 @@ final class RoomTourButton: UIView {
     private let titleLabel = UILabel()
     private let subTitleLabel = UILabel()
     private let stackView = UIStackView()
-    private let roomButton = UIButton()
+    let roomButton = UIButton()
     
     // MARK: - Initializer
     
     init(name title: String, deposit subTitle: String, isTourAvailable: Bool) {
+        self.isTourAvailable = isTourAvailable
+        
         super.init(frame: .zero)
         
-        setRoomTourButton(title: title, subTitle: subTitle, isTourAvailable: isTourAvailable)
+        setRoomTourButton(title: title, subTitle: subTitle)
         
         setStyle()
         setUI()
@@ -107,7 +111,7 @@ final class RoomTourButton: UIView {
 // MARK: - Functions
 
 private extension RoomTourButton {
-    func setRoomTourButton(title: String = "", subTitle: String = "", isTourAvailable: Bool = false) {
+    func setRoomTourButton(title: String = "", subTitle: String = "") {
         roomButton.isEnabled = isTourAvailable
         backgroundColor = isTourAvailable ? .grayscale1 : .grayscale4
         titleLabel.setText("룸\(title)", style: .title2, color: isTourAvailable ? .grayscale12 : .grayscale7)
@@ -117,14 +121,18 @@ private extension RoomTourButton {
     func setAction() {
         roomButton.tapPublisher
             .sink {
-                self.isSelected.toggle()
+                self.isSelected = true
             }
             .store(in: cancelBag)
     }
     
     func updateColor() {
-        backgroundColor = isSelected ? .primaryLight4 : .grayscale1
-        layer.borderColor = isSelected ? UIColor.primaryPurple.cgColor : UIColor.grayscale6.cgColor
+        if isTourAvailable {
+            backgroundColor = isSelected ? .primaryLight4 : .grayscale1
+            layer.borderColor = isSelected ? UIColor.primaryPurple.cgColor : UIColor.grayscale6.cgColor
+        } else {
+            backgroundColor = .grayscale4
+        }
     }
 }
 
