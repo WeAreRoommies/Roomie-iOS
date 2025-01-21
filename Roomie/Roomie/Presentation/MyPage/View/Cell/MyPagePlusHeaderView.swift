@@ -44,8 +44,7 @@ final class MyPagePlusHeaderView: BaseCollectionReusableView {
         }
         
         nicknameLabel.do {
-            $0.setText("이루미 님 안녕하세요!", style: .title2, color: .grayscale12)
-            $0.setHighlightText("이루미", style: .title2, color: .primaryPurple)
+            $0.setText(style: .title2, color: .grayscale12)
         }
         
         loginTypeView.do {
@@ -125,5 +124,10 @@ final class MyPagePlusHeaderView: BaseCollectionReusableView {
 extension MyPagePlusHeaderView {
     func configureHeader(title: String) {
         titleLabel.updateText(title)
+    }
+    
+    func dataBind(nickname: String) {
+        nicknameLabel.updateText("\(nickname) 님 안녕하세요!")
+        nicknameLabel.setHighlightText(nickname, style: .title2, color: .primaryPurple)
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 final class MyPageViewController: BaseViewController {
     
@@ -13,10 +14,29 @@ final class MyPageViewController: BaseViewController {
 
     private let rootView = MyPageView()
     
+    private let viewModel: MyPageViewModel
+    
+    private let cancelBag = CancelBag()
+    
     // MARK: - Property
 
+    private var userName: String = ""
+    
     private let plusData = MyPageModel.myPagePlusData()
     private let serviceData = MyPageModel.myPageServiceData()
+    
+    private let viewWillAppearSubject = CurrentValueSubject<Void, Never>(())
+    
+    // MARK: - Initializer
+
+    init(viewModel: MyPageViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - LifeCycle
 
@@ -28,6 +48,13 @@ final class MyPageViewController: BaseViewController {
         super.viewDidLoad()
         
         setRegister()
+        bindViewModel()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.viewWillAppearSubject.send(())
     }
     
     // MARK: - Functions
@@ -60,6 +87,22 @@ private extension MyPageViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: MyPageServiceHeaderView.reuseIdentifier
         )
+    }
+    
+    func bindViewModel() {
+        let input = MyPageViewModel.Input(
+            viewWillAppearSubject: viewWillAppearSubject.eraseToAnyPublisher()
+        )
+        
+        let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        
+        output.userName
+            .receive(on: RunLoop.main)
+            .sink { [weak self] name in
+                self?.userName = name
+                self?.rootView.collectionView.reloadSections(IndexSet(integer: 0))
+            }
+            .store(in: cancelBag)
     }
 }
 
@@ -138,6 +181,7 @@ extension MyPageViewController: UICollectionViewDataSource {
                     withReuseIdentifier: MyPagePlusHeaderView.reuseIdentifier,
                     for: indexPath
                 ) as? MyPagePlusHeaderView else { return UICollectionReusableView() }
+                header.dataBind(nickname: userName)
                 header.configureHeader(title: "루미 더보기")
                 return header
             case 1:
