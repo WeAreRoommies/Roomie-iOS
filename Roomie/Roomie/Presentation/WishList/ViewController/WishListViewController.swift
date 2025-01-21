@@ -99,9 +99,10 @@ private extension WishListViewController {
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
         
         output.wishList
+            .receive(on: RunLoop.main)
             .sink { [weak self] data in guard let self else { return }
                 self.rootView.emptyView.isHidden = data.isEmpty ? false : true
-                self.rootView.wishListCollectionView.isHidden = wishListRooms.isEmpty
+                self.rootView.wishListCollectionView.isHidden = data.isEmpty
                 
                 if !data.isEmpty {
                     self.updateSnapshot(with: data)
