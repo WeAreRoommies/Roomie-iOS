@@ -194,7 +194,7 @@ extension HouseListCollectionViewCell {
         roomLocationLabel.text = "\(data.location) · \(data.locationDescription)"
     }
     
-    func dataBind(_ data: RecentlyRoom) {
+    func dataBind(_ data: RecentlyHouse) {
         // TODO: 데이터 연결
         
         if let image = UIImage(named: data.mainImageURL) {
@@ -215,7 +215,7 @@ extension HouseListCollectionViewCell {
         roomLocationLabel.text = "\(data.location) · \(data.locationDescription)"
     }
     
-    func dataBind(_ data: WishListRoom) {
+    func dataBind(_ data: WishListHouse) {
         // TODO: 데이터 연결
         
         if let image = UIImage(named: data.mainImageURL) {
@@ -236,7 +236,7 @@ extension HouseListCollectionViewCell {
         roomLocationLabel.text = "\(data.location) · \(data.locationDescription)"
     }
     
-    func dataBind(_ data: MoodListRoom) {
+    func dataBind(_ data: MoodListHouse) {
         // TODO: 데이터 연결
         
         if let image = UIImage(named: data.mainImageURL) {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MoodListRoom {
+struct MoodListHouse: Hashable {
     let houseID: Int
     let monthlyRent: String
     let deposit: String
@@ -20,10 +20,10 @@ struct MoodListRoom {
     let mainImageURL: String
 }
 
-extension MoodListRoom {
-    static func calmListRoomData() -> [MoodListRoom] {
+extension MoodListHouse {
+    static func mockCalmListRoomData() -> [MoodListHouse] {
         return [
-            MoodListRoom(
+            MoodListHouse(
                 houseID: 1,
                 monthlyRent: "30~50",
                 deposit: "200~300",
@@ -35,7 +35,7 @@ extension MoodListRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            MoodListRoom(
+            MoodListHouse(
                 houseID: 2,
                 monthlyRent: "30~50",
                 deposit: "200~300",
@@ -51,11 +51,11 @@ extension MoodListRoom {
     }
 }
 
-extension MoodListRoom {
-    static func livelyListRoomData() -> [MoodListRoom] {
+extension MoodListHouse {
+    static func mockLivelyListRoomData() -> [MoodListHouse] {
         return [
-            MoodListRoom(
-                houseID: 1,
+            MoodListHouse(
+                houseID: 3,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2인실",
@@ -66,8 +66,8 @@ extension MoodListRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            MoodListRoom(
-                houseID: 2,
+            MoodListHouse(
+                houseID: 4,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2,3인실",
@@ -78,8 +78,8 @@ extension MoodListRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            MoodListRoom(
-                houseID: 2,
+            MoodListHouse(
+                houseID: 5,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2,3인실",
@@ -90,8 +90,8 @@ extension MoodListRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            MoodListRoom(
-                houseID: 2,
+            MoodListHouse(
+                houseID: 6,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2,3인실",
@@ -102,8 +102,8 @@ extension MoodListRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            MoodListRoom(
-                houseID: 2,
+            MoodListHouse(
+                houseID: 7,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2,3인실",
@@ -118,11 +118,11 @@ extension MoodListRoom {
     }
 }
 
-extension MoodListRoom {
-    static func neatListRoomData() -> [MoodListRoom] {
+extension MoodListHouse {
+    static func mockNeatListRoomData() -> [MoodListHouse] {
         return [
-            MoodListRoom(
-                houseID: 1,
+            MoodListHouse(
+                houseID: 8,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2인실",
@@ -133,8 +133,8 @@ extension MoodListRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            MoodListRoom(
-                houseID: 2,
+            MoodListHouse(
+                houseID: 9,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2,3인실",
@@ -145,8 +145,8 @@ extension MoodListRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            MoodListRoom(
-                houseID: 2,
+            MoodListHouse(
+                houseID: 10,
                 monthlyRent: "30~50",
                 deposit: "200~300",
                 occupancyType: "1,2,3인실",

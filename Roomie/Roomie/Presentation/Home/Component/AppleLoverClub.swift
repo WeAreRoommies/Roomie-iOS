@@ -94,7 +94,7 @@ final class AppleLoverClub: UIView {
         )
         
         pressedEvent
-            .map { UIColor.grayscale1 }
+            .map { UIColor.transpGray160 }
             .sink { [weak self] backgroundColor in
                 self?.backgroundColor = backgroundColor
             }

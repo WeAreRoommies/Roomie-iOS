@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WishListRoom {
+struct WishListHouse: Hashable {
     let houseID: Int
     let monthlyRent: String
     let deposit: String
@@ -21,10 +21,10 @@ struct WishListRoom {
     let mainImageURL: String
 }
 
-extension WishListRoom {
-    static func mockHomeData() -> [WishListRoom] {
+extension WishListHouse {
+    static func mockWishListData() -> [WishListHouse] {
         return [
-            WishListRoom(
+            WishListHouse(
                 houseID: 1,
                 monthlyRent: "30~50",
                 deposit: "200~300",
@@ -37,7 +37,7 @@ extension WishListRoom {
                 contractTerm: 6,
                 mainImageURL: ""
             ),
-            WishListRoom(
+            WishListHouse(
                 houseID: 2,
                 monthlyRent: "30~50",
                 deposit: "200~300",

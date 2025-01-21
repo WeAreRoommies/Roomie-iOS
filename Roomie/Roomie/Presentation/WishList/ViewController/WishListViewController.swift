@@ -17,15 +17,21 @@ final class WishListViewController: BaseViewController {
     // MARK: - Property
     
     private let rootView = WishListView()
-    
+
     private let viewModel: WishListViewModel
+    
+    private let cancelBag = CancelBag()
+    
+    private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
+    
+    private lazy var dataSource = createDiffableDataSource()
     
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
     final let contentInset = UIEdgeInsets(top: 12, left: 16, bottom: 24, right: 16)
     
-    private var wishListRooms: [WishListRoom] = WishListRoom.mockHomeData()
+    private var wishListRooms: [WishListHouse] = WishListHouse.mockWishListData()
     
     // MARK: - Initializer
     
@@ -47,7 +53,12 @@ final class WishListViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        bindViewModel()
         setRegister()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        viewWillAppearSubject.send()
     }
     
     // MARK: - Functions
@@ -58,10 +69,11 @@ final class WishListViewController: BaseViewController {
     
     override func setDelegate() {
         rootView.wishListCollectionView.delegate = self
-        rootView.wishListCollectionView.dataSource = self
     }
-    
-    private func setRegister() {
+}
+
+private extension WishListViewController {
+    func setRegister() {
         rootView.wishListCollectionView.register(
             HouseListCollectionViewCell.self,
             forCellWithReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier
@@ -74,9 +86,65 @@ final class WishListViewController: BaseViewController {
         )
     }
     
-    private func updateEmtpyView() {
+    func updateEmtpyView() {
         rootView.emptyView.isHidden = !wishListRooms.isEmpty
         rootView.wishListCollectionView.isHidden = wishListRooms.isEmpty
+    }
+    
+    func bindViewModel() {
+        let input = WishListViewModel.Input(
+            viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher()
+        )
+        
+        let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        
+        output.wishList
+            .sink { [weak self] data in guard let self else { return }
+                self.rootView.emptyView.isHidden = data.isEmpty ? false : true
+                self.rootView.wishListCollectionView.isHidden = wishListRooms.isEmpty
+                
+                if !data.isEmpty {
+                    self.updateSnapshot(with: data)
+                }
+            }
+            .store(in: cancelBag)
+    }
+    
+    func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, WishListHouse> {
+        let dataSource = UICollectionViewDiffableDataSource<Int, WishListHouse> (
+            collectionView: rootView.wishListCollectionView,
+            cellProvider: {
+                collectionView, indexPath, model in guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier,
+                    for: indexPath
+                ) as? HouseListCollectionViewCell
+                else {
+                    return UICollectionViewCell()
+                }
+                cell.dataBind(model)
+                return cell
+            }
+        )
+        
+        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
+            if kind == UICollectionView.elementKindSectionFooter {
+                guard let footer = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: UICollectionView.elementKindSectionFooter,
+                    withReuseIdentifier: VersionFooterView.reuseIdentifier,
+                    for: indexPath
+                ) as? VersionFooterView else { return UICollectionReusableView() }
+                return footer
+            }
+            return nil
+        }
+        return dataSource
+    }
+    
+    func updateSnapshot(with data: [WishListHouse]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, WishListHouse>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(data, toSection: 0)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
 
@@ -120,50 +188,5 @@ extension WishListViewController: UICollectionViewDelegateFlowLayout {
         referenceSizeForFooterInSection section: Int
     ) -> CGSize {
         return CGSize(width: UIScreen.main.bounds.width, height: 100)
-    }
-}
-
-// MARK: - UICollectionViewDataSource
-
-extension WishListViewController: UICollectionViewDataSource {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
-        updateEmtpyView()
-        
-        return wishListRooms.count
-    }
-    
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier,
-            for: indexPath
-        ) as? HouseListCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        
-        let data = wishListRooms[indexPath.row]
-        cell.dataBind(data)
-        
-        return cell
-    }
-    
-    func collectionView(
-        _ collectionView: UICollectionView,
-        viewForSupplementaryElementOfKind kind: String,
-        at indexPath: IndexPath
-    ) -> UICollectionReusableView {
-        guard kind == UICollectionView.elementKindSectionFooter else { return UICollectionReusableView() }
-        
-        guard let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: VersionFooterView.reuseIdentifier, for: indexPath) as? VersionFooterView
-        else {
-            return UICollectionReusableView()
-        }
-        
-        return footer
     }
 }
