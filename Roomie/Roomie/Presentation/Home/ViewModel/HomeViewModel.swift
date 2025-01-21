@@ -37,7 +37,6 @@ extension HomeViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
-        
         let houseListData = homeDataSubject
             .map { house in
                 house.recentlyViewedHouses.map { data in

@@ -33,12 +33,7 @@ extension UserTargetType: TargetType {
     }
     
     var task: Moya.Task {
-        switch self {
-        case .fetchUserHomeData:
-            return .requestPlain
-        case .fetchMypageData:
-            return .requestPlain
-        }
+        return .requestPlain
     }
     
     var headers: [String : String]? {
