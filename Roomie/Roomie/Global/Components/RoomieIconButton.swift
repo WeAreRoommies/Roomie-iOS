@@ -27,10 +27,10 @@ final class RoomieIconButton: UIButton {
     
     // MARK: - Initializer
     
-    init(imageName: String) {
+    init(imageName: String, border: Bool = false) {
         super.init(frame: .zero)
         
-        setButton(with: imageName)
+        setButton(with: imageName, border: border)
         setButtonColor()
     }
     
@@ -52,16 +52,20 @@ final class RoomieIconButton: UIButton {
 // MARK: - Functions
 
 private extension RoomieIconButton {
-    func setButton(with imageName: String = "") {
+    func setButton(with imageName: String = "", border: Bool = false) {
         guard let image = UIImage(named: imageName) else { return }
         setImage(image, for: .normal)
-        setLayer(borderWidth: 1, borderColor: .grayscale4, cornerRadius: 8)
         
-        self.backgroundColor = .grayscale1
-        self.layer.cornerRadius = 8
-        self.layer.shadowOpacity = 0.25
-        self.layer.shadowRadius = 2
-        self.layer.shadowOffset = CGSize(width: 0, height: 0)
+        if border {
+            setLayer(borderWidth: 1, borderColor: .grayscale5, cornerRadius: 8)
+        } else {
+            setLayer(borderWidth: 1, borderColor: .grayscale4, cornerRadius: 8)
+            
+            self.backgroundColor = .grayscale1
+            self.layer.shadowOpacity = 0.25
+            self.layer.shadowRadius = 2
+            self.layer.shadowOffset = CGSize(width: 0, height: 0)
+        }
     }
     
     func setButtonColor() {
