@@ -11,7 +11,7 @@ struct MapResponseDTO: ResponseModelType {
     let houses: [House]
 }
 
-struct House: Codable {
+struct House: Codable, Hashable {
     let houseID: Int
     let x, y: Double
     let monthlyRent, deposit: String

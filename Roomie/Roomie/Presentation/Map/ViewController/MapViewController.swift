@@ -116,13 +116,14 @@ private extension MapViewController {
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
         
         output.markersInfo
+            .receive(on: RunLoop.main)
             .sink { [weak self] markersInfo in
                 for markerInfo in markersInfo {
                     let marker = NMFMarker(position: NMGLatLng(lat: markerInfo.x, lng: markerInfo.y))
                     marker.mapView = self?.rootView.mapView
                     marker.iconImage = NMFOverlayImage(name: "icn_map_pin_normal")
                     marker.width = 36
-                    marker.height = 36
+                    marker.height = 40
                     
                     marker.touchHandler = { [weak self] _ in
                         guard let self = self else { return false }
@@ -140,6 +141,7 @@ private extension MapViewController {
             .store(in: cancelBag)
         
         output.markerDetailInfo
+            .receive(on: RunLoop.main)
             .sink { [weak self] markerDetailInfo in
                 self?.rootView.mapDetailCardView.isHidden = false
                 
@@ -189,7 +191,7 @@ extension MapViewController: NMFMapViewTouchDelegate {
 extension MapViewController: UIAdaptivePresentationControllerDelegate {
     func presentMapListSheetSheet() {
         let mapListSheetViewController = MapListSheetViewController(
-            viewModel: MapViewModel()
+            viewModel: MapViewModel(service: MapsService(), builder: MapRequestDTO.Builder())
         )
         
         let mediumDetent = UISheetPresentationController.Detent.custom { _ in 348 }

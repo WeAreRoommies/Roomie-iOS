@@ -5,6 +5,8 @@
 //  Created by 예삐 on 1/21/25.
 //
 
+import Foundation
+
 extension MapRequestDTO {
     final class Builder {
         private var location: String = "서울특별시 마포구 노고산동"

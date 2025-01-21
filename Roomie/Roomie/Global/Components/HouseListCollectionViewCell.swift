@@ -175,7 +175,7 @@ final class HouseListCollectionViewCell: BaseCollectionViewCell {
 // MARK: - DataBinding
 
 extension HouseListCollectionViewCell {
-    func dataBind(_ data: MapModel) {
+    func dataBind(_ data: House) {
         if let image = UIImage(named: data.mainImageURL) {
             roomImageView.image = image
             roomImageView.backgroundColor = .clear
@@ -190,7 +190,7 @@ extension HouseListCollectionViewCell {
         monthlyRentLabel.text = "월세 \(data.monthlyRent)"
         depositLabel.text = "보증금 \(data.deposit)"
         termLabel.text = "\(data.contractTerm)개월"
-        roomTypeLabel.text = "\(data.occupancyType) · \(data.genderPolicy)"
+        roomTypeLabel.text = "\(data.occupancyTypes) · \(data.genderPolicy)"
         roomLocationLabel.text = "\(data.location) · \(data.locationDescription)"
     }
     

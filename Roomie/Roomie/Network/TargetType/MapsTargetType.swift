@@ -29,13 +29,16 @@ extension MapsTargetType: TargetType {
     }
     
     var method: Moya.Method {
-        return .get
+        switch self {
+        case .fetchMapData: return .post
+        case .fetchMapSearchData: return .get
+        }
     }
     
     var task: Moya.Task {
         switch self {
-        case .fetchMapData:
-            return .requestPlain
+        case .fetchMapData(let request):
+            return .requestJSONEncodable(request)
         case .fetchMapSearchData(let query):
             return .requestParameters(parameters: ["q": query], encoding: URLEncoding.queryString)
         }
