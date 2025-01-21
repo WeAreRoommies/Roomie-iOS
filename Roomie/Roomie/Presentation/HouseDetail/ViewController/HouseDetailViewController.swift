@@ -16,22 +16,15 @@ final class HouseDetailViewController: BaseViewController {
     
     private let rootView = HouseDetailView()
     
-    private let viewModel: HouseDetailViewModel
+    private let roomStatusCellHeight: CGFloat = Screen.height(182 + 12)
+    private let roomStatusCellCount = 2 // TODO: DataBind
+    
+    private let roommateCellHeight: CGFloat = Screen.height(102 + 12)
+    private let roommateCellCount = 3 // TODO: DataBind
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     
     private let cancelBag = CancelBag()
-    
-    // MARK: - Initializer
-    
-    init(viewModel: HouseDetailViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     // MARK: - LifeCycle
     
@@ -41,9 +34,11 @@ final class HouseDetailViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        bindViewModel()
+       
         setRegister()
+        
+        rootView.safetyLivingFacilityView.dataBind(["침대", "침구", "옷장", "냉장고", "세탁기", "믹서", "드라이기"])
+        rootView.kitchenFacilityView.dataBind(["냉장고", "세탁기", "믹서", "드라이기"])
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -52,8 +47,22 @@ final class HouseDetailViewController: BaseViewController {
         viewWillAppearSubject.send(())
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        rootView.updateRoomStatusTableViewHeight(roomStatusCellCount, height: roomStatusCellHeight)
+        rootView.roomStatusTableView.layoutIfNeeded()
+        
+        rootView.updateRoommateTableViewHeight(roommateCellCount, height: roommateCellHeight)
+        
+    }
+    
     override func setDelegate() {
-        rootView.collectionView.dataSource = self
+        rootView.roomStatusTableView.dataSource = self
+        rootView.roomStatusTableView.delegate = self
+        
+        rootView.roommateTableView.dataSource = self
+        rootView.roommateTableView.delegate = self
     }
 }
 
@@ -61,142 +70,104 @@ final class HouseDetailViewController: BaseViewController {
 
 private extension HouseDetailViewController {
     func setRegister() {
-        rootView.collectionView
-            .register(
-                HousePhotoCollectionViewCell.self,
-                forCellWithReuseIdentifier: HousePhotoCollectionViewCell.reuseIdentifier
-            )
-        rootView.collectionView
-            .register(
-                HouseInfoCollectionViewCell.self,
-                forCellWithReuseIdentifier: HouseInfoCollectionViewCell.reuseIdentifier
-            )
-        rootView.collectionView
-            .register(
-                RoomMoodCollectionViewCell.self,
-                forCellWithReuseIdentifier: RoomMoodCollectionViewCell.reuseIdentifier
-            )
-        rootView.collectionView
-            .register(
-                RoomStatusCollectionViewCell.self,
-                forCellWithReuseIdentifier: RoomStatusCollectionViewCell.reuseIdentifier
-            )
-        
-        rootView.collectionView
-            .register(
-                HouseDetailHeaderView.self,
-                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: HouseDetailHeaderView.reuseIdentifier
-            )
-    }
-    
-    func bindViewModel() {
-        let input = HouseDetailViewModel.Input(
-            viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher()
+        rootView.roomStatusTableView.register(
+            RoomStatusTableViewCell.self,
+            forCellReuseIdentifier: RoomStatusTableViewCell.reuseIdentifier
         )
         
-        let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        rootView.roommateTableView.register(
+            RoommateTableViewCell.self,
+            forCellReuseIdentifier: RoommateTableViewCell.reuseIdentifier
+        )
         
-        output.houseInfo
-            .sink { data in
-                
-                // TODO: ViewModel -> CollectionView dataBinding
-                
-                dump(data)
-            }
-            .store(in: cancelBag)
+        rootView.roommateTableView.register(
+            RoommateNotFoundTableViewCell.self,
+            forCellReuseIdentifier: RoommateNotFoundTableViewCell.reuseIdentifier
+        )
     }
 }
 
-// MARK: - UICollectionViewDataSource
+// MARK: - UITableViewDataSource
 
-extension HouseDetailViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return HouseDetailSection.allCases.count
-    }
-    
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
+extension HouseDetailViewController: UITableViewDataSource {
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
     ) -> Int {
-        switch HouseDetailSection(rawValue: section) {
-        case .housePhoto:
-            return 1
-        case .houseInfo:
-            return 1
-        case .roomMood:
-            return 1
-        case .roomStatus:
-            return 3 // TODO: Data Binding 필요
-        default:
-            return 0
+        if tableView == rootView.roomStatusTableView {
+            return roomStatusCellCount // TODO: DataBind
         }
+        
+        if tableView == rootView.roommateTableView {
+            let cellCount = roommateCellCount == 0 ? 1 : roommateCellCount
+            return cellCount // TODO: DataBind
+        }
+        
+        return 0
     }
     
-    // TODO: 각 cell 마다 데이터 바인딩 필요
-    
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        switch HouseDetailSection(rawValue: indexPath.section) {
-        case .housePhoto:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: HousePhotoCollectionViewCell.reuseIdentifier,
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        if tableView == rootView.roomStatusTableView {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: RoomStatusTableViewCell.reuseIdentifier,
                 for: indexPath
-            )
+            ) as? RoomStatusTableViewCell else {
+                return UITableViewCell()
+            }
+            cell.selectionStyle = .none
             
+            // TODO: DataBind
             return cell
-        case .houseInfo:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: HouseInfoCollectionViewCell.reuseIdentifier,
-                for: indexPath
-            )
-            
-            return cell
-        case .roomMood:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: RoomMoodCollectionViewCell.reuseIdentifier,
-                for: indexPath
-            )
-            
-            return cell
-        case .roomStatus:
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: RoomStatusCollectionViewCell.reuseIdentifier,
-                for: indexPath
-            )
-            
-            return cell
-        default:
-            return UICollectionViewCell()
         }
+        
+        if tableView == rootView.roommateTableView {
+            if roommateCellCount == 0 {
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: RoommateNotFoundTableViewCell.reuseIdentifier,
+                    for: indexPath
+                ) as? RoommateNotFoundTableViewCell else {
+                    return UITableViewCell()
+                }
+                cell.selectionStyle = .none
+                
+                // TODO: DataBind
+                return cell
+            } else {
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: RoommateTableViewCell.reuseIdentifier,
+                    for: indexPath
+                ) as? RoommateTableViewCell else {
+                    return UITableViewCell()
+                }
+                cell.selectionStyle = .none
+                
+                // TODO: DataBind
+                return cell
+            }
+        }
+
+        return UITableViewCell()
     }
-    
-    func collectionView(
-        _ collectionView: UICollectionView,
-        viewForSupplementaryElementOfKind kind: String,
-        at indexPath: IndexPath
-    ) -> UICollectionReusableView {
-        switch HouseDetailSection(rawValue: indexPath.section) {
-        case .roomMood:
-            guard let header = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: HouseDetailHeaderView.reuseIdentifier,
-                for: indexPath
-            ) as? HouseDetailHeaderView else { return UICollectionReusableView() }
-            return header
-            
-        case .roomStatus:
-            guard let header = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: HouseDetailHeaderView.reuseIdentifier,
-                for: indexPath
-            ) as? HouseDetailHeaderView else { return UICollectionReusableView() }
-            return header
-            
-        default:
-            return UICollectionReusableView()
+}
+
+// MARK: - UITableViewDelegate
+
+extension HouseDetailViewController: UITableViewDelegate {
+    func tableView(
+        _ tableView: UITableView,
+        heightForRowAt indexPath: IndexPath
+    ) -> CGFloat {
+        if tableView == rootView.roomStatusTableView {
+            return roomStatusCellHeight
         }
+        
+        if tableView == rootView.roommateTableView {
+            return roommateCellHeight
+        }
+        
+        return 0
     }
 }

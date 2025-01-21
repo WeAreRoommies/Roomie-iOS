@@ -9,7 +9,12 @@ import Foundation
 import Combine
 
 final class MapSearchViewModel {
-    private let mapSearchDataSubject = PassthroughSubject<[MapSearchModel], Never>()
+    private let service: MapSearchServiceProtocol
+    private let mapSearchDataSubject = PassthroughSubject<MapSearchResponseDTO, Never>()
+    
+    init(service: MapSearchServiceProtocol) {
+        self.service = service
+    }
 }
 
 extension MapSearchViewModel: ViewModelType {
@@ -18,13 +23,13 @@ extension MapSearchViewModel: ViewModelType {
     }
     
     struct Output {
-        let mapSearchData: AnyPublisher<[MapSearchModel], Never>
+        let mapSearchData: AnyPublisher<MapSearchResponseDTO, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
         input.searchTextFieldEnterSubject
             .sink { [weak self] in
-                self?.fetchMapSearchData(key: $0)
+                self?.fetchMapSearchData(query: $0)
             }
             .store(in: cancelBag)
         
@@ -38,9 +43,15 @@ extension MapSearchViewModel: ViewModelType {
 }
 
 private extension MapSearchViewModel {
-    
-    // TODO: 이후 API 통신으로 변경
-    func fetchMapSearchData(key: String) {
-        mapSearchDataSubject.send(MapSearchModel.mockMapSearchData())
+    func fetchMapSearchData(query: String) {
+        Task {
+            do {
+                guard let responseBody = try await service.fetchMapSearchData(query: query),
+                      let data = responseBody.data else { return }
+                mapSearchDataSubject.send(data)
+            } catch {
+                print(">>> \(error.localizedDescription) : \(#function)")
+            }
+        }
     }
 }

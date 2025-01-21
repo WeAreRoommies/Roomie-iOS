@@ -1,5 +1,5 @@
 //
-//  RoomStatusCollectionViewCell.swift
+//  RoomStatusTableViewCell.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/18/25.
@@ -11,9 +11,11 @@ import SnapKit
 import Then
 
 // TODO: dataBind() 함수 구현 후 각 text 삭제
-final class RoomStatusCollectionViewCell: BaseCollectionViewCell {
+final class RoomStatusTableViewCell: BaseTableViewCell {
     
     // MARK: - UIComponent
+    
+    private let backView = UIView()
 
     private let statusView = RoomStatusView()
     
@@ -50,7 +52,7 @@ final class RoomStatusCollectionViewCell: BaseCollectionViewCell {
     // MARK: - UISetting
     
     override func setStyle() {
-        self.do {
+        backView.do {
             $0.layer.borderColor = UIColor.grayscale5.cgColor
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
@@ -116,7 +118,9 @@ final class RoomStatusCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func setUI() {
-        addSubviews(
+        addSubview(backView)
+        
+        backView.addSubviews(
             statusView,
             chevronRightIcon,
             nameLabel,
@@ -140,6 +144,12 @@ final class RoomStatusCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func setLayout() {
+        backView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(12)
+        }
+        
         statusView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(16)
             $0.leading.equalToSuperview().inset(16)
