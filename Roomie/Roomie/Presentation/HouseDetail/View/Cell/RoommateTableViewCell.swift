@@ -94,24 +94,22 @@ final class RoommateTableViewCell: BaseTableViewCell {
         activityTimeLabel.do {
             $0.setText("21:00 - 21:00", style: .body4, color: .grayscale10)
         }
-        
     }
     
     override func setUI() {
         addSubview(backView)
         
-        backView
-            .addSubviews(
-                profileImageView,
-                ageLabel,
-                jobLabel,
-                mbtiBackView,
-                roomNameBackView,
-                sleepTimeTitleLabel,
-                sleepTimeLabel,
-                activityTimeTitleLabel,
-                activityTimeLabel
-            )
+        backView.addSubviews(
+            profileImageView,
+            ageLabel,
+            jobLabel,
+            mbtiBackView,
+            roomNameBackView,
+            sleepTimeTitleLabel,
+            sleepTimeLabel,
+            activityTimeTitleLabel,
+            activityTimeLabel
+        )
         
         mbtiBackView.addSubview(mbtiLabel)
         
