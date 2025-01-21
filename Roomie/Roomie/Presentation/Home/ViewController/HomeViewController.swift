@@ -26,15 +26,14 @@ final class HomeViewController: BaseViewController {
     
     private lazy var dataSource = createDiffableDataSource()
     
+    private var recentlyRooms: [RecentlyHouse] = []
+    
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
         
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
-    
-    private var recentlyRooms: [RecentlyHouse] = RecentlyHouse.mockHomeData()
-    private var userInfo: UserInfo = UserInfo.mockUserData()
-    
+
     // MARK: - Initializer
     
     init(viewModel: HomeViewModel) {
@@ -151,6 +150,7 @@ private extension HomeViewController {
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
         
         output.userInfo
+            .receive(on: RunLoop.main)
             .sink { [weak self] data in
                 guard let self else { return }
                 self.rootView.nameLabel.text = data.name
@@ -159,10 +159,13 @@ private extension HomeViewController {
             .store(in: cancelBag)
         
         output.houseList
+            .receive(on: RunLoop.main)
             .sink { [weak self] data in
                 guard let self else { return }
                 if !data.isEmpty {
+                    self.recentlyRooms = data
                     self.updateSnapshot(with: data)
+                    self.updateEmtpyView()
                 }
             }
             .store(in: cancelBag)

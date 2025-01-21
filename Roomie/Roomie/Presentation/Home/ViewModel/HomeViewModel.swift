@@ -11,9 +11,13 @@ import Combine
 final class HomeViewModel {
     
     // MARK: - Property
-    
+    private let service: HomeServiceProtocol
     private let homeDataSubject = PassthroughSubject<[RecentlyHouse], Never>()
     private let userDataSubject = PassthroughSubject<UserInfo, Never>()
+    
+    init(service: HomeServiceProtocol) {
+        self.service = service
+    }
 }
 
 extension HomeViewModel: ViewModelType {
@@ -33,6 +37,7 @@ extension HomeViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
+        
         let houseListData = homeDataSubject.eraseToAnyPublisher()
         let userInfo = userDataSubject.eraseToAnyPublisher()
         
@@ -45,7 +50,36 @@ extension HomeViewModel: ViewModelType {
 
 private extension HomeViewModel {
     func fetchHomeData() {
-        homeDataSubject.send(RecentlyHouse.mockHomeData())
-        userDataSubject.send(UserInfo.mockUserData())
+        Task {
+            do {
+                guard let responseBody = try await service.fetchHomeData(),
+                      let data = responseBody.data else { return }
+                
+                let userInfo = UserInfo(
+                    name: data.name,
+                    location: data.location
+                )
+                let houses = data.recentlyViewedHouses.map { data in
+                    RecentlyHouse(
+                        houseID: data.houseID,
+                        monthlyRent: data.monthlyRent,
+                        deposit: data.deposit,
+                        occupancyType: data.occupancyTypes,
+                        location: data.location,
+                        genderPolicy: data.genderPolicy,
+                        locationDescription: data.locationDescription,
+                        isPinned: data.isPinned,
+                        moodTag: data.moodTag,
+                        contractTerm: data.contractTerm,
+                        mainImageURL: data.mainImageURL
+                    )
+                }
+                    .compactMap { $0 }
+                userDataSubject.send(userInfo)
+                homeDataSubject.send(houses)
+            } catch {
+                print(">>> \(error.localizedDescription) : \(#function)")
+            }
+        }
     }
 }
