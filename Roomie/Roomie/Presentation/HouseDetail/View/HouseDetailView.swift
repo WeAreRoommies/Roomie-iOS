@@ -14,7 +14,7 @@ final class HouseDetailView: BaseView {
     
     // MARK: - UIComponent
     
-    private let scrollView = UIScrollView()
+    let scrollView = UIScrollView()
     private let contentView = UIView()
     
     // HousePhoto Section
@@ -65,13 +65,20 @@ final class HouseDetailView: BaseView {
     private let roommateTitleLabel = UILabel()
     let roommateTableView = UITableView()
     
+    // bottom Button
     private let bottomButtonbackView = UIView()
     private let bottomButtonSeparatorView = UIView()
+    let pinnedButton = RoomieIconButton(imageName: "icn_heart_24_normal", border: true)
+    let contactButton = RoomieIconButton(imageName: "icn_inquire_24", border: true)
     let tourApplyButton = RoomieButton(title: "투어 신청하기")
     
     // MARK: - UISetting
     
     override func setStyle() {
+        scrollView.do {
+            $0.contentInsetAdjustmentBehavior = .never
+        }
+        
         photoImageView.do {
             $0.backgroundColor = .grayscale4
         }
@@ -234,7 +241,12 @@ final class HouseDetailView: BaseView {
         
         facilityStackView.addArrangedSubviews(safetyLivingFacilityView, kitchenFacilityView)
         
-        bottomButtonbackView.addSubviews(bottomButtonSeparatorView, tourApplyButton)
+        bottomButtonbackView.addSubviews(
+                bottomButtonSeparatorView,
+                pinnedButton,
+                contactButton,
+                tourApplyButton
+            )
     }
     
     override func setLayout() {
@@ -401,11 +413,25 @@ final class HouseDetailView: BaseView {
             $0.height.equalTo(1)
         }
         
+        pinnedButton.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(12)
+            $0.leading.equalToSuperview().inset(20)
+            $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
+            $0.width.equalTo(pinnedButton.snp.height)
+        }
+        
+        contactButton.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(12)
+            $0.leading.equalTo(pinnedButton.snp.trailing).offset(8)
+            $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
+            $0.width.equalTo(pinnedButton.snp.height)
+        }
+        
         tourApplyButton.snp.makeConstraints {
             $0.top.equalToSuperview().inset(12)
+            $0.leading.equalTo(contactButton.snp.trailing).offset(8)
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
             $0.trailing.equalToSuperview().inset(20)
-            $0.width.equalTo(Screen.width(207))
         }
     }
 }
