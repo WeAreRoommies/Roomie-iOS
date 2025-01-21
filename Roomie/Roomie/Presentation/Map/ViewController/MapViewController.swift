@@ -21,6 +21,7 @@ final class MapViewController: BaseViewController {
     
     private let cancelBag = CancelBag()
     
+    private var markers: [NMFMarker] = []
     private var selectedMarker: NMFMarker?
     
     private let viewWillAppearSubject = CurrentValueSubject<Void, Never>(())
@@ -53,6 +54,7 @@ final class MapViewController: BaseViewController {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(true, animated: false)
+        removeAllMarkers()
         viewWillAppearSubject.send(())
     }
     
@@ -121,9 +123,11 @@ private extension MapViewController {
         output.markersInfo
             .receive(on: RunLoop.main)
             .sink { [weak self] markersInfo in
+                guard let self = self else { return }
+                
                 for markerInfo in markersInfo {
                     let marker = NMFMarker(position: NMGLatLng(lat: markerInfo.x, lng: markerInfo.y))
-                    marker.mapView = self?.rootView.mapView
+                    marker.mapView = self.rootView.mapView
                     marker.iconImage = NMFOverlayImage(name: "icn_map_pin_normal")
                     marker.width = 36
                     marker.height = 40
@@ -139,6 +143,8 @@ private extension MapViewController {
                         
                         return true
                     }
+                    
+                    self.markers.append(marker)
                 }
             }
             .store(in: cancelBag)
@@ -168,6 +174,13 @@ private extension MapViewController {
                 )
             }
             .store(in: cancelBag)
+    }
+    
+    func removeAllMarkers() {
+        for marker in markers {
+            marker.mapView = nil
+        }
+        markers.removeAll()
     }
     
     func erasePreviousSelectedMarker() {
