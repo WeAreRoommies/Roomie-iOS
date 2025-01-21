@@ -64,6 +64,14 @@ final class HouseDetailViewController: BaseViewController {
         setNavigationBar(with: "", isBorderHidden: true)
     }
     
+    override func setAction() {
+        rootView.tourApplyButton.tapPublisher
+            .sink { [weak self] in
+                self?.presentHouseDetailSheet()
+            }
+            .store(in: cancelBag)
+    }
+    
     override func setDelegate() {
         rootView.roomStatusTableView.dataSource = self
         rootView.roomStatusTableView.delegate = self
@@ -262,5 +270,24 @@ extension HouseDetailViewController: UIScrollViewDelegate {
         } else {
             navigationItem.title = nil
         }
+    }
+}
+
+// MARK: - UIAdaptivePresentationControllerDelegate
+
+extension HouseDetailViewController: UIAdaptivePresentationControllerDelegate {
+    func presentHouseDetailSheet() {
+        let houseDetailSheetViewController = HouseDetailSheetViewController()
+        
+        let fullDetent = UISheetPresentationController.Detent.custom { _ in Screen.height(375) }
+        
+        if let sheet = houseDetailSheetViewController.sheetPresentationController {
+            sheet.detents = [fullDetent]
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 16
+        }
+        houseDetailSheetViewController.isModalInPresentation = false
+        
+        self.present(houseDetailSheetViewController, animated: true)
     }
 }
