@@ -50,11 +50,11 @@ private extension MoodListViewModel {
     func fetchMoodListData(type:String) {
         switch type {
         case MoodType.calm.title:
-            return moodListDataSubject.send(MoodListHouse.calmListRoomData())
+            return moodListDataSubject.send(MoodListHouse.mockCalmListRoomData())
         case MoodType.lively.title:
-            return moodListDataSubject.send(MoodListHouse.livelyListRoomData())
+            return moodListDataSubject.send(MoodListHouse.mockLivelyListRoomData())
         case MoodType.neat.title:
-            return moodListDataSubject.send(MoodListHouse.neatListRoomData())
+            return moodListDataSubject.send(MoodListHouse.mockNeatListRoomData())
         default:
             return
         }

@@ -40,6 +40,6 @@ extension WishListViewModel: ViewModelType {
 
 private extension WishListViewModel {
     func fetchWishListData() {
-        wishListDataSubject.send(WishListHouse.mockHomeData())
+        wishListDataSubject.send(WishListHouse.mockWishListData())
     }
 }

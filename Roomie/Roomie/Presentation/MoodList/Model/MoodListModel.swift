@@ -21,7 +21,7 @@ struct MoodListHouse: Hashable {
 }
 
 extension MoodListHouse {
-    static func calmListRoomData() -> [MoodListHouse] {
+    static func mockCalmListRoomData() -> [MoodListHouse] {
         return [
             MoodListHouse(
                 houseID: 1,
@@ -52,7 +52,7 @@ extension MoodListHouse {
 }
 
 extension MoodListHouse {
-    static func livelyListRoomData() -> [MoodListHouse] {
+    static func mockLivelyListRoomData() -> [MoodListHouse] {
         return [
             MoodListHouse(
                 houseID: 3,
@@ -119,7 +119,7 @@ extension MoodListHouse {
 }
 
 extension MoodListHouse {
-    static func neatListRoomData() -> [MoodListHouse] {
+    static func mockNeatListRoomData() -> [MoodListHouse] {
         return [
             MoodListHouse(
                 houseID: 8,

@@ -22,7 +22,7 @@ struct WishListHouse: Hashable {
 }
 
 extension WishListHouse {
-    static func mockHomeData() -> [WishListHouse] {
+    static func mockWishListData() -> [WishListHouse] {
         return [
             WishListHouse(
                 houseID: 1,
