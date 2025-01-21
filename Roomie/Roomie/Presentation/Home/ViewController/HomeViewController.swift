@@ -26,8 +26,6 @@ final class HomeViewController: BaseViewController {
     
     private lazy var dataSource = createDiffableDataSource()
     
-    private var recentlyRooms: [RecentlyHouse] = []
-    
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
         
     final let cellHeight: CGFloat = 112
@@ -161,7 +159,6 @@ private extension HomeViewController {
             .sink { [weak self] data in
                 guard let self else { return }
                 if !data.isEmpty {
-                    self.recentlyRooms = data
                     self.updateSnapshot(with: data)
                 }
             }
