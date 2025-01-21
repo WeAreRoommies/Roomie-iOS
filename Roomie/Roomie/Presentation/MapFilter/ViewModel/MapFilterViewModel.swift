@@ -280,6 +280,15 @@ extension MapFilterViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
+        input.preferredDate
+            .compactMap { $0 }
+            .compactMap { String.formattedDateString($0) }
+            .sink { [weak self] date in
+                guard let self = self else { return }
+                self.preferredDateSubject.send(date)
+            }
+            .store(in: cancelBag)
+        
         input.sixMonthButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }

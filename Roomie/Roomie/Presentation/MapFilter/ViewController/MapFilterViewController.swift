@@ -217,6 +217,17 @@ final class MapFilterViewController: BaseViewController {
             }
             .store(in: cancelBag)
         
+        rootView.filterPeriodView.preferredDatePickerView.datePicker
+            .controlEventPublisher(for: .valueChanged)
+            .compactMap { [weak self] _ in
+                let date = self?.rootView.filterPeriodView.preferredDatePickerView.dateLabel.text
+                return date
+            }
+            .sink { [weak self] formattedDate in
+                self?.preferredDateSubject.send(formattedDate)
+            }
+            .store(in: cancelBag)
+        
         rootView.filterPeriodView.threeMonthButton.optionButton
             .tapPublisher
             .sink { [weak self] in
@@ -401,13 +412,5 @@ private extension MapFilterViewController {
             rootView.filterRoomView.isHidden = true
             rootView.filterPeriodView.isHidden = false
         }
-    }
-}
-
-extension MapFilterViewController: DatePickerViewDelegate {
-    func dateDidPick(date: String) {
-        // TODO: 함수 호출 안 되는 거 해결
-        let formattedData = String.formattedDateString(date)
-        preferredDateSubject.send(formattedData ?? nil)
     }
 }
