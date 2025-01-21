@@ -12,7 +12,12 @@ final class WishListViewModel {
     
     // MARK: - Property
     
-    private let wishListDataSubject = PassthroughSubject<[WishListHouse], Never>()
+    private let service: WishListServiceProtocol
+    private let wishListDataSubject = PassthroughSubject<WishListResponseDTO, Never>()
+    
+    init(service: WishListServiceProtocol) {
+        self.service = service
+    }
 }
 
 extension WishListViewModel: ViewModelType {
@@ -30,7 +35,25 @@ extension WishListViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
-        let wishListData = wishListDataSubject.eraseToAnyPublisher()
+        let wishListData = wishListDataSubject
+            .map { house in
+                house.pinnedHouses.map { data in
+                    WishListHouse(
+                        houseID: data.houseID,
+                        monthlyRent: data.monthlyRent,
+                        deposit: data.deposit,
+                        occupancyTypes: data.occupancyTypes,
+                        location: data.location,
+                        genderPolicy: data.genderPolicy,
+                        locationDescription: data.locationDescription,
+                        isPinned: data.isPinned,
+                        moodTag: data.moodTag,
+                        contractTerm: data.contractTerm,
+                        mainImageURL: data.mainImageURL
+                    )
+                }
+            }
+            .eraseToAnyPublisher()
         
         return Output(
             wishList: wishListData
@@ -40,6 +63,14 @@ extension WishListViewModel: ViewModelType {
 
 private extension WishListViewModel {
     func fetchWishListData() {
-        wishListDataSubject.send(WishListHouse.mockWishListData())
+        Task {
+            do {
+                guard let responseBody = try await service.fetchWishListData(),
+                      let data = responseBody.data else { return }
+                wishListDataSubject.send(data)
+            } catch {
+                print(">>> \(error.localizedDescription) : \(#function)")
+            }
+        }
     }
 }

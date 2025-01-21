@@ -232,7 +232,7 @@ extension HouseListCollectionViewCell {
         monthlyRentLabel.text = "월세 \(data.monthlyRent)"
         depositLabel.text = "보증금 \(data.deposit)"
         termLabel.text = "\(data.contractTerm)개월"
-        roomTypeLabel.text = "\(data.occupancyType) · \(data.genderPolicy)"
+        roomTypeLabel.text = "\(data.occupancyTypes) · \(data.genderPolicy)"
         roomLocationLabel.text = "\(data.location) · \(data.locationDescription)"
     }
     

@@ -64,6 +64,7 @@ final class HomeView: BaseView {
         greetingLabel.do {
             $0.setText("루미에 어서오세요!" ,style: .heading2, color: .grayscale12)
         }
+        
         subGreetingLabel.do {
             $0.setText("루미가 루미님의 완벽한 집을\n찾아드릴게요" ,style: .body4, color: .grayscale7)
             $0.numberOfLines = 2
