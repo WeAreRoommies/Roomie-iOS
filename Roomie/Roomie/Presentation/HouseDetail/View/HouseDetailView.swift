@@ -61,7 +61,9 @@ final class HouseDetailView: BaseView {
     let kitchenFacilityView = HouseFacilityView(title: "주방시설")
     private let facilityStackView = UIStackView()
     
-    
+    // roommate Section
+    private let roommateTitleLabel = UILabel()
+    let roommateTableView = UITableView()
     
     private let bottomButtonbackView = UIView()
     private let bottomButtonSeparatorView = UIView()
@@ -162,11 +164,14 @@ final class HouseDetailView: BaseView {
             $0.distribution = .fill
         }
         
+        roommateTitleLabel.do {
+            $0.setText("룸메이트", style: .heading5, color: .grayscale12)
+        }
         
-        
-        // 리팩을 쉽게 하기 위한 개행입니다.. 나중에 다 수정할게요!
-        
-        
+        roommateTableView.do {
+            $0.separatorStyle = .none
+        }
+
         bottomButtonbackView.do {
             $0.backgroundColor = .grayscale1
         }
@@ -178,7 +183,9 @@ final class HouseDetailView: BaseView {
     
     override func setUI() {
         addSubviews(scrollView, bottomButtonbackView)
+        
         scrollView.addSubviews(contentView)
+        
         contentView.addSubviews(
             photoImageView,
             nameBackView,
@@ -193,13 +200,11 @@ final class HouseDetailView: BaseView {
             roomStatusTitleLabel,
             roomStatusTableView,
             facilityTitleLabel,
-            facilityStackView
+            facilityStackView,
+            roommateTitleLabel,
+            roommateTableView
         )
-        
-        
-        // 리팩을 쉽게 하기 위한 개행입니다.. 나중에 다 수정할게요!
-        
-        
+
         photoImageView.addSubview(roundedTopView)
         
         nameBackView.addSubview(nameLabel)
@@ -228,12 +233,6 @@ final class HouseDetailView: BaseView {
         )
         
         facilityStackView.addArrangedSubviews(safetyLivingFacilityView, kitchenFacilityView)
-        
-        
-        
-        // 리팩을 쉽게 하기 위한 개행입니다.. 나중에 다 수정할게요!
-        
-        
         
         bottomButtonbackView.addSubviews(bottomButtonSeparatorView, tourApplyButton)
     }
@@ -376,14 +375,19 @@ final class HouseDetailView: BaseView {
         facilityStackView.snp.makeConstraints {
             $0.top.equalTo(facilityTitleLabel.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.bottom.equalToSuperview().inset(16) ///
         }
         
+        roommateTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(facilityStackView.snp.bottom).offset(48)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+        }
         
-        
-        // 리팩을 쉽게 하기 위한 개행입니다.. 나중에 다 수정할게요!
-        
-        
+        roommateTableView.snp.makeConstraints {
+            $0.top.equalTo(roommateTitleLabel.snp.bottom).offset(16)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.height.equalTo(Screen.height(102 + 12))
+            $0.bottom.equalToSuperview().inset(8)
+        }
         
         bottomButtonbackView.snp.makeConstraints {
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
@@ -413,10 +417,22 @@ extension HouseDetailView {
     func updateRoomStatusTableViewHeight(
         _ numberOfItems: Int,
         height roomStatusCellHeight: CGFloat
-    ){
+    ) {
         let tableViewHeight = CGFloat(numberOfItems) * roomStatusCellHeight
     
         roomStatusTableView.snp.updateConstraints {
+            $0.height.equalTo(tableViewHeight)
+        }
+    }
+    
+    func updateRoommateTableViewHeight(
+        _ numberOfItems: Int,
+        height roommateCellHeight: CGFloat
+    ) {
+        let cellCount = numberOfItems == 0 ? 1 : numberOfItems
+        let tableViewHeight = CGFloat(cellCount) * roommateCellHeight
+        
+        roommateTableView.snp.updateConstraints {
             $0.height.equalTo(tableViewHeight)
         }
     }
