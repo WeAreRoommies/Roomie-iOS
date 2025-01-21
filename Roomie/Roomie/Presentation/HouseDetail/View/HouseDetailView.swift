@@ -70,7 +70,7 @@ final class HouseDetailView: BaseView {
     private let bottomButtonSeparatorView = UIView()
     let pinnedButton = RoomieIconButton(imageName: "icn_heart_24_normal", border: true)
     let contactButton = RoomieIconButton(imageName: "icn_inquire_24", border: true)
-    let tourApplyButton = RoomieButton(title: "투어 신청하기")
+    let tourApplyButton = RoomieButton(title: "투어신청하기")
     
     // MARK: - UISetting
     
