@@ -73,7 +73,10 @@ final class MapViewController: BaseViewController {
             .tapPublisher
             .sink {
                 let mapSearchViewController = MapSearchViewController(
-                    viewModel: MapSearchViewModel(service: MapsService())
+                    viewModel: MapSearchViewModel(
+                        service: MapsService(),
+                        builder: MapRequestDTO.Builder.shared
+                    )
                 )
                 self.navigationController?.pushViewController(mapSearchViewController, animated: true)
             }

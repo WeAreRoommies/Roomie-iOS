@@ -88,12 +88,6 @@ extension MapViewModel: ViewModelType {
 }
 
 private extension MapViewModel {
-    
-    // TODO: 이후 API 통신으로 변경
-//    func fetchMapData() {
-//        mapDataSubject.send(MapModel.mockMapData())
-//    }
-    
     func fetchMapData(request: MapRequestDTO) {
         Task {
             do {

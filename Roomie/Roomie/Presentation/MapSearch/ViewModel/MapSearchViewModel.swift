@@ -10,16 +10,20 @@ import Combine
 
 final class MapSearchViewModel {
     private let service: MapSearchServiceProtocol
+    private let builder: MapRequestDTO.Builder
+    
     private let mapSearchDataSubject = PassthroughSubject<MapSearchResponseDTO, Never>()
     
-    init(service: MapSearchServiceProtocol) {
+    init(service: MapSearchServiceProtocol, builder: MapRequestDTO.Builder) {
         self.service = service
+        self.builder = builder
     }
 }
 
 extension MapSearchViewModel: ViewModelType {
     struct Input {
         let searchTextFieldEnterSubject: AnyPublisher<String, Never>
+        let locationDidSelectSubject: AnyPublisher<String, Never>
     }
     
     struct Output {
@@ -30,6 +34,13 @@ extension MapSearchViewModel: ViewModelType {
         input.searchTextFieldEnterSubject
             .sink { [weak self] in
                 self?.fetchMapSearchData(query: $0)
+            }
+            .store(in: cancelBag)
+        
+        input.locationDidSelectSubject
+            .sink { [weak self] location in
+                guard let self = self else { return }
+                self.builder.setLocation(location)
             }
             .store(in: cancelBag)
         
