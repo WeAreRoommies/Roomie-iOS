@@ -279,11 +279,11 @@ extension HouseDetailViewController: UIAdaptivePresentationControllerDelegate {
     func presentHouseDetailSheet() {
         let houseDetailSheetViewController = HouseDetailSheetViewController()
         
-        let fullDetent = UISheetPresentationController.Detent.custom { _ in Screen.height(375) }
+        let fullDetent = UISheetPresentationController.Detent.custom { _ in Screen.height(380) }
         
         if let sheet = houseDetailSheetViewController.sheetPresentationController {
             sheet.detents = [fullDetent]
-            sheet.prefersGrabberVisible = true
+            sheet.prefersGrabberVisible = false
             sheet.preferredCornerRadius = 16
         }
         houseDetailSheetViewController.isModalInPresentation = false
