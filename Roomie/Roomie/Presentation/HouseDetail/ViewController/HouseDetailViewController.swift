@@ -93,9 +93,11 @@ private extension HouseDetailViewController {
         navigationController?.navigationBar.scrollEdgeAppearance = clearAppearance
         navigationController?.navigationBar.compactAppearance = clearAppearance
         
-        // 커스텀 border 제거
         let borderIdentifier = "customBorder"
-        if let existingBorder = navigationController?.navigationBar.subviews.first(where: { $0.accessibilityIdentifier == borderIdentifier }) {
+        if let existingBorder = navigationController?.navigationBar.subviews
+            .first(
+            where: { $0.accessibilityIdentifier == borderIdentifier }
+            ) {
             existingBorder.removeFromSuperview()
         }
         
@@ -119,9 +121,11 @@ private extension HouseDetailViewController {
         navigationController?.navigationBar.scrollEdgeAppearance = filledAppearance
         navigationController?.navigationBar.compactAppearance = filledAppearance
         
-        // 커스텀 border 추가
         let borderIdentifier = "customBorder"
-        let existingBorder = navigationController?.navigationBar.subviews.first(where: { $0.accessibilityIdentifier == borderIdentifier })
+        let existingBorder = navigationController?.navigationBar.subviews
+            .first(
+                where: { $0.accessibilityIdentifier == borderIdentifier }
+            )
         
         if existingBorder == nil {
             let customBorder = UIView()
