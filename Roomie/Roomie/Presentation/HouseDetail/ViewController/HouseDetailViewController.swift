@@ -64,6 +64,14 @@ final class HouseDetailViewController: BaseViewController {
         setNavigationBar(with: "", isBorderHidden: true)
     }
     
+    override func setAction() {
+        rootView.tourApplyButton.tapPublisher
+            .sink { [weak self] in
+                self?.presentHouseDetailSheet()
+            }
+            .store(in: cancelBag)
+    }
+    
     override func setDelegate() {
         rootView.roomStatusTableView.dataSource = self
         rootView.roomStatusTableView.delegate = self
@@ -78,6 +86,23 @@ final class HouseDetailViewController: BaseViewController {
 // MARK: - Functions
 
 private extension HouseDetailViewController {
+    func setRegister() {
+        rootView.roomStatusTableView.register(
+            RoomStatusTableViewCell.self,
+            forCellReuseIdentifier: RoomStatusTableViewCell.reuseIdentifier
+        )
+        
+        rootView.roommateTableView.register(
+            RoommateTableViewCell.self,
+            forCellReuseIdentifier: RoommateTableViewCell.reuseIdentifier
+        )
+        
+        rootView.roommateTableView.register(
+            RoommateNotFoundTableViewCell.self,
+            forCellReuseIdentifier: RoommateNotFoundTableViewCell.reuseIdentifier
+        )
+    }
+    
     func setClearNavigationBar() {
         navigationController?.navigationBar.isHidden = false
         
@@ -140,23 +165,6 @@ private extension HouseDetailViewController {
                 $0.bottom.equalToSuperview()
             }
         }
-    }
-    
-    func setRegister() {
-        rootView.roomStatusTableView.register(
-            RoomStatusTableViewCell.self,
-            forCellReuseIdentifier: RoomStatusTableViewCell.reuseIdentifier
-        )
-        
-        rootView.roommateTableView.register(
-            RoommateTableViewCell.self,
-            forCellReuseIdentifier: RoommateTableViewCell.reuseIdentifier
-        )
-        
-        rootView.roommateTableView.register(
-            RoommateNotFoundTableViewCell.self,
-            forCellReuseIdentifier: RoommateNotFoundTableViewCell.reuseIdentifier
-        )
     }
 }
 
@@ -258,9 +266,29 @@ extension HouseDetailViewController: UIScrollViewDelegate {
         }
         
         if offsetY > navigationTitleThreshold {
-            navigationItem.title = "43~50/90~100" // TODO: DataBind
+            navigationItem.title = "43~50/90~100"// TODO: DataBind
         } else {
             navigationItem.title = nil
         }
+    }
+}
+
+// MARK: - UIAdaptivePresentationControllerDelegate
+
+extension HouseDetailViewController: UIAdaptivePresentationControllerDelegate {
+    func presentHouseDetailSheet() {
+        let houseDetailSheetViewController = HouseDetailSheetViewController(viewModel: HouseDetailViewModel())
+        
+        let fullDetent = UISheetPresentationController.Detent.custom { _ in Screen.height(380) }
+        
+        if let sheet = houseDetailSheetViewController.sheetPresentationController {
+            sheet.detents = [fullDetent]
+            sheet.prefersGrabberVisible = false
+            sheet.preferredCornerRadius = 16
+        }
+        
+        houseDetailSheetViewController.isModalInPresentation = false
+        
+        self.present(houseDetailSheetViewController, animated: true)
     }
 }

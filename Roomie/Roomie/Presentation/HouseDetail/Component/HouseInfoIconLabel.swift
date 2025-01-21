@@ -100,6 +100,8 @@ final class HouseInfoIconLabel: UIView {
     }
 }
 
+// MARK: - Functions
+
 private extension HouseInfoIconLabel {
     func setIconLabel(with text: String = "", houseInfoType: HouseInfoType = .location) {
         infoLabel.setText(text, style: .body1, color: .grayscale10)
