@@ -11,6 +11,9 @@ import SnapKit
 import Then
 
 final class HouseDetailSheetView: BaseView {
+    // MARK: - Property
+    
+    private(set) var buttons: [RoomTourButton] = []
     
     // MARK: - UIComponent
     
@@ -31,6 +34,20 @@ final class HouseDetailSheetView: BaseView {
     private let thirdStackView = UIStackView()
     
     let tourApplyButton = RoomieButton(title: "투어신청하기", isEnabled: false)
+    
+    // MARK: - Initializer
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        setButtons()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        
+        setButtons()
+    }
     
     // MARK: - UISetting
     
@@ -130,5 +147,27 @@ final class HouseDetailSheetView: BaseView {
             $0.height.equalTo(Screen.width(RoomieButton.defaultHeight))
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(12)
         }
+    }
+}
+
+private extension HouseDetailSheetView {
+    func setButtons() {
+        buttons.append(roomATourButton)
+        roomATourButton.tag = 0
+        
+        buttons.append(roomBTourButton)
+        roomBTourButton.tag = 1
+        
+        buttons.append(roomCTourButton)
+        roomCTourButton.tag = 2
+        
+        buttons.append(roomDTourButton)
+        roomDTourButton.tag = 3
+        
+        buttons.append(roomETourButton)
+        roomETourButton.tag = 4
+        
+        buttons.append(roomFTourButton)
+        roomFTourButton.tag = 5
     }
 }
