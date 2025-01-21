@@ -242,11 +242,11 @@ final class HouseDetailView: BaseView {
         facilityStackView.addArrangedSubviews(safetyLivingFacilityView, kitchenFacilityView)
         
         bottomButtonbackView.addSubviews(
-                bottomButtonSeparatorView,
-                pinnedButton,
-                contactButton,
-                tourApplyButton
-            )
+            bottomButtonSeparatorView,
+            pinnedButton,
+            contactButton,
+            tourApplyButton
+        )
     }
     
     override func setLayout() {
