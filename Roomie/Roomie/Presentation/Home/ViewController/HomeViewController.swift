@@ -13,8 +13,8 @@ import Then
 import CombineCocoa
 
 private enum homeNavigationBarStatus {
-    case white
-    case purple
+    case top
+    case scrolled
 }
 
 final class HomeViewController: BaseViewController {
@@ -35,7 +35,7 @@ final class HomeViewController: BaseViewController {
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
     
-    private var homeNavigationBarStatus: homeNavigationBarStatus = .purple {
+    private var homeNavigationBarStatus: homeNavigationBarStatus = .scrolled {
         didSet {
             setHomeNavigationBarStatus()
         }
@@ -221,9 +221,9 @@ private extension HomeViewController {
     
     func setHomeNavigationBarStatus() {
         switch homeNavigationBarStatus {
-        case .white:
+        case .top:
             barAppearance.backgroundColor = .grayscale1
-        case .purple:
+        case .scrolled:
             barAppearance.backgroundColor = .primaryLight4
         }
         
@@ -236,7 +236,6 @@ private extension HomeViewController {
         title = nil
         navigationItem.leftBarButtonItem = nil
         
-//        let barAppearance = UINavigationBarAppearance()
         let locationLabel = UILabel()
         let likedButton = UIBarButtonItem(
             image: .icnHeartLine24,
@@ -250,16 +249,12 @@ private extension HomeViewController {
         let dropDownItem = UIBarButtonItem(customView: dropDownImageView)
         likedButton.tintColor = .grayscale10
         barAppearance.backgroundColor = .primaryLight4
-//        barAppearance.shadowColor = nil
         locationLabel.do {
             $0.setText(location, style: .title2, color: .grayscale10)
         }
         
         navigationItem.rightBarButtonItem = likedButton
         navigationItem.leftBarButtonItems = [locationItem, dropDownItem]
-        
-//        navigationController?.navigationBar.standardAppearance = barAppearance
-//        navigationController?.navigationBar.scrollEdgeAppearance = barAppearance
         
         view.setNeedsLayout()
         view.layoutIfNeeded()
@@ -315,11 +310,10 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 extension HomeViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
-        print(offsetY)
         if offsetY > -94 {
-            homeNavigationBarStatus = .white
+            homeNavigationBarStatus = .top
         } else {
-            homeNavigationBarStatus = .purple
+            homeNavigationBarStatus = .scrolled
         }
         
         let maxOffsetY = rootView.scrollView.contentSize.height - rootView.scrollView.bounds.height
