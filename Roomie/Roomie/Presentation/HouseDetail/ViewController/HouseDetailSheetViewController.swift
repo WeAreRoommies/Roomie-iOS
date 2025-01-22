@@ -65,6 +65,7 @@ final class HouseDetailSheetViewController: BaseViewController {
 private extension HouseDetailSheetViewController {
     func bindViewModel() {
         let input = HouseDetailViewModel.Input(
+            viewWillApper: Just(()).eraseToAnyPublisher(),
             roomIDSubject: roomIDSubject.eraseToAnyPublisher()
         )
         
