@@ -45,6 +45,8 @@ extension HouseDetailViewModel: ViewModelType {
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
         input.viewWillApper
             .sink { [weak self] in
+                
+                // TODO: houseID 받아오기
                 self?.fetchHouseDetailData(houseID: 1)
             }
             .store(in: cancelBag)
