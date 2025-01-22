@@ -31,8 +31,6 @@ final class WishListViewController: BaseViewController {
     final let contentInterSpacing: CGFloat = 4
     final let contentInset = UIEdgeInsets(top: 12, left: 16, bottom: 24, right: 16)
     
-    private var wishListRooms: [WishListHouse] = WishListHouse.mockWishListData()
-    
     // MARK: - Initializer
     
     init(viewModel: WishListViewModel) {
@@ -86,10 +84,10 @@ private extension WishListViewController {
         )
     }
     
-    func updateEmtpyView() {
-        rootView.emptyView.isHidden = !wishListRooms.isEmpty
-        rootView.wishListCollectionView.isHidden = wishListRooms.isEmpty
-    }
+//    func updateEmtpyView() {
+//        rootView.emptyView.isHidden = !wishListRooms.isEmpty
+//        rootView.wishListCollectionView.isHidden = wishListRooms.isEmpty
+//    }
     
     func bindViewModel() {
         let input = WishListViewModel.Input(
@@ -111,8 +109,8 @@ private extension WishListViewController {
             .store(in: cancelBag)
     }
     
-    func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, WishListHouse> {
-        let dataSource = UICollectionViewDiffableDataSource<Int, WishListHouse> (
+    func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, WishHouse> {
+        let dataSource = UICollectionViewDiffableDataSource<Int, WishHouse> (
             collectionView: rootView.wishListCollectionView,
             cellProvider: {
                 collectionView, indexPath, model in guard let cell = collectionView.dequeueReusableCell(
@@ -141,8 +139,8 @@ private extension WishListViewController {
         return dataSource
     }
     
-    func updateSnapshot(with data: [WishListHouse]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, WishListHouse>()
+    func updateSnapshot(with data: [WishHouse]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, WishHouse>()
         snapshot.appendSections([0])
         snapshot.appendItems(data, toSection: 0)
         dataSource.apply(snapshot, animatingDifferences: true)

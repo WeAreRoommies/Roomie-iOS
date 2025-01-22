@@ -11,6 +11,7 @@ import Combine
 import CombineCocoa
 import SnapKit
 import Then
+import Kingfisher
 
 final class HouseListCollectionViewCell: BaseCollectionViewCell {
     
@@ -55,6 +56,7 @@ final class HouseListCollectionViewCell: BaseCollectionViewCell {
             $0.layer.cornerRadius = 8
             $0.backgroundColor = .grayscale10
             $0.contentMode = .scaleAspectFill
+            $0.clipsToBounds = true
             $0.isUserInteractionEnabled = false
         }
         
@@ -176,8 +178,8 @@ final class HouseListCollectionViewCell: BaseCollectionViewCell {
 
 extension HouseListCollectionViewCell {
     func dataBind(_ data: House) {
-        if let image = UIImage(named: data.mainImageURL) {
-            roomImageView.image = image
+        if let imageURL = URL(string: data.mainImageURL) {
+            roomImageView.kf.setImage(with: imageURL)
             roomImageView.backgroundColor = .clear
         } else {
             roomImageView.image = nil
@@ -194,32 +196,9 @@ extension HouseListCollectionViewCell {
         roomLocationLabel.text = "\(data.location) · \(data.locationDescription)"
     }
     
-    func dataBind(_ data: RecentlyHouse) {
-        // TODO: 데이터 연결
-        
-        if let image = UIImage(named: data.mainImageURL) {
-            roomImageView.image = image
-            roomImageView.backgroundColor = .clear
-        } else {
-            roomImageView.image = nil
-            roomImageView.backgroundColor = .grayscale5
-        }
-        
-        likedImageView.image = data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
-        
-        moodTagLabel.text = data.moodTag
-        monthlyRentLabel.text = "월세 \(data.monthlyRent)"
-        depositLabel.text = "보증금 \(data.deposit)"
-        termLabel.text = "\(data.contractTerm)개월"
-        roomTypeLabel.text = "\(data.occupancyType) · \(data.genderPolicy)"
-        roomLocationLabel.text = "\(data.location) · \(data.locationDescription)"
-    }
-    
-    func dataBind(_ data: WishListHouse) {
-        // TODO: 데이터 연결
-        
-        if let image = UIImage(named: data.mainImageURL) {
-            roomImageView.image = image
+    func dataBind(_ data: HomeHouse) {
+        if let imageURL = URL(string: data.mainImageURL) {
+            roomImageView.kf.setImage(with: imageURL)
             roomImageView.backgroundColor = .clear
         } else {
             roomImageView.image = nil
@@ -236,11 +215,28 @@ extension HouseListCollectionViewCell {
         roomLocationLabel.text = "\(data.location) · \(data.locationDescription)"
     }
     
-    func dataBind(_ data: MoodListHouse) {
-        // TODO: 데이터 연결
+    func dataBind(_ data: WishHouse) {
+        if let imageURL = URL(string: data.mainImageURL) {
+            roomImageView.kf.setImage(with: imageURL)
+            roomImageView.backgroundColor = .clear
+        } else {
+            roomImageView.image = nil
+            roomImageView.backgroundColor = .grayscale5
+        }
         
-        if let image = UIImage(named: data.mainImageURL) {
-            roomImageView.image = image
+        likedImageView.image = data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
+        
+        moodTagLabel.text = data.moodTag
+        monthlyRentLabel.text = "월세 \(data.monthlyRent)"
+        depositLabel.text = "보증금 \(data.deposit)"
+        termLabel.text = "\(data.contractTerm)개월"
+        roomTypeLabel.text = "\(data.occupancyTypes) · \(data.genderPolicy)"
+        roomLocationLabel.text = "\(data.location) · \(data.locationDescription)"
+    }
+    
+    func dataBind(_ data: MoodHouse) {
+        if let imageURL = URL(string: data.mainImageURL) {
+            roomImageView.kf.setImage(with: imageURL)
             roomImageView.backgroundColor = .clear
         } else {
             roomImageView.image = nil
@@ -253,7 +249,7 @@ extension HouseListCollectionViewCell {
         monthlyRentLabel.text = "월세 \(data.monthlyRent)"
         depositLabel.text = "보증금 \(data.deposit)"
         termLabel.text = "\(data.contractTerm)개월"
-        roomTypeLabel.text = "\(data.occupancyType) · \(data.genderPolicy)"
+        roomTypeLabel.text = "\(data.occupancyTypes) · \(data.genderPolicy)"
         roomLocationLabel.text = "\(data.location) · \(data.locationDescription)"
     }
 }

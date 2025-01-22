@@ -89,6 +89,7 @@ final class HomeViewController: BaseViewController {
                 )
                 calmMoodListViewController.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(calmMoodListViewController, animated: true)
+                print("click button")
             }
             .store(in: cancelBag)
         
@@ -173,7 +174,7 @@ private extension HomeViewController {
             .store(in: cancelBag)
     }
     
-    func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, RecentlyHouse> {
+    func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, HomeHouse> {
         return UICollectionViewDiffableDataSource(collectionView: rootView.houseListCollectionView) {
             collectionView, indexPath, model in guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier,
@@ -185,8 +186,8 @@ private extension HomeViewController {
         }
     }
     
-    func updateSnapshot(with data: [RecentlyHouse]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, RecentlyHouse>()
+    func updateSnapshot(with data: [HomeHouse]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, HomeHouse>()
         snapshot.appendSections([0])
         snapshot.appendItems(data, toSection: 0)
         dataSource.apply(snapshot, animatingDifferences: true)
