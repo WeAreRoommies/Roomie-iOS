@@ -139,6 +139,17 @@ private extension MapViewController {
                         marker.iconImage = NMFOverlayImage(name: "icn_map_pin_active")
                         self.selectedMarker = marker
                         
+                        let cameraUpdate = NMFCameraUpdate(
+                            scrollTo: NMGLatLng(lat: markerInfo.x, lng: markerInfo.y)
+                        )
+                        cameraUpdate.animation = .easeIn
+                        
+                        let zoomUpdate = NMFCameraUpdate(zoomTo: 14)
+                        zoomUpdate.animation = .easeIn
+                        
+                        rootView.mapView.moveCamera(cameraUpdate)
+                        rootView.mapView.moveCamera(zoomUpdate)
+                        
                         self.markerDidSelectSubject.send(markerInfo.houseID)
                         
                         return true
@@ -196,6 +207,17 @@ extension MapViewController: NMFMapViewTouchDelegate {
     func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
         if !rootView.mapDetailCardView.isHidden {
             erasePreviousSelectedMarker()
+            
+            let cameraUpdate = NMFCameraUpdate(
+                scrollTo: NMGLatLng(lat: 37.55438, lng: 126.9377)
+            )
+            cameraUpdate.animation = .easeIn
+            
+            let zoomUpdate = NMFCameraUpdate(zoomTo: 13)
+            zoomUpdate.animation = .easeIn
+            
+            rootView.mapView.moveCamera(cameraUpdate)
+            rootView.mapView.moveCamera(zoomUpdate)
             
             rootView.mapDetailCardView.isHidden = true
         }
