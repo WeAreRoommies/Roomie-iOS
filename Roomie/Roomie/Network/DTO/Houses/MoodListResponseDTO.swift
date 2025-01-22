@@ -18,12 +18,12 @@ struct MoodHouse: Codable, Hashable {
     let genderPolicy, locationDescription: String
     let isPinned: Bool
     let contractTerm: Int
-    let mainImgURL: String
+    let mainImageURL: String
 
     enum CodingKeys: String, CodingKey {
         case houseID = "houseId"
-        case monthlyRent, deposit, occupancyTypes, location, genderPolicy, locationDescription, isPinned
-        case contractTerm = "contract_term"
-        case mainImgURL = "mainImgUrl"
+        case monthlyRent, deposit, occupancyTypes, location, genderPolicy
+        case locationDescription, isPinned, contractTerm
+        case mainImageURL = "mainImgUrl"
     }
 }

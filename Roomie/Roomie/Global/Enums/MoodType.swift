@@ -67,14 +67,14 @@ enum MoodType: CaseIterable {
         }
     }
     
-    var moodListData: [MoodListHouse] {
-        switch self {
-        case .calm:
-            return MoodListHouse.mockCalmListRoomData()
-        case .lively:
-            return MoodListHouse.mockLivelyListRoomData()
-        case .neat:
-            return MoodListHouse.mockNeatListRoomData()
-        }
-    }
+//    var moodListData: [MoodHouse] {
+//        switch self {
+//        case .calm:
+//            return MoodHouse.mockCalmListRoomData()
+//        case .lively:
+//            return MoodHouse.mockLivelyListRoomData()
+//        case .neat:
+//            return MoodHouse.mockNeatListRoomData()
+//        }
+//    }
 }
