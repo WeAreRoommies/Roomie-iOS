@@ -64,6 +64,7 @@ final class HomeView: BaseView {
         greetingLabel.do {
             $0.setText("루미에 어서오세요!" ,style: .heading2, color: .grayscale12)
         }
+        
         subGreetingLabel.do {
             $0.setText("루미가 루미님의 완벽한 집을\n찾아드릴게요" ,style: .body4, color: .grayscale7)
             $0.numberOfLines = 2
@@ -230,7 +231,7 @@ final class HomeView: BaseView {
         houseListCollectionView.snp.makeConstraints{
             $0.top.equalTo(recentlyLabel.snp.bottom).offset(12)
             $0.horizontalEdges.equalToSuperview().inset(16)
-            $0.height.equalTo(0)
+            $0.height.equalTo(226)
         }
         
         emptyView.snp.makeConstraints{

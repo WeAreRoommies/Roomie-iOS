@@ -31,10 +31,7 @@ final class HomeViewController: BaseViewController {
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
-    
-    private var recentlyRooms: [RecentlyHouse] = RecentlyHouse.mockHomeData()
-    private var userInfo: UserInfo = UserInfo.mockUserData()
-    
+
     // MARK: - Initializer
     
     init(viewModel: HomeViewModel) {
@@ -57,13 +54,11 @@ final class HomeViewController: BaseViewController {
         
         bindViewModel()
         setRegister()
-        updateEmtpyView()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        updateEmtpyView()
         rootView.houseListCollectionView.layoutIfNeeded()
         rootView.gradientView.setGradient(for: .home)
     }
@@ -151,6 +146,7 @@ private extension HomeViewController {
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
         
         output.userInfo
+            .receive(on: RunLoop.main)
             .sink { [weak self] data in
                 guard let self else { return }
                 self.rootView.nameLabel.text = data.name
@@ -159,11 +155,20 @@ private extension HomeViewController {
             .store(in: cancelBag)
         
         output.houseList
+            .receive(on: RunLoop.main)
             .sink { [weak self] data in
                 guard let self else { return }
                 if !data.isEmpty {
                     self.updateSnapshot(with: data)
                 }
+            }
+            .store(in: cancelBag)
+        
+        output.houseCount
+            .receive(on: RunLoop.main)
+            .sink { [weak self] data in guard let self else { return }
+                self.updateCollectionViewHeight(count: data)
+                self.updateEmtpyView(isEmpty: data == 0)
             }
             .store(in: cancelBag)
     }
@@ -187,30 +192,19 @@ private extension HomeViewController {
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
-    func updateCollectionViewHeight() -> CGFloat{
-        let numberOfItems = recentlyRooms.count
-        let cellsHeight = CGFloat(numberOfItems) * cellHeight
-        let totalSpacing = CGFloat(numberOfItems - 1) * contentInterSpacing
+    func updateCollectionViewHeight(count: Int) {
+        let cellsHeight = CGFloat(count) * cellHeight
+        let totalSpacing = CGFloat(count - 1) * contentInterSpacing
         let totalHeight = cellsHeight + totalSpacing
-
-        return totalHeight
+        
+        rootView.houseListCollectionView.snp.updateConstraints{
+            $0.height.equalTo(max(totalHeight, 0))
+        }
     }
     
-    func updateEmtpyView() {
-        let isEmpty = recentlyRooms.isEmpty
+    func updateEmtpyView(isEmpty: Bool) {
         rootView.emptyView.isHidden = !isEmpty
         rootView.houseListCollectionView.isHidden = isEmpty
-        
-        if !isEmpty {
-            let totalHeight = updateCollectionViewHeight()
-            rootView.houseListCollectionView.snp.updateConstraints {
-                $0.height.equalTo(max(totalHeight, 0))
-            }
-        } else {
-            rootView.houseListCollectionView.snp.updateConstraints {
-                $0.height.equalTo(226)
-            }
-        }
     }
     
     func setHomeNavigationBar(locaton location:String) {
@@ -257,7 +251,9 @@ private extension HomeViewController {
     
     @objc
     func wishLishButtonDidTap() {
-        let wishListViewController = WishListViewController(viewModel: WishListViewModel())
+        let wishListViewController = WishListViewController(
+            viewModel: WishListViewModel(service: HousesService())
+        )
         self.navigationController?.pushViewController(wishListViewController, animated: true)
     }
 }

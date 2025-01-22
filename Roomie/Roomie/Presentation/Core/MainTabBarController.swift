@@ -8,20 +8,21 @@
 import UIKit
 
 import Then
+import Moya
 
 final class MainTabBarController: UITabBarController {
     
     // MARK: - Property
     
     let homeViewController: HomeViewController = HomeViewController(
-        viewModel: HomeViewModel()
+        viewModel: HomeViewModel(service: UserService())
     ).then {
         $0.tabBarItem.title = "홈"
         $0.tabBarItem.image = .icnHomeLine24
     }
     
     let mapViewController: MapViewController = MapViewController(
-        viewModel: MapViewModel()
+        viewModel: MapViewModel(service: MapsService(), builder: MapRequestDTO.Builder.shared)
     ).then {
         $0.tabBarItem.title = "지도"
         $0.tabBarItem.image = .icnMapLine24

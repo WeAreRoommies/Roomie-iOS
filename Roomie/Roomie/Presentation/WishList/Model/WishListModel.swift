@@ -11,7 +11,7 @@ struct WishListHouse: Hashable {
     let houseID: Int
     let monthlyRent: String
     let deposit: String
-    let occupancyType: String
+    let occupancyTypes: String
     let location: String
     let genderPolicy: String
     let locationDescription: String
@@ -28,7 +28,7 @@ extension WishListHouse {
                 houseID: 1,
                 monthlyRent: "30~50",
                 deposit: "200~300",
-                occupancyType: "1,2인실",
+                occupancyTypes: "1,2인실",
                 location: "서대문구 연희동",
                 genderPolicy: "여성전용",
                 locationDescription: "자이아파트",
@@ -41,7 +41,7 @@ extension WishListHouse {
                 houseID: 2,
                 monthlyRent: "30~50",
                 deposit: "200~300",
-                occupancyType: "1,2,3인실",
+                occupancyTypes: "1,2,3인실",
                 location: "서대문구 대현동",
                 genderPolicy: "성별무관",
                 locationDescription: "자이아파트",

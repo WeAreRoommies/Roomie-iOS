@@ -54,7 +54,7 @@ extension BaseViewController {
         navigationController?.navigationBar.scrollEdgeAppearance = barAppearance
         
         let backButton = UIBarButtonItem(
-            image: .btnBack,
+            image: .icnArrowLeftLine24,
             style: .plain,
             target: self,
             action: #selector(backButtonDidTap)
