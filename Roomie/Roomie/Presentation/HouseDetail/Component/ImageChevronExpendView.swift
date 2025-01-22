@@ -5,8 +5,6 @@
 //  Created by 김승원 on 1/22/25.
 //
 
-import Foundation
-
 import UIKit
 import Combine
 
@@ -20,7 +18,7 @@ final class ImageChevronExpendView: UIView {
     
     private var isExpended: Bool = false {
         didSet {
-            expendView()
+            updateView()
         }
     }
     
@@ -199,21 +197,23 @@ final class ImageChevronExpendView: UIView {
     private func setAction() {
         expendButton.tapPublisher
             .sink { [weak self] in
-                guard let self else { return }
+                guard let self = self else { return }
                 self.isExpended.toggle()
             }
             .store(in: cancelBag)
     }
 }
 
+// MARK: - Functions
+
 private extension ImageChevronExpendView {
-    func expendView() {
-        oddStackView.isHidden.toggle()
-        evenStackView.isHidden.toggle()
-        roomImageView.isHidden.toggle()
+    private func updateView() {
+        oddStackView.isHidden = !isExpended
+        evenStackView.isHidden = !isExpended
+        roomImageView.isHidden = !isExpended
         
         self.snp.updateConstraints {
-            $0.height.equalTo(Screen.height(self.isExpended ? expendedHeight : unExpendedHeight))
+            $0.height.equalTo(Screen.height(isExpended ? expendedHeight : unExpendedHeight))
         }
         
         chevronIcon.image = isExpended ? .icnArrowUpLine24 : .icnArrowDownLine24
@@ -221,11 +221,10 @@ private extension ImageChevronExpendView {
         self.layoutIfNeeded()
     }
     
-    func setFacilityView(with title: String = "", status: Bool = true) {
+    private func setFacilityView(with title: String = "", status: Bool = true) {
         titleLabel.do {
             $0.setText(title, style: .body2, color: status ? .grayscale10 : .grayscale6)
         }
-        
         statusBackView.isHidden = status
         statusLabel.isHidden = status
     }
@@ -247,5 +246,9 @@ extension ImageChevronExpendView {
                 oddStackView.addArrangedSubview(CheckIconLabel(text: data[index]))
             }
         }
+    }
+    
+    func setExpended(_ isExpended: Bool) {
+        self.isExpended = isExpended
     }
 }
