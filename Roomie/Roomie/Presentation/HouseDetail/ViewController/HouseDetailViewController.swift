@@ -28,6 +28,7 @@ final class HouseDetailViewController: BaseViewController {
             case .clear:
                 setClearNavigationBar()
             case .filled:
+                navigationItem.title = nil
                 setFilledNavigationBar()
             case .filledWithTitle:
                 navigationItem.title = "43~50/90~100"// TODO: DataBind
@@ -310,7 +311,6 @@ extension HouseDetailViewController: UIScrollViewDelegate {
             if offsetY > navigationTitleThreshold {
                 navigationBarStatus = .filledWithTitle
             } else {
-                navigationItem.title = nil
                 navigationBarStatus = .filled
             }
         } else {
