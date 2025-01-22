@@ -25,11 +25,11 @@ final class HouseDetailView: BaseView {
     private let nameBackView = UIView()
     let nameLabel = UILabel()
     let titleLabel = UILabel()
-    let locationIconLabel = HouseInfoIconLabel("서대문구 연희동", houseInfoType: .location)
-    let occupancyTypesIconLabel = HouseInfoIconLabel("1,2인실", houseInfoType: .occupancyTypes)
-    let occupancyStatusIconLabel = HouseInfoIconLabel("2/4인", houseInfoType: .occupancyStatus)
-    let genderPolicyIconLabel = HouseInfoIconLabel("여성전용", houseInfoType: .genderPolicy)
-    let contractTermIconLabel = HouseInfoIconLabel("3개월 이상 계약", houseInfoType: .contractTerm)
+    let locationIconLabel = HouseInfoIconLabel(houseInfoType: .location)
+    let occupancyTypesIconLabel = HouseInfoIconLabel(houseInfoType: .occupancyTypes)
+    let occupancyStatusIconLabel = HouseInfoIconLabel(houseInfoType: .occupancyStatus)
+    let genderPolicyIconLabel = HouseInfoIconLabel(houseInfoType: .genderPolicy)
+    let contractTermIconLabel = HouseInfoIconLabel(houseInfoType: .contractTerm)
     private let firstIconLabelStackView = UIStackView()
     private let secondIconLabelStackView = UIStackView()
     let lookInsidePhotoButton = HouseInnerPhotoButton()
@@ -39,17 +39,10 @@ final class HouseDetailView: BaseView {
     private let roomMoodTitleLabel = UILabel()
     private let roomMoodBackView = UIView()
     let roomMoodLabel = UILabel()
-    let firstMoodTag = HouseMoodTagView(roomMood: "차분한")
-    let secondMoodTag = HouseMoodTagView(roomMood: "조용한")
-    let thirdMoodTag = HouseMoodTagView(roomMood: "재미있는")
-    let fourthMoodTag = HouseMoodTagView(roomMood: "Chill한")
+    private let moodTagsStackView = UIStackView()
     private let roomMoodSeparatorView = UIView()
     private let groundRuleTitleLabel = UILabel()
     private let groundRuleStackView = UIStackView()
-    let groundRuleLabel1 = CheckIconLabel(text: "아침마다 뉴진스 디토를 들으며 요가를 해요, 그리고 두 줄이면 이렇게 됩니다.")
-    let groundRuleLabel2 = CheckIconLabel(text: "chill 코드는 굉장히 많지만, 신경도 안 쓰는 chill guy일 때")
-    let groundRuleLabel3 = CheckIconLabel(text: "chill 코드는 굉장히 많지만, 신경도 안 쓰는 chill guy일 때")
-    let groundRuleLabel4 = CheckIconLabel(text: "chill 코드는 굉장히 많지만, 신경도 안 쓰는 chill guy일 때")
     
     // roomStatus Section
     private let roomStatusTitleLabel = UILabel()
@@ -81,6 +74,7 @@ final class HouseDetailView: BaseView {
         
         photoImageView.do {
             $0.backgroundColor = .grayscale4
+            $0.contentMode = .scaleAspectFill
         }
         
         roundedTopView.do {
@@ -97,11 +91,11 @@ final class HouseDetailView: BaseView {
         }
         
         nameLabel.do {
-            $0.setText("해피쉐어 12호점", style: .body6, color: .primaryPurple)
+            $0.setText(style: .body6, color: .primaryPurple)
         }
         
         titleLabel.do {
-            $0.setText("월세 43~50/보증금 90~100", style: .heading2, color: .grayscale12)
+            $0.setText(style: .heading2, color: .grayscale12)
         }
         
         firstIconLabelStackView.do {
@@ -134,7 +128,14 @@ final class HouseDetailView: BaseView {
         }
         
         roomMoodLabel.do {
-            $0.setText("I got no time to lose 내 길었던 하루 난 보고 싶어 Ra-ta-ta-ta 울린 심장 (Ra-ta-ta-ta) I got nothing to lose 널 좋아한다고", style: .body1, color: .grayscale12)
+            $0.setText(style: .body1, color: .grayscale12)
+        }
+        
+        moodTagsStackView.do {
+            $0.axis = .horizontal
+            $0.spacing = 8
+            $0.alignment = .fill
+            $0.distribution = .equalSpacing
         }
         
         roomMoodSeparatorView.do {
@@ -222,21 +223,10 @@ final class HouseDetailView: BaseView {
         
         roomMoodBackView.addSubviews(
             roomMoodLabel,
-            firstMoodTag,
-            secondMoodTag,
-            thirdMoodTag,
-            fourthMoodTag,
+            moodTagsStackView,
             roomMoodSeparatorView,
             groundRuleTitleLabel,
             groundRuleStackView
-        )
-        
-        // TODO: DataBind & 순서대로 addArrangedSubviews
-        groundRuleStackView.addArrangedSubviews(
-            groundRuleLabel1,
-            groundRuleLabel2,
-            groundRuleLabel3,
-            groundRuleLabel4
         )
         
         facilityStackView.addArrangedSubviews(safetyLivingFacilityView, kitchenFacilityView)
@@ -330,28 +320,14 @@ final class HouseDetailView: BaseView {
             $0.horizontalEdges.equalToSuperview().inset(16)
         }
         
-        firstMoodTag.snp.makeConstraints {
+        moodTagsStackView.snp.makeConstraints {
             $0.top.equalTo(roomMoodLabel.snp.bottom).offset(16)
             $0.leading.equalToSuperview().inset(16)
-        }
-        
-        secondMoodTag.snp.makeConstraints {
-            $0.top.equalTo(roomMoodLabel.snp.bottom).offset(16)
-            $0.leading.equalTo(firstMoodTag.snp.trailing).offset(8)
-        }
-        
-        thirdMoodTag.snp.makeConstraints {
-            $0.top.equalTo(roomMoodLabel.snp.bottom).offset(16)
-            $0.leading.equalTo(secondMoodTag.snp.trailing).offset(8)
-        }
-        
-        fourthMoodTag.snp.makeConstraints {
-            $0.top.equalTo(roomMoodLabel.snp.bottom).offset(16)
-            $0.leading.equalTo(thirdMoodTag.snp.trailing).offset(8)
+            $0.height.equalTo(Screen.height(28))
         }
         
         roomMoodSeparatorView.snp.makeConstraints {
-            $0.top.equalTo(firstMoodTag.snp.bottom).offset(12)
+            $0.top.equalTo(moodTagsStackView.snp.bottom).offset(12)
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.height.equalTo(1)
         }
@@ -451,6 +427,7 @@ extension HouseDetailView {
         }
     }
     
+    /// roommateTableView의 높이를 동적으로 계산하는 함수입니다.
     func updateRoommateTableViewHeight(
         _ numberOfItems: Int,
         height roommateCellHeight: CGFloat
@@ -460,6 +437,25 @@ extension HouseDetailView {
         
         roommateTableView.snp.updateConstraints {
             $0.height.equalTo(tableViewHeight)
+        }
+    }
+    
+    /// moodTags를 바인딩하는 함수입니다.
+    func bindMoodTags(_ moodTags: [String]) {
+        moodTagsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        for index in 0..<moodTags.count {
+            let moodTagLabel = HouseMoodTagView(roomMood: moodTags[index])
+            moodTagsStackView.addArrangedSubview(moodTagLabel)
+            
+        }
+    }
+    
+    /// groundRule을 바인딩하는 함수입니다.
+    func bindGroundRule(_ groundRule: [String]) {
+        groundRuleStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        for index in 0..<groundRule.count {
+            let groundRuleLabel = CheckIconLabel(text: groundRule[index])
+            groundRuleStackView.addArrangedSubview(groundRuleLabel)
         }
     }
 }

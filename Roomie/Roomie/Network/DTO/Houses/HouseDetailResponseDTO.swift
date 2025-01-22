@@ -15,7 +15,7 @@ struct HouseDetailResponseDTO: ResponseModelType {
 
 struct HouseInfo: Codable {
     let houseID: Int
-    let name, mainImgURL, monthlyRent, deposit: String
+    let name, mainImageURL, monthlyRent, deposit: String
     let location, occupancyTypes, occupancyStatus, genderPolicy: String
     let contractTerm: Int
     let moodTags: [String]
@@ -28,7 +28,7 @@ struct HouseInfo: Codable {
     enum CodingKeys: String, CodingKey {
         case houseID = "houseId"
         case name
-        case mainImgURL = "mainImgUrl"
+        case mainImageURL = "mainImgUrl"
         case monthlyRent, deposit, location, occupancyTypes, occupancyStatus, genderPolicy, contractTerm
         case moodTags, roomMood, groundRule, maintenanceCost, isPinned, safetyLivingFacility, kitchenFacility
     }

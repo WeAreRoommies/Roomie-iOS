@@ -24,8 +24,8 @@ final class RoommateTableViewCell: BaseTableViewCell {
     private let mbtiBackView = UIView()
     private let mbtiLabel = UILabel()
     
-    private let roomNameBackView = UIView()
-    private let roomNameLabel = UILabel()
+    private let nameBackView = UIView()
+    private let nameLabel = UILabel()
     
     private let sleepTimeTitleLabel = UILabel()
     private let sleepTimeLabel = UILabel()
@@ -52,11 +52,11 @@ final class RoommateTableViewCell: BaseTableViewCell {
         }
         
         ageLabel.do {
-            $0.setText("20대 초반", style: .body2, color: .grayscale12)
+            $0.setText(style: .body2, color: .grayscale12)
         }
         
         jobLabel.do {
-            $0.setText("대학생", style: .body2, color: .grayscale12)
+            $0.setText(style: .body2, color: .grayscale12)
         }
         
         mbtiBackView.do {
@@ -66,17 +66,17 @@ final class RoommateTableViewCell: BaseTableViewCell {
         }
         
         mbtiLabel.do {
-            $0.setText("INFP", style: .caption1, color: .grayscale8)
+            $0.setText(style: .caption1, color: .grayscale8)
         }
         
-        roomNameBackView.do {
+        nameBackView.do {
             $0.backgroundColor = .grayscale4
             $0.layer.cornerRadius = 2
             $0.clipsToBounds = true
         }
         
-        roomNameLabel.do {
-            $0.setText("1A 싱글침대", style: .caption1, color: .grayscale8)
+        nameLabel.do {
+            $0.setText(style: .caption1, color: .grayscale8)
         }
         
         sleepTimeTitleLabel.do {
@@ -84,7 +84,7 @@ final class RoommateTableViewCell: BaseTableViewCell {
         }
         
         sleepTimeLabel.do {
-            $0.setText("21:00 - 21:00", style: .body4, color: .grayscale10)
+            $0.setText(style: .body4, color: .grayscale10)
         }
         
         activityTimeTitleLabel.do {
@@ -92,7 +92,7 @@ final class RoommateTableViewCell: BaseTableViewCell {
         }
         
         activityTimeLabel.do {
-            $0.setText("21:00 - 21:00", style: .body4, color: .grayscale10)
+            $0.setText(style: .body4, color: .grayscale10)
         }
     }
     
@@ -104,7 +104,7 @@ final class RoommateTableViewCell: BaseTableViewCell {
             ageLabel,
             jobLabel,
             mbtiBackView,
-            roomNameBackView,
+            nameBackView,
             sleepTimeTitleLabel,
             sleepTimeLabel,
             activityTimeTitleLabel,
@@ -113,7 +113,7 @@ final class RoommateTableViewCell: BaseTableViewCell {
         
         mbtiBackView.addSubview(mbtiLabel)
         
-        roomNameBackView.addSubview(roomNameLabel)
+        nameBackView.addSubview(nameLabel)
     }
     
     override func setLayout() {
@@ -149,12 +149,12 @@ final class RoommateTableViewCell: BaseTableViewCell {
             $0.horizontalEdges.equalToSuperview().inset(4)
         }
         
-        roomNameBackView.snp.makeConstraints {
+        nameBackView.snp.makeConstraints {
             $0.leading.equalTo(mbtiBackView.snp.trailing).offset(4)
             $0.centerY.equalTo(jobLabel.snp.centerY)
         }
         
-        roomNameLabel.snp.makeConstraints {
+        nameLabel.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview().inset(2)
             $0.horizontalEdges.equalToSuperview().inset(4)
         }
@@ -178,5 +178,18 @@ final class RoommateTableViewCell: BaseTableViewCell {
             $0.bottom.equalToSuperview().inset(16)
             $0.leading.equalTo(activityTimeTitleLabel.snp.trailing).offset(4)
         }
+    }
+}
+
+// MARK: - Functions
+
+extension RoommateTableViewCell {
+    func dataBind(_ roommate: RoommateInfo) {
+        ageLabel.updateText(roommate.age)
+        jobLabel.updateText(roommate.job)
+        mbtiLabel.updateText(roommate.mbti)
+        nameLabel.updateText(roommate.name)
+        sleepTimeLabel.updateText(roommate.sleepTime)
+        activityTimeLabel.updateText(roommate.activityTime)
     }
 }

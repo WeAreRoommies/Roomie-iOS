@@ -75,7 +75,7 @@ private extension RoomStatusView {
         }
         
         statusLabel.do {
-            $0.updateText(isAvailable ? "입주가능" : "입주불가")
+            $0.updateText(isAvailable ? "입주가능" : "입주완료")
             $0.textColor = isAvailable ? .primaryPurple : .grayscale9
         }
     }

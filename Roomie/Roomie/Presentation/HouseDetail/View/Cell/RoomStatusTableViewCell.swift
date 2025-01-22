@@ -65,7 +65,7 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
         }
         
         nameLabel.do {
-            $0.setText("1A 벙글침대", style: .heading5, color: .grayscale11)
+            $0.setText(style: .heading5, color: .grayscale11)
         }
         
         roomTypeTitleLabel.do {
@@ -73,7 +73,7 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
         }
         
         roomTypeLabel.do {
-            $0.setText("2인실 · 여성", style: .body1, color: .grayscale11)
+            $0.setText(style: .body1, color: .grayscale11)
         }
         
         depositTitleLabel.do {
@@ -81,7 +81,7 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
         }
         
         depositLabel.do {
-            $0.setText("5,000,000원", style: .body1, color: .grayscale11)
+            $0.setText(style: .body1, color: .grayscale11)
         }
         
         prepaidUtilitiesTitleLabel.do {
@@ -89,7 +89,7 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
         }
         
         prepaidUtilitiesLabel.do {
-            $0.setText("10,000원", style: .body1, color: .grayscale11)
+            $0.setText(style: .body1, color: .grayscale11)
         }
         
         monthlyRentTitleLabel.do {
@@ -97,7 +97,7 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
         }
         
         monthlyRentLabel.do {
-            $0.setText("500,000원", style: .body1, color: .grayscale11)
+            $0.setText(style: .body1, color: .grayscale11)
         }
         
         contractPeriodTitleLabel.do {
@@ -105,7 +105,7 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
         }
         
         contractPeriodLabel.do {
-            $0.setText("24-12-10", style: .body1, color: .grayscale11)
+            $0.setText(style: .body1, color: .grayscale11)
         }
         
         managementFeeTitleLabel.do {
@@ -113,7 +113,7 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
         }
         
         managementFeeLabel.do {
-            $0.setText("1/n", style: .body1, color: .grayscale11)
+            $0.setText(style: .body1, color: .grayscale11)
         }
     }
     
@@ -244,5 +244,20 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
             $0.trailing.equalToSuperview()
             $0.width.equalTo(Screen.width(78))
         }
+    }
+}
+
+// MARK: - Functions
+
+extension RoomStatusTableViewCell {
+    func dataBind(_ roomInfo: RoomInfo) {
+        statusView.isAvailable = roomInfo.status
+        nameLabel.updateText(roomInfo.name)
+        roomTypeLabel.updateText(roomInfo.roomType)
+        depositLabel.updateText(roomInfo.deposit)
+        prepaidUtilitiesLabel.updateText(roomInfo.prepaidUtilities)
+        monthlyRentLabel.updateText(roomInfo.monthlyRent)
+        contractPeriodLabel.updateText(roomInfo.contractPeriod)
+        managementFeeLabel.updateText(roomInfo.managementFee)
     }
 }

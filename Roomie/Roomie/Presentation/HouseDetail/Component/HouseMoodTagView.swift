@@ -74,6 +74,6 @@ final class HouseMoodTagView: UIView {
 extension HouseMoodTagView {
     func setMoodTagView(with roomMood: String = "") {
         roomMoodHashTagLabel
-            .setText("#\(roomMood)", style: .body3, color: .primaryPurple)
+            .setText(roomMood, style: .body3, color: .primaryPurple)
     }
 }
