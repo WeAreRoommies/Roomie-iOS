@@ -22,6 +22,11 @@ final class HouseAllPhotoViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         rootView.fetchRooms(RoomDetail.mockData())
     }
     

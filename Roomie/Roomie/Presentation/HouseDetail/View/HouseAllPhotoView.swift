@@ -221,9 +221,9 @@ final class HouseAllPhotoView: BaseView {
 extension HouseAllPhotoView {
     func fetchRooms(_ rooms: [RoomDetail]) {
         for room in rooms {
-            let expendView = ImageChevronExpendView(title: room.name, status: room.status)
-            expendView.dataBind(room.facility)
-            roomStackView.addArrangedSubview(expendView)
+            let expandView = RoomFacilityExpandView(title: room.name, status: room.status)
+            expandView.dataBind(room.facility)
+            roomStackView.addArrangedSubview(expandView)
         }
     }
 }

@@ -13,12 +13,14 @@ final class HouseSinglePhotoViewController: BaseViewController {
     
     private let rootView = HouseSinglePhotoView()
     
+    private var expandedIndex: Int
+    
     // MARK: - Initializer
     
     init(index: Int) {
-        super.init(nibName: nil, bundle: nil)
+        expandedIndex = index
         
-        rootView.fetchRooms(RoomDetail.mockData(), with: index)
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -35,6 +37,12 @@ final class HouseSinglePhotoViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        rootView.fetchRooms(RoomDetail.mockData(), with: expandedIndex)
     }
     
     override func setView() {

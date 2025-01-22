@@ -67,18 +67,17 @@ final class HouseSinglePhotoView: BaseView {
 }
 
 extension HouseSinglePhotoView {
-    func fetchRooms(_ rooms: [RoomDetail], with expendIndex: Int) {
+    func fetchRooms(_ rooms: [RoomDetail], with expandIndex: Int) {
         for index in 0..<rooms.count {
-            let isexpended = (index == expendIndex)
-            print(isexpended)
+            let isexpanded = (index == expandIndex)
             
-            let expendView = ImageChevronExpendView(
+            let expandedView = RoomFacilityExpandView(
                 title: rooms[index].name,
                 status: rooms[index].status
             )
-            expendView.dataBind(rooms[index].facility)
-            expendView.setExpended(isexpended)
-            roomStackView.addArrangedSubview(expendView)
+            expandedView.dataBind(rooms[index].facility)
+            expandedView.setExpanded(isexpanded)
+            roomStackView.addArrangedSubview(expandedView)
         }
     }
 }

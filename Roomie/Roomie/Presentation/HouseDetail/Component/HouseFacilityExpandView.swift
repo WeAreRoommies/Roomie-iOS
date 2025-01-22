@@ -1,5 +1,5 @@
 //
-//  ChevronExpendView.swift
+//  HouseFacilityExpandView.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/20/25.
@@ -12,18 +12,18 @@ import CombineCocoa
 import SnapKit
 import Then
 
-final class ChevronExpendView: UIView {
+final class HouseFacilityExpandView: UIView {
     
     // MARK: - Property
     
-    private var isExpended: Bool = false {
+    private var isExpanded: Bool = false {
         didSet {
-            expendView()
+            expandView()
         }
     }
     
-    private var unExpendedHeight: CGFloat = 56
-    private var expendedHeight: CGFloat = 0
+    private var unExpandedHeight: CGFloat = 56
+    private var expandedHeight: CGFloat = 0
     
     private let cancelBag = CancelBag()
     
@@ -31,7 +31,7 @@ final class ChevronExpendView: UIView {
     
     private let titleLabel = UILabel()
     private let chevronIcon = UIImageView()
-    private let expendButton = UIButton()
+    private let expandButton = UIButton()
     
     private let evenStackView = UIStackView()
     private let oddStackView = UIStackView()
@@ -107,7 +107,7 @@ final class ChevronExpendView: UIView {
         addSubviews(
             titleLabel,
             chevronIcon,
-            expendButton,
+            expandButton,
             evenStackView,
             oddStackView
         )
@@ -129,45 +129,45 @@ final class ChevronExpendView: UIView {
             $0.size.equalTo(Screen.width(24))
         }
         
-        expendButton.snp.makeConstraints {
+        expandButton.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(Screen.height(56))
         }
         
         evenStackView.snp.makeConstraints {
-            $0.top.equalTo(expendButton.snp.bottom)
+            $0.top.equalTo(expandButton.snp.bottom)
             $0.leading.equalToSuperview().inset(8)
             $0.width.equalTo(Screen.width(155))
         }
         
         oddStackView.snp.makeConstraints {
-            $0.top.equalTo(expendButton.snp.bottom)
+            $0.top.equalTo(expandButton.snp.bottom)
             $0.trailing.equalToSuperview().inset(8)
             $0.width.equalTo(Screen.width(155))
         }
     }
     
     private func setAction() {
-        expendButton.tapPublisher
+        expandButton.tapPublisher
             .sink { [weak self] in
                 guard let self else { return }
-                self.isExpended.toggle()
+                self.isExpanded.toggle()
             }
             .store(in: cancelBag)
     }
 }
 
-private extension ChevronExpendView {
-    func expendView() {
+private extension HouseFacilityExpandView {
+    func expandView() {
         oddStackView.isHidden.toggle()
         evenStackView.isHidden.toggle()
         
         self.snp.updateConstraints {
-            $0.height.equalTo(Screen.height(self.isExpended ? expendedHeight : unExpendedHeight))
+            $0.height.equalTo(Screen.height(self.isExpanded ? expandedHeight : unExpandedHeight))
         }
         
-        chevronIcon.image = isExpended ? .icnArrowUpLine24 : .icnArrowDownLine24
+        chevronIcon.image = isExpanded ? .icnArrowUpLine24 : .icnArrowDownLine24
         
         self.layoutIfNeeded()
     }
@@ -179,14 +179,14 @@ private extension ChevronExpendView {
     }
 }
 
-extension ChevronExpendView {
+extension HouseFacilityExpandView {
     func dataBind(_ data: [String]) {
         let evenDataCount = (data.count + 1) / 2
         
         let itemHeight: CGFloat = 20
         let spacing: CGFloat = 8
         let stackViewHeight = CGFloat(evenDataCount) * itemHeight + CGFloat(evenDataCount - 1) * spacing
-        self.expendedHeight = 56 + stackViewHeight + 12
+        self.expandedHeight = 56 + stackViewHeight + 12
         
         for index in 0..<data.count {
             if index % 2 == 0 {

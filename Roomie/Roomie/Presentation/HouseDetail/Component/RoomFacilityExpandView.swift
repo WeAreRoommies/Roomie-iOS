@@ -1,5 +1,5 @@
 //
-//  ImageChevronExpendView.swift
+//  RoomFacilityExpandView.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/22/25.
@@ -12,18 +12,18 @@ import CombineCocoa
 import SnapKit
 import Then
 
-final class ImageChevronExpendView: UIView {
+final class RoomFacilityExpandView: UIView {
     
     // MARK: - Property
     
-    private var isExpended: Bool = false {
+    private var isExpanded: Bool = false {
         didSet {
             updateView()
         }
     }
     
-    private var unExpendedHeight: CGFloat = 56
-    private var expendedHeight: CGFloat = 0
+    private var unExpandedHeight: CGFloat = 56
+    private var expandedHeight: CGFloat = 0
     
     private let cancelBag = CancelBag()
     
@@ -36,7 +36,7 @@ final class ImageChevronExpendView: UIView {
     
     private let chevronIcon = UIImageView()
     
-    private let expendButton = UIButton()
+    private let expandButton = UIButton()
     
     private let roomImageView = UIImageView()
     
@@ -133,7 +133,7 @@ final class ImageChevronExpendView: UIView {
             titleLabel,
             statusBackView,
             chevronIcon,
-            expendButton,
+            expandButton,
             roomImageView,
             evenStackView,
             oddStackView
@@ -169,14 +169,14 @@ final class ImageChevronExpendView: UIView {
             $0.size.equalTo(Screen.width(24))
         }
         
-        expendButton.snp.makeConstraints {
+        expandButton.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(Screen.height(56))
         }
         
         roomImageView.snp.makeConstraints {
-            $0.top.equalTo(expendButton.snp.bottom)
+            $0.top.equalTo(expandButton.snp.bottom)
             $0.horizontalEdges.equalToSuperview().inset(8)
             $0.height.equalTo(Screen.height(192))
         }
@@ -195,10 +195,10 @@ final class ImageChevronExpendView: UIView {
     }
     
     private func setAction() {
-        expendButton.tapPublisher
+        expandButton.tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                self.isExpended.toggle()
+                self.isExpanded.toggle()
             }
             .store(in: cancelBag)
     }
@@ -206,17 +206,17 @@ final class ImageChevronExpendView: UIView {
 
 // MARK: - Functions
 
-private extension ImageChevronExpendView {
+private extension RoomFacilityExpandView {
     private func updateView() {
-        oddStackView.isHidden = !isExpended
-        evenStackView.isHidden = !isExpended
-        roomImageView.isHidden = !isExpended
+        oddStackView.isHidden = !isExpanded
+        evenStackView.isHidden = !isExpanded
+        roomImageView.isHidden = !isExpanded
         
         self.snp.updateConstraints {
-            $0.height.equalTo(Screen.height(isExpended ? expendedHeight : unExpendedHeight))
+            $0.height.equalTo(Screen.height(isExpanded ? expandedHeight : unExpandedHeight))
         }
         
-        chevronIcon.image = isExpended ? .icnArrowUpLine24 : .icnArrowDownLine24
+        chevronIcon.image = isExpanded ? .icnArrowUpLine24 : .icnArrowDownLine24
         
         self.layoutIfNeeded()
     }
@@ -230,14 +230,14 @@ private extension ImageChevronExpendView {
     }
 }
 
-extension ImageChevronExpendView {
+extension RoomFacilityExpandView {
     func dataBind(_ data: [String]) {
         let evenDataCount = (data.count + 1) / 2
         
         let itemHeight: CGFloat = 20
         let spacing: CGFloat = 8
         let stackViewHeight = CGFloat(evenDataCount) * itemHeight + CGFloat(evenDataCount - 1) * spacing
-        self.expendedHeight = 192 + 12 + 56 + stackViewHeight + 12
+        self.expandedHeight = 192 + 12 + 56 + stackViewHeight + 12
         
         for index in 0..<data.count {
             if index % 2 == 0 {
@@ -248,7 +248,7 @@ extension ImageChevronExpendView {
         }
     }
     
-    func setExpended(_ isExpended: Bool) {
-        self.isExpended = isExpended
+    func setExpanded(_ isExpanded: Bool) {
+        self.isExpanded = isExpanded
     }
 }
