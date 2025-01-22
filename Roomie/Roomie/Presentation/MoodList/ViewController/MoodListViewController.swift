@@ -68,7 +68,6 @@ final class MoodListViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        bindViewModel()
         moodListTypeSubject.send(moodType.title)
     }
     
