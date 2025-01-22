@@ -28,7 +28,9 @@ final class MainTabBarController: UITabBarController {
         $0.tabBarItem.image = .icnMapLine24
     }
     
-    let myPageViewController: MyPageViewController = MyPageViewController().then {
+    let myPageViewController: MyPageViewController = MyPageViewController(
+        viewModel: MyPageViewModel(service: UserService())
+    ).then {
         $0.tabBarItem.title = "마이페이지"
         $0.tabBarItem.image = .icnUserLine24
     }

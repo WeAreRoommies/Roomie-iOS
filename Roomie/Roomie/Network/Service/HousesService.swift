@@ -63,4 +63,36 @@ final class MockHouseService: WishListServiceProtocol {
         let mockData: WishListResponseDTO = WishListResponseDTO(pinnedHouses: [])
         return BaseResponseBody(code: 200, message: "", data: mockData)
     }
+    
+    func fetchMoodListData(moodTag: String) async throws -> BaseResponseBody<MoodListResponseDTO>? {
+        let mockData: MoodListResponseDTO = MoodListResponseDTO(
+            moodTag: "#차분한",
+            houses: [
+            MoodHouse(
+                houseID: 1,
+                monthlyRent: "30~50",
+                deposit: "200~300",
+                occupancyTypes: "1,2인실",
+                location: "서대문구 연희동",
+                genderPolicy: "여성전용",
+                locationDescription: "자이아파트",
+                isPinned: false,
+                contractTerm: 6,
+                mainImageURL: ""
+            ),
+            MoodHouse(
+                houseID: 2,
+                monthlyRent: "30~50",
+                deposit: "200~300",
+                occupancyTypes: "1,2,3인실",
+                location: "서대문구 대현동",
+                genderPolicy: "성별무관",
+                locationDescription: "자이아파트",
+                isPinned: true,
+                contractTerm: 6,
+                mainImageURL: ""
+            )
+        ])
+        return BaseResponseBody(code: 200, message: "", data: mockData)
+    }
 }

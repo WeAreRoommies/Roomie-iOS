@@ -26,7 +26,7 @@ extension HomeViewModel: ViewModelType {
     
     struct Output {
         let userInfo: AnyPublisher<UserInfo, Never>
-        let houseList: AnyPublisher<[RecentlyHouse], Never>
+        let houseList: AnyPublisher<[HomeHouse], Never>
         let houseCount: AnyPublisher<Int, Never>
     }
     
@@ -40,11 +40,11 @@ extension HomeViewModel: ViewModelType {
         let houseListData = homeDataSubject
             .map { house in
                 house.recentlyViewedHouses.map { data in
-                    RecentlyHouse(
+                    HomeHouse(
                         houseID: data.houseID,
                         monthlyRent: data.monthlyRent,
                         deposit: data.deposit,
-                        occupancyType: data.occupancyTypes,
+                        occupancyTypes: data.occupancyTypes,
                         location: data.location,
                         genderPolicy: data.genderPolicy,
                         locationDescription: data.locationDescription,

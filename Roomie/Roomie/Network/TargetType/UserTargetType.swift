@@ -11,7 +11,7 @@ import Moya
 
 enum UserTargetType {
     case fetchUserHomeData
-    case fetchMypageData
+    case fetchMyPageData
 }
 
 extension UserTargetType: TargetType {
@@ -23,7 +23,7 @@ extension UserTargetType: TargetType {
         switch self {
         case .fetchUserHomeData:
             return "/v1/users/home"
-        case .fetchMypageData:
+        case .fetchMyPageData:
             return "/v1/users/mypage"
         }
     }

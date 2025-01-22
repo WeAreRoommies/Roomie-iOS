@@ -31,8 +31,6 @@ final class MoodListViewController: BaseViewController {
     final let contentInterSpacing: CGFloat = 4
     final let contentInset = UIEdgeInsets(top: 12, left: 16, bottom: 24, right: 16)
     
-    private var moodListRooms: [MoodListHouse] = []
-    
     private let moodType: MoodType
     
     private var moodNavibarTitle: String
@@ -42,7 +40,7 @@ final class MoodListViewController: BaseViewController {
     init(moodType: MoodType) {
         self.moodType = moodType
         self.moodNavibarTitle = moodType.title
-        self.viewModel = MoodListViewModel(moodType: moodType)
+        self.viewModel = MoodListViewModel(service: HousesService())
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -61,6 +59,7 @@ final class MoodListViewController: BaseViewController {
         
         setDelegate()
         setRegister()
+        bindViewModel()
     }
     
     override func viewDidLayoutSubviews() {
@@ -69,7 +68,6 @@ final class MoodListViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        bindViewModel()
         moodListTypeSubject.send(moodType.title)
     }
     
@@ -114,17 +112,17 @@ private extension MoodListViewController {
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
         
         output.moodList
+            .receive(on: RunLoop.main)
             .sink { [weak self] data in guard let self else { return }
                 if !data.isEmpty {
-                    self.moodListRooms = data
                     self.updateSnapshot(with: data)
                 }
             }
             .store(in: cancelBag)
     }
     
-    func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, MoodListHouse> {
-        let dataSource = UICollectionViewDiffableDataSource<Int, MoodListHouse> (
+    func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, MoodHouse> {
+        let dataSource = UICollectionViewDiffableDataSource<Int, MoodHouse> (
             collectionView: rootView.moodListCollectionView, cellProvider: {
                 collectionView, indexPath, model in guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: HouseListCollectionViewCell.reuseIdentifier,
@@ -162,8 +160,8 @@ private extension MoodListViewController {
         return dataSource
     }
     
-    func updateSnapshot(with data: [MoodListHouse]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Int, MoodListHouse>()
+    func updateSnapshot(with data: [MoodHouse]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, MoodHouse>()
         snapshot.appendSections([0])
         snapshot.appendItems(data, toSection: 0)
         dataSource.apply(snapshot, animatingDifferences: true)

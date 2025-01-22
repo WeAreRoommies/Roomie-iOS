@@ -37,7 +37,11 @@ class BaseViewController: UIViewController {
 extension BaseViewController {
     
     /// 네비게이션 바 커스텀
-    func setNavigationBar(with string: String, isBorderHidden: Bool = false) {
+    func setNavigationBar(
+        with string: String,
+        isBorderHidden: Bool = false,
+        isBackButtonHidden: Bool = false
+    ) {
         title = string
         navigationItem.leftBarButtonItem = nil
         
@@ -62,7 +66,9 @@ extension BaseViewController {
             $0.tintColor = .grayscale10
         }
         
-        navigationItem.leftBarButtonItem = backButton
+        if !isBackButtonHidden {
+            navigationItem.leftBarButtonItem = backButton
+        }
         
         if !isBorderHidden {
             let identifier = "border"

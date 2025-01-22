@@ -26,7 +26,7 @@ extension WishListViewModel: ViewModelType {
     }
     
     struct Output {
-        let wishList: AnyPublisher<[WishListHouse], Never>
+        let wishList: AnyPublisher<[WishHouse], Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -38,7 +38,7 @@ extension WishListViewModel: ViewModelType {
         let wishListData = wishListDataSubject
             .map { house in
                 house.pinnedHouses.map { data in
-                    WishListHouse(
+                    WishHouse(
                         houseID: data.houseID,
                         monthlyRent: data.monthlyRent,
                         deposit: data.deposit,
