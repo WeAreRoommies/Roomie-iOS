@@ -8,5 +8,5 @@
 import Foundation
 
 protocol HouseDetailServiceProtocol {
-    func fetchHouseDetailData() async throws -> BaseResponseBody<HouseDetailResponseDTO>?
+    func fetchHouseDetailData(houseID: Int) async throws -> BaseResponseBody<HouseDetailResponseDTO>?
 }

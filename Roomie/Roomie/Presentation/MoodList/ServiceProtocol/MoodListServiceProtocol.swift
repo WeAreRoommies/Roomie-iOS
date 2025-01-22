@@ -8,5 +8,5 @@
 import Foundation
 
 protocol MoodListServiceProtocol {
-    func fetchMoodListData() async throws -> BaseResponseBody<MoodListResponseDTO>?
+    func fetchMoodListData(moodTag: String) async throws -> BaseResponseBody<MoodListResponseDTO>?
 }

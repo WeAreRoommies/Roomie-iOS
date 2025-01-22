@@ -44,10 +44,6 @@ extension HousesService: WishListServiceProtocol {
     func fetchWishListData() async throws -> BaseResponseBody<WishListResponseDTO>? {
         return try await self.request(with: .fetchWishLishData)
     }
-    
-    func fetchMoodListData(moodTag: String) async throws -> BaseResponseBody<MoodListResponseDTO>? {
-        return try await self.request(with: .fetchMoodListData(moodTag: moodTag))
-    }
 }
 
 extension HousesService: HouseDetailServiceProtocol {
@@ -56,7 +52,11 @@ extension HousesService: HouseDetailServiceProtocol {
     }
 }
 
-extension HousesService: MoodListService
+extension HousesService: MoodListServiceProtocol {
+    func fetchMoodListData(moodTag: String) async throws -> BaseResponseBody<MoodListResponseDTO>? {
+        return try await self.request(with: .fetchMoodListData(moodTag: moodTag))
+    }
+}
 
 final class MockHouseService: WishListServiceProtocol {
     func fetchWishListData() async throws -> BaseResponseBody<WishListResponseDTO>? {
