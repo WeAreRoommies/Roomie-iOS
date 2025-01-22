@@ -22,7 +22,19 @@ final class HouseDetailViewController: BaseViewController {
     
     private let rootView = HouseDetailView()
     
-    private var navigationBarStatus: NavigationBarStatus = .clear
+    private var navigationBarStatus: NavigationBarStatus = .clear {
+        didSet {
+            switch navigationBarStatus {
+            case .clear:
+                setClearNavigationBar()
+            case .filled:
+                setFilledNavigationBar()
+            case .filledWithTitle:
+                navigationItem.title = "43~50/90~100"// TODO: DataBind
+                setFilledNavigationBar()
+            }
+        }
+    }
     
     private let navigationBarThreshold = Screen.height(212.0)
     private let navigationTitleThreshold = Screen.height(280.0)
@@ -296,17 +308,13 @@ extension HouseDetailViewController: UIScrollViewDelegate {
         
         if offsetY > navigationBarThreshold {
             if offsetY > navigationTitleThreshold {
-                navigationItem.title = "43~50/90~100"// TODO: DataBind
                 navigationBarStatus = .filledWithTitle
-                setFilledNavigationBar()
             } else {
                 navigationItem.title = nil
                 navigationBarStatus = .filled
-                setFilledNavigationBar()
             }
         } else {
             navigationBarStatus = .clear
-            setClearNavigationBar()
         }
     }
 }
