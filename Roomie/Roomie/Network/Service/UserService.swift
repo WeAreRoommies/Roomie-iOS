@@ -45,10 +45,23 @@ extension UserService: HomeServiceProtocol {
     }
 }
 
-final class MockUserService: HomeServiceProtocol {
+extension UserService: MyPageServiceProtocol {
+    func fetchMyPageData() async throws -> BaseResponseBody<MyPageResponseDTO>? {
+        return try await self.request(with: .fetchMyPageData)
+    }
+}
+
+final class MockHomeService: HomeServiceProtocol {
     func fetchHomeData() async throws -> BaseResponseBody<HomeResponseDTO>? {
         let mockData: HomeResponseDTO =
         HomeResponseDTO(name: "김루미", location: "논현동", recentlyViewedHouses: [])
+        return BaseResponseBody(code: 200, message: "", data: mockData)
+    }
+}
+
+final class MockMyPageService: MyPageServiceProtocol {
+    func fetchMyPageData() async throws -> BaseResponseBody<MyPageResponseDTO>? {
+        let mockData = MyPageResponseDTO(name: "김루미")
         return BaseResponseBody(code: 200, message: "", data: mockData)
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 final class MyPageViewController: BaseViewController {
     
@@ -13,10 +14,27 @@ final class MyPageViewController: BaseViewController {
 
     private let rootView = MyPageView()
     
+    private let viewModel: MyPageViewModel
+    
+    private let cancelBag = CancelBag()
+    
     // MARK: - Property
-
+    
     private let plusData = MyPageModel.myPagePlusData()
     private let serviceData = MyPageModel.myPageServiceData()
+    
+    private let viewWillAppearSubject = CurrentValueSubject<Void, Never>(())
+    
+    // MARK: - Initializer
+
+    init(viewModel: MyPageViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - LifeCycle
 
@@ -28,12 +46,19 @@ final class MyPageViewController: BaseViewController {
         super.viewDidLoad()
         
         setRegister()
+        bindViewModel()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.viewWillAppearSubject.send(())
     }
     
     // MARK: - Functions
 
     override func setView() {
-        setNavigationBar(with: "마이페이지")
+        setNavigationBar(with: "마이페이지", isBackButtonHidden: true)
     }
     
     override func setDelegate() {
@@ -60,6 +85,27 @@ private extension MyPageViewController {
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: MyPageServiceHeaderView.reuseIdentifier
         )
+    }
+    
+    func bindViewModel() {
+        let input = MyPageViewModel.Input(
+            viewWillAppearSubject: viewWillAppearSubject.eraseToAnyPublisher()
+        )
+        
+        let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        
+        output.userName
+            .receive(on: RunLoop.main)
+            .sink { [weak self] name in
+                guard let self = self else { return }
+                if let header = self.rootView.collectionView.supplementaryView(
+                    forElementKind: UICollectionView.elementKindSectionHeader,
+                    at: IndexPath(item: 0, section: 0)
+                ) as? MyPagePlusHeaderView {
+                    header.dataBind(nickname: name)
+                }
+            }
+            .store(in: cancelBag)
     }
 }
 
