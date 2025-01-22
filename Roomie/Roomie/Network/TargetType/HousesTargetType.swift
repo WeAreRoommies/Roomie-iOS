@@ -47,7 +47,7 @@ extension HousesTargetType: TargetType {
             return .requestPlain
         case .fetchMoodListData(moodTag: let moodTag):
             return .requestParameters(
-                parameters: ["moodTag":moodTag],
+                parameters: ["moodTag": moodTag],
                 encoding: URLEncoding.queryString
             )
         }
@@ -56,6 +56,4 @@ extension HousesTargetType: TargetType {
     var headers: [String : String]? {
         return ["Content-Type": "application/json"]
     }
-    
-    
 }
