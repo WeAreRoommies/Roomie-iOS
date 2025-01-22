@@ -84,11 +84,6 @@ private extension WishListViewController {
         )
     }
     
-//    func updateEmtpyView() {
-//        rootView.emptyView.isHidden = !wishListRooms.isEmpty
-//        rootView.wishListCollectionView.isHidden = wishListRooms.isEmpty
-//    }
-    
     func bindViewModel() {
         let input = WishListViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher()

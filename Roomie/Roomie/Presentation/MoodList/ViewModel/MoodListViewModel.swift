@@ -33,7 +33,7 @@ extension MoodListViewModel: ViewModelType {
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
         input.moodListTypeSubject
-            .map { "#\($0)"}
+            .map { "#\($0)" }
             .sink { [weak self] type in
                 self?.fetchMoodListData(type: type)
             }

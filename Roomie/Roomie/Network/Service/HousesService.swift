@@ -65,7 +65,9 @@ final class MockHouseService: WishListServiceProtocol {
     }
     
     func fetchMoodListData(moodTag: String) async throws -> BaseResponseBody<MoodListResponseDTO>? {
-        let mockData: MoodListResponseDTO = MoodListResponseDTO(moodTag: "#차분한", houses: [
+        let mockData: MoodListResponseDTO = MoodListResponseDTO(
+            moodTag: "#차분한",
+            houses: [
             MoodHouse(
                 houseID: 1,
                 monthlyRent: "30~50",
@@ -91,6 +93,6 @@ final class MockHouseService: WishListServiceProtocol {
                 mainImageURL: ""
             )
         ])
-        return BaseResponseBody(code: 22, message: "", data: mockData)
+        return BaseResponseBody(code: 200, message: "", data: mockData)
     }
 }

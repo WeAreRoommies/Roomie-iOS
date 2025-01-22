@@ -89,7 +89,6 @@ final class HomeViewController: BaseViewController {
                 )
                 calmMoodListViewController.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(calmMoodListViewController, animated: true)
-                print("click button")
             }
             .store(in: cancelBag)
         
