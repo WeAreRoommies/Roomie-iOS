@@ -52,6 +52,7 @@ final class MyPageViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        updateSeletedCell()
         self.viewWillAppearSubject.send(())
     }
     
@@ -106,6 +107,15 @@ private extension MyPageViewController {
                 }
             }
             .store(in: cancelBag)
+    }
+    
+    func updateSeletedCell() {
+        for index in rootView.collectionView.indexPathsForVisibleItems {
+            if let cell = rootView.collectionView.cellForItem(at: index) as?
+                MyPageCollectionViewCell {
+                cell.isSelected = false
+            }
+        }
     }
 }
 
