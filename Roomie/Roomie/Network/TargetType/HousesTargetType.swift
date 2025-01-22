@@ -12,7 +12,7 @@ import Moya
 enum HousesTargetType {
     case fetchWishLishData
     case fetchHouseDetailData(houseID: Int)
-    case fetchMoodListData(query: String)
+    case fetchMoodListData(moodTag: String)
 }
 
 extension HousesTargetType: TargetType {
@@ -26,7 +26,7 @@ extension HousesTargetType: TargetType {
             return "/pins"
         case .fetchHouseDetailData(houseID: let houseID):
             return "/\(houseID)/details"
-        case .fetchMoodListData(query: let query):
+        case .fetchMoodListData:
             return ""
         }
     }
@@ -35,7 +35,7 @@ extension HousesTargetType: TargetType {
         switch self {
         case .fetchWishLishData: return .get
         case .fetchHouseDetailData: return .get
-        case .fetchMoodListData(query: let query): return .get
+        case .fetchMoodListData: return .get
         }
     }
     
@@ -45,9 +45,9 @@ extension HousesTargetType: TargetType {
             return .requestPlain
         case .fetchHouseDetailData:
             return .requestPlain
-        case .fetchMoodListData(query: let query):
+        case .fetchMoodListData(moodTag: let moodTag):
             return .requestParameters(
-                parameters: ["q":query],
+                parameters: ["moodTag":moodTag],
                 encoding: URLEncoding.queryString
             )
         }

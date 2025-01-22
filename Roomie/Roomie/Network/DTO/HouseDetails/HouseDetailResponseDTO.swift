@@ -8,12 +8,6 @@
 import Foundation
 
 struct HouseDetailResponseDTO: ResponseModelType {
-    let code: Int
-    let message: String
-    let data: DataClass
-}
-
-struct DataClass: Codable {
     let houseInfo: HouseInfo
     let rooms: [Room]
     let roommates: [Roommate]
