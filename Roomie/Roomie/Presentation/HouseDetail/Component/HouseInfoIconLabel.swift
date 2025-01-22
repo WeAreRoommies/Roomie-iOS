@@ -43,7 +43,7 @@ final class HouseInfoIconLabel: UIView {
     
     // MARK: - Initializer
     
-    init(_ text: String, houseInfoType: HouseInfoType) {
+    init(_ text: String = "", houseInfoType: HouseInfoType) {
         super.init(frame: .zero)
         
         setIconLabel(with: text, houseInfoType: houseInfoType)

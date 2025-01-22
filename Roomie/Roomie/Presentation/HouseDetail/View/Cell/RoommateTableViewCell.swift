@@ -52,11 +52,11 @@ final class RoommateTableViewCell: BaseTableViewCell {
         }
         
         ageLabel.do {
-            $0.setText("20대 초반", style: .body2, color: .grayscale12)
+            $0.setText(style: .body2, color: .grayscale12)
         }
         
         jobLabel.do {
-            $0.setText("대학생", style: .body2, color: .grayscale12)
+            $0.setText(style: .body2, color: .grayscale12)
         }
         
         mbtiBackView.do {
@@ -66,7 +66,7 @@ final class RoommateTableViewCell: BaseTableViewCell {
         }
         
         mbtiLabel.do {
-            $0.setText("INFP", style: .caption1, color: .grayscale8)
+            $0.setText(style: .caption1, color: .grayscale8)
         }
         
         nameBackView.do {
@@ -76,7 +76,7 @@ final class RoommateTableViewCell: BaseTableViewCell {
         }
         
         nameLabel.do {
-            $0.setText("1A 싱글침대", style: .caption1, color: .grayscale8)
+            $0.setText(style: .caption1, color: .grayscale8)
         }
         
         sleepTimeTitleLabel.do {
@@ -84,7 +84,7 @@ final class RoommateTableViewCell: BaseTableViewCell {
         }
         
         sleepTimeLabel.do {
-            $0.setText("21:00 - 21:00", style: .body4, color: .grayscale10)
+            $0.setText(style: .body4, color: .grayscale10)
         }
         
         activityTimeTitleLabel.do {
@@ -92,7 +92,7 @@ final class RoommateTableViewCell: BaseTableViewCell {
         }
         
         activityTimeLabel.do {
-            $0.setText("21:00 - 21:00", style: .body4, color: .grayscale10)
+            $0.setText(style: .body4, color: .grayscale10)
         }
     }
     

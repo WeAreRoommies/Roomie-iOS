@@ -25,11 +25,11 @@ final class HouseDetailView: BaseView {
     private let nameBackView = UIView()
     let nameLabel = UILabel()
     let titleLabel = UILabel()
-    let locationIconLabel = HouseInfoIconLabel("서대문구 연희동", houseInfoType: .location)
-    let occupancyTypesIconLabel = HouseInfoIconLabel("1,2인실", houseInfoType: .occupancyTypes)
-    let occupancyStatusIconLabel = HouseInfoIconLabel("2/4인", houseInfoType: .occupancyStatus)
-    let genderPolicyIconLabel = HouseInfoIconLabel("여성전용", houseInfoType: .genderPolicy)
-    let contractTermIconLabel = HouseInfoIconLabel("3개월 이상 계약", houseInfoType: .contractTerm)
+    let locationIconLabel = HouseInfoIconLabel(houseInfoType: .location)
+    let occupancyTypesIconLabel = HouseInfoIconLabel(houseInfoType: .occupancyTypes)
+    let occupancyStatusIconLabel = HouseInfoIconLabel(houseInfoType: .occupancyStatus)
+    let genderPolicyIconLabel = HouseInfoIconLabel(houseInfoType: .genderPolicy)
+    let contractTermIconLabel = HouseInfoIconLabel(houseInfoType: .contractTerm)
     private let firstIconLabelStackView = UIStackView()
     private let secondIconLabelStackView = UIStackView()
     let lookInsidePhotoButton = HouseInnerPhotoButton()
@@ -91,11 +91,11 @@ final class HouseDetailView: BaseView {
         }
         
         nameLabel.do {
-            $0.setText("해피쉐어 12호점", style: .body6, color: .primaryPurple)
+            $0.setText(style: .body6, color: .primaryPurple)
         }
         
         titleLabel.do {
-            $0.setText("월세 43~50/보증금 90~100", style: .heading2, color: .grayscale12)
+            $0.setText(style: .heading2, color: .grayscale12)
         }
         
         firstIconLabelStackView.do {
@@ -128,7 +128,7 @@ final class HouseDetailView: BaseView {
         }
         
         roomMoodLabel.do {
-            $0.setText("I got no time to lose 내 길었던 하루 난 보고 싶어 Ra-ta-ta-ta 울린 심장 (Ra-ta-ta-ta) I got nothing to lose 널 좋아한다고", style: .body1, color: .grayscale12)
+            $0.setText(style: .body1, color: .grayscale12)
         }
         
         moodTagsStackView.do {
@@ -440,7 +440,7 @@ extension HouseDetailView {
         }
     }
     
-    // moodTags를 바인딩하는 함수입니다.
+    /// moodTags를 바인딩하는 함수입니다.
     func bindMoodTags(_ moodTags: [String]) {
         moodTagsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         for index in 0..<moodTags.count {

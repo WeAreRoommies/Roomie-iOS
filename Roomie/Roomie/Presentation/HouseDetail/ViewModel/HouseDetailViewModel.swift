@@ -185,7 +185,8 @@ private extension HouseDetailViewModel {
     func fetchHouseDetailData(houseID: Int) {
         Task {
             do {
-                guard let responseBody = try await service.fetchHouseDetailData(houseID: houseID), let data = responseBody.data else { return }
+                guard let responseBody = try await service.fetchHouseDetailData(houseID: houseID),
+                      let data = responseBody.data else { return }
                 houseDetailDataSubject.send(data)
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
