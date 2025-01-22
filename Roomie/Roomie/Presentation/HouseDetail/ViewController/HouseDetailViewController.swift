@@ -65,6 +65,14 @@ final class HouseDetailViewController: BaseViewController {
     }
     
     override func setAction() {
+        rootView.lookInsidePhotoButton.updateButton.tapPublisher
+            .sink { [weak self] in
+                guard let self else { return }
+                let houseAllPhotoViewController = HouseAllPhotoViewController()
+                self.navigationController?.pushViewController(houseAllPhotoViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
         rootView.tourApplyButton.tapPublisher
             .sink { [weak self] in
                 self?.presentHouseDetailSheet()
