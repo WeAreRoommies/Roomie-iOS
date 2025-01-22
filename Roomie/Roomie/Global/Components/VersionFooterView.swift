@@ -28,7 +28,7 @@ final class VersionFooterView: BaseCollectionReusableView {
         }
         
         barView.do {
-            $0.backgroundColor = .grayscale5
+            $0.backgroundColor = .grayscale4
         }
         
         rightPolicyLabel.do {

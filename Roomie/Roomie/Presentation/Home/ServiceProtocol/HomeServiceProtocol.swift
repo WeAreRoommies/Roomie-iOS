@@ -9,4 +9,6 @@ import Foundation
 
 protocol HomeServiceProtocol {
     func fetchHomeData() async throws -> BaseResponseBody<HomeResponseDTO>?
+    
+    // TODO: 찜 API 추가
 }

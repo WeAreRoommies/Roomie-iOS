@@ -1,26 +1,27 @@
 //
-//  UserService.swift
+//  HomeService.swift
 //  Roomie
 //
-//  Created by MaengKim on 1/21/25.
+//  Created by 예삐 on 1/23/25.
 //
 
 import Foundation
 
 import Moya
 
-final class UserService {
-    let provider: MoyaProvider<UserTargetType>
+final class HomeService {
+    let provider: MoyaProvider<HomeTargetType>
     
-    init(provider: MoyaProvider<UserTargetType> = MoyaProvider(plugins: [MoyaLoggingPlugin()])) {
+    init(provider: MoyaProvider<HomeTargetType> = MoyaProvider(plugins: [MoyaLoggingPlugin()])) {
         self.provider = provider
     }
     
     func request<T: ResponseModelType>(
-        with request: UserTargetType
+        with request: HomeTargetType
     ) async throws -> BaseResponseBody<T>? {
         return try await withCheckedThrowingContinuation {
-            continuation in provider.request(request) { result in
+            continuation in provider.request(request) {
+                result in
                 switch result {
                 case .success(let response):
                     do {
@@ -39,29 +40,18 @@ final class UserService {
     }
 }
 
-extension UserService: HomeServiceProtocol {
+extension HomeService: HomeServiceProtocol {
     func fetchHomeData() async throws -> BaseResponseBody<HomeResponseDTO>? {
         return try await self.request(with: .fetchUserHomeData)
     }
-}
-
-extension UserService: MyPageServiceProtocol {
-    func fetchMyPageData() async throws -> BaseResponseBody<MyPageResponseDTO>? {
-        return try await self.request(with: .fetchMyPageData)
-    }
+    
+    // TODO: 찜 API 추가
 }
 
 final class MockHomeService: HomeServiceProtocol {
     func fetchHomeData() async throws -> BaseResponseBody<HomeResponseDTO>? {
         let mockData: HomeResponseDTO =
         HomeResponseDTO(name: "김루미", location: "논현동", recentlyViewedHouses: [])
-        return BaseResponseBody(code: 200, message: "", data: mockData)
-    }
-}
-
-final class MockMyPageService: MyPageServiceProtocol {
-    func fetchMyPageData() async throws -> BaseResponseBody<MyPageResponseDTO>? {
-        let mockData = MyPageResponseDTO(name: "김루미")
         return BaseResponseBody(code: 200, message: "", data: mockData)
     }
 }

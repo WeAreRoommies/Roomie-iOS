@@ -12,19 +12,22 @@ import Moya
 enum MapsTargetType {
     case fetchMapData(request: MapRequestDTO)
     case fetchMapSearchData(query: String)
+    case updatePinnedHouse(houseID: Int)
 }
 
 extension MapsTargetType: TargetType {
     var baseURL: URL {
-        return URL(string: Environment.baseURL)!
+        return URL(string: "\(Environment.baseURL)/v1")!
     }
     
     var path: String {
         switch self {
         case .fetchMapData:
-            return "/v1/maps/search"
+            return "/maps/search"
         case .fetchMapSearchData:
-            return "/v1/locations"
+            return "/locations"
+        case .updatePinnedHouse(houseID: let houseID):
+            return "/houses/\(houseID)/pins"
         }
     }
     
@@ -32,6 +35,7 @@ extension MapsTargetType: TargetType {
         switch self {
         case .fetchMapData: return .post
         case .fetchMapSearchData: return .get
+        case .updatePinnedHouse: return .patch
         }
     }
     
@@ -41,6 +45,8 @@ extension MapsTargetType: TargetType {
             return .requestJSONEncodable(request)
         case .fetchMapSearchData(let query):
             return .requestParameters(parameters: ["q": query], encoding: URLEncoding.queryString)
+        case .updatePinnedHouse(let houseID):
+            return .requestPlain
         }
     }
     

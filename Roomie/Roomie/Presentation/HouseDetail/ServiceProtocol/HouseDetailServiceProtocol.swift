@@ -9,4 +9,6 @@ import Foundation
 
 protocol HouseDetailServiceProtocol {
     func fetchHouseDetailData(houseID: Int) async throws -> BaseResponseBody<HouseDetailResponseDTO>?
+    
+    // TODO: 찜 API 추가
 }

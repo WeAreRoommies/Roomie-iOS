@@ -9,20 +9,17 @@ import Foundation
 
 import Moya
 
-enum UserTargetType {
-    case fetchUserHomeData
+enum MyPageTargetType {
     case fetchMyPageData
 }
 
-extension UserTargetType: TargetType {
+extension MyPageTargetType: TargetType {
     var baseURL: URL {
         return URL(string: Environment.baseURL)!
     }
     
     var path: String {
         switch self {
-        case .fetchUserHomeData:
-            return "/v1/users/home"
         case .fetchMyPageData:
             return "/v1/users/mypage"
         }
