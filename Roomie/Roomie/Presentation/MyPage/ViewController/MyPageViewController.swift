@@ -19,8 +19,6 @@ final class MyPageViewController: BaseViewController {
     private let cancelBag = CancelBag()
     
     // MARK: - Property
-
-    private var userName: String = ""
     
     private let plusData = MyPageModel.myPagePlusData()
     private let serviceData = MyPageModel.myPageServiceData()
@@ -60,7 +58,7 @@ final class MyPageViewController: BaseViewController {
     // MARK: - Functions
 
     override func setView() {
-        setNavigationBar(with: "마이페이지")
+        setNavigationBar(with: "마이페이지", isBackButtonHidden: true)
     }
     
     override func setDelegate() {
@@ -99,8 +97,13 @@ private extension MyPageViewController {
         output.userName
             .receive(on: RunLoop.main)
             .sink { [weak self] name in
-                self?.userName = name
-                self?.rootView.collectionView.reloadSections(IndexSet(integer: 0))
+                guard let self = self else { return }
+                if let header = self.rootView.collectionView.supplementaryView(
+                    forElementKind: UICollectionView.elementKindSectionHeader,
+                    at: IndexPath(item: 0, section: 0)
+                ) as? MyPagePlusHeaderView {
+                    header.dataBind(nickname: name)
+                }
             }
             .store(in: cancelBag)
     }
@@ -181,7 +184,6 @@ extension MyPageViewController: UICollectionViewDataSource {
                     withReuseIdentifier: MyPagePlusHeaderView.reuseIdentifier,
                     for: indexPath
                 ) as? MyPagePlusHeaderView else { return UICollectionReusableView() }
-                header.dataBind(nickname: userName)
                 header.configureHeader(title: "루미 더보기")
                 return header
             case 1:
