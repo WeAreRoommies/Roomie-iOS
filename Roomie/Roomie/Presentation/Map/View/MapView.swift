@@ -16,7 +16,7 @@ final class MapView: BaseView {
     // MARK: - UIComponent
     
     private let searchBarView = UIView()
-    private let searchBarLabel = UILabel()
+    let searchBarLabel = UILabel()
     private let searchImageView = UIImageView()
     let searchBarButton = UIButton()
     

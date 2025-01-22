@@ -80,6 +80,7 @@ final class MapViewController: BaseViewController {
                         builder: MapRequestDTO.Builder.shared
                     )
                 )
+                mapSearchViewController.delegate = self
                 self.navigationController?.pushViewController(mapSearchViewController, animated: true)
             }
             .store(in: cancelBag)
@@ -198,6 +199,19 @@ private extension MapViewController {
         if let previousMarker = self.selectedMarker {
             previousMarker.iconImage = NMFOverlayImage(name: "icn_map_pin_normal")
         }
+    }
+}
+
+// MARK: - MapSearchViewControllerDelegate
+
+extension MapViewController: MapSearchViewControllerDelegate {
+    func didSelectLocation(location: String, lat: Double, lng: Double) {
+        
+        rootView.searchBarLabel.setText(location, style: .title1, color: .grayscale12)
+        
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lng))
+        cameraUpdate.animation = .easeIn
+        rootView.mapView.moveCamera(cameraUpdate)
     }
 }
 
