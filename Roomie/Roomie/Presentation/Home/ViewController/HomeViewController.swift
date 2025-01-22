@@ -12,7 +12,10 @@ import SnapKit
 import Then
 import CombineCocoa
 
-// TODO: user name 연결
+private enum homeNavigationBarStatus {
+    case white
+    case purple
+}
 
 final class HomeViewController: BaseViewController {
     
@@ -31,6 +34,13 @@ final class HomeViewController: BaseViewController {
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
+    
+    private var homeNavigationBarStatus: homeNavigationBarStatus = .purple {
+        didSet {
+            setHomeNavigationBarStatus()
+        }
+    }
+    private var navigationBarColor: UIColor = .primaryLight4
 
     // MARK: - Initializer
     
@@ -65,6 +75,7 @@ final class HomeViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         updateSeletedCell()
+        setHomeNavigationBarStatus()
         viewWillAppearSubject.send()
     }
     
@@ -125,6 +136,7 @@ final class HomeViewController: BaseViewController {
     
     override func setDelegate() {
         rootView.houseListCollectionView.delegate = self
+        rootView.scrollView.delegate = self
     }
 }
 
@@ -207,6 +219,15 @@ private extension HomeViewController {
         rootView.houseListCollectionView.isHidden = isEmpty
     }
     
+    func setHomeNavigationBarStatus() {
+        switch homeNavigationBarStatus {
+        case .white:
+            navigationBarColor = .grayscale1
+        case .purple:
+            navigationBarColor = .primaryLight4
+        }
+    }
+    
     func setHomeNavigationBar(locaton location:String) {
         title = nil
         navigationItem.leftBarButtonItem = nil
@@ -224,7 +245,7 @@ private extension HomeViewController {
         let locationItem = UIBarButtonItem(customView: locationLabel)
         let dropDownItem = UIBarButtonItem(customView: dropDownImageView)
         likedButton.tintColor = .grayscale10
-        barAppearance.backgroundColor = .primaryLight4
+        barAppearance.backgroundColor = navigationBarColor
         barAppearance.shadowColor = nil
         locationLabel.do {
             $0.setText(location, style: .title2, color: .grayscale10)
@@ -284,3 +305,22 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         // TODO: 상세매물 페이지와 연결
     }
 }
+
+// MARK: - ScrollView Delegate
+
+extension HomeViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        print(offsetY)
+        if offsetY > -94 {
+            homeNavigationBarStatus = .white
+        } else {
+            homeNavigationBarStatus = .purple
+        }
+        
+        let maxOffsetY = rootView.scrollView.contentSize.height - rootView.scrollView.bounds.height
+
+        rootView.backgroundColor = rootView.scrollView.contentOffset.y >= maxOffsetY ? .grayscale1 : .primaryLight4
+    }
+}
+
