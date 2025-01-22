@@ -38,7 +38,6 @@ final class HouseAllPhotoView: BaseView {
     private let floorPlanBackView = UIView()
     let floorPlanImageView = UIImageView()
     
-    
     // MARK: - UISetting
     
     override func setStyle() {

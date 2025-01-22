@@ -17,7 +17,6 @@ final class HouseSinglePhotoView: BaseView {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
-    // 각 방 시설
     private let roomTitleLabel = UILabel()
     private let roomStackView = UIStackView()
     
