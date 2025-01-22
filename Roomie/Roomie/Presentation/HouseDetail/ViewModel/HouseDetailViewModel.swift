@@ -13,6 +13,7 @@ final class HouseDetailViewModel {
     // MARK: - Property
     
     private let service: HouseDetailServiceProtocol
+    
     private let houseDetailDataSubject = CurrentValueSubject<HouseDetailResponseDTO?, Never>(nil)
     
     private let roomIDSubject = PassthroughSubject<Int, Never>()
@@ -45,9 +46,10 @@ extension HouseDetailViewModel: ViewModelType {
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
         input.viewWillApper
             .sink { [weak self] in
+                guard let self else { return }
                 
                 // TODO: houseID 받아오기
-                self?.fetchHouseDetailData(houseID: 1)
+                self.fetchHouseDetailData(houseID: 1)
             }
             .store(in: cancelBag)
         
