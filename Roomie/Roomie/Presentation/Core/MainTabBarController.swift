@@ -15,7 +15,7 @@ final class MainTabBarController: UITabBarController {
     // MARK: - Property
     
     let homeViewController: HomeViewController = HomeViewController(
-        viewModel: HomeViewModel(service: UserService())
+        viewModel: HomeViewModel(service: HomeService())
     ).then {
         $0.tabBarItem.title = "홈"
         $0.tabBarItem.image = .icnHomeLine24
@@ -29,7 +29,7 @@ final class MainTabBarController: UITabBarController {
     }
     
     let myPageViewController: MyPageViewController = MyPageViewController(
-        viewModel: MyPageViewModel(service: UserService())
+        viewModel: MyPageViewModel(service: MyPageService())
     ).then {
         $0.tabBarItem.title = "마이페이지"
         $0.tabBarItem.image = .icnUserLine24
