@@ -14,7 +14,7 @@ final class HomeView: BaseView {
 
     // MARK: - UIComponents
     
-    private let scrollView = UIScrollView()
+    let scrollView = UIScrollView()
     
     private let contentView = UIView()
     
