@@ -28,7 +28,7 @@ final class HouseInnerPhotoButton: UIView {
     
     private let chevronRigntIconImageView = UIImageView()
     
-    private let updateButton = UIButton()
+    let updateButton = UIButton()
     
     // MARK: - Initializer
     

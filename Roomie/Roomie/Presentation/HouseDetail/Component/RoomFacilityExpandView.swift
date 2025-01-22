@@ -1,8 +1,8 @@
 //
-//  HouseFacilityView.swift
+//  RoomFacilityExpandView.swift
 //  Roomie
 //
-//  Created by 김승원 on 1/20/25.
+//  Created by 김승원 on 1/22/25.
 //
 
 import UIKit
@@ -12,36 +12,43 @@ import CombineCocoa
 import SnapKit
 import Then
 
-final class HouseFacilityView: UIView {
+final class RoomFacilityExpandView: UIView {
     
     // MARK: - Property
     
-    private var isExpended: Bool = false {
+    private var isExpanded: Bool = false {
         didSet {
-            expendView()
+            updateView()
         }
     }
     
-    private var unExpendedHeight: CGFloat = 56
-    private var expendedHeight: CGFloat = 0
+    private var unExpandedHeight: CGFloat = 56
+    private var expandedHeight: CGFloat = 0
     
     private let cancelBag = CancelBag()
     
     // MARK: - UIComponent
     
     private let titleLabel = UILabel()
+    
+    private let statusBackView = UIView()
+    private let statusLabel = UILabel()
+    
     private let chevronIcon = UIImageView()
-    private let expendButton = UIButton()
+    
+    private let expandButton = UIButton()
+    
+    private let roomImageView = UIImageView()
     
     private let evenStackView = UIStackView()
     private let oddStackView = UIStackView()
     
     // MARK: - Initializer
     
-    init(title: String) {
+    init(title: String, status: Bool) {
         super.init(frame: .zero)
         
-        setFacilityView(with: title)
+        setFacilityView(with: title, status: status)
         
         setStyle()
         setUI()
@@ -81,9 +88,27 @@ final class HouseFacilityView: UIView {
             $0.layer.cornerRadius = 8
         }
         
+        statusBackView.do {
+            $0.backgroundColor = .grayscale3
+            $0.layer.cornerRadius = 8
+            $0.clipsToBounds = true
+        }
+        
+        statusLabel.do {
+            $0.setText("입주 완료", style: .caption2, color: .grayscale9)
+        }
+        
         chevronIcon.do {
             $0.image = .icnArrowDownLine24
             $0.contentMode = .scaleAspectFit
+        }
+        
+        roomImageView.do {
+            $0.backgroundColor = .grayscale5
+            $0.contentMode = .scaleAspectFill
+            $0.layer.cornerRadius = 8
+            $0.clipsToBounds = true
+            $0.isHidden = true
         }
         
         evenStackView.do {
@@ -106,11 +131,15 @@ final class HouseFacilityView: UIView {
     private func setUI() {
         addSubviews(
             titleLabel,
+            statusBackView,
             chevronIcon,
-            expendButton,
+            expandButton,
+            roomImageView,
             evenStackView,
             oddStackView
         )
+        
+        statusBackView.addSubview(statusLabel)
     }
     
     private func setLayout() {
@@ -123,70 +152,92 @@ final class HouseFacilityView: UIView {
             $0.leading.equalToSuperview().offset(14)
         }
         
+        statusBackView.snp.makeConstraints {
+            $0.centerY.equalTo(titleLabel.snp.centerY)
+            $0.leading.equalTo(titleLabel.snp.trailing).offset(8)
+            $0.height.equalTo(Screen.height(20))
+        }
+        
+        statusLabel.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview().inset(8)
+            $0.centerY.equalToSuperview()
+        }
+        
         chevronIcon.snp.makeConstraints {
             $0.top.equalToSuperview().offset(Screen.height(16))
             $0.trailing.equalToSuperview().inset(12)
             $0.size.equalTo(Screen.width(24))
         }
         
-        expendButton.snp.makeConstraints {
+        expandButton.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(Screen.height(56))
         }
         
+        roomImageView.snp.makeConstraints {
+            $0.top.equalTo(expandButton.snp.bottom)
+            $0.horizontalEdges.equalToSuperview().inset(8)
+            $0.height.equalTo(Screen.height(192))
+        }
+        
         evenStackView.snp.makeConstraints {
-            $0.top.equalTo(expendButton.snp.bottom)
+            $0.top.equalTo(roomImageView.snp.bottom).offset(12)
             $0.leading.equalToSuperview().inset(8)
             $0.width.equalTo(Screen.width(155))
         }
         
         oddStackView.snp.makeConstraints {
-            $0.top.equalTo(expendButton.snp.bottom)
+            $0.top.equalTo(roomImageView.snp.bottom).offset(12)
             $0.trailing.equalToSuperview().inset(8)
             $0.width.equalTo(Screen.width(155))
         }
     }
     
     private func setAction() {
-        expendButton.tapPublisher
+        expandButton.tapPublisher
             .sink { [weak self] in
-                guard let self else { return }
-                self.isExpended.toggle()
+                guard let self = self else { return }
+                self.isExpanded.toggle()
             }
             .store(in: cancelBag)
     }
 }
 
-private extension HouseFacilityView {
-    func expendView() {
-        oddStackView.isHidden.toggle()
-        evenStackView.isHidden.toggle()
+// MARK: - Functions
+
+private extension RoomFacilityExpandView {
+    private func updateView() {
+        oddStackView.isHidden = !isExpanded
+        evenStackView.isHidden = !isExpanded
+        roomImageView.isHidden = !isExpanded
         
         self.snp.updateConstraints {
-            $0.height.equalTo(Screen.height(self.isExpended ? expendedHeight : unExpendedHeight))
+            $0.height.equalTo(Screen.height(isExpanded ? expandedHeight : unExpandedHeight))
         }
         
-        chevronIcon.image = isExpended ? .icnArrowUpLine24 : .icnArrowDownLine24
+        chevronIcon.image = isExpanded ? .icnArrowUpLine24 : .icnArrowDownLine24
         
         self.layoutIfNeeded()
     }
     
-    func setFacilityView(with title: String = "") {
+    private func setFacilityView(with title: String = "", status: Bool = true) {
         titleLabel.do {
-            $0.setText(title, style: .body2, color: .grayscale10)
+            $0.setText(title, style: .body2, color: status ? .grayscale10 : .grayscale6)
         }
+        statusBackView.isHidden = status
+        statusLabel.isHidden = status
     }
 }
 
-extension HouseFacilityView {
+extension RoomFacilityExpandView {
     func dataBind(_ data: [String]) {
         let evenDataCount = (data.count + 1) / 2
         
         let itemHeight: CGFloat = 20
         let spacing: CGFloat = 8
         let stackViewHeight = CGFloat(evenDataCount) * itemHeight + CGFloat(evenDataCount - 1) * spacing
-        self.expendedHeight = 56 + stackViewHeight + 12
+        self.expandedHeight = 192 + 12 + 56 + stackViewHeight + 12
         
         for index in 0..<data.count {
             if index % 2 == 0 {
@@ -195,5 +246,9 @@ extension HouseFacilityView {
                 oddStackView.addArrangedSubview(CheckIconLabel(text: data[index]))
             }
         }
+    }
+    
+    func setExpanded(_ isExpanded: Bool) {
+        self.isExpanded = isExpanded
     }
 }

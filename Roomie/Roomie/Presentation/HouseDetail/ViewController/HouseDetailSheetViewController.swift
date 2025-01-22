@@ -24,6 +24,7 @@ final class HouseDetailSheetViewController: BaseViewController {
     
     init(viewModel: HouseDetailViewModel) {
         self.viewModel = viewModel
+        
         super.init(nibName: nil, bundle: nil)
     }
     

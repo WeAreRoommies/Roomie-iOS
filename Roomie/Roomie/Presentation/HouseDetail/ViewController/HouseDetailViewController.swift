@@ -10,11 +10,32 @@ import Combine
 
 import CombineCocoa
 
+enum NavigationBarStatus {
+    case clear
+    case filled
+    case filledWithTitle
+}
+
 final class HouseDetailViewController: BaseViewController {
     
     // MARK: - Property
     
     private let rootView = HouseDetailView()
+    
+    private var navigationBarStatus: NavigationBarStatus = .clear {
+        didSet {
+            switch navigationBarStatus {
+            case .clear:
+                setClearNavigationBar()
+            case .filled:
+                navigationItem.title = nil
+                setFilledNavigationBar()
+            case .filledWithTitle:
+                navigationItem.title = "43~50/90~100"// TODO: DataBind
+                setFilledNavigationBar()
+            }
+        }
+    }
     
     private let navigationBarThreshold = Screen.height(212.0)
     private let navigationTitleThreshold = Screen.height(280.0)
@@ -48,7 +69,7 @@ final class HouseDetailViewController: BaseViewController {
         super.viewWillAppear(animated)
         
         viewWillAppearSubject.send(())
-        setClearNavigationBar()
+        setNavigationBarStatus()
     }
     
     override func viewDidLayoutSubviews() {
@@ -65,6 +86,14 @@ final class HouseDetailViewController: BaseViewController {
     }
     
     override func setAction() {
+        rootView.lookInsidePhotoButton.updateButton.tapPublisher
+            .sink { [weak self] in
+                guard let self else { return }
+                let houseAllPhotoViewController = HouseAllPhotoViewController()
+                self.navigationController?.pushViewController(houseAllPhotoViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
         rootView.tourApplyButton.tapPublisher
             .sink { [weak self] in
                 self?.presentHouseDetailSheet()
@@ -101,6 +130,18 @@ private extension HouseDetailViewController {
             RoommateNotFoundTableViewCell.self,
             forCellReuseIdentifier: RoommateNotFoundTableViewCell.reuseIdentifier
         )
+    }
+    
+    func setNavigationBarStatus() {
+        switch navigationBarStatus {
+        case .clear:
+            setClearNavigationBar()
+        case .filled:
+            setFilledNavigationBar()
+        case .filledWithTitle:
+            setFilledNavigationBar()
+            navigationItem.title = "43~50/90~100"// TODO: DataBind
+        }
     }
     
     func setClearNavigationBar() {
@@ -251,6 +292,13 @@ extension HouseDetailViewController: UITableViewDelegate {
         
         return 0
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == rootView.roomStatusTableView {
+            let houseSinglePhotoViewController = HouseSinglePhotoViewController(index: indexPath.row)
+            navigationController?.pushViewController(houseSinglePhotoViewController, animated: true)
+        }
+    }
 }
 
 // MARK: - ScrollView Delegate
@@ -260,15 +308,13 @@ extension HouseDetailViewController: UIScrollViewDelegate {
         let offsetY = scrollView.contentOffset.y
         
         if offsetY > navigationBarThreshold {
-            setFilledNavigationBar()
+            if offsetY > navigationTitleThreshold {
+                navigationBarStatus = .filledWithTitle
+            } else {
+                navigationBarStatus = .filled
+            }
         } else {
-            setClearNavigationBar()
-        }
-        
-        if offsetY > navigationTitleThreshold {
-            navigationItem.title = "43~50/90~100"// TODO: DataBind
-        } else {
-            navigationItem.title = nil
+            navigationBarStatus = .clear
         }
     }
 }
