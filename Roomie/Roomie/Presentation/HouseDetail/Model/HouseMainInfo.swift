@@ -8,7 +8,7 @@
 import Foundation
 
 struct HouseMainInfo {
-    let mainImgURL: String
+    let mainImageURL: String
     let name: String
     let title: String
     let location: String
