@@ -9,6 +9,7 @@ import UIKit
 import Combine
 
 import CombineCocoa
+import Kingfisher
 
 enum NavigationBarStatus {
     case clear
@@ -22,33 +23,36 @@ final class HouseDetailViewController: BaseViewController {
     
     private let rootView = HouseDetailView()
     
+    private let viewModel: HouseDetailViewModel
+    
     private var navigationBarStatus: NavigationBarStatus = .clear {
         didSet {
-            switch navigationBarStatus {
-            case .clear:
-                setClearNavigationBar()
-            case .filled:
-                navigationItem.title = nil
-                setFilledNavigationBar()
-            case .filledWithTitle:
-                navigationItem.title = "43~50/90~100"// TODO: DataBind
-                setFilledNavigationBar()
-            }
+            setNavigationBarStatus()
         }
     }
+    
+    private var navigationBarTitle: String = ""
     
     private let navigationBarThreshold = Screen.height(212.0)
     private let navigationTitleThreshold = Screen.height(280.0)
     
     private let roomStatusCellHeight: CGFloat = Screen.height(182 + 12)
-    private let roomStatusCellCount = 2 // TODO: DataBind
-    
     private let roommateCellHeight: CGFloat = Screen.height(102 + 12)
-    private let roommateCellCount = 3 // TODO: DataBind
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     
     private let cancelBag = CancelBag()
+    
+    // MARK: - Initializer
+    
+    init(viewModel: HouseDetailViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @MainActor required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - LifeCycle
     
@@ -60,9 +64,7 @@ final class HouseDetailViewController: BaseViewController {
         super.viewDidLoad()
         
         setRegister()
-        
-        rootView.safetyLivingFacilityView.dataBind(["침대", "침구", "옷장", "냉장고", "세탁기", "믹서", "드라이기"])
-        rootView.kitchenFacilityView.dataBind(["냉장고", "세탁기", "믹서", "드라이기"])
+        bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,10 +77,10 @@ final class HouseDetailViewController: BaseViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        rootView.updateRoomStatusTableViewHeight(roomStatusCellCount, height: roomStatusCellHeight)
+        rootView.updateRoomStatusTableViewHeight(viewModel.roomInfos.count, height: roomStatusCellHeight)
         rootView.roomStatusTableView.layoutIfNeeded()
         
-        rootView.updateRoommateTableViewHeight(roommateCellCount, height: roommateCellHeight)
+        rootView.updateRoommateTableViewHeight(viewModel.roommateInfos.count, height: roommateCellHeight)
     }
     
     override func setView() {
@@ -115,6 +117,82 @@ final class HouseDetailViewController: BaseViewController {
 // MARK: - Functions
 
 private extension HouseDetailViewController {
+    func bindViewModel() {
+        let input = HouseDetailViewModel.Input(
+            viewWillApper: viewWillAppearSubject.eraseToAnyPublisher(),
+            roomIDSubject: PassthroughSubject<Int, Never>().eraseToAnyPublisher()
+        )
+        
+        let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        
+        output.navigationBarTitle
+            .receive(on: RunLoop.main)
+            .sink { [weak self] navigationBarTitle in
+                guard let self else { return }
+                self.navigationBarTitle = navigationBarTitle
+            }
+            .store(in: cancelBag)
+        
+        output.houseMainInfo
+            .receive(on: RunLoop.main)
+            .sink { [weak self] houseMainInfo in
+                guard let self else { return }
+                if let imageUrl = URL(string: houseMainInfo.mainImageURL) {
+                    self.rootView.photoImageView.kf.setImage(with: imageUrl)
+                }
+                self.rootView.nameLabel.updateText(houseMainInfo.name)
+                self.rootView.titleLabel.updateText(houseMainInfo.title)
+                self.rootView.locationIconLabel.updateText(with: houseMainInfo.location)
+                self.rootView.occupancyTypesIconLabel.updateText(with: houseMainInfo.occupancyTypes)
+                self.rootView.occupancyStatusIconLabel.updateText(with: houseMainInfo.occupancyStatus)
+                self.rootView.genderPolicyIconLabel.updateText(with: houseMainInfo.genderPolicy)
+                self.rootView.contractTermIconLabel.updateText(with: houseMainInfo.contractTerm)
+            }
+            .store(in: cancelBag)
+        
+        output.roomMoodInfo
+            .receive(on: RunLoop.main)
+            .sink { [weak self] roomMoodInfo in
+                guard let self else { return }
+                self.rootView.roomMoodLabel.updateText(roomMoodInfo.roomMood)
+                self.rootView.bindGroundRule(roomMoodInfo.groundRule)
+                self.rootView.bindMoodTags(roomMoodInfo.moodTags)
+                
+            }
+            .store(in: cancelBag)
+        
+        viewModel.$roomInfos
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.rootView.roomStatusTableView.reloadData()
+            }
+            .store(in: cancelBag)
+        
+        output.safetyLivingFacilityInfo
+            .receive(on: RunLoop.main)
+            .sink { [weak self] safetyLivingFacilityInfo in
+                guard let self else { return }
+                rootView.safetyLivingFacilityView.dataBind(safetyLivingFacilityInfo)
+            }
+            .store(in: cancelBag)
+        
+        output.kitchenFacilityInfo.receive(on: RunLoop.main)
+            .sink { [weak self] kitchenFacilityInfo in
+                guard let self else { return }
+                rootView.kitchenFacilityView.dataBind(kitchenFacilityInfo)
+            }
+            .store(in: cancelBag)
+        
+        viewModel.$roommateInfos
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.rootView.roommateTableView.reloadData()
+            }
+            .store(in: cancelBag)
+    }
+    
     func setRegister() {
         rootView.roomStatusTableView.register(
             RoomStatusTableViewCell.self,
@@ -140,7 +218,7 @@ private extension HouseDetailViewController {
             setFilledNavigationBar()
         case .filledWithTitle:
             setFilledNavigationBar()
-            navigationItem.title = "43~50/90~100"// TODO: DataBind
+            navigationItem.title = navigationBarTitle
         }
     }
     
@@ -217,11 +295,11 @@ extension HouseDetailViewController: UITableViewDataSource {
         numberOfRowsInSection section: Int
     ) -> Int {
         if tableView == rootView.roomStatusTableView {
-            return roomStatusCellCount // TODO: DataBind
+            return viewModel.roomInfos.count // TODO: DataBind
         }
         
         if tableView == rootView.roommateTableView {
-            let cellCount = roommateCellCount == 0 ? 1 : roommateCellCount
+            let cellCount = viewModel.roommateInfos.count == 0 ? 1 : viewModel.roommateInfos.count
             return cellCount // TODO: DataBind
         }
         
@@ -241,12 +319,12 @@ extension HouseDetailViewController: UITableViewDataSource {
             }
             cell.selectionStyle = .none
             
-            // TODO: DataBind
+            cell.dataBind(viewModel.roomInfos[indexPath.row])
             return cell
         }
         
         if tableView == rootView.roommateTableView {
-            if roommateCellCount == 0 {
+            if viewModel.roommateInfos.count == 0 {
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: RoommateNotFoundTableViewCell.reuseIdentifier,
                     for: indexPath
@@ -255,7 +333,6 @@ extension HouseDetailViewController: UITableViewDataSource {
                 }
                 cell.selectionStyle = .none
                 
-                // TODO: DataBind
                 return cell
             } else {
                 guard let cell = tableView.dequeueReusableCell(
@@ -266,7 +343,7 @@ extension HouseDetailViewController: UITableViewDataSource {
                 }
                 cell.selectionStyle = .none
                 
-                // TODO: DataBind
+                cell.dataBind(viewModel.roommateInfos[indexPath.row])
                 return cell
             }
         }
@@ -323,7 +400,7 @@ extension HouseDetailViewController: UIScrollViewDelegate {
 
 extension HouseDetailViewController: UIAdaptivePresentationControllerDelegate {
     func presentHouseDetailSheet() {
-        let houseDetailSheetViewController = HouseDetailSheetViewController(viewModel: HouseDetailViewModel())
+        let houseDetailSheetViewController = HouseDetailSheetViewController(viewModel: viewModel)
         
         let fullDetent = UISheetPresentationController.Detent.custom { _ in Screen.height(380) }
         
