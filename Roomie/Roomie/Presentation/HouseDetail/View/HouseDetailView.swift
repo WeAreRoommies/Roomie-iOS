@@ -57,8 +57,8 @@ final class HouseDetailView: BaseView {
     
     // facility Section
     private let facilityTitleLabel = UILabel()
-    let safetyLivingFacilityView = HouseFacilityView(title: "안전 및 생활시설")
-    let kitchenFacilityView = HouseFacilityView(title: "주방시설")
+    let safetyLivingFacilityView = ChevronExpendView(title: "안전 및 생활시설")
+    let kitchenFacilityView = ChevronExpendView(title: "주방시설")
     private let facilityStackView = UIStackView()
     
     // roommate Section

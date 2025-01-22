@@ -1,5 +1,5 @@
 //
-//  HouseFacilityView.swift
+//  ChevronExpendView.swift
 //  Roomie
 //
 //  Created by 김승원 on 1/20/25.
@@ -12,7 +12,7 @@ import CombineCocoa
 import SnapKit
 import Then
 
-final class HouseFacilityView: UIView {
+final class ChevronExpendView: UIView {
     
     // MARK: - Property
     
@@ -158,7 +158,7 @@ final class HouseFacilityView: UIView {
     }
 }
 
-private extension HouseFacilityView {
+private extension ChevronExpendView {
     func expendView() {
         oddStackView.isHidden.toggle()
         evenStackView.isHidden.toggle()
@@ -179,7 +179,7 @@ private extension HouseFacilityView {
     }
 }
 
-extension HouseFacilityView {
+extension ChevronExpendView {
     func dataBind(_ data: [String]) {
         let evenDataCount = (data.count + 1) / 2
         
