@@ -246,3 +246,18 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
         }
     }
 }
+
+// MARK: - Functions
+
+extension RoomStatusTableViewCell {
+    func dataBind(_ roomInfo: RoomInfo) {
+        statusView.isAvailable = roomInfo.status
+        nameLabel.updateText(roomInfo.name)
+        roomTypeLabel.updateText(roomInfo.roomType)
+        depositLabel.updateText(roomInfo.deposit)
+        prepaidUtilitiesLabel.updateText(roomInfo.prepaidUtilities)
+        monthlyRentLabel.updateText(roomInfo.monthlyRent)
+        contractPeriodLabel.updateText(roomInfo.contractPeriod)
+        managementFeeLabel.updateText(roomInfo.managementFee)
+    }
+}
