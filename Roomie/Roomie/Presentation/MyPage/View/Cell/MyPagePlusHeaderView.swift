@@ -16,8 +16,9 @@ final class MyPagePlusHeaderView: BaseCollectionReusableView {
 
     private let profileImageView = UIImageView()
     
-    private let userInfoStackView = UIStackView()
     private let nicknameLabel = UILabel()
+    private let nicknameDefaultLabel = UILabel()
+    
     private let loginTypeView = UIView()
     private let loginTypeLabel = UILabel()
     
@@ -36,15 +37,12 @@ final class MyPagePlusHeaderView: BaseCollectionReusableView {
             $0.clipsToBounds = true
         }
         
-        userInfoStackView.do {
-            $0.axis = .vertical
-            $0.alignment = .top
-            $0.distribution = .fill
-            $0.spacing = 8
+        nicknameLabel.do {
+            $0.setText(style: .title2, color: .primaryPurple)
         }
         
-        nicknameLabel.do {
-            $0.setText(style: .title2, color: .grayscale12)
+        nicknameDefaultLabel.do {
+            $0.setText("님 안녕하세요!", style: .title2, color: .grayscale12)
         }
         
         loginTypeView.do {
@@ -76,12 +74,13 @@ final class MyPagePlusHeaderView: BaseCollectionReusableView {
     override func setUI() {
         addSubviews(
             profileImageView,
-            userInfoStackView,
+            nicknameLabel,
+            nicknameDefaultLabel,
+            loginTypeView,
             nextImageView,
             dividerView,
             titleLabel
         )
-        userInfoStackView.addArrangedSubviews(nicknameLabel, loginTypeView)
         loginTypeView.addSubview(loginTypeLabel)
     }
     
@@ -92,15 +91,25 @@ final class MyPagePlusHeaderView: BaseCollectionReusableView {
             $0.size.equalTo(60)
         }
         
-        userInfoStackView.snp.makeConstraints {
-            $0.centerY.equalTo(profileImageView.snp.centerY)
-            $0.leading.equalTo(profileImageView.snp.trailing).offset(12)
-        }
-        
         nextImageView.snp.makeConstraints {
             $0.centerY.equalTo(profileImageView.snp.centerY)
             $0.trailing.equalToSuperview().inset(10)
             $0.size.equalTo(44)
+        }
+        
+        nicknameLabel.snp.makeConstraints {
+            $0.bottom.equalTo(profileImageView.snp.centerY).offset(-4)
+            $0.leading.equalTo(profileImageView.snp.trailing).offset(12)
+        }
+        
+        nicknameDefaultLabel.snp.makeConstraints {
+            $0.centerY.equalTo(nicknameLabel.snp.centerY)
+            $0.leading.equalTo(nicknameLabel.snp.trailing).offset(2)
+        }
+        
+        loginTypeView.snp.makeConstraints {
+            $0.top.equalTo(profileImageView.snp.centerY).offset(4)
+            $0.leading.equalTo(profileImageView.snp.trailing).offset(12)
         }
         
         loginTypeLabel.snp.makeConstraints {
@@ -127,7 +136,6 @@ extension MyPagePlusHeaderView {
     }
     
     func dataBind(nickname: String) {
-        nicknameLabel.updateText("\(nickname) 님 안녕하세요!")
-        nicknameLabel.setHighlightText(nickname, style: .title2, color: .primaryPurple)
+        nicknameLabel.updateText(nickname)
     }
 }
