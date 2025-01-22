@@ -31,4 +31,15 @@ extension String {
         formatter.dateFormat = outputFormat
         return formatter.string(from: date)
     }
+    
+    /// Int 타입을 받아 "123,456,789원" 형식의 String 값으로 변환
+    static func formattedWonString(from value: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = ","
+        if let formattedValue = formatter.string(from: NSNumber(value: value)) {
+            return "\(formattedValue)원"
+        }
+        return "\(value)원"
+    }
 }
