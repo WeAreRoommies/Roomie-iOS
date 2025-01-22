@@ -14,13 +14,15 @@ struct HouseDetailImagesResponseDTO: ResponseModelType {
 struct HouseDetailImages: Codable {
     let mainImageURL: String
     let mainImageDescription: String
-    let facilityImageURLs: [String]
+    let facilityImageUrls: [String]
     let facilityImageDescription: String
     let floorImageURL: String
 
     enum CodingKeys: String, CodingKey {
         case mainImageURL = "mainImgUrl"
-        case mainImageDescription, facilityImageURLs, facilityImageDescription
+        case mainImageDescription = "mainImgDescription"
+        case facilityImageUrls = "facilityImgUrls"
+        case facilityImageDescription = "facilityImgDescription"
         case floorImageURL = "floorImgUrl"
     }
 }
