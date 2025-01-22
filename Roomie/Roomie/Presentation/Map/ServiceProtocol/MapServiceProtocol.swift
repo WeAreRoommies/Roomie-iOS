@@ -9,4 +9,6 @@ import Foundation
 
 protocol MapServiceProtocol {
     func fetchMapData(request: MapRequestDTO) async throws -> BaseResponseBody<MapResponseDTO>?
+    
+    // TODO: 찜 API 추가
 }

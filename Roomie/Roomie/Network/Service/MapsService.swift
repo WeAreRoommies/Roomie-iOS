@@ -44,6 +44,8 @@ extension MapsService: MapServiceProtocol {
     func fetchMapData(request: MapRequestDTO) async throws -> BaseResponseBody<MapResponseDTO>? {
         return try await self.request(with: .fetchMapData(request: request))
     }
+    
+    // TODO: 찜 API 추가
 }
 
 extension MapsService: MapSearchServiceProtocol {

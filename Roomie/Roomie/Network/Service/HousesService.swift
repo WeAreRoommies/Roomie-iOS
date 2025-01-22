@@ -44,18 +44,24 @@ extension HousesService: WishListServiceProtocol {
     func fetchWishListData() async throws -> BaseResponseBody<WishListResponseDTO>? {
         return try await self.request(with: .fetchWishLishData)
     }
+    
+    // TODO: 찜 API 추가
 }
 
 extension HousesService: HouseDetailServiceProtocol {
     func fetchHouseDetailData(houseID: Int) async throws -> BaseResponseBody<HouseDetailResponseDTO>? {
         return try await self.request(with: .fetchHouseDetailData(houseID: houseID))
     }
+    
+    // TODO: 찜 API 추가
 }
 
 extension HousesService: MoodListServiceProtocol {
     func fetchMoodListData(moodTag: String) async throws -> BaseResponseBody<MoodListResponseDTO>? {
         return try await self.request(with: .fetchMoodListData(moodTag: moodTag))
     }
+    
+    // TODO: 찜 API 추가
 }
 
 final class MockHouseService: WishListServiceProtocol {

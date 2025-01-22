@@ -44,6 +44,8 @@ extension HomeService: HomeServiceProtocol {
     func fetchHomeData() async throws -> BaseResponseBody<HomeResponseDTO>? {
         return try await self.request(with: .fetchUserHomeData)
     }
+    
+    // TODO: 찜 API 추가
 }
 
 final class MockHomeService: HomeServiceProtocol {
