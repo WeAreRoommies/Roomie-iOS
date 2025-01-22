@@ -40,7 +40,7 @@ final class HomeViewController: BaseViewController {
             setHomeNavigationBarStatus()
         }
     }
-    private var navigationBarColor: UIColor = .primaryLight4
+    private let barAppearance = UINavigationBarAppearance()
 
     // MARK: - Initializer
     
@@ -222,17 +222,21 @@ private extension HomeViewController {
     func setHomeNavigationBarStatus() {
         switch homeNavigationBarStatus {
         case .white:
-            navigationBarColor = .grayscale1
+            barAppearance.backgroundColor = .grayscale1
         case .purple:
-            navigationBarColor = .primaryLight4
+            barAppearance.backgroundColor = .primaryLight4
         }
+        
+        barAppearance.shadowColor = nil
+        navigationController?.navigationBar.standardAppearance = barAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = barAppearance
     }
     
     func setHomeNavigationBar(locaton location:String) {
         title = nil
         navigationItem.leftBarButtonItem = nil
         
-        let barAppearance = UINavigationBarAppearance()
+//        let barAppearance = UINavigationBarAppearance()
         let locationLabel = UILabel()
         let likedButton = UIBarButtonItem(
             image: .icnHeartLine24,
@@ -245,8 +249,8 @@ private extension HomeViewController {
         let locationItem = UIBarButtonItem(customView: locationLabel)
         let dropDownItem = UIBarButtonItem(customView: dropDownImageView)
         likedButton.tintColor = .grayscale10
-        barAppearance.backgroundColor = navigationBarColor
-        barAppearance.shadowColor = nil
+        barAppearance.backgroundColor = .primaryLight4
+//        barAppearance.shadowColor = nil
         locationLabel.do {
             $0.setText(location, style: .title2, color: .grayscale10)
         }
@@ -254,8 +258,8 @@ private extension HomeViewController {
         navigationItem.rightBarButtonItem = likedButton
         navigationItem.leftBarButtonItems = [locationItem, dropDownItem]
         
-        navigationController?.navigationBar.standardAppearance = barAppearance
-        navigationController?.navigationBar.scrollEdgeAppearance = barAppearance
+//        navigationController?.navigationBar.standardAppearance = barAppearance
+//        navigationController?.navigationBar.scrollEdgeAppearance = barAppearance
         
         view.setNeedsLayout()
         view.layoutIfNeeded()
