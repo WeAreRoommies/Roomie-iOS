@@ -13,6 +13,7 @@ enum HousesTargetType {
     case fetchWishLishData
     case fetchHouseDetailData(houseID: Int)
     case fetchMoodListData(moodTag: String)
+    case fetchPinWishData(houseID: Int)
 }
 
 extension HousesTargetType: TargetType {
@@ -28,6 +29,8 @@ extension HousesTargetType: TargetType {
             return "/\(houseID)/details"
         case .fetchMoodListData:
             return ""
+        case .fetchPinWishData(houseID: let houseID):
+            return "/\(houseID)/pins"
         }
     }
     
@@ -36,6 +39,7 @@ extension HousesTargetType: TargetType {
         case .fetchWishLishData: return .get
         case .fetchHouseDetailData: return .get
         case .fetchMoodListData: return .get
+        case .fetchPinWishData: return .patch
         }
     }
     
@@ -50,6 +54,8 @@ extension HousesTargetType: TargetType {
                 parameters: ["moodTag": moodTag],
                 encoding: URLEncoding.queryString
             )
+        case .fetchPinWishData:
+            return .requestPlain
         }
     }
     
