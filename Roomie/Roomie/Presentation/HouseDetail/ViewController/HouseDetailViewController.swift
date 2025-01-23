@@ -127,7 +127,8 @@ private extension HouseDetailViewController {
         let input = HouseDetailViewModel.Input(
             houseDetailViewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
             bottomSheetViewWillAppear: Just(()).eraseToAnyPublisher(),
-            buttonIndexSubject: PassthroughSubject<Int, Never>().eraseToAnyPublisher()
+            buttonIndexSubject: PassthroughSubject<Int, Never>().eraseToAnyPublisher(),
+            tourApplyButtonTapSubject: PassthroughSubject<Void, Never>().eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -415,7 +416,7 @@ extension HouseDetailViewController: UIScrollViewDelegate {
 extension HouseDetailViewController: UIAdaptivePresentationControllerDelegate {
     func presentHouseDetailSheet() {
         let houseDetailSheetViewController = HouseDetailSheetViewController(viewModel: viewModel)
-        
+        houseDetailSheetViewController.delegate = self
         let fullDetent = UISheetPresentationController.Detent.custom { _ in Screen.height(380) }
         
         if let sheet = houseDetailSheetViewController.sheetPresentationController {
@@ -427,5 +428,16 @@ extension HouseDetailViewController: UIAdaptivePresentationControllerDelegate {
         houseDetailSheetViewController.isModalInPresentation = false
         
         self.present(houseDetailSheetViewController, animated: true)
+    }
+}
+
+// MARK: - HouseDetailSheetViewControllerDelegate
+
+extension HouseDetailViewController: HouseDetailSheetViewControllerDelegate {
+    func tourApplyButtonDidTap(roomID: Int) {
+        print("HouseDetailViewController: \(roomID)")
+        
+        let tourCheckViewController = TourCheckViewController(viewModel: TourCheckViewModel())
+        navigationController?.pushViewController(tourCheckViewController, animated: true)
     }
 }

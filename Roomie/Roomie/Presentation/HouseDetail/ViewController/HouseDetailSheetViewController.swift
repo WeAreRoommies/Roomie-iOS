@@ -8,15 +8,22 @@
 import UIKit
 import Combine
 
+protocol HouseDetailSheetViewControllerDelegate: AnyObject {
+    func tourApplyButtonDidTap(roomID: Int)
+}
+
 final class HouseDetailSheetViewController: BaseViewController {
     
     // MARK: - Property
+    
+    weak var delegate: HouseDetailSheetViewControllerDelegate?
     
     private let rootView = HouseDetailSheetView()
     
     private let viewModel: HouseDetailViewModel
     
     private let buttonIndexSubject = PassthroughSubject<Int, Never>()
+    private let tourApplyButtonTapSubject = PassthroughSubject<Void, Never>()
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     
@@ -51,6 +58,14 @@ final class HouseDetailSheetViewController: BaseViewController {
         
         viewWillAppearSubject.send(())
     }
+    
+    override func setAction() {
+        rootView.tourApplyButton.tapPublisher
+            .sink { [weak self] in
+                self?.tourApplyButtonTapSubject.send(())
+            }
+            .store(in: cancelBag)
+    }
 }
 
 // MARK: - Functions
@@ -60,7 +75,8 @@ private extension HouseDetailSheetViewController {
         let input = HouseDetailViewModel.Input(
             houseDetailViewWillAppear: Just(()).eraseToAnyPublisher(),
             bottomSheetViewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
-            buttonIndexSubject: buttonIndexSubject.eraseToAnyPublisher()
+            buttonIndexSubject: buttonIndexSubject.eraseToAnyPublisher(),
+            tourApplyButtonTapSubject: tourApplyButtonTapSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(
@@ -87,8 +103,8 @@ private extension HouseDetailSheetViewController {
             .sink { [weak self] selectedRoomID in
                 guard let self else { return }
                 
-                // presentToTourCheckView
-                print(selectedRoomID)
+                delegate?.tourApplyButtonDidTap(roomID: selectedRoomID)
+                self.dismiss(animated: true)
             }
             .store(in: cancelBag)
     }
