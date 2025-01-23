@@ -184,7 +184,7 @@ extension HouseDetailViewModel: ViewModelType {
                         name: $0.name,
                         status: $0.status,
                         isTourAvailable: $0.isTourAvailable,
-                        subTitle: "\($0.deposit)/\($0.monthlyRent)"
+                        subTitle: "\($0.deposit / 10000)/\($0.monthlyRent / 10000)"
                     )
                 }
             }

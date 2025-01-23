@@ -51,21 +51,6 @@ final class HouseDetailSheetViewController: BaseViewController {
         
         viewWillAppearSubject.send(())
     }
-    
-    override func setAction() {
-        for button in rootView.buttons {
-            button.roomButton.tapPublisher
-                .map { button.tag }
-                .sink { [weak self] index in
-                    guard let self else { return }
-                    
-                    // TODO: 선택된 index로 rooms[index].roomID ViewModel에 넘기기
-                    self.updateRadioButton(selectedIndex: index)
-                    self.buttonIndexSubject.send(index)
-                }
-                .store(in: cancelBag)
-        }
-    }
 }
 
 // MARK: - Functions
@@ -94,16 +79,32 @@ private extension HouseDetailSheetViewController {
             .sink { [weak self] roomButtonInfos in
                 guard let self else { return }
                 self.rootView.dataBind(roomButtonInfos)
+                setRadioButton()
             }
             .store(in: cancelBag)
         
         output.selectedRoomID
             .sink { [weak self] selectedRoomID in
                 guard let self else { return }
-                // TODO: 선택된 방의 RoomID를 주입시켜주면서 화면 연결
+                
+                // presentToTourCheckView
                 print(selectedRoomID)
             }
             .store(in: cancelBag)
+    }
+    
+    func setRadioButton() {
+        for button in rootView.buttons {
+            button.roomButton.tapPublisher
+                .map { button.tag }
+                .sink { [weak self] index in
+                    guard let self else { return }
+                    
+                    self.updateRadioButton(selectedIndex: index)
+                    self.buttonIndexSubject.send(index)
+                }
+                .store(in: cancelBag)
+        }
     }
     
     func updateRadioButton(selectedIndex: Int) {
