@@ -14,11 +14,9 @@ final class WishListViewModel {
     
     private let service: WishListServiceProtocol
     
-    private let wishListDataSubject = PassthroughSubject<WishListResponseDTO, Never>()
+    let wishListDataSubject = CurrentValueSubject<WishListResponseDTO?, Never>(nil)
     let pinnedInfoDataSubject = PassthroughSubject<(Int, Bool), Never>()
     private let didTapHouseDataSubject = PassthroughSubject<Int, Never>()
-    
-    private(set) var wishListData: [WishHouse] = []
     
     init(service: WishListServiceProtocol) {
         self.service = service
@@ -58,6 +56,7 @@ extension WishListViewModel: ViewModelType {
             .store(in: cancelBag)
         
         let wishListData = wishListDataSubject
+            .compactMap { $0 }
             .map { house in
                 house.pinnedHouses.map { data in
                     WishHouse(
@@ -75,9 +74,6 @@ extension WishListViewModel: ViewModelType {
                     )
                 }
             }
-            .handleEvents(receiveOutput: { [weak self] list in
-                self?.wishListData = list
-            })
             .eraseToAnyPublisher()
         
         let pinnedInfoData = pinnedInfoDataSubject
@@ -109,11 +105,7 @@ private extension WishListViewModel {
             do {
                 guard let responseBody = try await service.updatePinnedHouse(houseID: houseID),
                       let data = responseBody.data else { return }
-                
-                if let index = self.wishListData.firstIndex(where: { $0.houseID == houseID }) {
-                    self.wishListData[index].isPinned = data.isPinned
-                    self.pinnedInfoDataSubject.send((houseID, data.isPinned))
-                }
+                self.pinnedInfoDataSubject.send((houseID, data.isPinned))
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
             }
