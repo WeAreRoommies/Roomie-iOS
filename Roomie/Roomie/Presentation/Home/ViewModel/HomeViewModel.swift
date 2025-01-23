@@ -48,7 +48,6 @@ extension HomeViewModel: ViewModelType {
                 self?.updatePinnedHouse(houseID: houseID)
             }
             .store(in: cancelBag)
-
         
         let houseListData = homeDataSubject
             .compactMap { $0 }
