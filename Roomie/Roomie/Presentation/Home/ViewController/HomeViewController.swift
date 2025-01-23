@@ -296,7 +296,7 @@ private extension HomeViewController {
     @objc
     func wishLishButtonDidTap() {
         let wishListViewController = WishListViewController(
-            viewModel: WishListViewModel(service: HousesService())
+            viewModel: WishListViewModel(service: WishListService())
         )
         self.navigationController?.pushViewController(wishListViewController, animated: true)
     }

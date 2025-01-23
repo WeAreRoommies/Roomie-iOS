@@ -40,7 +40,7 @@ final class MoodListViewController: BaseViewController {
     init(moodType: MoodType) {
         self.moodType = moodType
         self.moodNavibarTitle = moodType.title
-        self.viewModel = MoodListViewModel(service: HousesService())
+        self.viewModel = MoodListViewModel(service: MoodListService())
         super.init(nibName: nil, bundle: nil)
     }
     

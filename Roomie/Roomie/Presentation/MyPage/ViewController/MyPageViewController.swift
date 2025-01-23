@@ -127,7 +127,7 @@ extension MyPageViewController: UICollectionViewDelegate {
         switch indexPath.section {
         case 0:
             if indexPath.row == 0 {
-                let wishListViewController = WishListViewController(viewModel: WishListViewModel(service: HousesService()))
+                let wishListViewController = WishListViewController(viewModel: WishListViewModel(service: WishListService()))
                 wishListViewController.hidesBottomBarWhenPushed = true
                 self.navigationController?
                     .pushViewController(wishListViewController, animated: true)
