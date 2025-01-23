@@ -435,8 +435,7 @@ extension HouseDetailViewController: UIAdaptivePresentationControllerDelegate {
 
 extension HouseDetailViewController: HouseDetailSheetViewControllerDelegate {
     func tourApplyButtonDidTap(roomID: Int) {
-        print("HouseDetailViewController: \(roomID)")
-        
+    
         setClearNavigationBar()
         
         let tourCheckViewController = TourCheckViewController(viewModel: TourCheckViewModel())

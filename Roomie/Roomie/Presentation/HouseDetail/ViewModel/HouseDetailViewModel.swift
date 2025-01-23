@@ -199,7 +199,6 @@ extension HouseDetailViewModel: ViewModelType {
                 self.houseDetailDataSubject.value?.rooms[self.buttonIndex].roomID }
             .eraseToAnyPublisher()
         
-        
         return Output(
             navigationBarTitle: navigationBarTitle,
             houseMainInfo: houseMainInfo,
