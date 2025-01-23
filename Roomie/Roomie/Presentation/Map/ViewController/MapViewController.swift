@@ -25,7 +25,7 @@ final class MapViewController: BaseViewController {
     private var selectedMarker: NMFMarker?
     
     private let viewWillAppearSubject = CurrentValueSubject<Void, Never>(())
-    private let markerDidSelectSubject = PassthroughSubject<Int, Never>()
+    private let markerDidSelectSubject = CurrentValueSubject<Int, Never>(0)
     private let eraseButtonDidTapSubject = PassthroughSubject<Void, Never>()
     
     // MARK: - Initializer
@@ -113,10 +113,17 @@ final class MapViewController: BaseViewController {
             }
             .store(in: cancelBag)
         
-        rootView.mapDetailCardView.arrowButton
+        rootView.mapDetailCardView.nextButton
             .tapPublisher
-            .sink {
-                // TODO: 매물 상세 뷰 화면 연결
+            .sink { [weak self] in
+                let houseDetailViewController = HouseDetailViewController(
+                    viewModel: HouseDetailViewModel(
+                        houseID: self?.markerDidSelectSubject.value ?? 0,
+                        service: HousesService()
+                    )
+                )
+                houseDetailViewController.hidesBottomBarWhenPushed = true
+                self?.navigationController?.pushViewController(houseDetailViewController, animated: true)
             }
             .store(in: cancelBag)
     }
