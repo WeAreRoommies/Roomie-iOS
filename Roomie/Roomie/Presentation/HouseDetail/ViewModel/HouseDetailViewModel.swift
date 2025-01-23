@@ -51,20 +51,9 @@ extension HouseDetailViewModel: ViewModelType {
                 guard let self else { return }
                 
                 // TODO: houseID 받아오기
-                self.fetchHouseDetailData(houseID: houseID)
+                self.fetchHouseDetailData(houseID: self.houseID)
             }
             .store(in: cancelBag)
-        
-        houseDetailDataSubject
-            .compactMap { data in
-                data?.houseInfo.houseID
-            }
-            .sink { [weak self] houseID in
-                guard let self else { return }
-                self.houseID = houseID
-            }
-            .store(in: cancelBag)
-        
         
         input.roomIDSubject
             .sink { [weak self] roomID in
