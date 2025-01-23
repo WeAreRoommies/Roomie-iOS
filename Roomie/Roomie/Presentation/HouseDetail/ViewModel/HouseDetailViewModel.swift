@@ -16,8 +16,9 @@ final class HouseDetailViewModel {
     
     private let houseDetailDataSubject = CurrentValueSubject<HouseDetailResponseDTO?, Never>(nil)
     
-    private let buttonIndexSubject = PassthroughSubject<Int, Never>()
+    private let radioButtonSubject = PassthroughSubject<Void, Never>()
     
+    private var buttonIndex: Int = 0
     private(set) var houseID: Int = 0
     
     @Published private(set) var roomInfos: [RoomInfo] = []
@@ -36,6 +37,7 @@ extension HouseDetailViewModel: ViewModelType {
         let houseDetailViewWillAppear: AnyPublisher<Void, Never>
         let bottomSheetViewWillAppear: AnyPublisher<Void, Never>
         let buttonIndexSubject: AnyPublisher<Int, Never>
+        let tourApplyButtonTapSubject: AnyPublisher<Void, Never>
     }
     
     struct Output {
@@ -61,7 +63,8 @@ extension HouseDetailViewModel: ViewModelType {
         input.buttonIndexSubject
             .sink { [weak self] roomID in
                 guard let self else { return }
-                self.buttonIndexSubject.send(roomID)
+                self.radioButtonSubject.send(())
+                self.buttonIndex = roomID
             }
             .store(in: cancelBag)
         
@@ -173,7 +176,7 @@ extension HouseDetailViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
-        let isTourApplyButtonEnabled = buttonIndexSubject
+        let isTourApplyButtonEnabled = radioButtonSubject
             .map { _ in true }
             .eraseToAnyPublisher()
         
@@ -190,9 +193,12 @@ extension HouseDetailViewModel: ViewModelType {
             }
             .eraseToAnyPublisher()
         
-        let selectedRoomID = buttonIndexSubject
-            .compactMap { self.houseDetailDataSubject.value?.rooms[$0].roomID }
+        let selectedRoomID = input.tourApplyButtonTapSubject
+        
+            .compactMap {
+                self.houseDetailDataSubject.value?.rooms[self.buttonIndex].roomID }
             .eraseToAnyPublisher()
+        
         
         return Output(
             navigationBarTitle: navigationBarTitle,
