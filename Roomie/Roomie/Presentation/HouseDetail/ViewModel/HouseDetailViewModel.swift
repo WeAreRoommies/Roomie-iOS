@@ -211,7 +211,7 @@ extension HouseDetailViewModel: ViewModelType {
                     roomName: houseDetailData.rooms[buttonIndex].name
                 )
             }
-            .compactMap { $0 } // nil 값을 필터링
+            .compactMap { $0 }
             .eraseToAnyPublisher()
         
         return Output(

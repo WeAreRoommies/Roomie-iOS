@@ -214,8 +214,6 @@ final class HouseDetailView: BaseView {
             roommateTitleLabel,
             roommateTableView
         )
-
-//        photoImageView.addSubview(roundedTopView)
         
         nameBackView.addSubview(nameLabel)
         

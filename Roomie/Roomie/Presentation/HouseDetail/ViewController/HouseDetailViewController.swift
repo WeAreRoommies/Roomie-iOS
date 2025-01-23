@@ -79,9 +79,7 @@ final class HouseDetailViewController: BaseViewController {
         
         let borderIdentifier = "customBorder"
         if let existingBorder = navigationController?.navigationBar.subviews
-            .first(
-            where: { $0.accessibilityIdentifier == borderIdentifier }
-            ) {
+            .first(where: { $0.accessibilityIdentifier == borderIdentifier }) {
             existingBorder.removeFromSuperview()
         }
     }

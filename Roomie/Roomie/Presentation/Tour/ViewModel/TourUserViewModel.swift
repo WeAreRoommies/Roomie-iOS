@@ -22,7 +22,6 @@ final class TourUserViewModel {
     private let genderSubject = CurrentValueSubject<Gender, Never>(.none)
     private let phoneNumberTextSubject = CurrentValueSubject<String, Never>("")
     
-    
     // MARK: - Initializer
     
     init(builder: TourRequestDTO.Builder, roomID: Int) {

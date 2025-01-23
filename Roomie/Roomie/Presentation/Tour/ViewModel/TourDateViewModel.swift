@@ -8,7 +8,6 @@
 import Foundation
 import Combine
 
-// TODO: bulider이용해서 date, message를 model로 보내주기
 final class TourDateViewModel {
     
     // MARK: - Property
@@ -79,13 +78,12 @@ extension TourDateViewModel: ViewModelType {
     }
 }
 
-
 private extension TourDateViewModel {
     func applyTour(request: TourRequestDTO, roomID: Int) {
         Task {
             do {
-                guard let responseBody = try await service.applyTour(request: request, roomID: roomID), let data = responseBody.data else { return }
-                print(data.isSuccess)
+                guard let responseBody = try await service.applyTour(request: request, roomID: roomID),
+                      let data = responseBody.data else { return }
                 
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")

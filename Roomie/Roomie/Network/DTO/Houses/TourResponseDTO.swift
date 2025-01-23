@@ -7,7 +7,6 @@
 
 import Foundation
 
-// MARK: - TourResponseDTO
 struct TourResponseDTO: ResponseModelType {
     let isSuccess: Bool
 }
