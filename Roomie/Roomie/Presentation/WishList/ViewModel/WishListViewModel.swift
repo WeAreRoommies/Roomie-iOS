@@ -13,7 +13,11 @@ final class WishListViewModel {
     // MARK: - Property
     
     private let service: WishListServiceProtocol
+    
     private let wishListDataSubject = PassthroughSubject<WishListResponseDTO, Never>()
+    let pinnedInfoDataSubject = PassthroughSubject<(Int, Bool), Never>()
+    
+    private(set) var wishListData: [WishHouse] = []
     
     init(service: WishListServiceProtocol) {
         self.service = service
@@ -23,15 +27,24 @@ final class WishListViewModel {
 extension WishListViewModel: ViewModelType {
     struct Input {
         let viewWillAppear: AnyPublisher<Void, Never>
+        let pinnedHouseIDSubject: AnyPublisher<Int, Never>
     }
     
     struct Output {
         let wishList: AnyPublisher<[WishHouse], Never>
+        let pinnedInfo: AnyPublisher<(Int,Bool), Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
         input.viewWillAppear
-            .sink { [weak self] in self?.fetchWishListData()
+            .sink { [weak self] in
+                self?.fetchWishListData()
+            }
+            .store(in: cancelBag)
+        
+        input.pinnedHouseIDSubject
+            .sink { [weak self] houseID in
+                self?.updatePinnedHouse(houseID: houseID)
             }
             .store(in: cancelBag)
         
@@ -53,10 +66,17 @@ extension WishListViewModel: ViewModelType {
                     )
                 }
             }
+            .handleEvents(receiveOutput: { [weak self] list in
+                self?.wishListData = list
+            })
+            .eraseToAnyPublisher()
+        
+        let pinnedInfoData = pinnedInfoDataSubject
             .eraseToAnyPublisher()
         
         return Output(
-            wishList: wishListData
+            wishList: wishListData,
+            pinnedInfo: pinnedInfoData
         )
     }
 }
@@ -68,6 +88,22 @@ private extension WishListViewModel {
                 guard let responseBody = try await service.fetchWishListData(),
                       let data = responseBody.data else { return }
                 wishListDataSubject.send(data)
+            } catch {
+                print(">>> \(error.localizedDescription) : \(#function)")
+            }
+        }
+    }
+    
+    func updatePinnedHouse(houseID: Int) {
+        Task {
+            do {
+                guard let responseBody = try await service.updatePinnedHouse(houseID: houseID),
+                      let data = responseBody.data else { return }
+                
+                if let index = self.wishListData.firstIndex(where: { $0.houseID == houseID }) {
+                    self.wishListData[index].isPinned = data.isPinned
+                    self.pinnedInfoDataSubject.send((houseID, data.isPinned))
+                }
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
             }

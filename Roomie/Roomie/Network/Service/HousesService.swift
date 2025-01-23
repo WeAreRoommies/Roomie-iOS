@@ -41,11 +41,13 @@ final class HousesService {
 }
 
 extension HousesService: WishListServiceProtocol {
+    func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinnedResponseDTO>? {
+        return try await self.request(with: .updatePinnedHouse(houseID: houseID))
+    }
+    
     func fetchWishListData() async throws -> BaseResponseBody<WishListResponseDTO>? {
         return try await self.request(with: .fetchWishLishData)
     }
-    
-    // TODO: 찜 API 추가
 }
 
 extension HousesService: HouseDetailServiceProtocol {
@@ -77,6 +79,11 @@ extension HousesService: MoodListServiceProtocol {
 }
 
 final class MockHouseService: WishListServiceProtocol {
+    func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinnedResponseDTO>? {
+        let mockData: PinnedResponseDTO = PinnedResponseDTO(isPinned: false)
+        return BaseResponseBody(code: 200, message: "", data: mockData)
+    }
+    
     func fetchWishListData() async throws -> BaseResponseBody<WishListResponseDTO>? {
         let mockData: WishListResponseDTO = WishListResponseDTO(pinnedHouses: [])
         return BaseResponseBody(code: 200, message: "", data: mockData)

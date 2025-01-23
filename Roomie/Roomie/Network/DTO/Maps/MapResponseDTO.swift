@@ -17,7 +17,7 @@ struct House: Codable, Hashable {
     let monthlyRent, deposit: String
     let occupancyTypes: String
     let location, genderPolicy, locationDescription: String
-    let isPinned: Bool
+    var isPinned: Bool
     let moodTag: String
     let contractTerm: Int
     let mainImageURL: String

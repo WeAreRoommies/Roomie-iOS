@@ -45,13 +45,20 @@ extension HomeService: HomeServiceProtocol {
         return try await self.request(with: .fetchUserHomeData)
     }
     
-    // TODO: 찜 API 추가
+    func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinnedResponseDTO>? {
+        return try await self.request(with: .updatePinnedHouse(houseID: houseID))
+    }
 }
 
 final class MockHomeService: HomeServiceProtocol {
     func fetchHomeData() async throws -> BaseResponseBody<HomeResponseDTO>? {
         let mockData: HomeResponseDTO =
         HomeResponseDTO(name: "김루미", location: "논현동", recentlyViewedHouses: [])
+        return BaseResponseBody(code: 200, message: "", data: mockData)
+    }
+    
+    func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinnedResponseDTO>? {
+        let mockData: PinnedResponseDTO = PinnedResponseDTO(isPinned: false)
         return BaseResponseBody(code: 200, message: "", data: mockData)
     }
 }

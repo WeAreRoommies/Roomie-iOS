@@ -23,6 +23,7 @@ final class WishListViewController: BaseViewController {
     private let cancelBag = CancelBag()
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
+    private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
     
     private lazy var dataSource = createDiffableDataSource()
     
@@ -86,7 +87,8 @@ private extension WishListViewController {
     
     func bindViewModel() {
         let input = WishListViewModel.Input(
-            viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher()
+            viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
+            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -99,6 +101,23 @@ private extension WishListViewController {
                 
                 if !data.isEmpty {
                     self.updateSnapshot(with: data)
+                }
+            }
+            .store(in: cancelBag)
+        
+        output.pinnedInfo
+            .receive(on: RunLoop.main)
+            .sink { [weak self] (houseID, isPinned) in
+                guard let self = self else { return }
+
+                if let index = self.viewModel.wishListData.firstIndex(where: { $0.houseID == houseID }) {
+                    let indexPath = IndexPath(item: index, section: 0)
+                    if let cell = self.rootView.wishListCollectionView.cellForItem(at: indexPath) as? HouseListCollectionViewCell {
+                        cell.updateWishButton(isPinned: isPinned)
+                    }
+                }
+                if isPinned == false {
+                    Toast().show(message: "찜 목록에서 삭제되었어요", inset: 32, view: rootView)
                 }
             }
             .store(in: cancelBag)
@@ -116,6 +135,12 @@ private extension WishListViewController {
                     return UICollectionViewCell()
                 }
                 cell.dataBind(model)
+                cell.wishButton
+                    .controlEventPublisher(for: .touchUpInside)
+                    .sink {
+                        self.pinnedHouseIDSubject.send(model.houseID)
+                    }
+                    .store(in: self.cancelBag)
                 return cell
             }
         )
