@@ -341,7 +341,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 extension HomeViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
-        if offsetY > -94 {
+        if offsetY > -90 {
             homeNavigationBarStatus = .top
         } else {
             homeNavigationBarStatus = .scrolled
@@ -349,7 +349,8 @@ extension HomeViewController: UIScrollViewDelegate {
         
         let maxOffsetY = rootView.scrollView.contentSize.height - rootView.scrollView.bounds.height
 
-        rootView.backgroundColor = rootView.scrollView.contentOffset.y >= maxOffsetY ? .grayscale1 : .primaryLight4
+        rootView.backgroundColor = rootView.scrollView.contentOffset.y >=
+        maxOffsetY ? .grayscale1 : .primaryLight4
     }
 }
 
