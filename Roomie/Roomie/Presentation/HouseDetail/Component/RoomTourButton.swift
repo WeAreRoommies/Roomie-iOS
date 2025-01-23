@@ -137,7 +137,8 @@ private extension RoomTourButton {
 }
 
 extension RoomTourButton {
-    func updateSubTitleLabel(with text: String) {
-        subTitleLabel.updateText(text)
+    func updateTitleLabel(title: String, subTitle: String) {
+        titleLabel.updateText(title)
+        subTitleLabel.updateText(subTitle)
     }
 }
