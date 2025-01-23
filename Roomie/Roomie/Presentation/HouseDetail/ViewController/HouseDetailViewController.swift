@@ -92,6 +92,7 @@ final class HouseDetailViewController: BaseViewController {
             .sink { [weak self] in
                 guard let self else { return }
                 let houseAllPhotoViewController = HouseAllPhotoViewController(
+                    title: navigationBarTitle,
                     viewModel: HouseAllPhotoViewModel(
                         service: HousesService(),
                         houseID: 1
@@ -378,11 +379,12 @@ extension HouseDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == rootView.roomStatusTableView {
             let houseSinglePhotoViewController = HouseSinglePhotoViewController(
+                title: navigationBarTitle,
+                index: indexPath.row,
                 viewModel: HouseSinglePhotoViewModel(
                     service: HousesService(),
                     houseID: 1
-                ),
-                index: indexPath.row
+                )
             )
             navigationController?.pushViewController(houseSinglePhotoViewController, animated: true)
         }

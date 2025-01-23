@@ -17,6 +17,8 @@ final class HouseAllPhotoViewController: BaseViewController {
     
     private let rootView = HouseAllPhotoView()
     
+    private var navigationBarTitle: String = ""
+    
     private let viewModel: HouseAllPhotoViewModel
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
@@ -25,7 +27,8 @@ final class HouseAllPhotoViewController: BaseViewController {
     
     // MARK: - Initializer
     
-    init(viewModel: HouseAllPhotoViewModel) {
+    init(title navigationBarTitle: String, viewModel: HouseAllPhotoViewModel) {
+        self.navigationBarTitle = navigationBarTitle
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -54,7 +57,7 @@ final class HouseAllPhotoViewController: BaseViewController {
     }
     
     override func setView() {
-        setNavigationBar(with: "43~50/90~100", isBorderHidden: false)
+        setNavigationBar(with: navigationBarTitle)
     }
 }
 

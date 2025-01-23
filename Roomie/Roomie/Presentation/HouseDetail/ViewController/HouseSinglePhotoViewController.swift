@@ -16,6 +16,8 @@ final class HouseSinglePhotoViewController: BaseViewController {
     
     private let rootView = HouseSinglePhotoView()
     
+    private var navigationBarTitle: String = ""
+    
     private let viewModel: HouseSinglePhotoViewModel
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
@@ -26,9 +28,10 @@ final class HouseSinglePhotoViewController: BaseViewController {
     
     // MARK: - Initializer
     
-    init(viewModel: HouseSinglePhotoViewModel, index: Int) {
+    init(title navigationBarTitle: String, index expandedIndex: Int, viewModel: HouseSinglePhotoViewModel) {
+        self.navigationBarTitle = navigationBarTitle
+        self.expandedIndex = expandedIndex
         self.viewModel = viewModel
-        expandedIndex = index
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -57,8 +60,7 @@ final class HouseSinglePhotoViewController: BaseViewController {
     }
     
     override func setView() {
-        setNavigationBar(with: "43~50/90~100")
-        
+        setNavigationBar(with: navigationBarTitle)
     }
 }
 
