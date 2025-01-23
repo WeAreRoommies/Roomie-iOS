@@ -377,7 +377,13 @@ extension HouseDetailViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == rootView.roomStatusTableView {
-            let houseSinglePhotoViewController = HouseSinglePhotoViewController(index: indexPath.row)
+            let houseSinglePhotoViewController = HouseSinglePhotoViewController(
+                viewModel: HouseSinglePhotoViewModel(
+                    service: HousesService(),
+                    houseID: 1
+                ),
+                index: indexPath.row
+            )
             navigationController?.pushViewController(houseSinglePhotoViewController, animated: true)
         }
     }
