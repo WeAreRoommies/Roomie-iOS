@@ -76,6 +76,7 @@ extension HouseSinglePhotoView {
                 status: rooms[index].status
             )
             expandedView.dataBind(rooms[index].facility)
+            expandedView.configure(rooms[index].mainImageURL[0])
             expandedView.setExpanded(isexpanded)
             roomStackView.addArrangedSubview(expandedView)
         }
