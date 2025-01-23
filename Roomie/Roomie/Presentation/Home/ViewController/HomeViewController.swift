@@ -30,6 +30,7 @@ final class HomeViewController: BaseViewController {
     private lazy var dataSource = createDiffableDataSource()
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
+    private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
         
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
@@ -152,7 +153,8 @@ private extension HomeViewController {
     
     func bindViewModel() {
         let input = HomeViewModel.Input(
-            viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher()
+            viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
+            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -183,6 +185,23 @@ private extension HomeViewController {
                 self.updateEmtpyView(isEmpty: data == 0)
             }
             .store(in: cancelBag)
+        
+        output.pinnedInfo
+            .receive(on: RunLoop.main)
+            .sink { [weak self] (houseID, isPinned) in
+                guard let self = self else { return }
+
+                if let index = self.viewModel.houseListData.firstIndex(where: { $0.houseID == houseID }) {
+                    let indexPath = IndexPath(item: index, section: 0)
+                    if let cell = self.rootView.houseListCollectionView.cellForItem(at: indexPath) as? HouseListCollectionViewCell {
+                        cell.updateWishButton(isPinned: isPinned)
+                    }
+                }
+                if isPinned == false {
+                    Toast().show(message: "찜 목록에서 삭제되었어요", inset: 8, view: rootView)
+                }
+            }
+            .store(in: cancelBag)
     }
     
     func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, HomeHouse> {
@@ -193,6 +212,12 @@ private extension HomeViewController {
             else { return UICollectionViewCell() }
             
             cell.dataBind(model)
+            cell.wishButton
+                .controlEventPublisher(for: .touchUpInside)
+                .sink {
+                    self.pinnedHouseIDSubject.send(model.houseID)
+                }
+                .store(in: self.cancelBag)
             return cell
         }
     }

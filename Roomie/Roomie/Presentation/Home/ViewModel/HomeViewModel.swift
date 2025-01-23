@@ -12,7 +12,11 @@ final class HomeViewModel {
     
     // MARK: - Property
     private let service: HomeServiceProtocol
+    
     private let homeDataSubject = PassthroughSubject<HomeResponseDTO, Never>()
+    let pinnedInfoDataSubject = PassthroughSubject<(Int, Bool), Never>()
+    
+    private(set) var houseListData: [HomeHouse] = []
     
     init(service: HomeServiceProtocol) {
         self.service = service
@@ -22,18 +26,26 @@ final class HomeViewModel {
 extension HomeViewModel: ViewModelType {
     struct Input {
         let viewWillAppear: AnyPublisher<Void, Never>
+        let pinnedHouseIDSubject: AnyPublisher<Int, Never>
     }
     
     struct Output {
         let userInfo: AnyPublisher<UserInfo, Never>
         let houseList: AnyPublisher<[HomeHouse], Never>
         let houseCount: AnyPublisher<Int, Never>
+        let pinnedInfo: AnyPublisher<(Int,Bool), Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
         input.viewWillAppear
             .sink { [weak self] in
                 self?.fetchHomeData()
+            }
+            .store(in: cancelBag)
+        
+        input.pinnedHouseIDSubject
+            .sink { [weak self] houseID in
+                self?.updatePinnedHouse(houseID: houseID)
             }
             .store(in: cancelBag)
         
@@ -55,6 +67,9 @@ extension HomeViewModel: ViewModelType {
                     )
                 }
             }
+            .handleEvents(receiveOutput: { [weak self] list in
+                self?.houseListData = list
+            })
             .eraseToAnyPublisher()
         
         let userInfo = homeDataSubject
@@ -67,10 +82,14 @@ extension HomeViewModel: ViewModelType {
             .map { $0.recentlyViewedHouses.count }
             .eraseToAnyPublisher()
         
+        let pinnedInfoData = pinnedInfoDataSubject
+            .eraseToAnyPublisher()
+        
         return Output(
             userInfo: userInfo,
             houseList: houseListData,
-            houseCount: houseCount
+            houseCount: houseCount,
+            pinnedInfo: pinnedInfoData
         )
     }
 }
@@ -85,6 +104,24 @@ private extension HomeViewModel {
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
             }
+        }
+    }
+    
+    func updatePinnedHouse(houseID: Int) {
+        Task {
+            Task {
+                 do {
+                     guard let responseBody = try await service.updatePinnedHouse(houseID: houseID),
+                           let data = responseBody.data else { return }
+                     
+                     if let index = self.houseListData.firstIndex(where: { $0.houseID == houseID }) {
+                         self.houseListData[index].isPinned = data.isPinned
+                         self.pinnedInfoDataSubject.send((houseID, data.isPinned))
+                     }
+                 } catch {
+                     print(">>> \(error.localizedDescription) : \(#function)")
+                 }
+             }
         }
     }
 }

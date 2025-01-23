@@ -10,5 +10,5 @@ import Foundation
 protocol MoodListServiceProtocol {
     func fetchMoodListData(moodTag: String) async throws -> BaseResponseBody<MoodListResponseDTO>?
     
-    // TODO: 찜 API 추가
+    func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinnedResponseDTO>?
 }
