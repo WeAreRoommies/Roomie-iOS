@@ -53,7 +53,7 @@ final class AppleLoverClub: UIView {
         }
         
         titleLabel.do {
-            $0.setText("루미가 궁금하다면?" ,style: .body2, color: .grayscale10)
+            $0.setText("1분만에 나의 분위기 알아보기" ,style: .body2, color: .grayscale10)
         }
         
         nextImageView.do {
