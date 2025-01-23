@@ -18,8 +18,7 @@ final class TourCheckViewController: BaseViewController {
     
     private let viewModel: TourCheckViewModel
     
-    private let roomIDSubject = PassthroughSubject<Int, Never>()
-    private let houseIDSubject = PassthroughSubject<Int, Never>()
+    private let nextButtonSubject = PassthroughSubject<Void, Never>()
     
     private let cancelBag = CancelBag()
     
@@ -56,8 +55,7 @@ final class TourCheckViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self else { return }
-                let tourUserViewController = TourUserViewController(viewModel: TourUserViewModel())
-                self.navigationController?.pushViewController(tourUserViewController, animated: true)
+                self.nextButtonSubject.send(())
             }
             .store(in: cancelBag)
     }
@@ -69,9 +67,23 @@ private extension TourCheckViewController {
     // TODO: 이전 뷰에서 roomID, houseID 받아와서 subject에 연결
     func bindViewModel() {
         let input = TourCheckViewModel.Input(
-            roomIDSubject: roomIDSubject.eraseToAnyPublisher(),
-            houseIDSubject: houseIDSubject.eraseToAnyPublisher()
+            nextButtonSubject: nextButtonSubject.eraseToAnyPublisher()
         )
+        
+        let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        
+        output.presentNextView
+            .sink { [weak self] in
+                guard let self else { return }
+                let tourUserViewController = TourUserViewController(
+                    viewModel: TourUserViewModel(
+                        builder: TourRequestDTO.Builder.shared, roomID: viewModel.selectedRoomInfo.roomID
+                    )
+                )
+                self.navigationController?.pushViewController(tourUserViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
     }
     
     func setTourCheckTitle() {
