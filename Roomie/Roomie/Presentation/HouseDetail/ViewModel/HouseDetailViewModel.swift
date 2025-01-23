@@ -18,7 +18,7 @@ final class HouseDetailViewModel {
     
     private let roomIDSubject = PassthroughSubject<Int, Never>()
     
-    @Published private(set) var houseID: Int = 0
+    private(set) var houseID: Int = 0
     @Published private(set) var roomInfos: [RoomInfo] = []
     @Published private(set) var roommateInfos: [RoommateInfo] = []
     
