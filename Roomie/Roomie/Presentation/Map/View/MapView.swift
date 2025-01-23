@@ -16,7 +16,7 @@ final class MapView: BaseView {
     // MARK: - UIComponent
     
     private let searchBarView = UIView()
-    private let searchBarLabel = UILabel()
+    let searchBarLabel = UILabel()
     private let searchImageView = UIImageView()
     let searchBarButton = UIButton()
     
@@ -48,7 +48,8 @@ final class MapView: BaseView {
         }
         
         mapView.do {
-            $0.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: 37.555184166, lng: 126.936910322)))
+            $0.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: 37.55438, lng: 126.9377)))
+            $0.zoomLevel = 13
         }
         
         mapListButton.do {

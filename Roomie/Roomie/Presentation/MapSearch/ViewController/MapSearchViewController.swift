@@ -10,6 +10,10 @@ import Combine
 
 import CombineCocoa
 
+protocol MapSearchViewControllerDelegate: AnyObject {
+    func didSelectLocation(location: String, lat: Double, lng: Double)
+}
+
 final class MapSearchViewController: BaseViewController {
     
     // MARK: - Property
@@ -21,6 +25,8 @@ final class MapSearchViewController: BaseViewController {
     private let cancelBag = CancelBag()
     
     private lazy var dataSource = createDiffableDataSource()
+    
+    weak var delegate: MapSearchViewControllerDelegate?
     
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 40
     final let cellHeight: CGFloat = 118
@@ -173,6 +179,14 @@ extension MapSearchViewController: UICollectionViewDelegateFlowLayout {
         let selectedLocation = dataSource.itemIdentifier(for: indexPath)
         if let location = selectedLocation {
             self.locationDidSelectSubject.send(location.address)
+        }
+        
+        if let selectedLocation = dataSource.itemIdentifier(for: indexPath) {
+            delegate?.didSelectLocation(
+                location: selectedLocation.location,
+                lat: selectedLocation.y,
+                lng: selectedLocation.x
+            )
         }
         
         self.navigationController?.popViewController(animated: true)
