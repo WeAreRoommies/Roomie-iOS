@@ -18,12 +18,14 @@ final class HouseDetailViewModel {
     
     private let roomIDSubject = PassthroughSubject<Int, Never>()
     
+    @Published private(set) var houseID: Int = 0
     @Published private(set) var roomInfos: [RoomInfo] = []
     @Published private(set) var roommateInfos: [RoommateInfo] = []
     
     // MARK: - Initializer
     
-    init(service: HouseDetailServiceProtocol) {
+    init(houseID: Int, service: HouseDetailServiceProtocol) {
+        self.houseID = houseID
         self.service = service
     }
 }
@@ -49,9 +51,20 @@ extension HouseDetailViewModel: ViewModelType {
                 guard let self else { return }
                 
                 // TODO: houseID 받아오기
-                self.fetchHouseDetailData(houseID: 1)
+                self.fetchHouseDetailData(houseID: houseID)
             }
             .store(in: cancelBag)
+        
+        houseDetailDataSubject
+            .compactMap { data in
+                data?.houseInfo.houseID
+            }
+            .sink { [weak self] houseID in
+                guard let self else { return }
+                self.houseID = houseID
+            }
+            .store(in: cancelBag)
+        
         
         input.roomIDSubject
             .sink { [weak self] roomID in
