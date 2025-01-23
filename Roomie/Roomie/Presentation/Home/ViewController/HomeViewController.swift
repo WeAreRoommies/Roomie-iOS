@@ -8,9 +8,9 @@
 import UIKit
 import Combine
 
+import CombineCocoa
 import SnapKit
 import Then
-import CombineCocoa
 
 private enum homeNavigationBarStatus {
     case top
@@ -88,7 +88,8 @@ final class HomeViewController: BaseViewController {
         rootView.updateButton.updateButton
             .tapPublisher
             .sink {
-                // TODO: 웹 뷰 화면 전환
+                let webViewController = APPLELOVERCLUBViewController()
+                self.navigationController?.pushViewController(webViewController, animated: true)
             }
             .store(in: cancelBag)
         
@@ -141,7 +142,7 @@ final class HomeViewController: BaseViewController {
 
 // MARK: - Functions
 
-private extension HomeViewController {
+private extension HomeViewController {    
     func setRegister() {
         rootView.houseListCollectionView.register(
             HouseListCollectionViewCell.self,
