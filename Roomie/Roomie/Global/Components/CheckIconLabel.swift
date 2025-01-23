@@ -83,3 +83,9 @@ private extension CheckIconLabel {
         ruleLabel.setText(text, style: .body1, color: .grayscale12)
     }
 }
+
+extension CheckIconLabel {
+    func updateText(_ text: String) {
+        ruleLabel.updateText(text)
+    }
+}
