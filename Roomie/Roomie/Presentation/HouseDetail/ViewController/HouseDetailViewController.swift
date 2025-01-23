@@ -95,7 +95,7 @@ final class HouseDetailViewController: BaseViewController {
                     title: navigationBarTitle,
                     viewModel: HouseAllPhotoViewModel(
                         service: HousesService(),
-                        houseID: 1
+                        houseID: viewModel.houseID
                     )
                 )
                 self.navigationController?.pushViewController(houseAllPhotoViewController, animated: true)
@@ -383,7 +383,7 @@ extension HouseDetailViewController: UITableViewDelegate {
                 index: indexPath.row,
                 viewModel: HouseSinglePhotoViewModel(
                     service: HousesService(),
-                    houseID: 1
+                    houseID: viewModel.houseID
                 )
             )
             navigationController?.pushViewController(houseSinglePhotoViewController, animated: true)
