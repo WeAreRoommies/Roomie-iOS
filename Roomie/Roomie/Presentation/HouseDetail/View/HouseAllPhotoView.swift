@@ -82,7 +82,7 @@ final class HouseAllPhotoView: BaseView {
         }
         
         facilityDescriptionLabel.do {
-            $0.setText("설명설명", style: .body4, color: .grayscale12)
+            $0.setText(style: .body4, color: .grayscale12)
         }
         
         roomTitleLabel.do {

@@ -114,7 +114,7 @@ private extension RoomTourButton {
     func setRoomTourButton(title: String = "", subTitle: String = "") {
         roomButton.isEnabled = isTourAvailable
         backgroundColor = isTourAvailable ? .grayscale1 : .grayscale4
-        titleLabel.setText("룸\(title)", style: .title2, color: isTourAvailable ? .grayscale12 : .grayscale7)
+        titleLabel.setText(title, style: .title2, color: isTourAvailable ? .grayscale12 : .grayscale7)
         subTitleLabel.setText(subTitle, style: .body4, color: .grayscale7)
     }
     
@@ -137,7 +137,8 @@ private extension RoomTourButton {
 }
 
 extension RoomTourButton {
-    func updateSubTitleLabel(with text: String) {
-        subTitleLabel.updateText(text)
+    func updateTitleLabel(title: String, subTitle: String) {
+        titleLabel.updateText(title)
+        subTitleLabel.updateText(subTitle)
     }
 }

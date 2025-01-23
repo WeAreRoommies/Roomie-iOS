@@ -22,33 +22,10 @@ final class HouseDetailSheetView: BaseView {
     private let titleLabel = UILabel()
     private let separatorView = UIView()
     
-    let roomATourButton = RoomTourButton(name: "A", deposit: "500/50", isTourAvailable: true)
-    let roomBTourButton = RoomTourButton(name: "B", deposit: "500/50", isTourAvailable: true)
-    private let firstStackView = UIStackView()
-    
-    let roomCTourButton = RoomTourButton(name: "C", deposit: "500/50", isTourAvailable: true)
-    let roomDTourButton = RoomTourButton(name: "D", deposit: "500/50", isTourAvailable: false)
-    private let secondStackView = UIStackView()
-    
-    let roomETourButton = RoomTourButton(name: "E", deposit: "500/50", isTourAvailable: false)
-    let roomFTourButton = RoomTourButton(name: "F", deposit: "500/50", isTourAvailable: true)
-    private let thirdStackView = UIStackView()
+    private let evenStackView = UIStackView()
+    private let oddStackView = UIStackView()
     
     let tourApplyButton = RoomieButton(title: "투어신청하기", isEnabled: false)
-    
-    // MARK: - Initializer
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        setButtons()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        
-        setButtons()
-    }
     
     // MARK: - UISetting
     
@@ -68,25 +45,18 @@ final class HouseDetailSheetView: BaseView {
             $0.backgroundColor = .grayscale4
         }
         
-        firstStackView.do {
-            $0.axis = .horizontal
+        evenStackView.do {
+            $0.axis = .vertical
             $0.spacing = 11
             $0.alignment = .fill
-            $0.distribution = .fillEqually
+            $0.distribution = .equalSpacing
         }
         
-        secondStackView.do {
-            $0.axis = .horizontal
+        oddStackView.do {
+            $0.axis = .vertical
             $0.spacing = 11
             $0.alignment = .fill
-            $0.distribution = .fillEqually
-        }
-        
-        thirdStackView.do {
-            $0.axis = .horizontal
-            $0.spacing = 11
-            $0.alignment = .fill
-            $0.distribution = .fillEqually
+            $0.distribution = .equalSpacing
         }
     }
     
@@ -95,15 +65,10 @@ final class HouseDetailSheetView: BaseView {
             grabberView,
             titleLabel,
             separatorView,
-            firstStackView,
-            secondStackView,
-            thirdStackView,
+            evenStackView,
+            oddStackView,
             tourApplyButton
         )
-        
-        firstStackView.addArrangedSubviews(roomATourButton, roomBTourButton)
-        secondStackView.addArrangedSubviews(roomCTourButton, roomDTourButton)
-        thirdStackView.addArrangedSubviews(roomETourButton, roomFTourButton)
     }
     
     override func setLayout() {
@@ -125,22 +90,16 @@ final class HouseDetailSheetView: BaseView {
             $0.height.equalTo(1)
         }
         
-        firstStackView.snp.makeConstraints {
+        evenStackView.snp.makeConstraints {
             $0.top.equalTo(separatorView.snp.bottom).offset(20)
-            $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.height.equalTo(Screen.height(60))
+            $0.leading.equalToSuperview().inset(20)
+            $0.width.equalTo(Screen.width(162))
         }
         
-        secondStackView.snp.makeConstraints {
-            $0.top.equalTo(firstStackView.snp.bottom).offset(11)
-            $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.height.equalTo(Screen.height(60))
-        }
-        
-        thirdStackView.snp.makeConstraints {
-            $0.top.equalTo(secondStackView.snp.bottom).offset(11)
-            $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.height.equalTo(Screen.height(60))
+        oddStackView.snp.makeConstraints {
+            $0.top.equalTo(separatorView.snp.bottom).offset(20)
+            $0.trailing.equalToSuperview().inset(20)
+            $0.width.equalTo(Screen.width(162))
         }
         
         tourApplyButton.snp.makeConstraints {
@@ -151,24 +110,28 @@ final class HouseDetailSheetView: BaseView {
     }
 }
 
-private extension HouseDetailSheetView {
-    func setButtons() {
-        buttons.append(roomATourButton)
-        roomATourButton.tag = 0
-        
-        buttons.append(roomBTourButton)
-        roomBTourButton.tag = 1
-        
-        buttons.append(roomCTourButton)
-        roomCTourButton.tag = 2
-        
-        buttons.append(roomDTourButton)
-        roomDTourButton.tag = 3
-        
-        buttons.append(roomETourButton)
-        roomETourButton.tag = 4
-        
-        buttons.append(roomFTourButton)
-        roomFTourButton.tag = 5
+extension HouseDetailSheetView {
+    func dataBind(_ data: [RoomButtonInfo]) {
+        for index in 0..<data.count {
+            let roomTourButton = RoomTourButton(
+                name: data[index].name,
+                deposit: data[index].subTitle,
+                isTourAvailable: data[index].isTourAvailable
+            )
+            
+            roomTourButton.tag = index
+            
+            buttons.append(roomTourButton)
+            
+            roomTourButton.snp.makeConstraints {
+                $0.height.equalTo(Screen.height(60))
+            }
+            
+            if index % 2 == 0 {
+                evenStackView.addArrangedSubview(roomTourButton)
+            } else {
+                oddStackView.addArrangedSubview(roomTourButton)
+            }
+        }
     }
 }

@@ -60,7 +60,7 @@ final class HouseSinglePhotoViewController: BaseViewController {
     }
     
     override func setView() {
-        setNavigationBar(with: navigationBarTitle)
+        setNavigationBar(with: navigationBarTitle, isBorderHidden: true)
     }
 }
 

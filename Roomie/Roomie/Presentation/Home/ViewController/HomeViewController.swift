@@ -88,7 +88,7 @@ final class HomeViewController: BaseViewController {
                 // TODO: 추후 재 화면연결 필요
                 let houseDetailViewController = HouseDetailViewController(
                     viewModel: HouseDetailViewModel(
-                        houseID: 2,
+                        houseID: 1,
                         service: HousesService()
                     )
                 )

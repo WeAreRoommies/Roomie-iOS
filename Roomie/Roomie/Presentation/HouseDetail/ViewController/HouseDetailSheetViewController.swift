@@ -8,15 +8,24 @@
 import UIKit
 import Combine
 
+protocol HouseDetailSheetViewControllerDelegate: AnyObject {
+    func tourApplyButtonDidTap(roomID: Int)
+}
+
 final class HouseDetailSheetViewController: BaseViewController {
     
     // MARK: - Property
+    
+    weak var delegate: HouseDetailSheetViewControllerDelegate?
     
     private let rootView = HouseDetailSheetView()
     
     private let viewModel: HouseDetailViewModel
     
-    private let roomIDSubject = PassthroughSubject<Int, Never>()
+    private let buttonIndexSubject = PassthroughSubject<Int, Never>()
+    private let tourApplyButtonTapSubject = PassthroughSubject<Void, Never>()
+    
+    private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     
     private let cancelBag = CancelBag()
     
@@ -44,19 +53,18 @@ final class HouseDetailSheetViewController: BaseViewController {
         bindViewModel()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        viewWillAppearSubject.send(())
+    }
+    
     override func setAction() {
-        for button in rootView.buttons {
-            button.roomButton.tapPublisher
-                .map { button.tag }
-                .sink { [weak self] index in
-                    guard let self else { return }
-                    
-                    // TODO: 선택된 index로 rooms[index].roomID ViewModel에 넘기기
-                    self.updateRadioButton(selectedIndex: index)
-                    self.roomIDSubject.send(index)
-                }
-                .store(in: cancelBag)
-        }
+        rootView.tourApplyButton.tapPublisher
+            .sink { [weak self] in
+                self?.tourApplyButtonTapSubject.send(())
+            }
+            .store(in: cancelBag)
     }
 }
 
@@ -65,8 +73,10 @@ final class HouseDetailSheetViewController: BaseViewController {
 private extension HouseDetailSheetViewController {
     func bindViewModel() {
         let input = HouseDetailViewModel.Input(
-            viewWillApper: Just(()).eraseToAnyPublisher(),
-            roomIDSubject: roomIDSubject.eraseToAnyPublisher()
+            houseDetailViewWillAppear: Just(()).eraseToAnyPublisher(),
+            bottomSheetViewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
+            buttonIndexSubject: buttonIndexSubject.eraseToAnyPublisher(),
+            tourApplyButtonTapSubject: tourApplyButtonTapSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(
@@ -80,6 +90,37 @@ private extension HouseDetailSheetViewController {
                 rootView.tourApplyButton.isEnabled = isEnabled
             }
             .store(in: cancelBag)
+        
+        output.roomButtonInfos
+            .sink { [weak self] roomButtonInfos in
+                guard let self else { return }
+                self.rootView.dataBind(roomButtonInfos)
+                setRadioButton()
+            }
+            .store(in: cancelBag)
+        
+        output.selectedRoomID
+            .sink { [weak self] selectedRoomID in
+                guard let self else { return }
+                
+                delegate?.tourApplyButtonDidTap(roomID: selectedRoomID)
+                self.dismiss(animated: true)
+            }
+            .store(in: cancelBag)
+    }
+    
+    func setRadioButton() {
+        for button in rootView.buttons {
+            button.roomButton.tapPublisher
+                .map { button.tag }
+                .sink { [weak self] index in
+                    guard let self else { return }
+                    
+                    self.updateRadioButton(selectedIndex: index)
+                    self.buttonIndexSubject.send(index)
+                }
+                .store(in: cancelBag)
+        }
     }
     
     func updateRadioButton(selectedIndex: Int) {
