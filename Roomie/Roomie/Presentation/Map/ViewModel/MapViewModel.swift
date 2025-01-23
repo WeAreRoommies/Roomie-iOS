@@ -26,12 +26,14 @@ extension MapViewModel: ViewModelType {
     struct Input {
         let viewWillAppear: AnyPublisher<Void, Never>
         let markerDidSelect: AnyPublisher<Int, Never>
+        let eraseButtonDidTap: AnyPublisher<Void, Never>
     }
     
     struct Output {
         let markersInfo: AnyPublisher<[MarkerInfo], Never>
         let markerDetailInfo: AnyPublisher<MarkerDetailInfo, Never>
         let mapListData: AnyPublisher<MapResponseDTO, Never>
+        let defaultLocationInfo: AnyPublisher<(Double, Double), Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -45,6 +47,14 @@ extension MapViewModel: ViewModelType {
         input.markerDidSelect
             .sink { [weak self] houseID in
                 self?.houseID = houseID
+            }
+            .store(in: cancelBag)
+        
+        input.eraseButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.builder.setLocation("서울특별시 마포구 노고산동")
+                self.fetchMapData(request: builder.build())
             }
             .store(in: cancelBag)
         
@@ -79,10 +89,15 @@ extension MapViewModel: ViewModelType {
             .compactMap { $0 }
             .eraseToAnyPublisher()
         
+        let defaultLocationInfo = input.eraseButtonDidTap
+            .map { (37.567764, 126.916784) }
+            .eraseToAnyPublisher()
+        
         return Output(
             markersInfo: markersInfo,
             markerDetailInfo: markerDetailInfo,
-            mapListData: mapListData
+            mapListData: mapListData,
+            defaultLocationInfo: defaultLocationInfo
         )
     }
 }

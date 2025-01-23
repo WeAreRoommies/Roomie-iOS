@@ -17,8 +17,9 @@ final class MapView: BaseView {
     
     private let searchBarView = UIView()
     let searchBarLabel = UILabel()
-    private let searchImageView = UIImageView()
+    let searchImageView = UIImageView()
     let searchBarButton = UIButton()
+    let eraseButton = UIButton()
     
     let filteringButton = RoomieIconButton(imageName: "icn_map_fillter_20")
     
@@ -45,6 +46,11 @@ final class MapView: BaseView {
         
         searchImageView.do {
             $0.image = .icnSearch40
+        }
+        
+        eraseButton.do {
+            $0.setImage(.icnDelete20, for: .normal)
+            $0.isHidden = true
         }
         
         mapView.do {
@@ -82,7 +88,8 @@ final class MapView: BaseView {
         searchBarView.addSubviews(
             searchBarLabel,
             searchImageView,
-            searchBarButton
+            searchBarButton,
+            eraseButton
         )
     }
     
@@ -100,6 +107,12 @@ final class MapView: BaseView {
         }
         
         searchImageView.snp.makeConstraints {
+            $0.centerY.equalTo(searchBarView.snp.centerY)
+            $0.trailing.equalTo(searchBarView.snp.trailing).offset(-6)
+            $0.size.equalTo(40)
+        }
+        
+        eraseButton.snp.makeConstraints {
             $0.centerY.equalTo(searchBarView.snp.centerY)
             $0.trailing.equalTo(searchBarView.snp.trailing).offset(-6)
             $0.size.equalTo(40)

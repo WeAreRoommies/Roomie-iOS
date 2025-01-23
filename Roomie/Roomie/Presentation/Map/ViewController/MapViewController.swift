@@ -26,6 +26,7 @@ final class MapViewController: BaseViewController {
     
     private let viewWillAppearSubject = CurrentValueSubject<Void, Never>(())
     private let markerDidSelectSubject = PassthroughSubject<Int, Never>()
+    private let eraseButtonDidTapSubject = PassthroughSubject<Void, Never>()
     
     // MARK: - Initializer
 
@@ -54,7 +55,6 @@ final class MapViewController: BaseViewController {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(true, animated: false)
-        removeAllMarkers()
         viewWillAppearSubject.send(())
     }
     
@@ -103,6 +103,16 @@ final class MapViewController: BaseViewController {
             }
             .store(in: cancelBag)
         
+        rootView.eraseButton
+            .tapPublisher
+            .sink { [weak self] in
+                self?.eraseButtonDidTapSubject.send()
+                self?.rootView.searchBarLabel.setText("원하는 장소를 찾아보세요", style: .title1, color: .grayscale7)
+                
+                self?.rootView.eraseButton.isHidden = true
+            }
+            .store(in: cancelBag)
+        
         rootView.mapDetailCardView.arrowButton
             .tapPublisher
             .sink {
@@ -116,7 +126,8 @@ private extension MapViewController {
     func bindViewModel() {
         let input = MapViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
-            markerDidSelect: markerDidSelectSubject.eraseToAnyPublisher()
+            markerDidSelect: markerDidSelectSubject.eraseToAnyPublisher(),
+            eraseButtonDidTap: eraseButtonDidTapSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -125,6 +136,8 @@ private extension MapViewController {
             .receive(on: RunLoop.main)
             .sink { [weak self] markersInfo in
                 guard let self = self else { return }
+                
+                removeAllMarkers()
                 
                 for markerInfo in markersInfo {
                     let marker = NMFMarker(position: NMGLatLng(lat: markerInfo.x, lng: markerInfo.y))
@@ -182,6 +195,19 @@ private extension MapViewController {
                 )
             }
             .store(in: cancelBag)
+        
+        output.defaultLocationInfo
+            .receive(on: RunLoop.main)
+            .sink { [weak self] (lat, lng) in
+                guard let self = self else { return }
+                let cameraUpdate = NMFCameraUpdate(
+                    scrollTo: NMGLatLng(lat: lat, lng: lng),
+                    zoomTo: 12
+                )
+                cameraUpdate.animation = .easeIn
+                self.rootView.mapView.moveCamera(cameraUpdate)
+            }
+            .store(in: cancelBag)
     }
     
     func removeAllMarkers() {
@@ -204,6 +230,8 @@ extension MapViewController: MapSearchViewControllerDelegate {
     func didSelectLocation(location: String, lat: Double, lng: Double) {
         
         rootView.searchBarLabel.setText(location, style: .title1, color: .grayscale12)
+        rootView.searchImageView.isHidden = true
+        rootView.eraseButton.isHidden = false
         
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lng))
         cameraUpdate.animation = .easeIn

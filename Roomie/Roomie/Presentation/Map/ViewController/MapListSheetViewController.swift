@@ -66,7 +66,8 @@ private extension MapListSheetViewController {
     func bindViewModel() {
         let input = MapViewModel.Input(
             viewWillAppear: Just(()).eraseToAnyPublisher(),
-            markerDidSelect: PassthroughSubject<Int, Never>().eraseToAnyPublisher()
+            markerDidSelect: PassthroughSubject<Int, Never>().eraseToAnyPublisher(),
+            eraseButtonDidTap: PassthroughSubject<Void, Never>().eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
