@@ -51,7 +51,10 @@ final class TourCompleteViewController: BaseViewController {
             .sink { [weak self] in
                 guard let self else { return }
                 
-                // TODO: 지도 검색화면으로 (Pop)
+                if let targetViewController = navigationController?.viewControllers.first(
+                    where: { $0 is HouseDetailViewController }) {
+                    navigationController?.popToViewController(targetViewController, animated: true)
+                }
             }
             .store(in: cancelBag)
         
@@ -60,7 +63,8 @@ final class TourCompleteViewController: BaseViewController {
             .sink { [weak self] in
                 guard let self else { return }
                 
-                // TODO: 메인 페이지로 이동 (Pop)
+                navigationController?.popToRootViewController(animated: true)
+                self.tabBarController?.selectedIndex = 0
             }
             .store(in: cancelBag)
     }

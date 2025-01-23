@@ -448,7 +448,12 @@ extension HouseDetailViewController: UIAdaptivePresentationControllerDelegate {
 extension HouseDetailViewController: HouseDetailSheetViewControllerDelegate {
     func tourApplyButtonDidTap(_ selectedRoomInfo: SelectedRoomInfo) {
         
-        let tourCheckViewController = TourCheckViewController(viewModel: TourCheckViewModel(selectedRoomInfo: selectedRoomInfo))
+        let tourCheckViewController = TourCheckViewController(
+            viewModel: TourCheckViewModel(
+                selectedRoomInfo: selectedRoomInfo,
+                builder: TourRequestDTO.Builder.shared
+            )
+        )
         navigationController?.pushViewController(tourCheckViewController, animated: true)
     }
 }
