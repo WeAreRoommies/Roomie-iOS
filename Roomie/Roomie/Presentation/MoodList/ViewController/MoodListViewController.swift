@@ -25,6 +25,7 @@ final class MoodListViewController: BaseViewController {
     private lazy var dataSource = createDiffableDataSource()
     
     private let moodListTypeSubject = PassthroughSubject<String, Never>()
+    private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
     
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
@@ -40,7 +41,7 @@ final class MoodListViewController: BaseViewController {
     init(moodType: MoodType) {
         self.moodType = moodType
         self.moodNavibarTitle = moodType.title
-        self.viewModel = MoodListViewModel(service: HousesService())
+        self.viewModel = MoodListViewModel(service: MoodListService())
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -68,6 +69,8 @@ final class MoodListViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        updateSeletedCell()
         moodListTypeSubject.send(moodType.title)
     }
     
@@ -106,7 +109,8 @@ private extension MoodListViewController {
     
     func bindViewModel() {
         let input = MoodListViewModel.Input(
-            moodListTypeSubject: moodListTypeSubject.eraseToAnyPublisher()
+            moodListTypeSubject: moodListTypeSubject.eraseToAnyPublisher(),
+            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -116,6 +120,26 @@ private extension MoodListViewController {
             .sink { [weak self] data in guard let self else { return }
                 if !data.isEmpty {
                     self.updateSnapshot(with: data)
+                }
+            }
+            .store(in: cancelBag)
+        
+        output.pinnedInfo
+            .receive(on: RunLoop.main)
+            .sink { [weak self] (houseID, isPinned) in
+                guard let self = self else { return }
+
+                if let index = self.viewModel.moodListDataSubject.value?.houses.firstIndex(
+                    where: { $0.houseID == houseID }
+                ) {
+                    let indexPath = IndexPath(item: index, section: 0)
+                    if let cell = self.rootView.moodListCollectionView.cellForItem(at: indexPath) as?
+                        HouseListCollectionViewCell {
+                        cell.updateWishButton(isPinned: isPinned)
+                    }
+                }
+                if isPinned == false {
+                    Toast().show(message: "찜 목록에서 삭제되었어요", inset: 32, view: rootView)
                 }
             }
             .store(in: cancelBag)
@@ -130,6 +154,12 @@ private extension MoodListViewController {
                 else { return UICollectionViewCell() }
                 
                 cell.dataBind(model)
+                cell.wishButton
+                    .controlEventPublisher(for: .touchUpInside)
+                    .sink {
+                        self.pinnedHouseIDSubject.send(model.houseID)
+                    }
+                    .store(in: self.cancelBag)
                 return cell
             }
         )
@@ -166,6 +196,15 @@ private extension MoodListViewController {
         snapshot.appendItems(data, toSection: 0)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
+    
+    func updateSeletedCell() {
+        for index in rootView.moodListCollectionView.indexPathsForVisibleItems {
+            if let cell = rootView.moodListCollectionView.cellForItem(at: index) as?
+                HouseListCollectionViewCell {
+                cell.isSelected = false
+            }
+        }
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -199,7 +238,12 @@ extension MoodListViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        // TODO: 상세매물 페이지와 연결
+        guard let houseID = viewModel.moodListDataSubject.value?.houses[indexPath.item].houseID else { return }
+        let houseDetailViewController = HouseDetailViewController(
+            viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
+        )
+        houseDetailViewController.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(houseDetailViewController, animated: true)
     }
     
     func collectionView(

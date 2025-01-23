@@ -75,6 +75,8 @@ final class HomeViewController: BaseViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         updateSeletedCell()
         setHomeNavigationBarStatus()
         viewWillAppearSubject.send()
@@ -296,7 +298,7 @@ private extension HomeViewController {
     @objc
     func wishLishButtonDidTap() {
         let wishListViewController = WishListViewController(
-            viewModel: WishListViewModel(service: HousesService())
+            viewModel: WishListViewModel(service: WishListService())
         )
         self.navigationController?.pushViewController(wishListViewController, animated: true)
     }
