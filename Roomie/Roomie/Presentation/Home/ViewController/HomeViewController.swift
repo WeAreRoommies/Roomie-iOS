@@ -31,7 +31,6 @@ final class HomeViewController: BaseViewController {
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
-    private let didTapHouseSubject = PassthroughSubject<Int, Never>()
         
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
@@ -129,7 +128,6 @@ final class HomeViewController: BaseViewController {
             .tapPublisher
             .sink {
                 let neatMoodListViewController = MoodListViewController(
-                    
                     moodType: .neat
                 )
                 neatMoodListViewController.hidesBottomBarWhenPushed = true
@@ -164,8 +162,7 @@ private extension HomeViewController {
     func bindViewModel() {
         let input = HomeViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
-            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher(),
-            tappedHouseIDSubject: didTapHouseSubject.eraseToAnyPublisher()
+            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -214,20 +211,6 @@ private extension HomeViewController {
                 if isPinned == false {
                     Toast().show(message: "찜 목록에서 삭제되었어요", inset: 8, view: rootView)
                 }
-            }
-            .store(in: cancelBag)
-        
-        output.tappedInfo
-            .receive(on: RunLoop.main)
-            .sink { [weak self] houseID in
-                guard let self = self else { return }
-                self.houseID = houseID
-                
-                let houseDetailViewController = HouseDetailViewController(
-                    viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
-                )
-                houseDetailViewController.hidesBottomBarWhenPushed = true
-                self.navigationController?.pushViewController(houseDetailViewController, animated: true)
             }
             .store(in: cancelBag)
     }
@@ -355,7 +338,11 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         didSelectItemAt indexPath: IndexPath
     ) {
         guard let houseID = viewModel.homeDataSubject.value?.recentlyViewedHouses[indexPath.item].houseID else { return }
-        didTapHouseSubject.send(houseID)
+        let houseDetailViewController = HouseDetailViewController(
+            viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
+        )
+        houseDetailViewController.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(houseDetailViewController, animated: true)
     }
 }
 

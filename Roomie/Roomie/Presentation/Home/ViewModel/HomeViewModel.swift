@@ -11,6 +11,7 @@ import Combine
 final class HomeViewModel {
     
     // MARK: - Property
+    
     private let service: HomeServiceProtocol
     
     let homeDataSubject = CurrentValueSubject<HomeResponseDTO?, Never>(nil)
@@ -26,7 +27,6 @@ extension HomeViewModel: ViewModelType {
     struct Input {
         let viewWillAppear: AnyPublisher<Void, Never>
         let pinnedHouseIDSubject: AnyPublisher<Int, Never>
-        let tappedHouseIDSubject: AnyPublisher<Int, Never>
     }
     
     struct Output {
@@ -34,7 +34,6 @@ extension HomeViewModel: ViewModelType {
         let houseList: AnyPublisher<[HomeHouse], Never>
         let houseCount: AnyPublisher<Int, Never>
         let pinnedInfo: AnyPublisher<(Int,Bool), Never>
-        let tappedInfo: AnyPublisher<Int, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -47,12 +46,6 @@ extension HomeViewModel: ViewModelType {
         input.pinnedHouseIDSubject
             .sink { [weak self] houseID in
                 self?.updatePinnedHouse(houseID: houseID)
-            }
-            .store(in: cancelBag)
-        
-        input.tappedHouseIDSubject
-            .sink { [weak self] houseID in
-                self?.didTapHouseDataSubject.send(houseID)
             }
             .store(in: cancelBag)
 
@@ -97,8 +90,7 @@ extension HomeViewModel: ViewModelType {
             userInfo: userInfo,
             houseList: houseListData,
             houseCount: houseCount,
-            pinnedInfo: pinnedInfoData,
-            tappedInfo: didTapHouseDataSubject.eraseToAnyPublisher()
+            pinnedInfo: pinnedInfoData
         )
     }
 }
