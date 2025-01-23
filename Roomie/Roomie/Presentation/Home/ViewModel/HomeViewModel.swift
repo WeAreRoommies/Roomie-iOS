@@ -15,6 +15,7 @@ final class HomeViewModel {
     
     private let homeDataSubject = PassthroughSubject<HomeResponseDTO, Never>()
     let pinnedInfoDataSubject = PassthroughSubject<(Int, Bool), Never>()
+    private let tappedHouseDataSubject = PassthroughSubject<Int, Never>()
     
     private(set) var houseListData: [HomeHouse] = []
     
@@ -27,6 +28,7 @@ extension HomeViewModel: ViewModelType {
     struct Input {
         let viewWillAppear: AnyPublisher<Void, Never>
         let pinnedHouseIDSubject: AnyPublisher<Int, Never>
+        let tappedHouseIDSubject: AnyPublisher<Int, Never>
     }
     
     struct Output {
@@ -34,6 +36,7 @@ extension HomeViewModel: ViewModelType {
         let houseList: AnyPublisher<[HomeHouse], Never>
         let houseCount: AnyPublisher<Int, Never>
         let pinnedInfo: AnyPublisher<(Int,Bool), Never>
+        let tappedInfo: AnyPublisher<Int, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -48,6 +51,13 @@ extension HomeViewModel: ViewModelType {
                 self?.updatePinnedHouse(houseID: houseID)
             }
             .store(in: cancelBag)
+        
+        input.tappedHouseIDSubject
+            .sink { [weak self] houseID in
+                self?.tappedHouseDataSubject.send(houseID)
+            }
+            .store(in: cancelBag)
+
         
         let houseListData = homeDataSubject
             .map { house in
@@ -89,7 +99,8 @@ extension HomeViewModel: ViewModelType {
             userInfo: userInfo,
             houseList: houseListData,
             houseCount: houseCount,
-            pinnedInfo: pinnedInfoData
+            pinnedInfo: pinnedInfoData,
+            tappedInfo: tappedHouseDataSubject.eraseToAnyPublisher()
         )
     }
 }

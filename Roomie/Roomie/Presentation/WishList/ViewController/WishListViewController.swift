@@ -24,6 +24,7 @@ final class WishListViewController: BaseViewController {
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
+    private let tappedHouseSubject = PassthroughSubject<Int, Never>()
     
     private lazy var dataSource = createDiffableDataSource()
     
@@ -31,6 +32,8 @@ final class WishListViewController: BaseViewController {
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
     final let contentInset = UIEdgeInsets(top: 12, left: 16, bottom: 24, right: 16)
+    
+    var houseID: Int = 0
     
     // MARK: - Initializer
     
@@ -88,7 +91,8 @@ private extension WishListViewController {
     func bindViewModel() {
         let input = WishListViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
-            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher()
+            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher(),
+            tappedHouseIDSubject: tappedHouseSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -119,6 +123,21 @@ private extension WishListViewController {
                 if isPinned == false {
                     Toast().show(message: "찜 목록에서 삭제되었어요", inset: 32, view: rootView)
                 }
+            }
+            .store(in: cancelBag)
+        
+        output.tappedInfo
+            .receive(on: RunLoop.main)
+            .sink { [weak self] houseID in
+                guard let self = self else { return }
+                self.houseID = houseID
+                print("output: \(houseID)")
+                
+                let houseDetailViewController = HouseDetailViewController(
+                    viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
+                )
+                houseDetailViewController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(houseDetailViewController, animated: true)
             }
             .store(in: cancelBag)
     }
@@ -198,7 +217,9 @@ extension WishListViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        // TODO: 상세매물 페이지와 연결
+        let houseID = viewModel.wishListData[indexPath.item].houseID
+        print(houseID)
+        tappedHouseSubject.send(houseID)
     }
     
     func collectionView(
