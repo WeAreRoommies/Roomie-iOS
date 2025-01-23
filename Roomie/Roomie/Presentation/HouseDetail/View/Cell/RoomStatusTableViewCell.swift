@@ -109,7 +109,7 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
         }
         
         managementFeeTitleLabel.do {
-            $0.setText("보증금", style: .body3, color: .grayscale8)
+            $0.setText("관리비", style: .body3, color: .grayscale8)
         }
         
         managementFeeLabel.do {
