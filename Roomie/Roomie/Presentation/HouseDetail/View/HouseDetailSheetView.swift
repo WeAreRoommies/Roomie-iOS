@@ -172,3 +172,12 @@ private extension HouseDetailSheetView {
         roomFTourButton.tag = 5
     }
 }
+
+extension HouseDetailSheetView {
+    func dataBind(_ roomButtonInfos: [RoomButtonInfo]) {
+        let visibleButtonCount = roomButtonInfos.count
+        for index in visibleButtonCount..<6 {
+            buttons[index].isHidden = true
+        }
+    }
+}
