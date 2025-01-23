@@ -30,6 +30,7 @@ final class HouseAllPhotoViewController: BaseViewController {
     init(title navigationBarTitle: String, viewModel: HouseAllPhotoViewModel) {
         self.navigationBarTitle = navigationBarTitle
         self.viewModel = viewModel
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -53,7 +54,6 @@ final class HouseAllPhotoViewController: BaseViewController {
         super.viewWillAppear(animated)
         
         viewWillAppearSubject.send(())
-//        rootView.fetchRooms(RoomDetail.mockData())
     }
     
     override func setView() {

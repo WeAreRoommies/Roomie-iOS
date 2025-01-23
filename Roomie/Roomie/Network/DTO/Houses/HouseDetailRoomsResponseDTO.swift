@@ -11,7 +11,6 @@ struct HouseDetailRoomsResponseDTO: ResponseModelType {
     let rooms: [HouseDetailRoom]
 }
 
-// MARK: - Room
 struct HouseDetailRoom: Codable {
     let roomID: Int
     let name: String
