@@ -21,6 +21,8 @@ final class TourDateViewController: BaseViewController {
     private let dateSubject = PassthroughSubject<String, Never>()
     private let messageSubject = PassthroughSubject<String, Never>()
     
+    private let nextButtonSubject = PassthroughSubject<Void, Never>()
+    
     private let cancelBag = CancelBag()
     
     // MARK: - Initializer
@@ -81,8 +83,7 @@ final class TourDateViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self else { return }
-                let tourCompleteViewController = TourCompleteViewController()
-                self.navigationController?.pushViewController(tourCompleteViewController, animated: true)
+                self.nextButtonSubject.send(())
             }
             .store(in: cancelBag)
     }
@@ -94,10 +95,19 @@ private extension TourDateViewController {
     func bindViewModel() {
         let input = TourDateViewModel.Input(
             dateSubject: dateSubject.eraseToAnyPublisher(),
-            messageSubject: messageSubject.eraseToAnyPublisher()
+            messageSubject: messageSubject.eraseToAnyPublisher(),
+            nextButtonSubject: nextButtonSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        
+        output.presentNextView
+            .sink { [weak self] in
+                guard let self else { return }
+                let tourCompleteViewController = TourCompleteViewController()
+                self.navigationController?.pushViewController(tourCompleteViewController, animated: true)
+            }
+            .store(in: cancelBag)
         
         output.isNextButtonEnabled
             .sink { [weak self] isEnabled in
@@ -120,4 +130,3 @@ extension TourDateViewController: DatePickerViewDelegate {
 extension TourDateViewController: KeyboardObservable {
     var transformView: UIView { return self.view }
 }
-
