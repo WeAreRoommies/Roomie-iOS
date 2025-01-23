@@ -49,6 +49,12 @@ extension HousesService: WishListServiceProtocol {
 }
 
 extension HousesService: HouseDetailServiceProtocol {
+    func fetchHouseDetailRoomsData(
+        houseID: Int
+    ) async throws -> BaseResponseBody<HouseDetailRoomsResponseDTO>? {
+        return try await self.request(with: .fetchHouseDetailRoomsData(houseID: houseID))
+    }
+    
     func fetchHouseDetailImagesData(
         houseID: Int
     ) async throws -> BaseResponseBody<HouseDetailImagesResponseDTO>? {
