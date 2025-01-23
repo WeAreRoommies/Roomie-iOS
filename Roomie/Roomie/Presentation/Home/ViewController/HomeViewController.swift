@@ -31,7 +31,7 @@ final class HomeViewController: BaseViewController {
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
-    private let tappedHouseSubject = PassthroughSubject<Int, Never>()
+    private let didTapHouseSubject = PassthroughSubject<Int, Never>()
         
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
@@ -164,7 +164,8 @@ private extension HomeViewController {
     func bindViewModel() {
         let input = HomeViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
-            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher(), tappedHouseIDSubject: tappedHouseSubject.eraseToAnyPublisher()
+            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher(),
+            tappedHouseIDSubject: didTapHouseSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -219,7 +220,6 @@ private extension HomeViewController {
             .sink { [weak self] houseID in
                 guard let self = self else { return }
                 self.houseID = houseID
-                print("output: \(houseID)")
                 
                 let houseDetailViewController = HouseDetailViewController(
                     viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
@@ -353,8 +353,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         didSelectItemAt indexPath: IndexPath
     ) {
         let houseID = viewModel.houseListData[indexPath.item].houseID
-        print(houseID)
-        tappedHouseSubject.send(houseID)
+        didTapHouseSubject.send(houseID)
     }
 }
 
@@ -371,7 +370,8 @@ extension HomeViewController: UIScrollViewDelegate {
         
         let maxOffsetY = rootView.scrollView.contentSize.height - rootView.scrollView.bounds.height
 
-        rootView.backgroundColor = rootView.scrollView.contentOffset.y >= maxOffsetY ? .grayscale1 : .primaryLight4
+        rootView.backgroundColor = rootView.scrollView.contentOffset.y
+        >= maxOffsetY ? .grayscale1 : .primaryLight4
     }
 }
 

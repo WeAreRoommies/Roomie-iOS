@@ -15,7 +15,7 @@ final class HomeViewModel {
     
     private let homeDataSubject = PassthroughSubject<HomeResponseDTO, Never>()
     let pinnedInfoDataSubject = PassthroughSubject<(Int, Bool), Never>()
-    private let tappedHouseDataSubject = PassthroughSubject<Int, Never>()
+    private let didTapHouseDataSubject = PassthroughSubject<Int, Never>()
     
     private(set) var houseListData: [HomeHouse] = []
     
@@ -54,7 +54,7 @@ extension HomeViewModel: ViewModelType {
         
         input.tappedHouseIDSubject
             .sink { [weak self] houseID in
-                self?.tappedHouseDataSubject.send(houseID)
+                self?.didTapHouseDataSubject.send(houseID)
             }
             .store(in: cancelBag)
 
@@ -100,7 +100,7 @@ extension HomeViewModel: ViewModelType {
             houseList: houseListData,
             houseCount: houseCount,
             pinnedInfo: pinnedInfoData,
-            tappedInfo: tappedHouseDataSubject.eraseToAnyPublisher()
+            tappedInfo: didTapHouseDataSubject.eraseToAnyPublisher()
         )
     }
 }
