@@ -31,10 +31,13 @@ final class HomeViewController: BaseViewController {
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
+    private let tappedHouseSubject = PassthroughSubject<Int, Never>()
         
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
+    
+    var houseID: Int = 0
     
     private var homeNavigationBarStatus: homeNavigationBarStatus = .scrolled {
         didSet {
@@ -86,10 +89,12 @@ final class HomeViewController: BaseViewController {
         rootView.updateButton.updateButton
             .tapPublisher
             .sink { [weak self] in
-                // TODO: 추후 재 화면연결 필요
                 let houseDetailViewController = HouseDetailViewController(
                     viewModel: HouseDetailViewModel(
-                        houseID: 1,
+                        houseID: {
+                            guard let self = self else { return 0 }
+                            return self.houseID
+                        }(),
                         service: HousesService()
                     )
                 )
@@ -159,7 +164,7 @@ private extension HomeViewController {
     func bindViewModel() {
         let input = HomeViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
-            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher()
+            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher(), tappedHouseIDSubject: tappedHouseSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -206,6 +211,21 @@ private extension HomeViewController {
                 if isPinned == false {
                     Toast().show(message: "찜 목록에서 삭제되었어요", inset: 8, view: rootView)
                 }
+            }
+            .store(in: cancelBag)
+        
+        output.tappedInfo
+            .receive(on: RunLoop.main)
+            .sink { [weak self] houseID in
+                guard let self = self else { return }
+                self.houseID = houseID
+                print("output: \(houseID)")
+                
+                let houseDetailViewController = HouseDetailViewController(
+                    viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
+                )
+                houseDetailViewController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(houseDetailViewController, animated: true)
             }
             .store(in: cancelBag)
     }
@@ -332,7 +352,9 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        // TODO: 상세매물 페이지와 연결
+        let houseID = viewModel.houseListData[indexPath.item].houseID
+        print(houseID)
+        tappedHouseSubject.send(houseID)
     }
 }
 
