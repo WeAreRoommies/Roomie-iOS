@@ -108,8 +108,8 @@ final class MapViewController: BaseViewController {
             .sink { [weak self] in
                 self?.eraseButtonDidTapSubject.send()
                 self?.rootView.searchBarLabel.setText("원하는 장소를 찾아보세요", style: .title1, color: .grayscale7)
-                
                 self?.rootView.eraseButton.isHidden = true
+                self?.rootView.searchImageView.isHidden = false
             }
             .store(in: cancelBag)
         
@@ -127,7 +127,8 @@ private extension MapViewController {
         let input = MapViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
             markerDidSelect: markerDidSelectSubject.eraseToAnyPublisher(),
-            eraseButtonDidTap: eraseButtonDidTapSubject.eraseToAnyPublisher()
+            eraseButtonDidTap: eraseButtonDidTapSubject.eraseToAnyPublisher(),
+            pinnedHouseID: PassthroughSubject<Int, Never>().eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -265,6 +266,8 @@ extension MapViewController: UIAdaptivePresentationControllerDelegate {
             viewModel: MapViewModel(service: MapsService(), builder: MapRequestDTO.Builder.shared)
         )
         
+        mapListSheetViewController.delegate = self
+        
         let mediumDetent = UISheetPresentationController.Detent.custom { _ in 348 }
         let largeDetent = UISheetPresentationController.Detent.custom { _ in 648 }
         
@@ -276,5 +279,15 @@ extension MapViewController: UIAdaptivePresentationControllerDelegate {
         mapListSheetViewController.isModalInPresentation = false
         
         self.present(mapListSheetViewController, animated: true)
+    }
+}
+
+extension MapViewController: MapListSheetViewControllerDelegate {
+    func houseCellDidTap(houseID: Int) {
+        let houseDetailViewController = HouseDetailViewController(
+            viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
+        )
+        houseDetailViewController.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(houseDetailViewController, animated: true)
     }
 }

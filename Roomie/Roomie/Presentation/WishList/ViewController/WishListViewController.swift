@@ -24,7 +24,6 @@ final class WishListViewController: BaseViewController {
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
-    private let didTapHouseSubject = PassthroughSubject<Int, Never>()
     
     private lazy var dataSource = createDiffableDataSource()
     
@@ -33,7 +32,6 @@ final class WishListViewController: BaseViewController {
     final let contentInterSpacing: CGFloat = 4
     final let contentInset = UIEdgeInsets(top: 12, left: 16, bottom: 24, right: 16)
     
-    var houseID: Int = 0
     
     // MARK: - Initializer
     
@@ -60,6 +58,9 @@ final class WishListViewController: BaseViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        updateSeletedCell()
         viewWillAppearSubject.send()
     }
     
@@ -91,8 +92,7 @@ private extension WishListViewController {
     func bindViewModel() {
         let input = WishListViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
-            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher(),
-            tappedHouseIDSubject: didTapHouseSubject.eraseToAnyPublisher()
+            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -114,29 +114,18 @@ private extension WishListViewController {
             .sink { [weak self] (houseID, isPinned) in
                 guard let self = self else { return }
 
-                if let index = self.viewModel.wishListData.firstIndex(where: { $0.houseID == houseID }) {
+                if let index = self.viewModel.wishListDataSubject.value?.pinnedHouses.firstIndex(
+                    where: { $0.houseID == houseID }
+                ) {
                     let indexPath = IndexPath(item: index, section: 0)
-                    if let cell = self.rootView.wishListCollectionView.cellForItem(at: indexPath) as? HouseListCollectionViewCell {
+                    if let cell = self.rootView.wishListCollectionView.cellForItem(at: indexPath)
+                        as? HouseListCollectionViewCell {
                         cell.updateWishButton(isPinned: isPinned)
                     }
                 }
                 if isPinned == false {
                     Toast().show(message: "찜 목록에서 삭제되었어요", inset: 32, view: rootView)
                 }
-            }
-            .store(in: cancelBag)
-        
-        output.tappedInfo
-            .receive(on: RunLoop.main)
-            .sink { [weak self] houseID in
-                guard let self = self else { return }
-                self.houseID = houseID
-                
-                let houseDetailViewController = HouseDetailViewController(
-                    viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
-                )
-                houseDetailViewController.hidesBottomBarWhenPushed = true
-                self.navigationController?.pushViewController(houseDetailViewController, animated: true)
             }
             .store(in: cancelBag)
     }
@@ -183,6 +172,15 @@ private extension WishListViewController {
         snapshot.appendItems(data, toSection: 0)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
+    
+    func updateSeletedCell() {
+        for index in rootView.wishListCollectionView.indexPathsForVisibleItems {
+            if let cell = rootView.wishListCollectionView.cellForItem(at: index) as?
+                HouseListCollectionViewCell {
+                cell.isSelected = false
+            }
+        }
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -216,8 +214,12 @@ extension WishListViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        let houseID = viewModel.wishListData[indexPath.item].houseID
-        didTapHouseSubject.send(houseID)
+        guard let houseID = viewModel.wishListDataSubject.value?.pinnedHouses[indexPath.item].houseID else { return }
+        let houseDetailViewController = HouseDetailViewController(
+            viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
+        )
+        houseDetailViewController.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(houseDetailViewController, animated: true)
     }
     
     func collectionView(

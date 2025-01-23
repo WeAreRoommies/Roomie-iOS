@@ -11,13 +11,12 @@ import Combine
 final class HomeViewModel {
     
     // MARK: - Property
+    
     private let service: HomeServiceProtocol
     
-    private let homeDataSubject = PassthroughSubject<HomeResponseDTO, Never>()
+    let homeDataSubject = CurrentValueSubject<HomeResponseDTO?, Never>(nil)
     let pinnedInfoDataSubject = PassthroughSubject<(Int, Bool), Never>()
     private let didTapHouseDataSubject = PassthroughSubject<Int, Never>()
-    
-    private(set) var houseListData: [HomeHouse] = []
     
     init(service: HomeServiceProtocol) {
         self.service = service
@@ -28,7 +27,6 @@ extension HomeViewModel: ViewModelType {
     struct Input {
         let viewWillAppear: AnyPublisher<Void, Never>
         let pinnedHouseIDSubject: AnyPublisher<Int, Never>
-        let tappedHouseIDSubject: AnyPublisher<Int, Never>
     }
     
     struct Output {
@@ -36,7 +34,6 @@ extension HomeViewModel: ViewModelType {
         let houseList: AnyPublisher<[HomeHouse], Never>
         let houseCount: AnyPublisher<Int, Never>
         let pinnedInfo: AnyPublisher<(Int,Bool), Never>
-        let tappedInfo: AnyPublisher<Int, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -52,14 +49,8 @@ extension HomeViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
-        input.tappedHouseIDSubject
-            .sink { [weak self] houseID in
-                self?.didTapHouseDataSubject.send(houseID)
-            }
-            .store(in: cancelBag)
-
-        
         let houseListData = homeDataSubject
+            .compactMap { $0 }
             .map { house in
                 house.recentlyViewedHouses.map { data in
                     HomeHouse(
@@ -77,18 +68,17 @@ extension HomeViewModel: ViewModelType {
                     )
                 }
             }
-            .handleEvents(receiveOutput: { [weak self] list in
-                self?.houseListData = list
-            })
             .eraseToAnyPublisher()
         
         let userInfo = homeDataSubject
+            .compactMap { $0 }
             .map { data in
                 UserInfo(name: data.name, location: data.location)
             }
             .eraseToAnyPublisher()
         
         let houseCount = homeDataSubject
+            .compactMap { $0 }
             .map { $0.recentlyViewedHouses.count }
             .eraseToAnyPublisher()
         
@@ -99,8 +89,7 @@ extension HomeViewModel: ViewModelType {
             userInfo: userInfo,
             houseList: houseListData,
             houseCount: houseCount,
-            pinnedInfo: pinnedInfoData,
-            tappedInfo: didTapHouseDataSubject.eraseToAnyPublisher()
+            pinnedInfo: pinnedInfoData
         )
     }
 }
@@ -123,11 +112,7 @@ private extension HomeViewModel {
             do {
                 guard let responseBody = try await service.updatePinnedHouse(houseID: houseID),
                       let data = responseBody.data else { return }
-                
-                if let index = self.houseListData.firstIndex(where: { $0.houseID == houseID }) {
-                    self.houseListData[index].isPinned = data.isPinned
-                    self.pinnedInfoDataSubject.send((houseID, data.isPinned))
-                }
+                self.pinnedInfoDataSubject.send((houseID, data.isPinned))
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
             }

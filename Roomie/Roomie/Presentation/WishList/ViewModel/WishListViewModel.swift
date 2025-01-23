@@ -14,11 +14,9 @@ final class WishListViewModel {
     
     private let service: WishListServiceProtocol
     
-    private let wishListDataSubject = PassthroughSubject<WishListResponseDTO, Never>()
+    let wishListDataSubject = CurrentValueSubject<WishListResponseDTO?, Never>(nil)
     let pinnedInfoDataSubject = PassthroughSubject<(Int, Bool), Never>()
     private let didTapHouseDataSubject = PassthroughSubject<Int, Never>()
-    
-    private(set) var wishListData: [WishHouse] = []
     
     init(service: WishListServiceProtocol) {
         self.service = service
@@ -29,13 +27,11 @@ extension WishListViewModel: ViewModelType {
     struct Input {
         let viewWillAppear: AnyPublisher<Void, Never>
         let pinnedHouseIDSubject: AnyPublisher<Int, Never>
-        let tappedHouseIDSubject: AnyPublisher<Int, Never>
     }
     
     struct Output {
         let wishList: AnyPublisher<[WishHouse], Never>
         let pinnedInfo: AnyPublisher<(Int,Bool), Never>
-        let tappedInfo: AnyPublisher<Int, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -51,13 +47,8 @@ extension WishListViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
-        input.tappedHouseIDSubject
-            .sink { [weak self] houseID in
-                self?.didTapHouseDataSubject.send(houseID)
-            }
-            .store(in: cancelBag)
-        
         let wishListData = wishListDataSubject
+            .compactMap { $0 }
             .map { house in
                 house.pinnedHouses.map { data in
                     WishHouse(
@@ -75,9 +66,6 @@ extension WishListViewModel: ViewModelType {
                     )
                 }
             }
-            .handleEvents(receiveOutput: { [weak self] list in
-                self?.wishListData = list
-            })
             .eraseToAnyPublisher()
         
         let pinnedInfoData = pinnedInfoDataSubject
@@ -85,8 +73,7 @@ extension WishListViewModel: ViewModelType {
         
         return Output(
             wishList: wishListData,
-            pinnedInfo: pinnedInfoData,
-            tappedInfo: didTapHouseDataSubject.eraseToAnyPublisher()
+            pinnedInfo: pinnedInfoData
         )
     }
 }
@@ -109,11 +96,7 @@ private extension WishListViewModel {
             do {
                 guard let responseBody = try await service.updatePinnedHouse(houseID: houseID),
                       let data = responseBody.data else { return }
-                
-                if let index = self.wishListData.firstIndex(where: { $0.houseID == houseID }) {
-                    self.wishListData[index].isPinned = data.isPinned
-                    self.pinnedInfoDataSubject.send((houseID, data.isPinned))
-                }
+                self.pinnedInfoDataSubject.send((houseID, data.isPinned))
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
             }

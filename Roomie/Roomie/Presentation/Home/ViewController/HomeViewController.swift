@@ -31,13 +31,10 @@ final class HomeViewController: BaseViewController {
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
-    private let didTapHouseSubject = PassthroughSubject<Int, Never>()
         
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
-    
-    var houseID: Int = 0
     
     private var homeNavigationBarStatus: homeNavigationBarStatus = .scrolled {
         didSet {
@@ -88,18 +85,8 @@ final class HomeViewController: BaseViewController {
     override func setAction() {
         rootView.updateButton.updateButton
             .tapPublisher
-            .sink { [weak self] in
-                let houseDetailViewController = HouseDetailViewController(
-                    viewModel: HouseDetailViewModel(
-                        houseID: {
-                            guard let self = self else { return 0 }
-                            return self.houseID
-                        }(),
-                        service: HousesService()
-                    )
-                )
-                houseDetailViewController.hidesBottomBarWhenPushed = true
-                self?.navigationController?.pushViewController(houseDetailViewController, animated: true)
+            .sink {
+                // TODO: 웹 뷰 화면 전환
             }
             .store(in: cancelBag)
         
@@ -129,7 +116,6 @@ final class HomeViewController: BaseViewController {
             .tapPublisher
             .sink {
                 let neatMoodListViewController = MoodListViewController(
-                    
                     moodType: .neat
                 )
                 neatMoodListViewController.hidesBottomBarWhenPushed = true
@@ -164,8 +150,7 @@ private extension HomeViewController {
     func bindViewModel() {
         let input = HomeViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
-            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher(),
-            tappedHouseIDSubject: didTapHouseSubject.eraseToAnyPublisher()
+            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -202,7 +187,9 @@ private extension HomeViewController {
             .sink { [weak self] (houseID, isPinned) in
                 guard let self = self else { return }
 
-                if let index = self.viewModel.houseListData.firstIndex(where: { $0.houseID == houseID }) {
+                if let index = self.viewModel.homeDataSubject.value?.recentlyViewedHouses.firstIndex(
+                    where: { $0.houseID == houseID }
+                ) {
                     let indexPath = IndexPath(item: index, section: 0)
                     if let cell = self.rootView.houseListCollectionView.cellForItem(at: indexPath) as?
                         HouseListCollectionViewCell {
@@ -212,20 +199,6 @@ private extension HomeViewController {
                 if isPinned == false {
                     Toast().show(message: "찜 목록에서 삭제되었어요", inset: 8, view: rootView)
                 }
-            }
-            .store(in: cancelBag)
-        
-        output.tappedInfo
-            .receive(on: RunLoop.main)
-            .sink { [weak self] houseID in
-                guard let self = self else { return }
-                self.houseID = houseID
-                
-                let houseDetailViewController = HouseDetailViewController(
-                    viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
-                )
-                houseDetailViewController.hidesBottomBarWhenPushed = true
-                self.navigationController?.pushViewController(houseDetailViewController, animated: true)
             }
             .store(in: cancelBag)
     }
@@ -352,8 +325,12 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        let houseID = viewModel.houseListData[indexPath.item].houseID
-        didTapHouseSubject.send(houseID)
+        guard let houseID = viewModel.homeDataSubject.value?.recentlyViewedHouses[indexPath.item].houseID else { return }
+        let houseDetailViewController = HouseDetailViewController(
+            viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
+        )
+        houseDetailViewController.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(houseDetailViewController, animated: true)
     }
 }
 
@@ -362,7 +339,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 extension HomeViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
-        if offsetY > -94 {
+        if offsetY > -90 {
             homeNavigationBarStatus = .top
         } else {
             homeNavigationBarStatus = .scrolled
