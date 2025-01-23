@@ -69,6 +69,8 @@ final class MoodListViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        updateSeletedCell()
         moodListTypeSubject.send(moodType.title)
     }
     
@@ -194,6 +196,15 @@ private extension MoodListViewController {
         snapshot.appendItems(data, toSection: 0)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
+    
+    func updateSeletedCell() {
+        for index in rootView.moodListCollectionView.indexPathsForVisibleItems {
+            if let cell = rootView.moodListCollectionView.cellForItem(at: index) as?
+                HouseListCollectionViewCell {
+                cell.isSelected = false
+            }
+        }
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -227,7 +238,12 @@ extension MoodListViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        // TODO: 상세매물 페이지와 연결
+        guard let houseID = viewModel.moodListDataSubject.value?.houses[indexPath.item].houseID else { return }
+        let houseDetailViewController = HouseDetailViewController(
+            viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
+        )
+        houseDetailViewController.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(houseDetailViewController, animated: true)
     }
     
     func collectionView(
