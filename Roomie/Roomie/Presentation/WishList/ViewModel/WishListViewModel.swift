@@ -27,13 +27,11 @@ extension WishListViewModel: ViewModelType {
     struct Input {
         let viewWillAppear: AnyPublisher<Void, Never>
         let pinnedHouseIDSubject: AnyPublisher<Int, Never>
-        let tappedHouseIDSubject: AnyPublisher<Int, Never>
     }
     
     struct Output {
         let wishList: AnyPublisher<[WishHouse], Never>
         let pinnedInfo: AnyPublisher<(Int,Bool), Never>
-        let tappedInfo: AnyPublisher<Int, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -46,12 +44,6 @@ extension WishListViewModel: ViewModelType {
         input.pinnedHouseIDSubject
             .sink { [weak self] houseID in
                 self?.updatePinnedHouse(houseID: houseID)
-            }
-            .store(in: cancelBag)
-        
-        input.tappedHouseIDSubject
-            .sink { [weak self] houseID in
-                self?.didTapHouseDataSubject.send(houseID)
             }
             .store(in: cancelBag)
         
@@ -81,8 +73,7 @@ extension WishListViewModel: ViewModelType {
         
         return Output(
             wishList: wishListData,
-            pinnedInfo: pinnedInfoData,
-            tappedInfo: didTapHouseDataSubject.eraseToAnyPublisher()
+            pinnedInfo: pinnedInfoData
         )
     }
 }
