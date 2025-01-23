@@ -16,7 +16,7 @@ struct MoodHouse: Codable, Hashable {
     let houseID: Int
     let monthlyRent, deposit, occupancyTypes, location: String
     let genderPolicy, locationDescription: String
-    let isPinned: Bool
+    var isPinned: Bool
     let contractTerm: Int
     let mainImageURL: String
 

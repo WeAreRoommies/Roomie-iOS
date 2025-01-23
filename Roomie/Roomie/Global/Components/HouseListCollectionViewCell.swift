@@ -15,6 +15,14 @@ import Kingfisher
 
 final class HouseListCollectionViewCell: BaseCollectionViewCell {
     
+    // MARK: - Property
+    
+    override var isSelected: Bool {
+        didSet{
+            self.backgroundColor = isSelected ? .grayscale3 : .clear
+        }
+    }
+    
     // MARK: - UIComponent
     
     private let subtitleStackView = UIStackView()
@@ -24,7 +32,8 @@ final class HouseListCollectionViewCell: BaseCollectionViewCell {
     private let moodTagView = UIView()
     let moodTagLabel = UILabel()
     
-    let likedImageView = UIImageView()
+    let wishButton = UIButton()
+    let wishButtonTapSubject = PassthroughSubject<Int, Never>()
     
     private let depositLabel = UILabel()
     private let barView = UIView()
@@ -34,13 +43,9 @@ final class HouseListCollectionViewCell: BaseCollectionViewCell {
     
     private let roomLocationLabel = UILabel()
     
-    // MARK: - UISetting
+    private var cancelBag = CancelBag()
     
-    override var isSelected: Bool {
-        didSet{
-            self.backgroundColor = isSelected ? .grayscale3 : .clear
-        }
-    }
+    // MARK: - UISetting
     
     override func setStyle() {
         self.layer.cornerRadius = 8
@@ -71,9 +76,8 @@ final class HouseListCollectionViewCell: BaseCollectionViewCell {
             $0.isUserInteractionEnabled = false
         }
         
-        likedImageView.do {
-            $0.image = .icnHeart24Normal
-            $0.isUserInteractionEnabled = false
+        wishButton.do {
+            $0.setImage(.icnHeart24Normal, for: .normal)
         }
         
         monthlyRentLabel.do {
@@ -103,9 +107,9 @@ final class HouseListCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func setUI() {
-        addSubviews(
+        contentView.addSubviews(
             roomImageView,
-            likedImageView,
+            wishButton,
             moodTagView,
             monthlyRentLabel,
             subtitleStackView,
@@ -138,7 +142,7 @@ final class HouseListCollectionViewCell: BaseCollectionViewCell {
             $0.centerX.equalToSuperview()
         }
         
-        likedImageView.snp.makeConstraints{
+        wishButton.snp.makeConstraints{
             $0.top.equalTo(roomImageView.snp.top).offset(6)
             $0.trailing.equalTo(roomImageView.snp.trailing).offset(-6)
             $0.size.equalTo(24)
@@ -174,9 +178,16 @@ final class HouseListCollectionViewCell: BaseCollectionViewCell {
     }
 }
 
-// MARK: - DataBinding
+// MARK: - Functions
 
 extension HouseListCollectionViewCell {
+    func updateWishButton(isPinned: Bool) {
+        let wishImage = isPinned
+            ? UIImage(resource: .icnHeartFilledWhite24)
+            : UIImage(resource: .icnHeartLinewithfillWhite24)
+        wishButton.setImage(wishImage, for: .normal)
+    }
+    
     func dataBind(_ data: House) {
         if let imageURL = URL(string: data.mainImageURL) {
             roomImageView.kf.setImage(with: imageURL)
@@ -186,7 +197,9 @@ extension HouseListCollectionViewCell {
             roomImageView.backgroundColor = .grayscale5
         }
         
-        likedImageView.image = data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
+        wishButton.setImage(
+            data.isPinned ? UIImage(resource: .icnHeartFilledWhite24)
+            : UIImage(resource: .icnHeartLinewithfillWhite24), for: .normal)
         
         moodTagLabel.text = data.moodTag
         monthlyRentLabel.text = "월세 \(data.monthlyRent)"
@@ -205,7 +218,9 @@ extension HouseListCollectionViewCell {
             roomImageView.backgroundColor = .grayscale5
         }
         
-        likedImageView.image = data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
+        wishButton.setImage(
+            data.isPinned ? UIImage(resource: .icnHeartFilledWhite24)
+            : UIImage(resource: .icnHeartLinewithfillWhite24), for: .normal)
         
         moodTagLabel.text = data.moodTag
         monthlyRentLabel.text = "월세 \(data.monthlyRent)"
@@ -224,7 +239,7 @@ extension HouseListCollectionViewCell {
             roomImageView.backgroundColor = .grayscale5
         }
         
-        likedImageView.image = data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
+        updateWishButton(isPinned: data.isPinned)
         
         moodTagLabel.text = data.moodTag
         monthlyRentLabel.text = "월세 \(data.monthlyRent)"
@@ -243,7 +258,9 @@ extension HouseListCollectionViewCell {
             roomImageView.backgroundColor = .grayscale5
         }
         
-        likedImageView.image = data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24
+        wishButton.setImage(
+            data.isPinned ? UIImage(resource: .icnHeartFilledWhite24)
+            : UIImage(resource: .icnHeartLinewithfillWhite24), for: .normal)
         
         moodTagView.isHidden = true
         monthlyRentLabel.text = "월세 \(data.monthlyRent)"
