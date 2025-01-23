@@ -16,6 +16,7 @@ enum HousesTargetType {
     case updatePinnedHouse(houseID: Int)
     case fetchHouseDetailImagesData(houseID: Int)
     case fetchHouseDetailRoomsData(houseID: Int)
+    case applyTour(request: TourRequestDTO, roomID: Int)
 }
 
 extension HousesTargetType: TargetType {
@@ -37,6 +38,8 @@ extension HousesTargetType: TargetType {
             return "/houses/\(houseID)/details/images"
         case .fetchHouseDetailRoomsData(houseID: let houseID):
             return "/houses/\(houseID)/details/rooms"
+        case .applyTour(request: let request, roomID: let roomID):
+            return "/rooms/\(roomID)/tour-requests"
         }
     }
     
@@ -45,6 +48,7 @@ extension HousesTargetType: TargetType {
         case .fetchWishLishData, .fetchHouseDetailData: return .get
         case .fetchMoodListData, .fetchHouseDetailImagesData, .fetchHouseDetailRoomsData: return .get
         case .updatePinnedHouse: return .patch
+        case .applyTour: return .post
         }
     }
     
@@ -59,6 +63,8 @@ extension HousesTargetType: TargetType {
                 parameters: ["moodTag": moodTag],
                 encoding: URLEncoding.queryString
             )
+        case .applyTour(request: let request, roomID: let roomID):
+            return .requestJSONEncodable(request)
         }
     }
     

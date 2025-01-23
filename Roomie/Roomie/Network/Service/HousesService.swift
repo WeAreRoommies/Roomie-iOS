@@ -51,6 +51,10 @@ extension HousesService: WishListServiceProtocol {
 }
 
 extension HousesService: HouseDetailServiceProtocol {
+    func applyTour(request: TourRequestDTO, roomID: Int) async throws -> BaseResponseBody<TourResponseDTO>? {
+        return try await self.request(with: .applyTour(request: request, roomID: roomID))
+    }
+    
     func fetchHouseDetailRoomsData(
         houseID: Int
     ) async throws -> BaseResponseBody<HouseDetailRoomsResponseDTO>? {
