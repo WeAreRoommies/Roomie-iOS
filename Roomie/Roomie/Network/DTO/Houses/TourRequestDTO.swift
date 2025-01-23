@@ -7,10 +7,15 @@
 
 import Foundation
 
-struct TourRequestDTO: Codable {
-    let name, birth, gender, phoneNumber: String
-    let preferredDate, message: String
-    let roomID, houseID: Int
+struct TourRequestDTO: RequestModelType {
+    let name: String
+    let birth: String
+    let gender: String
+    let phoneNumber: String
+    let preferredDate: String
+    let message: String
+    let roomID: Int
+    let houseID: Int
 
     enum CodingKeys: String, CodingKey {
         case name, birth, gender, phoneNumber, preferredDate, message
