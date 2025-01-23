@@ -74,6 +74,18 @@ final class HouseDetailViewController: BaseViewController {
         setNavigationBarStatus()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        let borderIdentifier = "customBorder"
+        if let existingBorder = navigationController?.navigationBar.subviews
+            .first(
+            where: { $0.accessibilityIdentifier == borderIdentifier }
+            ) {
+            existingBorder.removeFromSuperview()
+        }
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -434,11 +446,9 @@ extension HouseDetailViewController: UIAdaptivePresentationControllerDelegate {
 // MARK: - HouseDetailSheetViewControllerDelegate
 
 extension HouseDetailViewController: HouseDetailSheetViewControllerDelegate {
-    func tourApplyButtonDidTap(roomID: Int) {
-    
-        setClearNavigationBar()
+    func tourApplyButtonDidTap(_ selectedRoomInfo: SelectedRoomInfo) {
         
-        let tourCheckViewController = TourCheckViewController(viewModel: TourCheckViewModel())
+        let tourCheckViewController = TourCheckViewController(viewModel: TourCheckViewModel(selectedRoomInfo: selectedRoomInfo))
         navigationController?.pushViewController(tourCheckViewController, animated: true)
     }
 }

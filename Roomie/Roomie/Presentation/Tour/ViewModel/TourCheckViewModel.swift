@@ -13,9 +13,16 @@ final class TourCheckViewModel {
     
     // MARK: - Property
     
+    private(set) var selectedRoomInfo: SelectedRoomInfo
+    
     private let roomIDSubject = PassthroughSubject<Int, Never>()
     private let houseIDSubject = PassthroughSubject<Int, Never>()
     
+    // MARK: - Initializer
+    
+    init(selectedRoomInfo: SelectedRoomInfo) {
+        self.selectedRoomInfo = selectedRoomInfo
+    }
 }
 
 extension TourCheckViewModel: ViewModelType {

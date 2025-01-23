@@ -44,6 +44,7 @@ final class TourCheckViewController: BaseViewController {
         super.viewDidLoad()
         
         bindViewModel()
+        setTourCheckTitle()
     }
     
     override func setView() {
@@ -71,6 +72,11 @@ private extension TourCheckViewController {
             roomIDSubject: roomIDSubject.eraseToAnyPublisher(),
             houseIDSubject: houseIDSubject.eraseToAnyPublisher()
         )
+    }
+    
+    func setTourCheckTitle() {
+        rootView.houseNameLabel.updateText(viewModel.selectedRoomInfo.houseName)
+        rootView.roomNameLabel.updateText(viewModel.selectedRoomInfo.roomName)
     }
 }
 
