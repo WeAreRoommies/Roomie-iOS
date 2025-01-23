@@ -45,7 +45,7 @@ extension MapsTargetType: TargetType {
             return .requestJSONEncodable(request)
         case .fetchMapSearchData(let query):
             return .requestParameters(parameters: ["q": query], encoding: URLEncoding.queryString)
-        case .updatePinnedHouse(let houseID):
+        case .updatePinnedHouse:
             return .requestPlain
         }
     }
