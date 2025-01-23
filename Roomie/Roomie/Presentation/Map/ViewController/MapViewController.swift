@@ -266,6 +266,8 @@ extension MapViewController: UIAdaptivePresentationControllerDelegate {
             viewModel: MapViewModel(service: MapsService(), builder: MapRequestDTO.Builder.shared)
         )
         
+        mapListSheetViewController.delegate = self
+        
         let mediumDetent = UISheetPresentationController.Detent.custom { _ in 348 }
         let largeDetent = UISheetPresentationController.Detent.custom { _ in 648 }
         
@@ -277,5 +279,15 @@ extension MapViewController: UIAdaptivePresentationControllerDelegate {
         mapListSheetViewController.isModalInPresentation = false
         
         self.present(mapListSheetViewController, animated: true)
+    }
+}
+
+extension MapViewController: MapListSheetViewControllerDelegate {
+    func houseCellDidTap(houseID: Int) {
+        let houseDetailViewController = HouseDetailViewController(
+            viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
+        )
+        houseDetailViewController.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(houseDetailViewController, animated: true)
     }
 }

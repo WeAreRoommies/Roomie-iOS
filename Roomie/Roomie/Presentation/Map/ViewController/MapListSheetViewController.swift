@@ -8,6 +8,10 @@
 import UIKit
 import Combine
 
+protocol MapListSheetViewControllerDelegate: AnyObject {
+    func houseCellDidTap(houseID: Int)
+}
+
 final class MapListSheetViewController: BaseViewController {
     
     // MARK: - Property
@@ -21,6 +25,8 @@ final class MapListSheetViewController: BaseViewController {
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let cellHeight: CGFloat = 112
     final let contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    
+    weak var delegate: MapListSheetViewControllerDelegate?
     
     private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
     
@@ -157,5 +163,14 @@ extension MapListSheetViewController: UICollectionViewDelegateFlowLayout {
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
         return contentInset
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        guard let houseID = viewModel.mapDataSubject.value?.houses[indexPath.item].houseID else { return }
+        delegate?.houseCellDidTap(houseID: houseID)
+        self.dismiss(animated: true)
     }
 }
