@@ -36,8 +36,6 @@ final class HomeViewController: BaseViewController {
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
     
-    var houseID: Int = 0
-    
     private var homeNavigationBarStatus: homeNavigationBarStatus = .scrolled {
         didSet {
             setHomeNavigationBarStatus()
@@ -87,18 +85,8 @@ final class HomeViewController: BaseViewController {
     override func setAction() {
         rootView.updateButton.updateButton
             .tapPublisher
-            .sink { [weak self] in
-                let houseDetailViewController = HouseDetailViewController(
-                    viewModel: HouseDetailViewModel(
-                        houseID: {
-                            guard let self = self else { return 0 }
-                            return self.houseID
-                        }(),
-                        service: HousesService()
-                    )
-                )
-                houseDetailViewController.hidesBottomBarWhenPushed = true
-                self?.navigationController?.pushViewController(houseDetailViewController, animated: true)
+            .sink {
+                // TODO: 웹 뷰 화면 전환
             }
             .store(in: cancelBag)
         

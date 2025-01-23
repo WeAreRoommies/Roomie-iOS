@@ -32,7 +32,6 @@ final class WishListViewController: BaseViewController {
     final let contentInterSpacing: CGFloat = 4
     final let contentInset = UIEdgeInsets(top: 12, left: 16, bottom: 24, right: 16)
     
-    var houseID: Int = 0
     
     // MARK: - Initializer
     
@@ -59,6 +58,9 @@ final class WishListViewController: BaseViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        updateSeletedCell()
         viewWillAppearSubject.send()
     }
     
@@ -112,9 +114,12 @@ private extension WishListViewController {
             .sink { [weak self] (houseID, isPinned) in
                 guard let self = self else { return }
 
-                if let index = self.viewModel.wishListDataSubject.value?.pinnedHouses.firstIndex(where: { $0.houseID == houseID }) {
+                if let index = self.viewModel.wishListDataSubject.value?.pinnedHouses.firstIndex(
+                    where: { $0.houseID == houseID }
+                ) {
                     let indexPath = IndexPath(item: index, section: 0)
-                    if let cell = self.rootView.wishListCollectionView.cellForItem(at: indexPath) as? HouseListCollectionViewCell {
+                    if let cell = self.rootView.wishListCollectionView.cellForItem(at: indexPath)
+                        as? HouseListCollectionViewCell {
                         cell.updateWishButton(isPinned: isPinned)
                     }
                 }
@@ -166,6 +171,15 @@ private extension WishListViewController {
         snapshot.appendSections([0])
         snapshot.appendItems(data, toSection: 0)
         dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    func updateSeletedCell() {
+        for index in rootView.wishListCollectionView.indexPathsForVisibleItems {
+            if let cell = rootView.wishListCollectionView.cellForItem(at: index) as?
+                HouseListCollectionViewCell {
+                cell.isSelected = false
+            }
+        }
     }
 }
 
