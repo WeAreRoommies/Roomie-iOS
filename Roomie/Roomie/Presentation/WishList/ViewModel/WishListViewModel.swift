@@ -96,19 +96,17 @@ private extension WishListViewModel {
     
     func updatePinnedHouse(houseID: Int) {
         Task {
-            Task {
-                 do {
-                     guard let responseBody = try await service.updatePinnedHouse(houseID: houseID),
-                           let data = responseBody.data else { return }
-                     
-                     if let index = self.wishListData.firstIndex(where: { $0.houseID == houseID }) {
-                         self.wishListData[index].isPinned = data.isPinned
-                         self.pinnedInfoDataSubject.send((houseID, data.isPinned))
-                     }
-                 } catch {
-                     print(">>> \(error.localizedDescription) : \(#function)")
-                 }
-             }
+            do {
+                guard let responseBody = try await service.updatePinnedHouse(houseID: houseID),
+                      let data = responseBody.data else { return }
+                
+                if let index = self.wishListData.firstIndex(where: { $0.houseID == houseID }) {
+                    self.wishListData[index].isPinned = data.isPinned
+                    self.pinnedInfoDataSubject.send((houseID, data.isPinned))
+                }
+            } catch {
+                print(">>> \(error.localizedDescription) : \(#function)")
+            }
         }
     }
 }
