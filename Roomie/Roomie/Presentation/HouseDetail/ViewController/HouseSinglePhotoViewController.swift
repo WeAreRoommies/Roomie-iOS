@@ -42,7 +42,6 @@ final class HouseSinglePhotoViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        rootView.fetchRooms(RoomDetail.mockData(), with: expandedIndex)
     }
     
     override func setView() {
