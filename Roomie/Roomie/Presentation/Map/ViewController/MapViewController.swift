@@ -141,15 +141,11 @@ private extension MapViewController {
                         self.selectedMarker = marker
                         
                         let cameraUpdate = NMFCameraUpdate(
-                            scrollTo: NMGLatLng(lat: markerInfo.x, lng: markerInfo.y)
+                            scrollTo: NMGLatLng(lat: markerInfo.x, lng: markerInfo.y),
+                            zoomTo: 13
                         )
                         cameraUpdate.animation = .easeIn
-                        
-                        let zoomUpdate = NMFCameraUpdate(zoomTo: 14)
-                        zoomUpdate.animation = .easeIn
-                        
                         rootView.mapView.moveCamera(cameraUpdate)
-                        rootView.mapView.moveCamera(zoomUpdate)
                         
                         self.markerDidSelectSubject.send(markerInfo.houseID)
                         
@@ -223,15 +219,10 @@ extension MapViewController: NMFMapViewTouchDelegate {
             erasePreviousSelectedMarker()
             
             let cameraUpdate = NMFCameraUpdate(
-                scrollTo: NMGLatLng(lat: 37.55438, lng: 126.9377)
+                zoomTo: 12
             )
             cameraUpdate.animation = .easeIn
-            
-            let zoomUpdate = NMFCameraUpdate(zoomTo: 13)
-            zoomUpdate.animation = .easeIn
-            
             rootView.mapView.moveCamera(cameraUpdate)
-            rootView.mapView.moveCamera(zoomUpdate)
             
             rootView.mapDetailCardView.isHidden = true
         }

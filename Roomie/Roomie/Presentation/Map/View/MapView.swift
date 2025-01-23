@@ -48,8 +48,8 @@ final class MapView: BaseView {
         }
         
         mapView.do {
-            $0.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: 37.55438, lng: 126.9377)))
-            $0.zoomLevel = 13
+            $0.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: 37.567764, lng: 126.916784)))
+            $0.zoomLevel = 12
         }
         
         mapListButton.do {
