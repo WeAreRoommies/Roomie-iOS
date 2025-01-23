@@ -202,7 +202,9 @@ private extension HomeViewController {
             .sink { [weak self] (houseID, isPinned) in
                 guard let self = self else { return }
 
-                if let index = self.viewModel.houseListData.firstIndex(where: { $0.houseID == houseID }) {
+                if let index = self.viewModel.homeDataSubject.value?.recentlyViewedHouses.firstIndex(
+                    where: { $0.houseID == houseID }
+                ) {
                     let indexPath = IndexPath(item: index, section: 0)
                     if let cell = self.rootView.houseListCollectionView.cellForItem(at: indexPath) as?
                         HouseListCollectionViewCell {
@@ -352,7 +354,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        let houseID = viewModel.houseListData[indexPath.item].houseID
+        guard let houseID = viewModel.homeDataSubject.value?.recentlyViewedHouses[indexPath.item].houseID else { return }
         didTapHouseSubject.send(houseID)
     }
 }
