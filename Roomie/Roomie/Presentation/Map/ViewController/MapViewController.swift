@@ -108,8 +108,8 @@ final class MapViewController: BaseViewController {
             .sink { [weak self] in
                 self?.eraseButtonDidTapSubject.send()
                 self?.rootView.searchBarLabel.setText("원하는 장소를 찾아보세요", style: .title1, color: .grayscale7)
-                
                 self?.rootView.eraseButton.isHidden = true
+                self?.rootView.searchImageView.isHidden = false
             }
             .store(in: cancelBag)
         
