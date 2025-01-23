@@ -59,8 +59,7 @@ private extension RoomieIconButton {
         if border {
             setLayer(borderWidth: 1, borderColor: .grayscale5, cornerRadius: 8)
         } else {
-            setLayer(borderWidth: 1, borderColor: .grayscale4, cornerRadius: 8)
-            
+            self.layer.cornerRadius = 8
             self.backgroundColor = .grayscale1
             self.layer.shadowOpacity = 0.25
             self.layer.shadowRadius = 2
