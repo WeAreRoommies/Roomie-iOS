@@ -193,7 +193,8 @@ private extension HomeViewController {
 
                 if let index = self.viewModel.houseListData.firstIndex(where: { $0.houseID == houseID }) {
                     let indexPath = IndexPath(item: index, section: 0)
-                    if let cell = self.rootView.houseListCollectionView.cellForItem(at: indexPath) as? HouseListCollectionViewCell {
+                    if let cell = self.rootView.houseListCollectionView.cellForItem(at: indexPath) as?
+                        HouseListCollectionViewCell {
                         cell.updateWishButton(isPinned: isPinned)
                     }
                 }

@@ -198,8 +198,9 @@ extension HouseListCollectionViewCell {
         }
         
         wishButton.setImage(
-            data.isPinned ? UIImage(resource: .icnHeartFilledWhite24)
-            : UIImage(resource: .icnHeartLinewithfillWhite24), for: .normal)
+            data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24,
+            for: .normal
+        )
         
         moodTagLabel.text = data.moodTag
         monthlyRentLabel.text = "월세 \(data.monthlyRent)"
@@ -219,8 +220,9 @@ extension HouseListCollectionViewCell {
         }
         
         wishButton.setImage(
-            data.isPinned ? UIImage(resource: .icnHeartFilledWhite24)
-            : UIImage(resource: .icnHeartLinewithfillWhite24), for: .normal)
+            data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24,
+            for: .normal
+        )
         
         moodTagLabel.text = data.moodTag
         monthlyRentLabel.text = "월세 \(data.monthlyRent)"
@@ -239,7 +241,10 @@ extension HouseListCollectionViewCell {
             roomImageView.backgroundColor = .grayscale5
         }
         
-        updateWishButton(isPinned: data.isPinned)
+        wishButton.setImage(
+            data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24,
+            for: .normal
+        )                                                                                 
         
         moodTagLabel.text = data.moodTag
         monthlyRentLabel.text = "월세 \(data.monthlyRent)"
@@ -259,8 +264,9 @@ extension HouseListCollectionViewCell {
         }
         
         wishButton.setImage(
-            data.isPinned ? UIImage(resource: .icnHeartFilledWhite24)
-            : UIImage(resource: .icnHeartLinewithfillWhite24), for: .normal)
+            data.isPinned ? .icnHeartFilledWhite24 : .icnHeartLinewithfillWhite24,
+            for: .normal
+        )
         
         moodTagView.isHidden = true
         monthlyRentLabel.text = "월세 \(data.monthlyRent)"
