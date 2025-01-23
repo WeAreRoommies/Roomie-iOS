@@ -45,7 +45,9 @@ extension MapsService: MapServiceProtocol {
         return try await self.request(with: .fetchMapData(request: request))
     }
     
-    // TODO: 찜 API 추가
+    func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinnedResponseDTO>? {
+        return try await self.request(with: .updatePinnedHouse(houseID: houseID))
+    }
 }
 
 extension MapsService: MapSearchServiceProtocol {

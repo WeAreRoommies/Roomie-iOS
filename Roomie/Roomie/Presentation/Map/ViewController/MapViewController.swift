@@ -127,7 +127,8 @@ private extension MapViewController {
         let input = MapViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
             markerDidSelect: markerDidSelectSubject.eraseToAnyPublisher(),
-            eraseButtonDidTap: eraseButtonDidTapSubject.eraseToAnyPublisher()
+            eraseButtonDidTap: eraseButtonDidTapSubject.eraseToAnyPublisher(),
+            pinnedHouseID: PassthroughSubject<Int, Never>().eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
