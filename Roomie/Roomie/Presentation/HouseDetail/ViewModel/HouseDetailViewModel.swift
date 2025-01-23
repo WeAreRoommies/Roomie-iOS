@@ -16,7 +16,7 @@ final class HouseDetailViewModel {
     
     private let houseDetailDataSubject = CurrentValueSubject<HouseDetailResponseDTO?, Never>(nil)
     
-    private let roomIDSubject = PassthroughSubject<Int, Never>()
+    private let buttonIndexSubject = PassthroughSubject<Int, Never>()
     
     private(set) var houseID: Int = 0
     
@@ -33,8 +33,9 @@ final class HouseDetailViewModel {
 
 extension HouseDetailViewModel: ViewModelType {
     struct Input {
-        let viewWillApper: AnyPublisher<Void, Never>
-        let roomIDSubject: AnyPublisher<Int, Never>
+        let houseDetailViewWillAppear: AnyPublisher<Void, Never>
+        let bottomSheetViewWillAppear: AnyPublisher<Void, Never>
+        let buttonIndexSubject: AnyPublisher<Int, Never>
     }
     
     struct Output {
@@ -44,22 +45,23 @@ extension HouseDetailViewModel: ViewModelType {
         let safetyLivingFacilityInfo: AnyPublisher<[String], Never>
         let kitchenFacilityInfo: AnyPublisher<[String], Never>
         let isTourApplyButtonEnabled: AnyPublisher<Bool, Never>
+        let roomButtonInfos: AnyPublisher<[RoomButtonInfo], Never>
+        let selectedRoomID: AnyPublisher<Int, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
-        input.viewWillApper
+        input.houseDetailViewWillAppear
             .sink { [weak self] in
                 guard let self else { return }
-                
-                // TODO: houseID 받아오기
+            
                 self.fetchHouseDetailData(houseID: self.houseID)
             }
             .store(in: cancelBag)
         
-        input.roomIDSubject
+        input.buttonIndexSubject
             .sink { [weak self] roomID in
                 guard let self else { return }
-                self.roomIDSubject.send(roomID)
+                self.buttonIndexSubject.send(roomID)
             }
             .store(in: cancelBag)
         
@@ -171,8 +173,25 @@ extension HouseDetailViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
-        let isTourApplyButtonEnabled = self.roomIDSubject
+        let isTourApplyButtonEnabled = buttonIndexSubject
             .map { _ in true }
+            .eraseToAnyPublisher()
+        
+        let roomButtonInfos = input.bottomSheetViewWillAppear
+            .compactMap { _ in
+                self.houseDetailDataSubject.value?.rooms.map {
+                    RoomButtonInfo(
+                        name: $0.name,
+                        status: $0.status,
+                        isTourAvailable: $0.isTourAvailable,
+                        subTitle: "\($0.deposit)/\($0.monthlyRent)"
+                    )
+                }
+            }
+            .eraseToAnyPublisher()
+        
+        let selectedRoomID = buttonIndexSubject
+            .compactMap { self.houseDetailDataSubject.value?.rooms[$0].roomID }
             .eraseToAnyPublisher()
         
         return Output(
@@ -181,7 +200,9 @@ extension HouseDetailViewModel: ViewModelType {
             roomMoodInfo: roomMoodInfo,
             safetyLivingFacilityInfo: safetyLivingFacilityInfo,
             kitchenFacilityInfo: kitchenFacilityInfo,
-            isTourApplyButtonEnabled: isTourApplyButtonEnabled
+            isTourApplyButtonEnabled: isTourApplyButtonEnabled,
+            roomButtonInfos: roomButtonInfos,
+            selectedRoomID: selectedRoomID
         )
     }
 }
