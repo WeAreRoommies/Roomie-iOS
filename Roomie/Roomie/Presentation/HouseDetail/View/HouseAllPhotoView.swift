@@ -24,19 +24,19 @@ final class HouseAllPhotoView: BaseView {
     let mainDescriptionLabel = UILabel()
     
     // 공용시설
-    private let publicTitleLabel = UILabel()
-    private let publicBackView = UIView()
-    let publicImageView = UIImageView()
-    let publicDescriptionLabel = UILabel()
+    private let facilityTitleLabel = UILabel()
+    private let facilityBackView = UIView()
+    let facilityImageView = UIImageView()
+    let facilityDescriptionLabel = UILabel()
     
     // 각 방 시설
     private let roomTitleLabel = UILabel()
     private let roomStackView = UIStackView()
     
     // 평면도
-    private let floorPlanTitleLabel = UILabel()
-    private let floorPlanBackView = UIView()
-    let floorPlanImageView = UIImageView()
+    private let floorTitleLabel = UILabel()
+    private let floorBackView = UIView()
+    let floorImageView = UIImageView()
     
     // MARK: - UISetting
     
@@ -63,25 +63,25 @@ final class HouseAllPhotoView: BaseView {
             $0.setText("설명설명", style: .body4, color: .grayscale12)
         }
         
-        publicTitleLabel.do {
+        facilityTitleLabel.do {
             $0.setText("공용시설", style: .heading5, color: .grayscale12)
         }
         
-        publicBackView.do {
+        facilityBackView.do {
             $0.layer.borderColor = UIColor.grayscale5.cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 10
             $0.clipsToBounds = true
         }
         
-        publicImageView.do {
+        facilityImageView.do {
             $0.backgroundColor = .grayscale5
             $0.contentMode = .scaleAspectFill
             $0.layer.cornerRadius = 8
             $0.clipsToBounds = true
         }
         
-        publicDescriptionLabel.do {
+        facilityDescriptionLabel.do {
             $0.setText("설명설명", style: .body4, color: .grayscale12)
         }
         
@@ -96,18 +96,18 @@ final class HouseAllPhotoView: BaseView {
             $0.distribution = .fill
         }
         
-        floorPlanTitleLabel.do {
+        floorTitleLabel.do {
             $0.setText("평면도", style: .heading5, color: .grayscale12)
         }
         
-        floorPlanBackView.do {
+        floorBackView.do {
             $0.layer.borderColor = UIColor.grayscale5.cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 10
             $0.clipsToBounds = true
         }
         
-        floorPlanImageView.do {
+        floorImageView.do {
             $0.backgroundColor = .grayscale5
             $0.contentMode = .scaleAspectFill
             $0.layer.cornerRadius = 8
@@ -121,19 +121,19 @@ final class HouseAllPhotoView: BaseView {
         contentView.addSubviews(
                 mainTitleLabel,
                 mainBackView,
-                publicTitleLabel,
-                publicBackView,
+                facilityTitleLabel,
+                facilityBackView,
                 roomTitleLabel,
                 roomStackView,
-                floorPlanTitleLabel,
-                floorPlanBackView
+                floorTitleLabel,
+                floorBackView
             )
         
         mainBackView.addSubviews(mainImageView, mainDescriptionLabel)
         
-        publicBackView.addSubviews(publicImageView, publicDescriptionLabel)
+        facilityBackView.addSubviews(facilityImageView, facilityDescriptionLabel)
         
-        floorPlanBackView.addSubview(floorPlanImageView)
+        floorBackView.addSubview(floorImageView)
     }
     
     override func setLayout() {
@@ -169,29 +169,29 @@ final class HouseAllPhotoView: BaseView {
             $0.bottom.equalToSuperview().inset(12)
         }
         
-        publicTitleLabel.snp.makeConstraints {
+        facilityTitleLabel.snp.makeConstraints {
             $0.top.equalTo(mainBackView.snp.bottom).offset(40)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
-        publicBackView.snp.makeConstraints {
-            $0.top.equalTo(publicTitleLabel.snp.bottom).offset(16)
+        facilityBackView.snp.makeConstraints {
+            $0.top.equalTo(facilityTitleLabel.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
-        publicImageView.snp.makeConstraints {
+        facilityImageView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview().inset(8)
             $0.height.equalTo(Screen.height(192))
         }
         
-        publicDescriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(publicImageView.snp.bottom).offset(8)
+        facilityDescriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(facilityImageView.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(8)
             $0.bottom.equalToSuperview().inset(12)
         }
         
         roomTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(publicBackView.snp.bottom).offset(40)
+            $0.top.equalTo(facilityBackView.snp.bottom).offset(40)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
@@ -200,18 +200,18 @@ final class HouseAllPhotoView: BaseView {
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
-        floorPlanTitleLabel.snp.makeConstraints {
+        floorTitleLabel.snp.makeConstraints {
             $0.top.equalTo(roomStackView.snp.bottom).offset(40)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
-        floorPlanBackView.snp.makeConstraints {
-            $0.top.equalTo(floorPlanTitleLabel.snp.bottom).offset(16)
+        floorBackView.snp.makeConstraints {
+            $0.top.equalTo(floorTitleLabel.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview().inset(24)
         }
         
-        floorPlanImageView.snp.makeConstraints {
+        floorImageView.snp.makeConstraints {
             $0.height.equalTo(Screen.height(192))
             $0.edges.equalToSuperview().inset(8)
         }
@@ -219,9 +219,10 @@ final class HouseAllPhotoView: BaseView {
 }
 
 extension HouseAllPhotoView {
-    func fetchRooms(_ rooms: [RoomDetail]) {
+    func fetchRooms(_ rooms: [HouseDetailRoom]) {
         for room in rooms {
             let expandView = RoomFacilityExpandView(title: room.name, status: room.status)
+            expandView.configure(room.mainImageURL[0])
             expandView.dataBind(room.facility)
             roomStackView.addArrangedSubview(expandView)
         }
