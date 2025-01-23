@@ -125,8 +125,9 @@ final class HouseDetailViewController: BaseViewController {
 private extension HouseDetailViewController {
     func bindViewModel() {
         let input = HouseDetailViewModel.Input(
-            viewWillApper: viewWillAppearSubject.eraseToAnyPublisher(),
-            roomIDSubject: PassthroughSubject<Int, Never>().eraseToAnyPublisher()
+            houseDetailViewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
+            bottomSheetViewWillAppear: Just(()).eraseToAnyPublisher(),
+            buttonIndexSubject: PassthroughSubject<Int, Never>().eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)

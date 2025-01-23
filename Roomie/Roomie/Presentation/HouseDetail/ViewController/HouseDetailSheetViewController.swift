@@ -16,7 +16,9 @@ final class HouseDetailSheetViewController: BaseViewController {
     
     private let viewModel: HouseDetailViewModel
     
-    private let roomIDSubject = PassthroughSubject<Int, Never>()
+    private let buttonIndexSubject = PassthroughSubject<Int, Never>()
+    
+    private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     
     private let cancelBag = CancelBag()
     
@@ -44,6 +46,12 @@ final class HouseDetailSheetViewController: BaseViewController {
         bindViewModel()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        viewWillAppearSubject.send(())
+    }
+    
     override func setAction() {
         for button in rootView.buttons {
             button.roomButton.tapPublisher
@@ -53,7 +61,7 @@ final class HouseDetailSheetViewController: BaseViewController {
                     
                     // TODO: 선택된 index로 rooms[index].roomID ViewModel에 넘기기
                     self.updateRadioButton(selectedIndex: index)
-                    self.roomIDSubject.send(index)
+                    self.buttonIndexSubject.send(index)
                 }
                 .store(in: cancelBag)
         }
@@ -65,8 +73,9 @@ final class HouseDetailSheetViewController: BaseViewController {
 private extension HouseDetailSheetViewController {
     func bindViewModel() {
         let input = HouseDetailViewModel.Input(
-            viewWillApper: Just(()).eraseToAnyPublisher(),
-            roomIDSubject: roomIDSubject.eraseToAnyPublisher()
+            houseDetailViewWillAppear: Just(()).eraseToAnyPublisher(),
+            bottomSheetViewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
+            buttonIndexSubject: buttonIndexSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(
@@ -78,6 +87,21 @@ private extension HouseDetailSheetViewController {
             .sink { [weak self] isEnabled in
                 guard let self else { return }
                 rootView.tourApplyButton.isEnabled = isEnabled
+            }
+            .store(in: cancelBag)
+        
+        output.roomButtonInfos
+            .sink { [weak self] roomButtonInfos in
+                guard let self else { return }
+                self.rootView.dataBind(roomButtonInfos)
+            }
+            .store(in: cancelBag)
+        
+        output.selectedRoomID
+            .sink { [weak self] selectedRoomID in
+                guard let self else { return }
+                // TODO: 선택된 방의 RoomID를 주입시켜주면서 화면 연결
+                print(selectedRoomID)
             }
             .store(in: cancelBag)
     }
