@@ -80,6 +80,7 @@ final class MapViewController: BaseViewController {
                         builder: MapRequestDTO.Builder.shared
                     )
                 )
+                mapSearchViewController.delegate = self
                 self.navigationController?.pushViewController(mapSearchViewController, animated: true)
             }
             .store(in: cancelBag)
@@ -139,6 +140,17 @@ private extension MapViewController {
                         marker.iconImage = NMFOverlayImage(name: "icn_map_pin_active")
                         self.selectedMarker = marker
                         
+                        let cameraUpdate = NMFCameraUpdate(
+                            scrollTo: NMGLatLng(lat: markerInfo.x, lng: markerInfo.y)
+                        )
+                        cameraUpdate.animation = .easeIn
+                        
+                        let zoomUpdate = NMFCameraUpdate(zoomTo: 14)
+                        zoomUpdate.animation = .easeIn
+                        
+                        rootView.mapView.moveCamera(cameraUpdate)
+                        rootView.mapView.moveCamera(zoomUpdate)
+                        
                         self.markerDidSelectSubject.send(markerInfo.houseID)
                         
                         return true
@@ -190,12 +202,36 @@ private extension MapViewController {
     }
 }
 
+// MARK: - MapSearchViewControllerDelegate
+
+extension MapViewController: MapSearchViewControllerDelegate {
+    func didSelectLocation(location: String, lat: Double, lng: Double) {
+        
+        rootView.searchBarLabel.setText(location, style: .title1, color: .grayscale12)
+        
+        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: lat, lng: lng))
+        cameraUpdate.animation = .easeIn
+        rootView.mapView.moveCamera(cameraUpdate)
+    }
+}
+
 // MARK: - NMFMapViewTouchDelegate
 
 extension MapViewController: NMFMapViewTouchDelegate {
     func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
         if !rootView.mapDetailCardView.isHidden {
             erasePreviousSelectedMarker()
+            
+            let cameraUpdate = NMFCameraUpdate(
+                scrollTo: NMGLatLng(lat: 37.55438, lng: 126.9377)
+            )
+            cameraUpdate.animation = .easeIn
+            
+            let zoomUpdate = NMFCameraUpdate(zoomTo: 13)
+            zoomUpdate.animation = .easeIn
+            
+            rootView.mapView.moveCamera(cameraUpdate)
+            rootView.mapView.moveCamera(zoomUpdate)
             
             rootView.mapDetailCardView.isHidden = true
         }
