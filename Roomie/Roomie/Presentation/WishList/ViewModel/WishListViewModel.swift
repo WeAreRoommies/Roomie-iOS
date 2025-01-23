@@ -16,7 +16,7 @@ final class WishListViewModel {
     
     private let wishListDataSubject = PassthroughSubject<WishListResponseDTO, Never>()
     let pinnedInfoDataSubject = PassthroughSubject<(Int, Bool), Never>()
-    private let tappedHouseDataSubject = PassthroughSubject<Int, Never>()
+    private let didTapHouseDataSubject = PassthroughSubject<Int, Never>()
     
     private(set) var wishListData: [WishHouse] = []
     
@@ -53,7 +53,7 @@ extension WishListViewModel: ViewModelType {
         
         input.tappedHouseIDSubject
             .sink { [weak self] houseID in
-                self?.tappedHouseDataSubject.send(houseID)
+                self?.didTapHouseDataSubject.send(houseID)
             }
             .store(in: cancelBag)
         
@@ -86,7 +86,7 @@ extension WishListViewModel: ViewModelType {
         return Output(
             wishList: wishListData,
             pinnedInfo: pinnedInfoData,
-            tappedInfo: tappedHouseDataSubject.eraseToAnyPublisher()
+            tappedInfo: didTapHouseDataSubject.eraseToAnyPublisher()
         )
     }
 }
