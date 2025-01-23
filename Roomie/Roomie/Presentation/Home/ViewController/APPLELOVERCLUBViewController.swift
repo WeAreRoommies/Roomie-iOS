@@ -6,8 +6,8 @@
 //
 
 import UIKit
-
 import WebKit
+
 import SnapKit
 import Then
 
@@ -25,17 +25,6 @@ final class APPLELOVERCLUBViewController: BaseViewController {
             $0.allowsBackForwardNavigationGestures = true
             $0.configuration.preferences.javaScriptEnabled = true
         }
-
-    }
-    
-    func setUI() {
-        self.rootView.addSubview(webView)
-    }
-    
-    func setLayout() {
-        webView.snp.makeConstraints{
-            $0.edges.equalToSuperview()
-        }
     }
     
     // MARK: - LifeCycle
@@ -51,7 +40,19 @@ final class APPLELOVERCLUBViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadUrl()
+        loadURL()
+    }
+    
+    // MARK: - UISetting
+    
+    func setUI() {
+        self.rootView.addSubview(webView)
+    }
+    
+    func setLayout() {
+        webView.snp.makeConstraints{
+            $0.edges.equalToSuperview()
+        }
     }
     
     override func setView() {
@@ -60,7 +61,7 @@ final class APPLELOVERCLUBViewController: BaseViewController {
     
     // MARK: - Function
     
-    func loadUrl() {
+    func loadURL() {
         if let url = URL(string: "https://1401kms-70595.waveon.me") {
             let urlRequest = URLRequest(url: url)
             webView?.load(urlRequest)
