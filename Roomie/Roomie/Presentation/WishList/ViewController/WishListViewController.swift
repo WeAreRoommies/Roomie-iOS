@@ -116,6 +116,9 @@ private extension WishListViewController {
                         cell.updateWishButton(isPinned: isPinned)
                     }
                 }
+                if isPinned == false {
+                    Toast().show(message: "찜 목록에서 삭제되었어요", inset: 32, view: rootView)
+                }
             }
             .store(in: cancelBag)
     }

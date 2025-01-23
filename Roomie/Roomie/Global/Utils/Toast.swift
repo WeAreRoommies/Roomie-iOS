@@ -11,7 +11,7 @@ import SnapKit
 import Then
 
 final class Toast: UIView {
-    func show(message: String, view: UIView) {
+    func show(message: String, inset: CGFloat, view: UIView) {
         let toastLabel = UILabel().then {
             $0.setText(message, style: .body2, color: .grayscale1)
             $0.textAlignment = .center
@@ -27,7 +27,7 @@ final class Toast: UIView {
         addSubview(toastLabel)
         
         self.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(10)
+            $0.bottom.equalToSuperview().inset(inset)
             $0.leading.trailing.equalToSuperview().inset(12)
             $0.height.equalTo(48)
         }
@@ -43,10 +43,10 @@ final class Toast: UIView {
 
 private extension Toast {
     func animateToast() {
-        UIView.animate(withDuration: 0.4, delay: 0.0, options: .curveEaseIn) {
+        UIView.animate(withDuration: 0.2, delay: 0.0, options: .curveEaseIn) {
             self.alpha = 1.0
         } completion: { _ in
-            UIView.animate(withDuration: 1, delay: 1.8, options: .curveEaseOut) {
+            UIView.animate(withDuration: 1, delay: 0.6, options: .curveEaseOut) {
                 self.alpha = 0.0
             } completion: { _ in
                 self.removeFromSuperview()
