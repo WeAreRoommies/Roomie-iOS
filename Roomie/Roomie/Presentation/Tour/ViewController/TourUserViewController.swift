@@ -23,6 +23,8 @@ final class TourUserViewController: BaseViewController {
     private let genderSubject = PassthroughSubject<Gender, Never>()
     private let phoneNumberTextSubject = PassthroughSubject<String, Never>()
     
+    private let nextButtonSubject = PassthroughSubject<Void, Never>()
+    
     private let cancelBag = CancelBag()
     
     // MARK: - Initializer
@@ -108,8 +110,7 @@ final class TourUserViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self else { return }
-                let tourDateViewController = TourDateViewController(viewModel: TourDateViewModel())
-                self.navigationController?.pushViewController(tourDateViewController, animated: true)
+                self.nextButtonSubject.send(())
             }
             .store(in: cancelBag)
     }
@@ -123,7 +124,8 @@ private extension TourUserViewController {
             nameTextSubject: nameTextSubject.eraseToAnyPublisher(),
             dateSubject: dateSubject.eraseToAnyPublisher(),
             genderSubject: genderSubject.eraseToAnyPublisher(),
-            phoneNumberTextSubject: phoneNumberTextSubject.eraseToAnyPublisher()
+            phoneNumberTextSubject: phoneNumberTextSubject.eraseToAnyPublisher(),
+            nextButtonSubject: nextButtonSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -141,6 +143,20 @@ private extension TourUserViewController {
         output.isNextButtonEnabled
             .sink { [weak self] isEnabled in
                 self?.rootView.nextButton.isEnabled = isEnabled
+            }
+            .store(in: cancelBag)
+        
+        output.presentNextView
+            .sink { [weak self] in
+                guard let self else { return }
+                let tourDateViewController = TourDateViewController(
+                    viewModel: TourDateViewModel(
+                        service: HousesService(),
+                        builder: TourRequestDTO.Builder.shared,
+                        roomID: viewModel.roomID
+                    )
+                )
+                self.navigationController?.pushViewController(tourDateViewController, animated: true)
             }
             .store(in: cancelBag)
     }
