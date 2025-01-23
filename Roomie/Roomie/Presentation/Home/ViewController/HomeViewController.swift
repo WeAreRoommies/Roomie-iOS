@@ -86,7 +86,12 @@ final class HomeViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 // TODO: 추후 재 화면연결 필요
-                let houseDetailViewController = HouseDetailViewController(viewModel: HouseDetailViewModel(service: HousesService()))
+                let houseDetailViewController = HouseDetailViewController(
+                    viewModel: HouseDetailViewModel(
+                        houseID: 2,
+                        service: HousesService()
+                    )
+                )
                 houseDetailViewController.hidesBottomBarWhenPushed = true
                 self?.navigationController?.pushViewController(houseDetailViewController, animated: true)
             }

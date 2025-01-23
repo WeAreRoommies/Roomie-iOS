@@ -67,7 +67,7 @@ final class HouseSinglePhotoView: BaseView {
 }
 
 extension HouseSinglePhotoView {
-    func fetchRooms(_ rooms: [RoomDetail], with expandIndex: Int) {
+    func fetchRooms(_ rooms: [HouseDetailRoom], with expandIndex: Int) {
         for index in 0..<rooms.count {
             let isexpanded = (index == expandIndex)
             
@@ -76,6 +76,7 @@ extension HouseSinglePhotoView {
                 status: rooms[index].status
             )
             expandedView.dataBind(rooms[index].facility)
+            expandedView.configure(rooms[index].mainImageURL[0])
             expandedView.setExpanded(isexpanded)
             roomStackView.addArrangedSubview(expandedView)
         }

@@ -9,6 +9,7 @@ import UIKit
 import Combine
 
 import CombineCocoa
+import Kingfisher
 import SnapKit
 import Then
 
@@ -245,6 +246,12 @@ extension RoomFacilityExpandView {
             } else {
                 oddStackView.addArrangedSubview(CheckIconLabel(text: data[index]))
             }
+        }
+    }
+    
+    func configure(_ urlString: String) {
+        if let roomImageURL = URL(string: urlString) {
+            roomImageView.kf.setImage(with: roomImageURL)
         }
     }
     

@@ -14,6 +14,8 @@ enum HousesTargetType {
     case fetchHouseDetailData(houseID: Int)
     case fetchMoodListData(moodTag: String)
     case updatePinnedHouse(houseID: Int)
+    case fetchHouseDetailImagesData(houseID: Int)
+    case fetchHouseDetailRoomsData(houseID: Int)
 }
 
 extension HousesTargetType: TargetType {
@@ -31,12 +33,17 @@ extension HousesTargetType: TargetType {
             return "/houses/\(houseID)/details"
         case .updatePinnedHouse(houseID: let houseID):
             return "/houses/\(houseID)/pins"
+        case .fetchHouseDetailImagesData(houseID: let houseID):
+            return "/houses/\(houseID)/details/images"
+        case .fetchHouseDetailRoomsData(houseID: let houseID):
+            return "/houses/\(houseID)/details/rooms"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .fetchWishLishData, .fetchHouseDetailData, .fetchMoodListData: return .get
+        case .fetchWishLishData, .fetchHouseDetailData: return .get
+        case .fetchMoodListData, .fetchHouseDetailImagesData, .fetchHouseDetailRoomsData: return .get
         case .updatePinnedHouse: return .patch
         }
     }
@@ -44,6 +51,8 @@ extension HousesTargetType: TargetType {
     var task: Moya.Task {
         switch self {
         case .fetchWishLishData, .fetchHouseDetailData, .updatePinnedHouse:
+            return .requestPlain
+        case .fetchHouseDetailImagesData, .fetchHouseDetailRoomsData:
             return .requestPlain
         case .fetchMoodListData(moodTag: let moodTag):
             return .requestParameters(

@@ -91,7 +91,13 @@ final class HouseDetailViewController: BaseViewController {
         rootView.lookInsidePhotoButton.updateButton.tapPublisher
             .sink { [weak self] in
                 guard let self else { return }
-                let houseAllPhotoViewController = HouseAllPhotoViewController()
+                let houseAllPhotoViewController = HouseAllPhotoViewController(
+                    title: navigationBarTitle,
+                    viewModel: HouseAllPhotoViewModel(
+                        service: HousesService(),
+                        houseID: viewModel.houseID
+                    )
+                )
                 self.navigationController?.pushViewController(houseAllPhotoViewController, animated: true)
             }
             .store(in: cancelBag)
@@ -372,7 +378,14 @@ extension HouseDetailViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == rootView.roomStatusTableView {
-            let houseSinglePhotoViewController = HouseSinglePhotoViewController(index: indexPath.row)
+            let houseSinglePhotoViewController = HouseSinglePhotoViewController(
+                title: navigationBarTitle,
+                index: indexPath.row,
+                viewModel: HouseSinglePhotoViewModel(
+                    service: HousesService(),
+                    houseID: viewModel.houseID
+                )
+            )
             navigationController?.pushViewController(houseSinglePhotoViewController, animated: true)
         }
     }

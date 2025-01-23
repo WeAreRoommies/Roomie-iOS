@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import Combine
+
+import CombineCocoa
 
 final class HouseSinglePhotoViewController: BaseViewController {
     
@@ -13,12 +16,22 @@ final class HouseSinglePhotoViewController: BaseViewController {
     
     private let rootView = HouseSinglePhotoView()
     
+    private var navigationBarTitle: String = ""
+    
+    private let viewModel: HouseSinglePhotoViewModel
+    
+    private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
+    
+    private let cancelBag = CancelBag()
+    
     private var expandedIndex: Int
     
     // MARK: - Initializer
     
-    init(index: Int) {
-        expandedIndex = index
+    init(title navigationBarTitle: String, index expandedIndex: Int, viewModel: HouseSinglePhotoViewModel) {
+        self.navigationBarTitle = navigationBarTitle
+        self.expandedIndex = expandedIndex
+        self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -37,16 +50,36 @@ final class HouseSinglePhotoViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        rootView.fetchRooms(RoomDetail.mockData(), with: expandedIndex)
+        viewWillAppearSubject.send(())
     }
     
     override func setView() {
-        setNavigationBar(with: "43~50/90~100")
+        setNavigationBar(with: navigationBarTitle)
+    }
+}
+
+// MARK: - Functions
+
+private extension HouseSinglePhotoViewController {
+    func bindViewModel() {
+        let input = HouseSinglePhotoViewModel.Input(
+            viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher()
+        )
         
+        let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        
+        output.houseDetailRoomsData
+            .receive(on: RunLoop.main)
+            .sink { [weak self] houseDetailRoomsData in
+                guard let self else { return }
+                rootView.fetchRooms(houseDetailRoomsData.rooms, with: expandedIndex)
+            }
+            .store(in: cancelBag)
     }
 }

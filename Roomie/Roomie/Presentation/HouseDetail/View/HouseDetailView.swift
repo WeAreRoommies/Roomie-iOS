@@ -75,6 +75,7 @@ final class HouseDetailView: BaseView {
         photoImageView.do {
             $0.backgroundColor = .grayscale4
             $0.contentMode = .scaleAspectFill
+            $0.clipsToBounds = true
         }
         
         roundedTopView.do {
