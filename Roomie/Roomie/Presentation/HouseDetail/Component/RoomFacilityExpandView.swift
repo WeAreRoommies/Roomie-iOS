@@ -233,6 +233,9 @@ private extension RoomFacilityExpandView {
 
 extension RoomFacilityExpandView {
     func dataBind(_ data: [String]) {
+        evenStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        oddStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
         let evenDataCount = (data.count + 1) / 2
         
         let itemHeight: CGFloat = 20

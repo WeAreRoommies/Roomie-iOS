@@ -112,6 +112,9 @@ final class HouseDetailSheetView: BaseView {
 
 extension HouseDetailSheetView {
     func dataBind(_ data: [RoomButtonInfo]) {
+        evenStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        oddStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
         for index in 0..<data.count {
             let roomTourButton = RoomTourButton(
                 name: data[index].name,

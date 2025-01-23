@@ -54,10 +54,7 @@ final class HouseAllPhotoViewController: BaseViewController {
         super.viewWillAppear(animated)
         
         viewWillAppearSubject.send(())
-    }
-    
-    override func setView() {
-        setNavigationBar(with: navigationBarTitle)
+        setNavigationBar(with: navigationBarTitle, isBorderHidden: false)
     }
 }
 

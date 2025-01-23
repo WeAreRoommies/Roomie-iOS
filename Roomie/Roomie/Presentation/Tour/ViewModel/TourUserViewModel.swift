@@ -13,10 +13,21 @@ final class TourUserViewModel {
     
     // MARK: - Property
     
-    private let nameTextSubject = PassthroughSubject<String, Never>()
-    private let dateSubject = PassthroughSubject<String, Never>()
-    private let genderSubject = PassthroughSubject<Gender, Never>()
-    private let phoneNumberTextSubject = PassthroughSubject<String, Never>()   
+    private(set) var roomID: Int
+    
+    private let builder: TourRequestDTO.Builder
+    
+    private let nameTextSubject = CurrentValueSubject<String, Never>("")
+    private let dateSubject = CurrentValueSubject<String, Never>("")
+    private let genderSubject = CurrentValueSubject<Gender, Never>(.none)
+    private let phoneNumberTextSubject = CurrentValueSubject<String, Never>("")
+    
+    // MARK: - Initializer
+    
+    init(builder: TourRequestDTO.Builder, roomID: Int) {
+        self.builder = builder
+        self.roomID = roomID
+    }
 }
 
 extension TourUserViewModel: ViewModelType {
@@ -25,14 +36,28 @@ extension TourUserViewModel: ViewModelType {
         let dateSubject: AnyPublisher<String, Never>
         let genderSubject: AnyPublisher<Gender, Never>
         let phoneNumberTextSubject: AnyPublisher<String, Never>
+        let nextButtonSubject: AnyPublisher<Void, Never>
     }
     
     struct Output {
         let isPhoneNumberValid: AnyPublisher<Bool, Never>
         let isNextButtonEnabled: AnyPublisher<Bool, Never>
+        let presentNextView: AnyPublisher<Void, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
+        input.nextButtonSubject
+            .compactMap { $0 }
+            .sink { [weak self] in
+                guard let self else { return }
+                guard let formattedDateString = String.formattedDateString(self.dateSubject.value) else { return }
+                self.builder.setName(nameTextSubject.value)
+                self.builder.setBirth(formattedDateString)
+                self.builder.setGender(genderSubject.value.genderString)
+                self.builder.setPhoneNumber(phoneNumberTextSubject.value)
+            }
+            .store(in: cancelBag)
+        
         input.nameTextSubject
             .sink { [weak self] name in
                 self?.nameTextSubject.send(name)
@@ -78,6 +103,10 @@ extension TourUserViewModel: ViewModelType {
             }
             .eraseToAnyPublisher()
         
-        return Output(isPhoneNumberValid: isPhoneNumberValid, isNextButtonEnabled: isNextButtonEnabled)
+        return Output(
+            isPhoneNumberValid: isPhoneNumberValid,
+            isNextButtonEnabled: isNextButtonEnabled,
+            presentNextView: input.nextButtonSubject
+        )
     }
 }

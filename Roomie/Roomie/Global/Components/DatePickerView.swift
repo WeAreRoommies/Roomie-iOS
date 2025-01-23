@@ -27,6 +27,8 @@ final class DatePickerView: UIView {
     
     private let cancelBag = CancelBag()
     
+    private var canSelectPassedDate: Bool = false
+    
     // MARK: - UIComponent
     
     let dateLabel = UILabel()
@@ -41,6 +43,19 @@ final class DatePickerView: UIView {
     let datePicker = UIDatePicker()
     
     // MARK: - Initializer
+    
+    init(_ canSelectPassedDate: Bool = false) {
+        self.canSelectPassedDate = canSelectPassedDate
+        
+        super.init(frame: .zero)
+        
+        setStyle()
+        setUI()
+        setLayout()
+        
+        setPickerView()
+        setAction()
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -88,7 +103,7 @@ final class DatePickerView: UIView {
             $0.datePickerMode = .date
             $0.preferredDatePickerStyle = .inline
             $0.locale = Locale(identifier: "ko_KR")
-            $0.minimumDate = Date()
+            $0.minimumDate = canSelectPassedDate ? nil : Date()
         }
     }
     

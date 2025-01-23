@@ -21,7 +21,7 @@ final class TourUserView: BaseView {
     let nameTextField = TourTextField()
     
     private let birthLabel = UILabel()
-    let birthPickerView = DatePickerView()
+    let birthPickerView = DatePickerView(true)
     
     private let genderLabel = UILabel()
     let maleButton = TourHalfButton(gender: .male)

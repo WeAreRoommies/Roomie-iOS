@@ -67,7 +67,7 @@ final class TourTextView: UITextView {
             $0.setText(
                 textColor: .grayscale12,
                 backgroundColor: .grayscale2,
-                style: .title1
+                style: .body1
             )
             $0.setLayer(
                 borderWidth: 1,

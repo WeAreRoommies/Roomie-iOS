@@ -19,7 +19,11 @@ final class HouseDetailViewModel {
     private let radioButtonSubject = PassthroughSubject<Void, Never>()
     
     private var buttonIndex: Int = 0
+    
     private(set) var houseID: Int = 0
+    
+    @Published var houseName: String = ""
+    @Published var roomName: String = ""
     
     @Published private(set) var roomInfos: [RoomInfo] = []
     @Published private(set) var roommateInfos: [RoommateInfo] = []
@@ -48,7 +52,7 @@ extension HouseDetailViewModel: ViewModelType {
         let kitchenFacilityInfo: AnyPublisher<[String], Never>
         let isTourApplyButtonEnabled: AnyPublisher<Bool, Never>
         let roomButtonInfos: AnyPublisher<[RoomButtonInfo], Never>
-        let selectedRoomID: AnyPublisher<Int, Never>
+        let selectedRoomID: AnyPublisher<SelectedRoomInfo, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -194,9 +198,20 @@ extension HouseDetailViewModel: ViewModelType {
             .eraseToAnyPublisher()
         
         let selectedRoomID = input.tourApplyButtonTapSubject
-        
-            .compactMap {
-                self.houseDetailDataSubject.value?.rooms[self.buttonIndex].roomID }
+            .map { [weak self] _ -> SelectedRoomInfo? in
+                guard let self = self,
+                      let houseDetailData = self.houseDetailDataSubject.value else {
+                    return nil
+                }
+                
+                return SelectedRoomInfo(
+                    houseID: self.houseID,
+                    roomID: houseDetailData.rooms[buttonIndex].roomID,
+                    houseName: houseDetailData.houseInfo.name,
+                    roomName: houseDetailData.rooms[buttonIndex].name
+                )
+            }
+            .compactMap { $0 }
             .eraseToAnyPublisher()
         
         return Output(
@@ -219,6 +234,7 @@ private extension HouseDetailViewModel {
                 guard let responseBody = try await service.fetchHouseDetailData(houseID: houseID),
                       let data = responseBody.data else { return }
                 houseDetailDataSubject.send(data)
+                self.houseName = data.houseInfo.name
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
             }

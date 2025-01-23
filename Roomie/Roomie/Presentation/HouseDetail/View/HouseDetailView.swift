@@ -80,7 +80,7 @@ final class HouseDetailView: BaseView {
         
         roundedTopView.do {
             $0.backgroundColor = .grayscale1
-            $0.roundCorners(cornerRadius: 16, maskedCorners: [.layerMinXMinYCorner, .layerMaxXMinYCorner])
+            $0.roundCorners(cornerRadius: 12, maskedCorners: [.layerMinXMinYCorner, .layerMaxXMinYCorner])
         }
         
         nameBackView.do {
@@ -197,6 +197,7 @@ final class HouseDetailView: BaseView {
         
         contentView.addSubviews(
             photoImageView,
+            roundedTopView,
             nameBackView,
             titleLabel,
             firstIconLabelStackView,
@@ -213,8 +214,6 @@ final class HouseDetailView: BaseView {
             roommateTitleLabel,
             roommateTableView
         )
-
-        photoImageView.addSubview(roundedTopView)
         
         nameBackView.addSubview(nameLabel)
         
@@ -258,7 +257,7 @@ final class HouseDetailView: BaseView {
         }
         
         roundedTopView.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalTo(nameBackView.snp.top)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(Screen.height(20))
         }

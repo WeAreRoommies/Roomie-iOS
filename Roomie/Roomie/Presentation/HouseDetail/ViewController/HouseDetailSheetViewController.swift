@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 protocol HouseDetailSheetViewControllerDelegate: AnyObject {
-    func tourApplyButtonDidTap(roomID: Int)
+    func tourApplyButtonDidTap(_ selectedRoomInfo: SelectedRoomInfo)
 }
 
 final class HouseDetailSheetViewController: BaseViewController {
@@ -57,6 +57,7 @@ final class HouseDetailSheetViewController: BaseViewController {
         super.viewWillAppear(animated)
         
         viewWillAppearSubject.send(())
+        
     }
     
     override func setAction() {
@@ -100,11 +101,11 @@ private extension HouseDetailSheetViewController {
             .store(in: cancelBag)
         
         output.selectedRoomID
-            .sink { [weak self] selectedRoomID in
+            .sink { [weak self] selectedRoomInfo in
                 guard let self else { return }
                 
-                delegate?.tourApplyButtonDidTap(roomID: selectedRoomID)
                 self.dismiss(animated: true)
+                delegate?.tourApplyButtonDidTap(selectedRoomInfo)
             }
             .store(in: cancelBag)
     }
