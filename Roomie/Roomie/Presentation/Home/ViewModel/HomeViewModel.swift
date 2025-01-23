@@ -11,12 +11,12 @@ import Combine
 final class HomeViewModel {
     
     // MARK: - Property
+    
     private let service: HomeServiceProtocol
     
-    private let homeDataSubject = PassthroughSubject<HomeResponseDTO, Never>()
+    let homeDataSubject = CurrentValueSubject<HomeResponseDTO?, Never>(nil)
     let pinnedInfoDataSubject = PassthroughSubject<(Int, Bool), Never>()
-    
-    private(set) var houseListData: [HomeHouse] = []
+    private let didTapHouseDataSubject = PassthroughSubject<Int, Never>()
     
     init(service: HomeServiceProtocol) {
         self.service = service
@@ -50,6 +50,7 @@ extension HomeViewModel: ViewModelType {
             .store(in: cancelBag)
         
         let houseListData = homeDataSubject
+            .compactMap { $0 }
             .map { house in
                 house.recentlyViewedHouses.map { data in
                     HomeHouse(
@@ -67,18 +68,17 @@ extension HomeViewModel: ViewModelType {
                     )
                 }
             }
-            .handleEvents(receiveOutput: { [weak self] list in
-                self?.houseListData = list
-            })
             .eraseToAnyPublisher()
         
         let userInfo = homeDataSubject
+            .compactMap { $0 }
             .map { data in
                 UserInfo(name: data.name, location: data.location)
             }
             .eraseToAnyPublisher()
         
         let houseCount = homeDataSubject
+            .compactMap { $0 }
             .map { $0.recentlyViewedHouses.count }
             .eraseToAnyPublisher()
         
@@ -112,11 +112,7 @@ private extension HomeViewModel {
             do {
                 guard let responseBody = try await service.updatePinnedHouse(houseID: houseID),
                       let data = responseBody.data else { return }
-                
-                if let index = self.houseListData.firstIndex(where: { $0.houseID == houseID }) {
-                    self.houseListData[index].isPinned = data.isPinned
-                    self.pinnedInfoDataSubject.send((houseID, data.isPinned))
-                }
+                self.pinnedInfoDataSubject.send((houseID, data.isPinned))
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
             }

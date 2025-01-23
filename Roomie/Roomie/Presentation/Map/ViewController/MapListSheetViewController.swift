@@ -8,6 +8,10 @@
 import UIKit
 import Combine
 
+protocol MapListSheetViewControllerDelegate: AnyObject {
+    func houseCellDidTap(houseID: Int)
+}
+
 final class MapListSheetViewController: BaseViewController {
     
     // MARK: - Property
@@ -21,6 +25,10 @@ final class MapListSheetViewController: BaseViewController {
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let cellHeight: CGFloat = 112
     final let contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    
+    weak var delegate: MapListSheetViewControllerDelegate?
+    
+    private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
     
     private lazy var dataSource = createDiffableDataSource()
     
@@ -67,7 +75,8 @@ private extension MapListSheetViewController {
         let input = MapViewModel.Input(
             viewWillAppear: Just(()).eraseToAnyPublisher(),
             markerDidSelect: PassthroughSubject<Int, Never>().eraseToAnyPublisher(),
-            eraseButtonDidTap: PassthroughSubject<Void, Never>().eraseToAnyPublisher()
+            eraseButtonDidTap: PassthroughSubject<Void, Never>().eraseToAnyPublisher(),
+            pinnedHouseID: pinnedHouseIDSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -84,6 +93,26 @@ private extension MapListSheetViewController {
                 }
             }
             .store(in: cancelBag)
+        
+        output.pinnedInfo
+            .receive(on: RunLoop.main)
+            .sink { [weak self] (houseID, isPinned) in
+                guard let self = self else { return }
+                
+                if let index = self.viewModel.mapDataSubject.value?.houses.firstIndex(
+                    where: { $0.houseID == houseID }
+                ) {
+                    let indexPath = IndexPath(item: index, section: 0)
+                    if let cell = self.rootView.collectionView.cellForItem(at: indexPath) as?
+                        HouseListCollectionViewCell {
+                        cell.updateWishButton(isPinned: isPinned)
+                    }
+                }
+                if isPinned == false {
+                    Toast().show(message: "찜 목록에서 삭제되었어요", inset: 32, view: rootView)
+                }
+            }
+            .store(in: cancelBag)
     }
     
     func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, House> {
@@ -96,6 +125,13 @@ private extension MapListSheetViewController {
             ) as? HouseListCollectionViewCell else {
                 return UICollectionViewCell()
             }
+            
+            cell.wishButton
+                .controlEventPublisher(for: .touchUpInside)
+                .sink {
+                    self.pinnedHouseIDSubject.send(model.houseID)
+                }
+                .store(in: self.cancelBag)
             
             cell.dataBind(model)
             return cell
@@ -127,5 +163,14 @@ extension MapListSheetViewController: UICollectionViewDelegateFlowLayout {
         insetForSectionAt section: Int
     ) -> UIEdgeInsets {
         return contentInset
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        guard let houseID = viewModel.mapDataSubject.value?.houses[indexPath.item].houseID else { return }
+        delegate?.houseCellDidTap(houseID: houseID)
+        self.dismiss(animated: true)
     }
 }

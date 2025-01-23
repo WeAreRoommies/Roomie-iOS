@@ -85,16 +85,8 @@ final class HomeViewController: BaseViewController {
     override func setAction() {
         rootView.updateButton.updateButton
             .tapPublisher
-            .sink { [weak self] in
-                // TODO: 추후 재 화면연결 필요
-                let houseDetailViewController = HouseDetailViewController(
-                    viewModel: HouseDetailViewModel(
-                        houseID: 1,
-                        service: HousesService()
-                    )
-                )
-                houseDetailViewController.hidesBottomBarWhenPushed = true
-                self?.navigationController?.pushViewController(houseDetailViewController, animated: true)
+            .sink {
+                // TODO: 웹 뷰 화면 전환
             }
             .store(in: cancelBag)
         
@@ -124,7 +116,6 @@ final class HomeViewController: BaseViewController {
             .tapPublisher
             .sink {
                 let neatMoodListViewController = MoodListViewController(
-                    
                     moodType: .neat
                 )
                 neatMoodListViewController.hidesBottomBarWhenPushed = true
@@ -196,7 +187,9 @@ private extension HomeViewController {
             .sink { [weak self] (houseID, isPinned) in
                 guard let self = self else { return }
 
-                if let index = self.viewModel.houseListData.firstIndex(where: { $0.houseID == houseID }) {
+                if let index = self.viewModel.homeDataSubject.value?.recentlyViewedHouses.firstIndex(
+                    where: { $0.houseID == houseID }
+                ) {
                     let indexPath = IndexPath(item: index, section: 0)
                     if let cell = self.rootView.houseListCollectionView.cellForItem(at: indexPath) as?
                         HouseListCollectionViewCell {
@@ -332,7 +325,12 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        // TODO: 상세매물 페이지와 연결
+        guard let houseID = viewModel.homeDataSubject.value?.recentlyViewedHouses[indexPath.item].houseID else { return }
+        let houseDetailViewController = HouseDetailViewController(
+            viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
+        )
+        houseDetailViewController.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(houseDetailViewController, animated: true)
     }
 }
 
@@ -341,7 +339,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 extension HomeViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
-        if offsetY > -94 {
+        if offsetY > -90 {
             homeNavigationBarStatus = .top
         } else {
             homeNavigationBarStatus = .scrolled
@@ -349,7 +347,8 @@ extension HomeViewController: UIScrollViewDelegate {
         
         let maxOffsetY = rootView.scrollView.contentSize.height - rootView.scrollView.bounds.height
 
-        rootView.backgroundColor = rootView.scrollView.contentOffset.y >= maxOffsetY ? .grayscale1 : .primaryLight4
+        rootView.backgroundColor = rootView.scrollView.contentOffset.y
+        >= maxOffsetY ? .grayscale1 : .primaryLight4
     }
 }
 

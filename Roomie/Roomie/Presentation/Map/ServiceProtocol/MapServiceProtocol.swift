@@ -10,5 +10,5 @@ import Foundation
 protocol MapServiceProtocol {
     func fetchMapData(request: MapRequestDTO) async throws -> BaseResponseBody<MapResponseDTO>?
     
-    // TODO: 찜 API 추가
+    func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinnedResponseDTO>?
 }

@@ -32,6 +32,7 @@ final class WishListViewController: BaseViewController {
     final let contentInterSpacing: CGFloat = 4
     final let contentInset = UIEdgeInsets(top: 12, left: 16, bottom: 24, right: 16)
     
+    
     // MARK: - Initializer
     
     init(viewModel: WishListViewModel) {
@@ -57,6 +58,9 @@ final class WishListViewController: BaseViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        updateSeletedCell()
         viewWillAppearSubject.send()
     }
     
@@ -110,9 +114,12 @@ private extension WishListViewController {
             .sink { [weak self] (houseID, isPinned) in
                 guard let self = self else { return }
 
-                if let index = self.viewModel.wishListData.firstIndex(where: { $0.houseID == houseID }) {
+                if let index = self.viewModel.wishListDataSubject.value?.pinnedHouses.firstIndex(
+                    where: { $0.houseID == houseID }
+                ) {
                     let indexPath = IndexPath(item: index, section: 0)
-                    if let cell = self.rootView.wishListCollectionView.cellForItem(at: indexPath) as? HouseListCollectionViewCell {
+                    if let cell = self.rootView.wishListCollectionView.cellForItem(at: indexPath)
+                        as? HouseListCollectionViewCell {
                         cell.updateWishButton(isPinned: isPinned)
                     }
                 }
@@ -165,6 +172,15 @@ private extension WishListViewController {
         snapshot.appendItems(data, toSection: 0)
         dataSource.apply(snapshot, animatingDifferences: true)
     }
+    
+    func updateSeletedCell() {
+        for index in rootView.wishListCollectionView.indexPathsForVisibleItems {
+            if let cell = rootView.wishListCollectionView.cellForItem(at: index) as?
+                HouseListCollectionViewCell {
+                cell.isSelected = false
+            }
+        }
+    }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -198,7 +214,12 @@ extension WishListViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        // TODO: 상세매물 페이지와 연결
+        guard let houseID = viewModel.wishListDataSubject.value?.pinnedHouses[indexPath.item].houseID else { return }
+        let houseDetailViewController = HouseDetailViewController(
+            viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
+        )
+        houseDetailViewController.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(houseDetailViewController, animated: true)
     }
     
     func collectionView(
