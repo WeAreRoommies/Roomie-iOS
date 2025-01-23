@@ -91,7 +91,12 @@ final class HouseDetailViewController: BaseViewController {
         rootView.lookInsidePhotoButton.updateButton.tapPublisher
             .sink { [weak self] in
                 guard let self else { return }
-                let houseAllPhotoViewController = HouseAllPhotoViewController(viewModel: HouseAllPhotoViewModel(service: HousesService()))
+                let houseAllPhotoViewController = HouseAllPhotoViewController(
+                    viewModel: HouseAllPhotoViewModel(
+                        service: HousesService(),
+                        houseID: 1
+                    )
+                )
                 self.navigationController?.pushViewController(houseAllPhotoViewController, animated: true)
             }
             .store(in: cancelBag)
