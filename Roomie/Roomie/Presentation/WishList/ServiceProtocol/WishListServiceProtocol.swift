@@ -10,5 +10,5 @@ import Foundation
 protocol WishListServiceProtocol {
     func fetchWishListData() async throws -> BaseResponseBody<WishListResponseDTO>?
     
-    func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinWishResponseDTO>?
+    func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinnedResponseDTO>?
 }

@@ -1,5 +1,5 @@
 //
-//  PinWishResponseDTO.swift
+//  PinnedResponseDTO.swift
 //  Roomie
 //
 //  Created by MaengKim on 1/23/25.
@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct PinWishResponseDTO: ResponseModelType {
+struct PinnedResponseDTO: ResponseModelType {
     var isPinned: Bool
 }

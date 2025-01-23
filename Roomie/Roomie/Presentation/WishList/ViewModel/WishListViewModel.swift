@@ -13,11 +13,11 @@ final class WishListViewModel {
     // MARK: - Property
     
     private let service: WishListServiceProtocol
+    
     private let wishListDataSubject = PassthroughSubject<WishListResponseDTO, Never>()
+    let pinnedInfoDataSubject = PassthroughSubject<(Int, Bool), Never>()
     
     private(set) var wishListData: [WishHouse] = []
-    
-    let pinnedWishSubject = PassthroughSubject<(Int, Bool), Never>()
     
     init(service: WishListServiceProtocol) {
         self.service = service
@@ -27,12 +27,12 @@ final class WishListViewModel {
 extension WishListViewModel: ViewModelType {
     struct Input {
         let viewWillAppear: AnyPublisher<Void, Never>
-        let pinnedWishSubject: AnyPublisher<Int, Never>
+        let pinnedHouseIDSubject: AnyPublisher<Int, Never>
     }
     
     struct Output {
         let wishList: AnyPublisher<[WishHouse], Never>
-        let pinnedWish: AnyPublisher<(Int,Bool), Never>
+        let pinnedInfo: AnyPublisher<(Int,Bool), Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -42,7 +42,7 @@ extension WishListViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
-        input.pinnedWishSubject
+        input.pinnedHouseIDSubject
             .sink { [weak self] houseID in
                 self?.updatePinnedHouse(houseID: houseID)
             }
@@ -71,12 +71,12 @@ extension WishListViewModel: ViewModelType {
             })
             .eraseToAnyPublisher()
         
-        let pinned = pinnedWishSubject
+        let pinnedInfoData = pinnedInfoDataSubject
             .eraseToAnyPublisher()
         
         return Output(
             wishList: wishListData,
-            pinnedWish: pinned
+            pinnedInfo: pinnedInfoData
         )
     }
 }
@@ -103,7 +103,7 @@ private extension WishListViewModel {
                      
                      if let index = self.wishListData.firstIndex(where: { $0.houseID == houseID }) {
                          self.wishListData[index].isPinned = data.isPinned
-                         self.pinnedWishSubject.send((houseID, data.isPinned))
+                         self.pinnedInfoDataSubject.send((houseID, data.isPinned))
                      }
                  } catch {
                      print(">>> \(error.localizedDescription) : \(#function)")

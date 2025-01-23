@@ -41,7 +41,7 @@ final class HousesService {
 }
 
 extension HousesService: WishListServiceProtocol {
-    func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinWishResponseDTO>? {
+    func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinnedResponseDTO>? {
         return try await self.request(with: .updatePinnedHouse(houseID: houseID))
     }
     
@@ -67,8 +67,8 @@ extension HousesService: MoodListServiceProtocol {
 }
 
 final class MockHouseService: WishListServiceProtocol {
-    func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinWishResponseDTO>? {
-        let mockData: PinWishResponseDTO = PinWishResponseDTO(isPinned: false)
+    func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinnedResponseDTO>? {
+        let mockData: PinnedResponseDTO = PinnedResponseDTO(isPinned: false)
         return BaseResponseBody(code: 200, message: "", data: mockData)
     }
     

@@ -23,7 +23,7 @@ final class WishListViewController: BaseViewController {
     private let cancelBag = CancelBag()
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
-    private let pinnedWishSubject = PassthroughSubject<Int, Never>()
+    private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
     
     private lazy var dataSource = createDiffableDataSource()
     
@@ -88,7 +88,7 @@ private extension WishListViewController {
     func bindViewModel() {
         let input = WishListViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
-            pinnedWishSubject: pinnedWishSubject.eraseToAnyPublisher()
+            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -105,7 +105,7 @@ private extension WishListViewController {
             }
             .store(in: cancelBag)
         
-        output.pinnedWish
+        output.pinnedInfo
             .receive(on: RunLoop.main)
             .sink { [weak self] (houseID, isPinned) in
                 guard let self = self else { return }
@@ -135,7 +135,7 @@ private extension WishListViewController {
                 cell.wishButton
                     .controlEventPublisher(for: .touchUpInside)
                     .sink {
-                        self.pinnedWishSubject.send(model.houseID)
+                        self.pinnedHouseIDSubject.send(model.houseID)
                     }
                     .store(in: self.cancelBag)
                 return cell
