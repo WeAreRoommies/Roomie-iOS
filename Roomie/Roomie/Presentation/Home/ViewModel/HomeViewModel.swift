@@ -109,19 +109,17 @@ private extension HomeViewModel {
     
     func updatePinnedHouse(houseID: Int) {
         Task {
-            Task {
-                 do {
-                     guard let responseBody = try await service.updatePinnedHouse(houseID: houseID),
-                           let data = responseBody.data else { return }
-                     
-                     if let index = self.houseListData.firstIndex(where: { $0.houseID == houseID }) {
-                         self.houseListData[index].isPinned = data.isPinned
-                         self.pinnedInfoDataSubject.send((houseID, data.isPinned))
-                     }
-                 } catch {
-                     print(">>> \(error.localizedDescription) : \(#function)")
-                 }
-             }
+            do {
+                guard let responseBody = try await service.updatePinnedHouse(houseID: houseID),
+                      let data = responseBody.data else { return }
+                
+                if let index = self.houseListData.firstIndex(where: { $0.houseID == houseID }) {
+                    self.houseListData[index].isPinned = data.isPinned
+                    self.pinnedInfoDataSubject.send((houseID, data.isPinned))
+                }
+            } catch {
+                print(">>> \(error.localizedDescription) : \(#function)")
+            }
         }
     }
 }
