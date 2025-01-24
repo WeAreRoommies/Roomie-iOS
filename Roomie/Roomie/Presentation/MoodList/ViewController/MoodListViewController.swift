@@ -72,13 +72,10 @@ final class MoodListViewController: BaseViewController {
         
         updateSeletedCell()
         moodListTypeSubject.send(moodType.title)
+        setNavigationBar(with: "#\(moodNavibarTitle)")
     }
     
     // MARK: - Functions
-    
-    override func setView() {
-        setNavigationBar(with: "#\(moodNavibarTitle)")
-    }
     
     override func setDelegate() {
         rootView.moodListCollectionView.delegate = self

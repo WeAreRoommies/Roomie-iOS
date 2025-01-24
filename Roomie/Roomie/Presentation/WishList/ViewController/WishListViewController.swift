@@ -62,6 +62,7 @@ final class WishListViewController: BaseViewController {
         
         updateSeletedCell()
         viewWillAppearSubject.send()
+        setNavigationBar(with: "찜 목록")
     }
     
     // MARK: - Functions
