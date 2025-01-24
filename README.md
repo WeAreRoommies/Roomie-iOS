@@ -8,9 +8,8 @@
 # ⚒️ iOS Developer
 |김수연</br>[@mmaybei](https://github.com/mmaybei)|김승원</br>[@SeungWon1125](https://github.com/SeungWon1125)|김현수</br>[@maeng-kim](https://github.com/@maeng-kim)|
 |:---:|:---:|:---:|
-|<img src = "https://github.com/user-attachments/assets/23a9cf2b-79b8-4c5f-bb76-30de4300d926" width ="250">|<img src = "https://github.com/user-attachments/assets/8d4d736d-3547-44ad-9aa5-ce7b4c3eab98" width ="250">|<img src = "https://github.com/user-attachments/assets/014597cb-0f1b-4fbd-a028-82f9c0edb622" width ="250">|
+|<img src = "https://github.com/user-attachments/assets/b5ca043f-5470-4695-8228-b3a086250750" width ="250">|<img src = "https://github.com/user-attachments/assets/eb56a0d7-d32c-46e6-a4a6-b505ef0acabf" width ="250">|<img src = "https://github.com/user-attachments/assets/d581e539-9857-49d1-af4f-465ae707f0d0" width ="250">|
 |`지도/검색/필터링`</br>`마이페이지`|`매물 상세 뷰`</br>`입주 신청 플로우`|`홈 뷰`</br>`분위기 별 리스트`</br>`찜 리스트`|
-</br>
 
 # 🏡 Screenshot
 | 홈 | 지도 | 필터링 | 검색 |
@@ -26,7 +25,6 @@
 | 분위기별 리스트 | 찜 리스트 | 마이페이지 |
 |:---:|:---:|:---:|
 |<img src = "https://github.com/user-attachments/assets/003fd19e-89d0-4372-b650-7b6d38a89ad0" width ="200">|<img src = "https://github.com/user-attachments/assets/1c3a1b7e-cb18-434c-a52a-0f51ccbf2f4f" width ="200">|<img src = "https://github.com/user-attachments/assets/9ea512e8-d58a-4c47-926c-b2bb8ad105d6" width ="200">|
-</br>
 
 # ⚙️ Project Design
 ![프로젝트설계](https://github.com/user-attachments/assets/48d3c7c1-6334-48d3-8beb-d6c259cb231f)
