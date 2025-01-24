@@ -61,7 +61,7 @@ final class HouseDetailView: BaseView {
     // bottom Button
     private let bottomButtonbackView = UIView()
     private let bottomButtonSeparatorView = UIView()
-    let pinnedButton = RoomieIconButton(imageName: "icn_heart_24_normal", border: true)
+    let wishListButton = RoomieIconButton(imageName: "icn_heart_24_normal", border: true)
     let contactButton = RoomieIconButton(imageName: "icn_inquire_24", border: true)
     let tourApplyButton = RoomieButton(title: "투어신청하기")
     
@@ -233,7 +233,7 @@ final class HouseDetailView: BaseView {
         
         bottomButtonbackView.addSubviews(
             bottomButtonSeparatorView,
-            pinnedButton,
+            wishListButton,
             contactButton,
             tourApplyButton
         )
@@ -389,18 +389,18 @@ final class HouseDetailView: BaseView {
             $0.height.equalTo(1)
         }
         
-        pinnedButton.snp.makeConstraints {
+        wishListButton.snp.makeConstraints {
             $0.top.equalToSuperview().inset(12)
             $0.leading.equalToSuperview().inset(20)
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
-            $0.width.equalTo(pinnedButton.snp.height)
+            $0.width.equalTo(wishListButton.snp.height)
         }
         
         contactButton.snp.makeConstraints {
             $0.top.equalToSuperview().inset(12)
-            $0.leading.equalTo(pinnedButton.snp.trailing).offset(8)
+            $0.leading.equalTo(wishListButton.snp.trailing).offset(8)
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
-            $0.width.equalTo(pinnedButton.snp.height)
+            $0.width.equalTo(wishListButton.snp.height)
         }
         
         tourApplyButton.snp.makeConstraints {
