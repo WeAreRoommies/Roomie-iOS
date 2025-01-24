@@ -17,6 +17,7 @@ final class HouseDetailViewModel {
     private let houseDetailDataSubject = CurrentValueSubject<HouseDetailResponseDTO?, Never>(nil)
     
     private let radioButtonSubject = PassthroughSubject<Void, Never>()
+    private let pinnedInfoSubject = PassthroughSubject<Bool, Never>()
     
     private var buttonIndex: Int = 0
     
@@ -42,6 +43,7 @@ extension HouseDetailViewModel: ViewModelType {
         let bottomSheetViewWillAppear: AnyPublisher<Void, Never>
         let buttonIndexSubject: AnyPublisher<Int, Never>
         let tourApplyButtonTapSubject: AnyPublisher<Void, Never>
+        let wishListButtonSubject: AnyPublisher<Void, Never>
     }
     
     struct Output {
@@ -53,6 +55,8 @@ extension HouseDetailViewModel: ViewModelType {
         let isTourApplyButtonEnabled: AnyPublisher<Bool, Never>
         let roomButtonInfos: AnyPublisher<[RoomButtonInfo], Never>
         let selectedRoomID: AnyPublisher<SelectedRoomInfo, Never>
+        let pinnedInfo: AnyPublisher<Bool, Never>
+        let pinnedStatus: AnyPublisher<Bool, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -214,6 +218,23 @@ extension HouseDetailViewModel: ViewModelType {
             .compactMap { $0 }
             .eraseToAnyPublisher()
         
+        input.wishListButtonSubject
+            .sink { [weak self] in
+                guard let self else { return }
+                self.updatePinnedHouse(houseID: houseID)
+            }
+            .store(in: cancelBag)
+        
+        let pinnedInfo = pinnedInfoSubject
+            .eraseToAnyPublisher()
+        
+        let pinnedStatus = houseDetailDataSubject
+            .compactMap { $0 }
+            .map { data in
+                data.houseInfo.isPinned
+            }
+            .eraseToAnyPublisher()
+        
         return Output(
             navigationBarTitle: navigationBarTitle,
             houseMainInfo: houseMainInfo,
@@ -222,7 +243,9 @@ extension HouseDetailViewModel: ViewModelType {
             kitchenFacilityInfo: kitchenFacilityInfo,
             isTourApplyButtonEnabled: isTourApplyButtonEnabled,
             roomButtonInfos: roomButtonInfos,
-            selectedRoomID: selectedRoomID
+            selectedRoomID: selectedRoomID,
+            pinnedInfo: pinnedInfo,
+            pinnedStatus: pinnedStatus
         )
     }
 }
@@ -235,6 +258,18 @@ private extension HouseDetailViewModel {
                       let data = responseBody.data else { return }
                 houseDetailDataSubject.send(data)
                 self.houseName = data.houseInfo.name
+            } catch {
+                print(">>> \(error.localizedDescription) : \(#function)")
+            }
+        }
+    }
+    
+    func updatePinnedHouse(houseID: Int) {
+        Task {
+            do {
+                guard let responseBody = try await service.updatePinnedHouse(houseID: houseID),
+                      let data = responseBody.data else { return }
+                pinnedInfoSubject.send(data.isPinned)
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
             }

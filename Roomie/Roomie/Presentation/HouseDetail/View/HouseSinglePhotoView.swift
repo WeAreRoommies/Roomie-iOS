@@ -68,6 +68,7 @@ final class HouseSinglePhotoView: BaseView {
 
 extension HouseSinglePhotoView {
     func fetchRooms(_ rooms: [HouseDetailRoom], with expandIndex: Int) {
+        roomStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         for index in 0..<rooms.count {
             let isexpanded = (index == expandIndex)
             

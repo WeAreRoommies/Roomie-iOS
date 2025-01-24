@@ -19,9 +19,9 @@ final class HouseDetailView: BaseView {
     
     // HousePhoto Section
     let photoImageView = UIImageView()
-    private let roundedTopView = UIView()
     
     // HouseInfo Section
+    private let houseInfoBackView = UIView()
     private let nameBackView = UIView()
     let nameLabel = UILabel()
     let titleLabel = UILabel()
@@ -61,7 +61,7 @@ final class HouseDetailView: BaseView {
     // bottom Button
     private let bottomButtonbackView = UIView()
     private let bottomButtonSeparatorView = UIView()
-    let pinnedButton = RoomieIconButton(imageName: "icn_heart_24_normal", border: true)
+    let wishListButton = RoomieIconButton(imageName: "icn_heart_24_normal", border: true)
     let contactButton = RoomieIconButton(imageName: "icn_inquire_24", border: true)
     let tourApplyButton = RoomieButton(title: "투어신청하기")
     
@@ -78,9 +78,9 @@ final class HouseDetailView: BaseView {
             $0.clipsToBounds = true
         }
         
-        roundedTopView.do {
+        houseInfoBackView.do {
             $0.backgroundColor = .grayscale1
-            $0.roundCorners(cornerRadius: 12, maskedCorners: [.layerMinXMinYCorner, .layerMaxXMinYCorner])
+            $0.roundCorners(cornerRadius: 16, maskedCorners: [.layerMinXMinYCorner, .layerMaxXMinYCorner])
         }
         
         nameBackView.do {
@@ -197,7 +197,7 @@ final class HouseDetailView: BaseView {
         
         contentView.addSubviews(
             photoImageView,
-            roundedTopView,
+            houseInfoBackView,
             nameBackView,
             titleLabel,
             firstIconLabelStackView,
@@ -233,7 +233,7 @@ final class HouseDetailView: BaseView {
         
         bottomButtonbackView.addSubviews(
             bottomButtonSeparatorView,
-            pinnedButton,
+            wishListButton,
             contactButton,
             tourApplyButton
         )
@@ -256,10 +256,10 @@ final class HouseDetailView: BaseView {
             $0.height.equalTo(Screen.height(316))
         }
         
-        roundedTopView.snp.makeConstraints {
-            $0.bottom.equalTo(nameBackView.snp.top)
+        houseInfoBackView.snp.makeConstraints {
+            $0.top.equalTo(photoImageView.snp.bottom).offset(-20)
             $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(Screen.height(20))
+            $0.bottom.equalTo(lookInsidePhotoButton.snp.bottom).offset(20)
         }
         
         nameBackView.snp.makeConstraints {
@@ -389,18 +389,18 @@ final class HouseDetailView: BaseView {
             $0.height.equalTo(1)
         }
         
-        pinnedButton.snp.makeConstraints {
+        wishListButton.snp.makeConstraints {
             $0.top.equalToSuperview().inset(12)
             $0.leading.equalToSuperview().inset(20)
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
-            $0.width.equalTo(pinnedButton.snp.height)
+            $0.width.equalTo(wishListButton.snp.height)
         }
         
         contactButton.snp.makeConstraints {
             $0.top.equalToSuperview().inset(12)
-            $0.leading.equalTo(pinnedButton.snp.trailing).offset(8)
+            $0.leading.equalTo(wishListButton.snp.trailing).offset(8)
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-12)
-            $0.width.equalTo(pinnedButton.snp.height)
+            $0.width.equalTo(wishListButton.snp.height)
         }
         
         tourApplyButton.snp.makeConstraints {

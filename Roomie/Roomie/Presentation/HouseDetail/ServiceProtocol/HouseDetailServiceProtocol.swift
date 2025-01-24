@@ -19,5 +19,5 @@ protocol HouseDetailServiceProtocol {
     
     func applyTour(request: TourRequestDTO, roomID: Int) async throws -> BaseResponseBody<TourResponseDTO>?
     
-    // TODO: 찜 API 추가
+    func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinnedResponseDTO>?
 }

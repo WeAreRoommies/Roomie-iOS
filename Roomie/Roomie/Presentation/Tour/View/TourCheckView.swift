@@ -20,7 +20,7 @@ final class TourCheckView: BaseView {
     let houseNameLabel = UILabel()
     
     private let roomTitleLabel = UILabel()
-    let roomNameLabel = UILabel()
+    let roomNameLabel = CheckIconLabel(text: "")
     
     let nextButton = RoomieButton(title: "이 방이 맞아요")
         
@@ -36,15 +36,11 @@ final class TourCheckView: BaseView {
         }
         
         houseNameLabel.do {
-            $0.setText("해피쉐어 100호점 (건대점)", style: .body1, color: .grayscale12)
+            $0.setText(style: .body1, color: .grayscale12)
         }
         
         roomTitleLabel.do {
             $0.setText("대상", style: .body2, color: .grayscale7)
-        }
-        
-        roomNameLabel.do {
-            $0.setText("1A (싱글침대)", style: .body1, color: .grayscale12)
         }
     }
     

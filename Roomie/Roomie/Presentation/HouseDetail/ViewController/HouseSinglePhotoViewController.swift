@@ -20,7 +20,7 @@ final class HouseSinglePhotoViewController: BaseViewController {
     
     private let viewModel: HouseSinglePhotoViewModel
     
-    private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
+    private let viewDidLoadSubject = PassthroughSubject<Void, Never>()
     
     private let cancelBag = CancelBag()
     
@@ -51,12 +51,12 @@ final class HouseSinglePhotoViewController: BaseViewController {
         super.viewDidLoad()
         
         bindViewModel()
+        viewDidLoadSubject.send(())
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        viewWillAppearSubject.send(())
         setNavigationBar(with: navigationBarTitle, isBorderHidden: false)
     }
 }
@@ -66,7 +66,7 @@ final class HouseSinglePhotoViewController: BaseViewController {
 private extension HouseSinglePhotoViewController {
     func bindViewModel() {
         let input = HouseSinglePhotoViewModel.Input(
-            viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher()
+            viewDidLoad: viewDidLoadSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
