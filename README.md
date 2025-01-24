@@ -46,6 +46,42 @@
 자세한 내용은 [아요 루미들의 코딩 컨벤션](https://automatic-protocol-11a.notion.site/16536a29f062800e80cffc65cf303f39?pvs=4) 문서를 참고해주세요.
 </br></br>
 
+# 📂 Foldering
+```
+📁 Roomie
+├── 📁 Application
+│   ├── 📃 AppDelegate
+│   └── 📃 SceneDelegate
+├── 📁 Global
+│   ├── 🗂️ Base
+│   │   ├── 📃 BaseVie
+│   │   ├── 📃 BaseViewController.swift
+│   │   └── ...
+│   ├── 🗂️ Components
+│   ├── 📃 Config.xcconfig
+│   ├── 🗂️ Enums
+│   ├── 🗂️ Extensions
+│   ├── 📃 Info.plist
+│   ├── 🗂️ Resource
+│   │   ├── 🗂️ Fonts
+│   │   ├── 📃 Assets.xcassets
+│   │   └── 📃 Colors.xcassets
+│   └── 🗂️ Utils
+├── 📁 Presentation
+│   └── 🗂️ Home
+│       ├── 🗂️ View
+│       │   └── 📃 HomeView.swift
+│       ├── 🗂️ ViewController
+│       │   └── 📃 HomeViewController.swift
+│       └── 🗂️ ViewModel
+│           └── 📃HomeViewModel.swift
+└── 📁 Network
+    ├── 🗂️ Base
+    ├── 🗂️ DTO
+    ├── 🗂️ Service
+    └── 🗂️ TargetType
+```
+
 # 📝 Tag Convention
 ```
 [init] 가장 처음 Initial Commit에 태그 붙이기!
