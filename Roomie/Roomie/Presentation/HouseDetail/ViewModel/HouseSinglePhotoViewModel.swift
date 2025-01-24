@@ -30,7 +30,7 @@ final class HouseSinglePhotoViewModel {
 
 extension HouseSinglePhotoViewModel: ViewModelType {
     struct Input {
-        let viewWillAppear: AnyPublisher<Void, Never>
+        let viewDidLoad: AnyPublisher<Void, Never>
     }
     
     struct Output {
@@ -38,7 +38,7 @@ extension HouseSinglePhotoViewModel: ViewModelType {
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
-        input.viewWillAppear
+        input.viewDidLoad
             .sink { [weak self] in
                 guard let self else { return }
                 
