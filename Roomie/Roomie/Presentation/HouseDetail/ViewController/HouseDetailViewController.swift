@@ -40,6 +40,7 @@ final class HouseDetailViewController: BaseViewController {
     private let roommateCellHeight: CGFloat = Screen.height(102 + 12)
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
+    private let wishListButtonSubject = PassthroughSubject<Void, Never>()
     
     private let cancelBag = CancelBag()
     
@@ -117,6 +118,13 @@ final class HouseDetailViewController: BaseViewController {
                 self?.presentHouseDetailSheet()
             }
             .store(in: cancelBag)
+        
+        rootView.wishListButton.tapPublisher
+            .sink { [weak self] in
+                guard let self else { return }
+                self.wishListButtonSubject.send(())
+            }
+            .store(in: cancelBag)
     }
     
     override func setDelegate() {
@@ -138,10 +146,35 @@ private extension HouseDetailViewController {
             houseDetailViewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
             bottomSheetViewWillAppear: Just(()).eraseToAnyPublisher(),
             buttonIndexSubject: PassthroughSubject<Int, Never>().eraseToAnyPublisher(),
-            tourApplyButtonTapSubject: PassthroughSubject<Void, Never>().eraseToAnyPublisher()
+            tourApplyButtonTapSubject: PassthroughSubject<Void, Never>().eraseToAnyPublisher(),
+            wishListButtonSubject: wishListButtonSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        
+        output.pinnedStatus
+            .receive(on: RunLoop.main)
+            .sink { [weak self] pinnedStatus in
+                guard let self else { return }
+                rootView.wishListButton
+                    .setImage(
+                        pinnedStatus ? .icnHeart24Active : .icnHeart24Normal,
+                        for: .normal
+                    )
+            }
+            .store(in: cancelBag)
+        
+        output.pinnedInfo
+            .receive(on: RunLoop.main)
+            .sink { [weak self] isPinned in
+                guard let self else { return }
+                rootView.wishListButton
+                    .setImage(
+                        isPinned ? .icnHeart24Active : .icnHeart24Normal,
+                        for: .normal
+                    )
+            }
+            .store(in: cancelBag)
         
         output.navigationBarTitle
             .receive(on: RunLoop.main)

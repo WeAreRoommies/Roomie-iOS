@@ -77,7 +77,8 @@ private extension HouseDetailSheetViewController {
             houseDetailViewWillAppear: Just(()).eraseToAnyPublisher(),
             bottomSheetViewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
             buttonIndexSubject: buttonIndexSubject.eraseToAnyPublisher(),
-            tourApplyButtonTapSubject: tourApplyButtonTapSubject.eraseToAnyPublisher()
+            tourApplyButtonTapSubject: tourApplyButtonTapSubject.eraseToAnyPublisher(),
+            wishListButtonSubject: PassthroughSubject<Void, Never>().eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(
