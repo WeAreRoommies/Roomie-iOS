@@ -301,6 +301,7 @@ private extension HomeViewController {
         let wishListViewController = WishListViewController(
             viewModel: WishListViewModel(service: WishListService())
         )
+        wishListViewController.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(wishListViewController, animated: true)
     }
 }
