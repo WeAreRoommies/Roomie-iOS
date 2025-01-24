@@ -168,11 +168,12 @@ private extension HouseDetailViewController {
             .receive(on: RunLoop.main)
             .sink { [weak self] isPinned in
                 guard let self else { return }
-                rootView.wishListButton
-                    .setImage(
-                        isPinned ? .icnHeart24Active : .icnHeart24Normal,
-                        for: .normal
-                    )
+                if isPinned {
+                    rootView.wishListButton.setImage(.icnHeart24Active, for: .normal)
+                } else {
+                    rootView.wishListButton.setImage(.icnHeart24Normal, for: .normal)
+                    Toast().show(message: "찜 목록에서 삭제되었어요", inset: Screen.height(120), view: rootView)
+                }
             }
             .store(in: cancelBag)
         
