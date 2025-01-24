@@ -125,6 +125,13 @@ final class HouseDetailViewController: BaseViewController {
                 self.wishListButtonSubject.send(())
             }
             .store(in: cancelBag)
+        
+        rootView.contactButton.tapPublisher
+            .sink{
+                let webViewController = HouseDetailWebViewController()
+                self.navigationController?.pushViewController(webViewController, animated: true)
+            }
+            .store(in: cancelBag)
     }
     
     override func setDelegate() {
