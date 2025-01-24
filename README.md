@@ -1,7 +1,9 @@
 ```
-룸메이트 때문에 고통스러운 쉐어하우스 생활, ROOMIE에서 해결해요! 🏡
-35기 AND SOPT 앱잼 ROOMIE 프로젝트입니다.
+나와 딱 맞는 쉐어하우스를 찾아주는 중개 플랫폼, Roomie 🏡
+35기 AND SOPT 앱잼 Roomie 프로젝트입니다.
 ```
+![Frame 2085666010](https://github.com/user-attachments/assets/d44647e1-d667-43a7-b1df-24a2646b0a6f)
+</br>
 
 # ⚒️ iOS Developer
 |김수연</br>[@mmaybei](https://github.com/mmaybei)|김승원</br>[@SeungWon1125](https://github.com/SeungWon1125)|김현수</br>[@maeng-kim](https://github.com/@maeng-kim)|
@@ -9,6 +11,25 @@
 |<img src = "https://github.com/user-attachments/assets/23a9cf2b-79b8-4c5f-bb76-30de4300d926" width ="250">|<img src = "https://github.com/user-attachments/assets/8d4d736d-3547-44ad-9aa5-ce7b4c3eab98" width ="250">|<img src = "https://github.com/user-attachments/assets/014597cb-0f1b-4fbd-a028-82f9c0edb622" width ="250">|
 |`지도/검색/필터링`</br>`마이페이지`|`매물 상세 뷰`</br>`입주 신청 플로우`|`홈 뷰`</br>`분위기 별 리스트`</br>`찜 리스트`|
 </br>
+
+# 🏡 Screenshot
+| 홈 | 지도 | 필터링 | 검색 |
+|:---:|:---:|:---:|:---:|
+|<img src = "https://github.com/user-attachments/assets/284a9f1a-cc6c-4b57-98db-044679db5544" width ="200">|<img src = "https://github.com/user-attachments/assets/bdd04f02-aacf-42d1-94a6-b8fe3c223bfe" width ="200">|<img src = "https://github.com/user-attachments/assets/8f1d8c91-9974-4710-9637-27f43ad7495f" width ="200">|<img src = "https://github.com/user-attachments/assets/1e98c0fa-54c8-46ae-8ac9-a62619c44174" width ="200">|
+</br>
+
+| 매물 상세 | 내부 이미지 뷰 | 방별 이미지 뷰 | 투어 신청 |
+|:---:|:---:|:---:|:---:|
+|<img src = "https://github.com/user-attachments/assets/e2bfcb04-b777-42c9-a16f-782286b63832" width ="200">|<img src = "https://github.com/user-attachments/assets/1d2dd0b1-24b1-46a1-8e32-29c19d901adb" width ="200">|<img src = "https://github.com/user-attachments/assets/04e90c6f-2fd7-49b0-90c1-7cd85efb302a" width ="200">|<img src = "https://github.com/user-attachments/assets/bf2bb57c-23ae-4e59-a266-9561e29492d1" width ="200">|
+</br>
+
+| 분위기별 리스트 | 찜 리스트 | 마이페이지 |
+|:---:|:---:|:---:|
+|<img src = "https://github.com/user-attachments/assets/003fd19e-89d0-4372-b650-7b6d38a89ad0" width ="200">|<img src = "https://github.com/user-attachments/assets/1c3a1b7e-cb18-434c-a52a-0f51ccbf2f4f" width ="200">|<img src = "https://github.com/user-attachments/assets/9ea512e8-d58a-4c47-926c-b2bb8ad105d6" width ="200">|
+</br>
+
+# ⚙️ Project Design
+![프로젝트설계](https://github.com/user-attachments/assets/48d3c7c1-6334-48d3-8beb-d6c259cb231f)
 
 # 🌀 Library
 |library|description|version|
@@ -60,16 +81,7 @@ PR을 작성하면 작성자 이외의 다른 팀원들이 코드 리뷰를 진�
 자신의 로컬 develop 브랜치에서 원격 develop 브랜치를 자주 pull 받음으로써 충돌 상황을 방지합니다.
 이슈 및 PR은 작은 단위로, 상대방의 파일은 최대한 건드리지 않습니다.
 ```
-```
-건강한 코드리뷰 문화를 지향합니다.
 
-(1) 그냥 제 의견은 그렇다구요~
-(2) 이렇게 하면 더 좋을 것 같은데요?
-(3) 이건 고쳐주세요!
-(Q) 질문
-
-코드 리뷰 시 중요도를 표기하여 생산성을 높입니다.
-이때 (3)의 경우 반드시 반영한 후 머지하도록 합니다.
-
-칭찬도 마음껏 해주자!
-```
+# 💥 Trouble Shooting
+[아요 루미들의 트러블 슈팅](https://www.notion.so/16536a29f06280ada9dcc81027a4a935?pvs=4) 
+아요들아 고생했어 🫳🫳🫳
