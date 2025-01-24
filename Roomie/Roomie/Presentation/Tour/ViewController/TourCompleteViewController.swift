@@ -54,6 +54,7 @@ final class TourCompleteViewController: BaseViewController {
                 if let targetViewController = navigationController?.viewControllers.first(
                     where: { $0 is HouseDetailViewController }) {
                     navigationController?.popToViewController(targetViewController, animated: true)
+                    self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
                 }
             }
             .store(in: cancelBag)
@@ -65,6 +66,7 @@ final class TourCompleteViewController: BaseViewController {
                 
                 navigationController?.popToRootViewController(animated: true)
                 self.tabBarController?.selectedIndex = 0
+                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
             }
             .store(in: cancelBag)
     }
