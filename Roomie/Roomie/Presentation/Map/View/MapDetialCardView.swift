@@ -27,7 +27,8 @@ final class MapDetialCardView: BaseView {
     private let moodTagView = UIView()
     let moodTagLabel = UILabel()
     
-    let arrowButton = UIButton()
+    let arrowImageView = UIImageView()
+    let nextButton = UIButton()
     
     // MARK: - UISetting
 
@@ -72,8 +73,8 @@ final class MapDetialCardView: BaseView {
             $0.setText(style: .body4, color: .grayscale9)
         }
         
-        arrowButton.do {
-            $0.setImage(.icnArrowRightLine40, for: .normal)
+        arrowImageView.do {
+            $0.image = .icnArrowRightLine40
         }
     }
     
@@ -84,7 +85,8 @@ final class MapDetialCardView: BaseView {
             genderOccupancyLabel,
             locationLabel,
             moodTagView,
-            arrowButton
+            arrowImageView,
+            nextButton
         )
         subtitleStackView.addArrangedSubviews(
             depositLabel,
@@ -130,10 +132,14 @@ final class MapDetialCardView: BaseView {
             $0.leading.trailing.equalToSuperview().inset(8)
         }
         
-        arrowButton.snp.makeConstraints {
+        arrowImageView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(8)
             $0.trailing.equalToSuperview().inset(8)
             $0.size.equalTo(40)
+        }
+        
+        nextButton.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
     }
 }
