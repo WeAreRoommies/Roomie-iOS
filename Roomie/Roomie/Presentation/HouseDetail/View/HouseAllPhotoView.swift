@@ -220,11 +220,15 @@ final class HouseAllPhotoView: BaseView {
 
 extension HouseAllPhotoView {
     func fetchRooms(_ rooms: [HouseDetailRoom]) {
-        for room in rooms {
-            let expandView = RoomFacilityExpandView(title: room.name, status: room.status)
-            expandView.configure(room.mainImageURL[0])
-            expandView.dataBind(room.facility)
-            roomStackView.addArrangedSubview(expandView)
+        roomStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        for index in 0..<rooms.count {
+            let expendView = RoomFacilityExpandView(
+                title: rooms[index].name,
+                status: rooms[index].status
+            )
+            expendView.dataBind(rooms[index].facility)
+            expendView.configure(rooms[index].mainImageURL[0])
+            roomStackView.addArrangedSubview(expendView)
         }
     }
 }
