@@ -187,6 +187,5 @@ final class MockHousesService: HouseDetailServiceProtocol {
     func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinnedResponseDTO>? {
         let mockData: PinnedResponseDTO = PinnedResponseDTO(isPinned: false)
         return BaseResponseBody(code: 200, message: "", data: mockData)
-
     }
 }
