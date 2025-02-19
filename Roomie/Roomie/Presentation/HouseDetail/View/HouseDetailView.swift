@@ -18,12 +18,12 @@ final class HouseDetailView: BaseView {
     private let contentView = UIView()
     
     // HousePhoto Section
-    let photoBackView = UIView()
+    let photoContainerView = UIView()
     let photoImageView = UIImageView()
     
     // HouseInfo Section
-    private let houseInfoBackView = UIView()
-    private let nameBackView = UIView()
+    private let houseInfoContainerView = UIView()
+    private let nameContainerView = UIView()
     let nameLabel = UILabel()
     let titleLabel = UILabel()
     let locationIconLabel = HouseInfoIconLabel(houseInfoType: .location)
@@ -38,7 +38,7 @@ final class HouseDetailView: BaseView {
     
     // roomMood Section
     private let roomMoodTitleLabel = UILabel()
-    private let roomMoodBackView = UIView()
+    private let roomMoodContainerView = UIView()
     let roomMoodLabel = UILabel()
     private let moodTagsStackView = UIStackView()
     private let roomMoodSeparatorView = UIView()
@@ -60,7 +60,7 @@ final class HouseDetailView: BaseView {
     let roommateTableView = UITableView()
     
     // bottom Button
-    private let bottomButtonbackView = UIView()
+    private let bottomButtonContainerView = UIView()
     private let bottomButtonSeparatorView = UIView()
     let wishListButton = RoomieIconButton(imageName: "icn_heart_24_normal", border: true)
     let contactButton = RoomieIconButton(imageName: "icn_inquire_24", border: true)
@@ -79,12 +79,12 @@ final class HouseDetailView: BaseView {
             $0.clipsToBounds = true
         }
         
-        houseInfoBackView.do {
+        houseInfoContainerView.do {
             $0.backgroundColor = .grayscale1
             $0.roundCorners(cornerRadius: 16, maskedCorners: [.layerMinXMinYCorner, .layerMaxXMinYCorner])
         }
         
-        nameBackView.do {
+        nameContainerView.do {
             $0.backgroundColor = .primaryLight5
             $0.layer.cornerRadius = 4
             $0.layer.borderWidth = 1
@@ -122,7 +122,7 @@ final class HouseDetailView: BaseView {
             $0.setText("룸 분위기", style: .heading5, color: .grayscale12)
         }
         
-        roomMoodBackView.do {
+        roomMoodContainerView.do {
             $0.backgroundColor = .grayscale1
             $0.layer.borderColor = UIColor.grayscale5.cgColor
             $0.layer.borderWidth = 1
@@ -182,7 +182,7 @@ final class HouseDetailView: BaseView {
             $0.separatorStyle = .none
         }
 
-        bottomButtonbackView.do {
+        bottomButtonContainerView.do {
             $0.backgroundColor = .grayscale1
         }
         
@@ -192,14 +192,14 @@ final class HouseDetailView: BaseView {
     }
     
     override func setUI() {
-        addSubviews(scrollView, bottomButtonbackView)
+        addSubviews(scrollView, bottomButtonContainerView)
         
         scrollView.addSubviews(contentView)
         
         contentView.addSubviews(
-            photoBackView,
-            houseInfoBackView,
-            nameBackView,
+            photoContainerView,
+            houseInfoContainerView,
+            nameContainerView,
             titleLabel,
             firstIconLabelStackView,
             secondIconLabelStackView,
@@ -207,7 +207,7 @@ final class HouseDetailView: BaseView {
             lookInsidePhotoButton,
             houseInfoSeparatorView,
             roomMoodTitleLabel,
-            roomMoodBackView,
+            roomMoodContainerView,
             roomStatusTitleLabel,
             roomStatusTableView,
             facilityTitleLabel,
@@ -216,15 +216,15 @@ final class HouseDetailView: BaseView {
             roommateTableView
         )
         
-        photoBackView.addSubview(photoImageView)
+        photoContainerView.addSubview(photoImageView)
         
-        nameBackView.addSubview(nameLabel)
+        nameContainerView.addSubview(nameLabel)
         
         firstIconLabelStackView.addArrangedSubviews(locationIconLabel, occupancyTypesIconLabel)
         
         secondIconLabelStackView.addArrangedSubviews(occupancyStatusIconLabel, genderPolicyIconLabel)
         
-        roomMoodBackView.addSubviews(
+        roomMoodContainerView.addSubviews(
             roomMoodLabel,
             moodTagsStackView,
             roomMoodSeparatorView,
@@ -234,7 +234,7 @@ final class HouseDetailView: BaseView {
         
         facilityStackView.addArrangedSubviews(safetyLivingFacilityView, kitchenFacilityView)
         
-        bottomButtonbackView.addSubviews(
+        bottomButtonContainerView.addSubviews(
             bottomButtonSeparatorView,
             wishListButton,
             contactButton,
@@ -245,7 +245,7 @@ final class HouseDetailView: BaseView {
     override func setLayout() {
         scrollView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
-            $0.bottom.equalTo(bottomButtonbackView.snp.top)
+            $0.bottom.equalTo(bottomButtonContainerView.snp.top)
         }
         
         contentView.snp.makeConstraints {
@@ -254,7 +254,7 @@ final class HouseDetailView: BaseView {
             $0.height.greaterThanOrEqualToSuperview().priority(.low)
         }
         
-        photoBackView.snp.makeConstraints {
+        photoContainerView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
             $0.height.equalTo(Screen.height(316))
         }
@@ -264,14 +264,14 @@ final class HouseDetailView: BaseView {
             $0.horizontalEdges.bottom.equalToSuperview()
         }
         
-        houseInfoBackView.snp.makeConstraints {
-            $0.top.equalTo(photoBackView.snp.bottom).offset(-20)
+        houseInfoContainerView.snp.makeConstraints {
+            $0.top.equalTo(photoContainerView.snp.bottom).offset(-20)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalTo(lookInsidePhotoButton.snp.bottom).offset(20)
         }
         
-        nameBackView.snp.makeConstraints {
-            $0.top.equalTo(photoBackView.snp.bottom)
+        nameContainerView.snp.makeConstraints {
+            $0.top.equalTo(photoContainerView.snp.bottom)
             $0.leading.equalToSuperview().inset(20)
         }
         
@@ -281,7 +281,7 @@ final class HouseDetailView: BaseView {
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(nameBackView.snp.bottom).offset(8)
+            $0.top.equalTo(nameContainerView.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
@@ -318,7 +318,7 @@ final class HouseDetailView: BaseView {
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
-        roomMoodBackView.snp.makeConstraints {
+        roomMoodContainerView.snp.makeConstraints {
             $0.top.equalTo(roomMoodTitleLabel.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
@@ -353,7 +353,7 @@ final class HouseDetailView: BaseView {
         }
         
         roomStatusTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(roomMoodBackView.snp.bottom).offset(48)
+            $0.top.equalTo(roomMoodContainerView.snp.bottom).offset(48)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
@@ -385,7 +385,7 @@ final class HouseDetailView: BaseView {
             $0.bottom.equalToSuperview().inset(8)
         }
         
-        bottomButtonbackView.snp.makeConstraints {
+        bottomButtonContainerView.snp.makeConstraints {
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(Screen.height(80))

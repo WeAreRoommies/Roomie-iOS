@@ -14,14 +14,14 @@ final class RoommateNotFoundTableViewCell: BaseTableViewCell {
     
     // MARK: - UIComponent
     
-    private let backView = UIView()
+    private let containerView = UIView()
     
     private let titleLabel = UILabel()
     
     // MARK: - UISetting
     
     override func setStyle() {
-        backView.do {
+        containerView.do {
             $0.layer.borderColor = UIColor.grayscale5.cgColor
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
@@ -34,13 +34,13 @@ final class RoommateNotFoundTableViewCell: BaseTableViewCell {
     }
     
     override func setUI() {
-        addSubview(backView)
+        addSubview(containerView)
         
-        backView.addSubview(titleLabel)
+        containerView.addSubview(titleLabel)
     }
     
     override func setLayout() {
-        backView.snp.makeConstraints {
+        containerView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview().inset(12)

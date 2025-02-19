@@ -15,7 +15,7 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
     
     // MARK: - UIComponent
     
-    private let backView = UIView()
+    private let containerView = UIView()
 
     private let statusView = RoomStatusView()
     
@@ -52,7 +52,7 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
     // MARK: - UISetting
     
     override func setStyle() {
-        backView.do {
+        containerView.do {
             $0.layer.borderColor = UIColor.grayscale5.cgColor
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
@@ -118,9 +118,9 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
     }
     
     override func setUI() {
-        addSubview(backView)
+        addSubview(containerView)
         
-        backView.addSubviews(
+        containerView.addSubviews(
             statusView,
             chevronRightIcon,
             nameLabel,
@@ -144,7 +144,7 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
     }
     
     override func setLayout() {
-        backView.snp.makeConstraints {
+        containerView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview().inset(12)
