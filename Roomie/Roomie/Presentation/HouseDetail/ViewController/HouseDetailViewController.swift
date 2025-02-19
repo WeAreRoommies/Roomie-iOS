@@ -89,8 +89,6 @@ final class HouseDetailViewController: BaseViewController {
         super.viewDidLayoutSubviews()
         
         rootView.updateRoomStatusTableViewHeight(viewModel.roomInfos.count, height: roomStatusCellHeight)
-        rootView.roomStatusTableView.layoutIfNeeded()
-        
         rootView.updateRoommateTableViewHeight(viewModel.roommateInfos.count, height: roommateCellHeight)
     }
     
@@ -123,6 +121,13 @@ final class HouseDetailViewController: BaseViewController {
             .sink { [weak self] in
                 guard let self else { return }
                 self.wishListButtonSubject.send(())
+            }
+            .store(in: cancelBag)
+        
+        rootView.contactButton.tapPublisher
+            .sink{
+                let webViewController = HouseDetailWebViewController()
+                self.navigationController?.pushViewController(webViewController, animated: true)
             }
             .store(in: cancelBag)
     }
@@ -269,8 +274,7 @@ private extension HouseDetailViewController {
         case .filled:
             setFilledNavigationBar()
         case .filledWithTitle:
-            setFilledNavigationBar()
-            navigationItem.title = navigationBarTitle
+            setFilledNavigationBar(navigationBarTitle)
         }
     }
     
@@ -300,7 +304,9 @@ private extension HouseDetailViewController {
         navigationItem.title = nil
     }
     
-    func setFilledNavigationBar() {
+    func setFilledNavigationBar(_ navigationBarTitle: String = "") {
+        navigationItem.title = navigationBarTitle
+        
         navigationController?.navigationBar.isHidden = false
         
         let filledAppearance = UINavigationBarAppearance()
@@ -352,7 +358,7 @@ extension HouseDetailViewController: UITableViewDataSource {
         
         if tableView == rootView.roommateTableView {
             let cellCount = viewModel.roommateInfos.count == 0 ? 1 : viewModel.roommateInfos.count
-            return cellCount // TODO: DataBind
+            return cellCount
         }
         
         return 0
@@ -443,14 +449,15 @@ extension HouseDetailViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let offsetY = scrollView.contentOffset.y
         
+        let newStatus: NavigationBarStatus
         if offsetY > navigationBarThreshold {
-            if offsetY > navigationTitleThreshold {
-                navigationBarStatus = .filledWithTitle
-            } else {
-                navigationBarStatus = .filled
-            }
+            newStatus = offsetY > navigationTitleThreshold ? .filledWithTitle : .filled
         } else {
-            navigationBarStatus = .clear
+            newStatus = .clear
+        }
+
+        if navigationBarStatus != newStatus {
+            navigationBarStatus = newStatus
         }
     }
 }

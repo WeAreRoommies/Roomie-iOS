@@ -14,17 +14,17 @@ final class RoommateTableViewCell: BaseTableViewCell {
     
     // MARK: - UIComponent
     
-    private let backView = UIView()
+    private let containerView = UIView()
     
     private let profileImageView = UIImageView()
     
     private let ageLabel = UILabel()
     private let jobLabel = UILabel()
     
-    private let mbtiBackView = UIView()
+    private let mbtiContainerView = UIView()
     private let mbtiLabel = UILabel()
     
-    private let nameBackView = UIView()
+    private let nameContainerView = UIView()
     private let nameLabel = UILabel()
     
     private let sleepTimeTitleLabel = UILabel()
@@ -36,7 +36,7 @@ final class RoommateTableViewCell: BaseTableViewCell {
     // MARK: - UISetting
     
     override func setStyle() {
-        backView.do {
+        containerView.do {
             $0.layer.borderColor = UIColor.grayscale5.cgColor
             $0.layer.cornerRadius = 8
             $0.layer.borderWidth = 1
@@ -59,7 +59,7 @@ final class RoommateTableViewCell: BaseTableViewCell {
             $0.setText(style: .body2, color: .grayscale12)
         }
         
-        mbtiBackView.do {
+        mbtiContainerView.do {
             $0.backgroundColor = .grayscale4
             $0.layer.cornerRadius = 2
             $0.clipsToBounds = true
@@ -69,7 +69,7 @@ final class RoommateTableViewCell: BaseTableViewCell {
             $0.setText(style: .caption1, color: .grayscale8)
         }
         
-        nameBackView.do {
+        nameContainerView.do {
             $0.backgroundColor = .grayscale4
             $0.layer.cornerRadius = 2
             $0.clipsToBounds = true
@@ -97,27 +97,27 @@ final class RoommateTableViewCell: BaseTableViewCell {
     }
     
     override func setUI() {
-        addSubview(backView)
+        addSubview(containerView)
         
-        backView.addSubviews(
+        containerView.addSubviews(
             profileImageView,
             ageLabel,
             jobLabel,
-            mbtiBackView,
-            nameBackView,
+            mbtiContainerView,
+            nameContainerView,
             sleepTimeTitleLabel,
             sleepTimeLabel,
             activityTimeTitleLabel,
             activityTimeLabel
         )
         
-        mbtiBackView.addSubview(mbtiLabel)
+        mbtiContainerView.addSubview(mbtiLabel)
         
-        nameBackView.addSubview(nameLabel)
+        nameContainerView.addSubview(nameLabel)
     }
     
     override func setLayout() {
-        backView.snp.makeConstraints {
+        containerView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview().inset(12)
@@ -139,7 +139,7 @@ final class RoommateTableViewCell: BaseTableViewCell {
             $0.leading.equalTo(ageLabel.snp.trailing).offset(Screen.width(2))
         }
         
-        mbtiBackView.snp.makeConstraints {
+        mbtiContainerView.snp.makeConstraints {
             $0.leading.equalTo(jobLabel.snp.trailing).offset(8)
             $0.centerY.equalTo(jobLabel.snp.centerY)
         }
@@ -149,8 +149,8 @@ final class RoommateTableViewCell: BaseTableViewCell {
             $0.horizontalEdges.equalToSuperview().inset(4)
         }
         
-        nameBackView.snp.makeConstraints {
-            $0.leading.equalTo(mbtiBackView.snp.trailing).offset(4)
+        nameContainerView.snp.makeConstraints {
+            $0.leading.equalTo(mbtiContainerView.snp.trailing).offset(4)
             $0.centerY.equalTo(jobLabel.snp.centerY)
         }
         

@@ -32,7 +32,7 @@ final class RoomFacilityExpandView: UIView {
     
     private let titleLabel = UILabel()
     
-    private let statusBackView = UIView()
+    private let statusContainerView = UIView()
     private let statusLabel = UILabel()
     
     private let chevronIcon = UIImageView()
@@ -89,7 +89,7 @@ final class RoomFacilityExpandView: UIView {
             $0.layer.cornerRadius = 8
         }
         
-        statusBackView.do {
+        statusContainerView.do {
             $0.backgroundColor = .grayscale3
             $0.layer.cornerRadius = 8
             $0.clipsToBounds = true
@@ -132,7 +132,7 @@ final class RoomFacilityExpandView: UIView {
     private func setUI() {
         addSubviews(
             titleLabel,
-            statusBackView,
+            statusContainerView,
             chevronIcon,
             expandButton,
             roomImageView,
@@ -140,7 +140,7 @@ final class RoomFacilityExpandView: UIView {
             oddStackView
         )
         
-        statusBackView.addSubview(statusLabel)
+        statusContainerView.addSubview(statusLabel)
     }
     
     private func setLayout() {
@@ -153,7 +153,7 @@ final class RoomFacilityExpandView: UIView {
             $0.leading.equalToSuperview().offset(14)
         }
         
-        statusBackView.snp.makeConstraints {
+        statusContainerView.snp.makeConstraints {
             $0.centerY.equalTo(titleLabel.snp.centerY)
             $0.leading.equalTo(titleLabel.snp.trailing).offset(8)
             $0.height.equalTo(Screen.height(20))
@@ -226,7 +226,7 @@ private extension RoomFacilityExpandView {
         titleLabel.do {
             $0.setText(title, style: .body2, color: status ? .grayscale10 : .grayscale6)
         }
-        statusBackView.isHidden = status
+        statusContainerView.isHidden = status
         statusLabel.isHidden = status
     }
 }

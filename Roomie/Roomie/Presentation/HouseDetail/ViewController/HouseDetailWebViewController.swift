@@ -1,5 +1,5 @@
 //
-//  APPLELOVERCLUBViewController.swift
+//  HouseDetailWebViewController.swift
 //  Roomie
 //
 //  Created by MaengKim on 1/24/25.
@@ -11,7 +11,7 @@ import WebKit
 import SnapKit
 import Then
 
-final class APPLELOVERCLUBViewController: BaseViewController {
+final class HouseDetailWebViewController: BaseViewController {
     
     // MARK: - Property
     
@@ -62,7 +62,7 @@ final class APPLELOVERCLUBViewController: BaseViewController {
     // MARK: - Function
     
     func loadURL() {
-        if let url = URL(string: "https://1401kms-70595.waveon.me") {
+        if let url = URL(string: "http://pf.kakao.com/_WviTn") {
             let urlRequest = URLRequest(url: url)
             webView?.load(urlRequest)
         } else {
