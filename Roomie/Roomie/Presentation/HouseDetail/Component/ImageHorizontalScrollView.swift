@@ -15,10 +15,25 @@ import Then
 
 class ImageHorizontalScrollView: UIView {
     
+    // MARK: - Property
+    
+    private var currentPage: Int = 1 {
+        didSet {
+            pageCountLabel.do {
+                $0.updateText("\(currentPage)/\(totalPage)")
+            }
+        }
+    }
+    
+    private var totalPage: Int = 1
+    
     // MARK: - UIComponent
     
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
+    
+    private let pageContainerView = UIView()
+    private let pageCountLabel = UILabel()
     
     // MARK: - Initializer
     
@@ -28,17 +43,22 @@ class ImageHorizontalScrollView: UIView {
         setStyle()
         setUI()
         setLayout()
+        setDelegate()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private func setDelegate() {
+        scrollView.delegate = self
+    }
+    
     // MARK: - UISetting
     
     private func setStyle() {
         scrollView.do {
-            $0.backgroundColor = .grayscale5
+            $0.backgroundColor = .white
             $0.isPagingEnabled = true
             $0.showsHorizontalScrollIndicator = false
         }
@@ -50,11 +70,18 @@ class ImageHorizontalScrollView: UIView {
             $0.distribution = .fillEqually
         }
         
+        pageContainerView.do {
+            $0.backgroundColor = .transpGray1250
+            $0.layer.cornerRadius = 11
+            $0.clipsToBounds = true
+        }
     }
     
     private func setUI() {
         addSubview(scrollView)
-        scrollView.addSubview(stackView)
+        addSubview(pageContainerView)
+        scrollView.addSubviews(stackView)
+        pageContainerView.addSubview(pageCountLabel)
     }
     
     private func setLayout() {
@@ -67,12 +94,31 @@ class ImageHorizontalScrollView: UIView {
             $0.height.equalToSuperview()
             $0.width.greaterThanOrEqualToSuperview().priority(.low)
         }
+        
+        pageContainerView.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(8)
+            $0.bottom.equalToSuperview().inset(8)
+            $0.width.equalTo(Screen.width(35))
+            $0.height.equalTo(Screen.height(22))
+        }
+        
+        pageCountLabel.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
     }
 }
 
+// MARK: - Functions
+
 extension ImageHorizontalScrollView {
-    func setImages(imageURLs: [String]) {
-        for imageURL in imageURLs {
+    func setImages(urlStrings: [String]) {
+        self.totalPage = urlStrings.count
+        
+        pageCountLabel.do {
+            $0.setText("\(currentPage)/\(totalPage)", style: .caption3, color: .grayscale1)
+        }
+        
+        for imageURL in urlStrings {
             if let imageURL = URL(string: imageURL) {
                 let imageView = UIImageView()
                 
@@ -88,5 +134,14 @@ extension ImageHorizontalScrollView {
                 }
             }
         }
+    }
+}
+
+// MARK: - UIScrollViewDelegate
+
+extension ImageHorizontalScrollView: UIScrollViewDelegate {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let index = Int(scrollView.contentOffset.x / scrollView.frame.width)
+        currentPage = index + 1
     }
 }
