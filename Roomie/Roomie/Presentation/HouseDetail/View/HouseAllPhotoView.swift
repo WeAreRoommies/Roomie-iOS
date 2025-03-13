@@ -26,7 +26,7 @@ final class HouseAllPhotoView: BaseView {
     // 공용시설
     private let facilityTitleLabel = UILabel()
     private let facilityContainerView = UIView()
-    let facilityImageView = UIImageView()
+    let facilityImageScrollView = ImageHorizontalScrollView()
     let facilityDescriptionLabel = UILabel()
     
     // 각 방 시설
@@ -74,8 +74,7 @@ final class HouseAllPhotoView: BaseView {
             $0.clipsToBounds = true
         }
         
-        facilityImageView.do {
-            $0.backgroundColor = .grayscale5
+        facilityImageScrollView.do {
             $0.contentMode = .scaleAspectFill
             $0.layer.cornerRadius = 8
             $0.clipsToBounds = true
@@ -118,6 +117,7 @@ final class HouseAllPhotoView: BaseView {
     override func setUI() {
         addSubview(scrollView)
         scrollView.addSubview(contentView)
+        
         contentView.addSubviews(
                 mainTitleLabel,
                 mainContainerView,
@@ -130,9 +130,7 @@ final class HouseAllPhotoView: BaseView {
             )
         
         mainContainerView.addSubviews(mainImageView, mainDescriptionLabel)
-        
-        facilityContainerView.addSubviews(facilityImageView, facilityDescriptionLabel)
-        
+        facilityContainerView.addSubviews(facilityImageScrollView, facilityDescriptionLabel)
         floorContainerView.addSubview(floorImageView)
     }
     
@@ -179,13 +177,13 @@ final class HouseAllPhotoView: BaseView {
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
-        facilityImageView.snp.makeConstraints {
+        facilityImageScrollView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview().inset(8)
             $0.height.equalTo(Screen.height(192))
         }
         
         facilityDescriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(facilityImageView.snp.bottom).offset(8)
+            $0.top.equalTo(facilityImageScrollView.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(8)
             $0.bottom.equalToSuperview().inset(12)
         }
@@ -221,13 +219,15 @@ final class HouseAllPhotoView: BaseView {
 extension HouseAllPhotoView {
     func fetchRooms(_ rooms: [HouseDetailRoom]) {
         roomStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
         for index in 0..<rooms.count {
             let expendView = RoomFacilityExpandView(
                 title: rooms[index].name,
                 status: rooms[index].status
             )
             expendView.dataBind(rooms[index].facility)
-            expendView.configure(rooms[index].mainImageURL[0])
+            expendView.configure(rooms[index].mainImageURL)
+            
             roomStackView.addArrangedSubview(expendView)
         }
     }

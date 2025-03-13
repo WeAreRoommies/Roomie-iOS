@@ -77,9 +77,8 @@ private extension HouseAllPhotoViewController {
                 }
                 rootView.mainDescriptionLabel
                     .updateText(houseDetailImagesData.images.mainImageDescription)
-                if let facilityImageURL = URL(string: houseDetailImagesData.images.facilityImageURLs[0]) {
-                    self.rootView.facilityImageView.kf.setImage(with: facilityImageURL)
-                }
+                rootView.facilityImageScrollView
+                    .setImages(urlStrings: houseDetailImagesData.images.facilityImageURLs)
                 rootView.facilityDescriptionLabel
                     .updateText(houseDetailImagesData.images.facilityImageDescription)
                 if let floorImageURL = URL(string: houseDetailImagesData.images.floorImageURL) {
