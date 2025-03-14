@@ -139,7 +139,7 @@ extension ImageHorizontalScrollView {
 // MARK: - UIScrollViewDelegate
 
 extension ImageHorizontalScrollView: UIScrollViewDelegate {
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let index = Int(scrollView.contentOffset.x / scrollView.frame.width)
         currentPage = index + 1
     }
