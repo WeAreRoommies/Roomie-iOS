@@ -13,7 +13,7 @@ import Kingfisher
 import SnapKit
 import Then
 
-class ImageHorizontalScrollView: UIView {
+final class ImageHorizontalScrollView: UIView {
     
     // MARK: - Property
     
@@ -78,9 +78,8 @@ class ImageHorizontalScrollView: UIView {
     }
     
     private func setUI() {
-        addSubview(scrollView)
-        addSubview(pageContainerView)
-        scrollView.addSubviews(stackView)
+        addSubviews(scrollView, pageContainerView)
+        scrollView.addSubview(stackView)
         pageContainerView.addSubview(pageCountLabel)
     }
     
