@@ -39,7 +39,7 @@ final class RoomFacilityExpandView: UIView {
     
     private let expandButton = UIButton()
     
-    private let roomImageView = UIImageView()
+    private let roomImageScrollView = ImageHorizontalScrollView()
     
     private let evenStackView = UIStackView()
     private let oddStackView = UIStackView()
@@ -104,11 +104,7 @@ final class RoomFacilityExpandView: UIView {
             $0.contentMode = .scaleAspectFit
         }
         
-        roomImageView.do {
-            $0.backgroundColor = .grayscale5
-            $0.contentMode = .scaleAspectFill
-            $0.layer.cornerRadius = 8
-            $0.clipsToBounds = true
+        roomImageScrollView.do {
             $0.isHidden = true
         }
         
@@ -135,7 +131,7 @@ final class RoomFacilityExpandView: UIView {
             statusContainerView,
             chevronIcon,
             expandButton,
-            roomImageView,
+            roomImageScrollView,
             evenStackView,
             oddStackView
         )
@@ -176,20 +172,20 @@ final class RoomFacilityExpandView: UIView {
             $0.height.equalTo(Screen.height(56))
         }
         
-        roomImageView.snp.makeConstraints {
+        roomImageScrollView.snp.makeConstraints {
             $0.top.equalTo(expandButton.snp.bottom)
             $0.horizontalEdges.equalToSuperview().inset(8)
             $0.height.equalTo(Screen.height(192))
         }
         
         evenStackView.snp.makeConstraints {
-            $0.top.equalTo(roomImageView.snp.bottom).offset(12)
+            $0.top.equalTo(roomImageScrollView.snp.bottom).offset(12)
             $0.leading.equalToSuperview().inset(8)
             $0.width.equalTo(Screen.width(155))
         }
         
         oddStackView.snp.makeConstraints {
-            $0.top.equalTo(roomImageView.snp.bottom).offset(12)
+            $0.top.equalTo(roomImageScrollView.snp.bottom).offset(12)
             $0.trailing.equalToSuperview().inset(8)
             $0.width.equalTo(Screen.width(155))
         }
@@ -211,7 +207,7 @@ private extension RoomFacilityExpandView {
     private func updateView() {
         oddStackView.isHidden = !isExpanded
         evenStackView.isHidden = !isExpanded
-        roomImageView.isHidden = !isExpanded
+        roomImageScrollView.isHidden = !isExpanded
         
         self.snp.updateConstraints {
             $0.height.equalTo(Screen.height(isExpanded ? expandedHeight : unExpandedHeight))
@@ -252,10 +248,8 @@ extension RoomFacilityExpandView {
         }
     }
     
-    func configure(_ urlString: String) {
-        if let roomImageURL = URL(string: urlString) {
-            roomImageView.kf.setImage(with: roomImageURL)
-        }
+    func configure(_ urlStrings: [String]) {
+        roomImageScrollView.setImages(urlStrings: urlStrings)
     }
     
     func setExpanded(_ isExpanded: Bool) {
