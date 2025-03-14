@@ -74,12 +74,6 @@ final class HouseAllPhotoView: BaseView {
             $0.clipsToBounds = true
         }
         
-        facilityImageScrollView.do {
-            $0.contentMode = .scaleAspectFill
-            $0.layer.cornerRadius = 8
-            $0.clipsToBounds = true
-        }
-        
         facilityDescriptionLabel.do {
             $0.setText(style: .body4, color: .grayscale12)
         }

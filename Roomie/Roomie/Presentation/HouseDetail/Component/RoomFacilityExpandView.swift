@@ -105,10 +105,6 @@ final class RoomFacilityExpandView: UIView {
         }
         
         roomImageScrollView.do {
-            $0.backgroundColor = .grayscale5
-            $0.contentMode = .scaleAspectFill
-            $0.layer.cornerRadius = 8
-            $0.clipsToBounds = true
             $0.isHidden = true
         }
         

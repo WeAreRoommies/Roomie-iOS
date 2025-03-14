@@ -61,6 +61,8 @@ final class ImageHorizontalScrollView: UIView {
             $0.backgroundColor = .white
             $0.isPagingEnabled = true
             $0.showsHorizontalScrollIndicator = false
+            $0.layer.cornerRadius = 8
+            $0.clipsToBounds = true
         }
         
         stackView.do {
@@ -130,6 +132,7 @@ extension ImageHorizontalScrollView {
                 
                 imageView.snp.makeConstraints {
                     $0.width.equalTo(scrollView.snp.width)
+                    $0.height.equalTo(scrollView.snp.height)
                 }
             }
         }
@@ -142,5 +145,9 @@ extension ImageHorizontalScrollView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let index = Int(scrollView.contentOffset.x / scrollView.frame.width)
         currentPage = index + 1
+        
+        if scrollView.contentOffset.y != 0 {
+            scrollView.contentOffset.y = 0
+        }
     }
 }
