@@ -1,0 +1,202 @@
+//
+//  OnBoardingContainerViewController.swift
+//  Roomie
+//
+//  Created by MaengKim on 5/20/25.
+//
+
+import UIKit
+import Combine
+
+import CombineCocoa
+import SnapKit
+import Then
+
+final class OnBoardingContainerViewController: UIViewController {
+    
+    // MARK: - Property
+    
+    private let pageViewController: UIPageViewController
+    
+    private let cancelBag = CancelBag()
+    
+    private var indicators: [UIView] = []
+    
+    private let indicatorStackView = UIStackView()
+    
+    private var pages: [OnBoardingPageViewController] = []
+    
+    private let pageControl = UIPageControl()
+    
+    private let viewModel: OnBoardingViewModel
+
+    private let pageIndexSubject = PassthroughSubject<OnBoardingType, Never>()
+    
+    // MARK: - UIComponent
+    
+    private let startButton = UIButton()
+    
+    // MARK: - Initializer
+    
+    init(viewModel: OnBoardingViewModel) {
+        self.viewModel = viewModel
+        self.pageViewController = UIPageViewController(
+            transitionStyle: .scroll,
+            navigationOrientation: .horizontal
+        )
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - LifeCycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setPage()
+        setPageViewController()
+        setPageIndicators()
+        setStartButton()
+        setDelegate()
+        bindViewModel()
+    }
+}
+
+// MARK: - Function
+
+private extension OnBoardingContainerViewController {
+    
+    func setStartButton() {
+        startButton.do {
+            $0.setTitle("바로 시작하기", style: .title2, color: .grayscale1)
+            $0.backgroundColor = .primaryPurple
+            $0.layer.cornerRadius = 8
+        }
+        
+        view.addSubview(startButton)
+        
+        startButton.snp.makeConstraints{
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(45)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(Screen.width(335))
+            $0.height.equalTo(Screen.height(58))
+        }
+    }
+    
+    func setDelegate() {
+        pageViewController.dataSource = self
+        pageViewController.delegate = self
+    }
+    
+    func setPage() {
+        pages = OnBoardingType.onBoardingCases.map {
+            OnBoardingPageViewController(type: $0)
+        }
+        
+        let loginPage = OnBoardingPageViewController(type: .login)
+        pages.append(loginPage)
+    }
+    
+    func setPageViewController() {
+        addChild(pageViewController)
+        view.addSubview(pageViewController.view)
+        
+        pageViewController.didMove(toParent: self)
+        pageViewController.setViewControllers([pages[0]], direction: .forward, animated: true)
+    }
+    
+    func setPageIndicators() {
+        indicatorStackView.axis = .horizontal
+        indicatorStackView.alignment = .center
+        indicatorStackView.distribution = .equalSpacing
+        indicatorStackView.spacing = 8
+        
+        OnBoardingType.onBoardingCases.forEach { _ in
+            let dot = UIView()
+            dot.backgroundColor = .grayscale5
+            dot.layer.cornerRadius = 4
+            dot.snp.makeConstraints {
+                $0.size.equalTo(CGSize(width: 8, height: 8))
+            }
+            indicators.append(dot)
+            indicatorStackView.addArrangedSubview(dot)
+        }
+        
+        view.addSubview(indicatorStackView)
+        indicatorStackView.snp.makeConstraints{
+            $0.top.equalTo(view.safeAreaLayoutGuide).inset(60)
+            $0.centerX.equalToSuperview()
+        }
+    }
+    
+    func updatePageIndicators(for type: OnBoardingType) {
+        if type.isLogin {
+            indicatorStackView.isHidden = true
+            startButton.isHidden = true
+        } else {
+            indicatorStackView.isHidden = false
+            startButton.isHidden = false
+        }
+        
+        for (index, dot) in indicators.enumerated() {
+            if index == OnBoardingType.allCases.firstIndex(of: type) {
+                dot.backgroundColor = .primaryPurple
+                dot.layer.cornerRadius = 4
+                dot.snp.remakeConstraints {
+                    $0.size.equalTo(CGSize(width: 16, height: 8))
+                }
+            } else {
+                dot.backgroundColor = .grayscale5
+                dot.layer.cornerRadius = 4
+                dot.snp.remakeConstraints {
+                    $0.size.equalTo(CGSize(width: 8, height: 8))
+                }
+            }
+        }
+    }
+    
+    func bindViewModel() {
+        let input = OnBoardingViewModel.Input(
+            currentPageSubject: pageIndexSubject.eraseToAnyPublisher()
+        )
+        
+        let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        
+        output.currentPage
+            .sink { [weak self] type in
+                self?.updatePageIndicators(for: type)
+            }
+            .store(in: cancelBag)
+    }
+}
+
+extension OnBoardingContainerViewController:
+    UIPageViewControllerDelegate, UIPageViewControllerDataSource {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerBefore viewController: UIViewController)
+    -> UIViewController? {
+        guard let current = viewController as? OnBoardingPageViewController,
+              let index = pages.firstIndex(of: current), index > 0 else { return nil }
+        return pages[index - 1]
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerAfter viewController: UIViewController)
+    -> UIViewController? {
+        guard let current = viewController as? OnBoardingPageViewController,
+              let index = pages.firstIndex(of: current), index < pages.count - 1 else { return nil }
+        return pages[index + 1]
+    }
+
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            didFinishAnimating finished: Bool,
+                            previousViewControllers: [UIViewController],
+                            transitionCompleted completed: Bool) {
+        if let current = pageViewController.viewControllers?.first as? OnBoardingPageViewController {
+            pageIndexSubject.send(current.getType())
+        }
+    }
+}
