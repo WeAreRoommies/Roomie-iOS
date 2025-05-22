@@ -39,19 +39,13 @@ final class OnBoardingLoginView: BaseView {
             $0.image = .imgGomiExcited
         }
         
-        kakaoLoginButton = setButton(
-            title: "카카오로 계속하기",
-            image: .icnKakaoLogo,
-            backgroundColor: .kakaoBackground,
-            textColor: .black
-        )
+        kakaoLoginButton.do {
+            $0.setImage(.imgKakaoLogin, for: .normal)
+        }
         
-        appleLoginButton = setButton(
-            title: "Apple로 계속하기",
-            image: .icnAppleLogo,
-            backgroundColor: .black,
-            textColor: .white
-        )
+        appleLoginButton.do {
+            $0.setImage(.imgAppleLogin, for: .normal)
+        }
     }
     
     override func setUI() {
@@ -95,42 +89,5 @@ final class OnBoardingLoginView: BaseView {
             $0.width.equalTo(Screen.width(320))
             $0.height.equalTo(Screen.height(45))
         }
-    }
-}
-
-// MARK: - Functions
-
-private extension OnBoardingLoginView {
-    func setButton(title: String, image: UIImage, backgroundColor: UIColor, textColor: UIColor) -> UIButton {
-        let button = UIButton(configuration: .plain())
-        button.backgroundColor = backgroundColor
-        button.layer.cornerRadius = 6
-        button.clipsToBounds = true
-        
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 8.6
-        stackView.alignment = .center
-        stackView.distribution = .fill
-        stackView.isUserInteractionEnabled = false
-        
-        let icon = UIImageView(image: image)
-        icon.contentMode = .scaleAspectFit
-        icon.snp.makeConstraints {
-            $0.size.equalTo(18)
-        }
-        
-        let label = UILabel()
-        label.setText("\(title)", style: .title2, color: textColor)
-        label.textAlignment = .center
-        
-        stackView.addArrangedSubviews(icon, label)
-        button.addSubview(stackView)
-        
-        stackView.snp.makeConstraints {
-            $0.horizontalEdges.equalToSuperview().inset(14)
-            $0.verticalEdges.equalToSuperview().inset(11)
-        }
-        return button
     }
 }
