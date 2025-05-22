@@ -10,7 +10,6 @@ import UIKit
 import SnapKit
 import Then
 
-// TODO: dataBind() 함수 구현 후 각 text 삭제
 final class RoomStatusTableViewCell: BaseTableViewCell {
     
     // MARK: - UIComponent
@@ -33,9 +32,9 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
     private let depositTitleLabel = UILabel()
     private let depositLabel = UILabel()
     
-    // 선불공과금
-    private let prepaidUtilitiesTitleLabel = UILabel()
-    private let prepaidUtilitiesLabel = UILabel()
+    // 관리비
+    private let managementFeeTitleLabel = UILabel()
+    private let managementFeeLabel = UILabel()
     
     // 월세
     private let monthlyRentTitleLabel = UILabel()
@@ -44,10 +43,6 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
     // 계약기간
     private let contractPeriodTitleLabel = UILabel()
     private let contractPeriodLabel = UILabel()
-    
-    // 관리비
-    private let managementFeeTitleLabel = UILabel()
-    private let managementFeeLabel = UILabel()
     
     // MARK: - UISetting
     
@@ -84,11 +79,11 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
             $0.setText(style: .body1, color: .grayscale11)
         }
         
-        prepaidUtilitiesTitleLabel.do {
-            $0.setText("선불공과금", style: .body3, color: .grayscale8)
+        contractPeriodTitleLabel.do {
+            $0.setText("계약기간", style: .body3, color: .grayscale8)
         }
         
-        prepaidUtilitiesLabel.do {
+        contractPeriodLabel.do {
             $0.setText(style: .body1, color: .grayscale11)
         }
         
@@ -97,14 +92,6 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
         }
         
         monthlyRentLabel.do {
-            $0.setText(style: .body1, color: .grayscale11)
-        }
-        
-        contractPeriodTitleLabel.do {
-            $0.setText("계약기간", style: .body3, color: .grayscale8)
-        }
-        
-        contractPeriodLabel.do {
             $0.setText(style: .body1, color: .grayscale11)
         }
         
@@ -132,12 +119,10 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
             roomTypeLabel,
             depositTitleLabel,
             depositLabel,
-            prepaidUtilitiesTitleLabel,
-            prepaidUtilitiesLabel,
-            monthlyRentTitleLabel,
-            monthlyRentLabel,
             contractPeriodTitleLabel,
             contractPeriodLabel,
+            monthlyRentTitleLabel,
+            monthlyRentLabel,
             managementFeeTitleLabel,
             managementFeeLabel
         )
@@ -173,10 +158,12 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
             $0.height.equalTo(Screen.height(76))
         }
         
+        //
+        
         roomTypeTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview()
-            $0.width.equalTo(Screen.width(61))
+            $0.width.equalTo(Screen.width(60))
         }
         
         roomTypeLabel.snp.makeConstraints {
@@ -197,16 +184,15 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
             $0.width.equalTo(Screen.width(78))
         }
         
-        prepaidUtilitiesTitleLabel.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview()
-            $0.width.equalTo(Screen.width(61))
+        contractPeriodTitleLabel.snp.makeConstraints {
+            $0.centerY.leading.equalToSuperview()
+            $0.width.equalTo(Screen.width(60))
         }
         
-        prepaidUtilitiesLabel.snp.makeConstraints {
+        contractPeriodLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.leading.equalTo(prepaidUtilitiesTitleLabel.snp.trailing).offset(12)
-            $0.width.equalTo(Screen.width(68))
+            $0.leading.equalTo(managementFeeTitleLabel.snp.trailing).offset(12)
+            $0.width.equalTo(Screen.width(78))
         }
         
         monthlyRentTitleLabel.snp.makeConstraints {
@@ -221,28 +207,16 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
             $0.width.equalTo(Screen.width(78))
         }
         
-        contractPeriodTitleLabel.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
-            $0.leading.equalToSuperview()
-            $0.width.equalTo(Screen.width(61))
-        }
-        
-        contractPeriodLabel.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
-            $0.leading.equalTo(contractPeriodTitleLabel.snp.trailing).offset(12)
-            $0.width.equalTo(Screen.width(68))
-        }
-        
         managementFeeTitleLabel.snp.makeConstraints {
             $0.bottom.equalToSuperview()
-            $0.trailing.equalTo(managementFeeLabel.snp.leading).offset(-12)
-            $0.width.equalTo(Screen.width(37))
+            $0.leading.equalToSuperview()
+            $0.width.equalTo(Screen.width(60))
         }
         
         managementFeeLabel.snp.makeConstraints {
             $0.bottom.equalToSuperview()
-            $0.trailing.equalToSuperview()
-            $0.width.equalTo(Screen.width(78))
+            $0.leading.equalTo(contractPeriodTitleLabel.snp.trailing).offset(12)
+            $0.width.equalTo(Screen.width(68))
         }
     }
 }
@@ -255,9 +229,8 @@ extension RoomStatusTableViewCell {
         nameLabel.updateText(roomInfo.name)
         roomTypeLabel.updateText(roomInfo.roomType)
         depositLabel.updateText(roomInfo.deposit)
-        prepaidUtilitiesLabel.updateText(roomInfo.prepaidUtilities)
-        monthlyRentLabel.updateText(roomInfo.monthlyRent)
         contractPeriodLabel.updateText(roomInfo.contractPeriod)
+        monthlyRentLabel.updateText(roomInfo.monthlyRent)
         managementFeeLabel.updateText(roomInfo.managementFee)
     }
 }
