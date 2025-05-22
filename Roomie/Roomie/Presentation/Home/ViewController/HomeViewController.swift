@@ -331,7 +331,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
     ) {
         guard let houseID = viewModel.homeDataSubject.value?.recentlyViewedHouses[indexPath.item].houseID else { return }
         let houseDetailViewController = HouseDetailViewController(
-            viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
+            viewModel: HouseDetailViewModel(houseID: houseID, service: MockHousesService())
         )
         houseDetailViewController.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(houseDetailViewController, animated: true)
