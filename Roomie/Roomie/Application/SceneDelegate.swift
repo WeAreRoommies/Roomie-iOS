@@ -17,8 +17,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        let viewModel = OnBoardingViewModel()
+        let homeViewModel = HomeViewModel(service: HomeService())
+        let onboarding = OnBoardingContainerViewController(viewModel: viewModel, homeViewModel: homeViewModel)
         self.window = UIWindow(windowScene: windowScene)
-        self.window?.rootViewController = MainTabBarController()
+        self.window?.rootViewController = UINavigationController(rootViewController: onboarding)
         self.window?.makeKeyAndVisible()
     }
 }

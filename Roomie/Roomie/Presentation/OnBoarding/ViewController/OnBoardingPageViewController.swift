@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import Combine
+
+import CombineCocoa
 
 final class OnBoardingPageViewController: UIViewController {
     
@@ -17,10 +20,15 @@ final class OnBoardingPageViewController: UIViewController {
     
     private let type: OnBoardingType
     
+    private let cancelBag = CancelBag()
+    
+    private let homeViewModel: HomeViewModel
+    
     // MARK: - Initializer
     
-    init(type: OnBoardingType) {
+    init(type: OnBoardingType, viewModel: HomeViewModel) {
         self.type = type
+        self.homeViewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         
         if type.isLogin {
@@ -39,5 +47,19 @@ final class OnBoardingPageViewController: UIViewController {
     
     func getType() -> OnBoardingType {
         return type
+    }
+    
+    func setAction() {
+        loginView.kakaoLoginButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+
+                let homeViewController = HomeViewController(viewModel: self.homeViewModel)
+                let navigationViewController = UINavigationController(rootViewController: homeViewController)
+                navigationViewController.modalPresentationStyle = .fullScreen
+                self.present(navigationViewController, animated: true)
+            }
+            .store(in: cancelBag)
     }
 }

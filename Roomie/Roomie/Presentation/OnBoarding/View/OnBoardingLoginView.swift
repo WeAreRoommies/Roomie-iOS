@@ -42,7 +42,7 @@ final class OnBoardingLoginView: BaseView {
         kakaoLoginButton = setButton(
             title: "카카오로 계속하기",
             image: .icnKakaoLogo,
-            backgroundColor: .yellow,
+            backgroundColor: .kakaoBackground,
             textColor: .black
         )
         
@@ -112,6 +112,7 @@ private extension OnBoardingLoginView {
         stackView.spacing = 8.6
         stackView.alignment = .center
         stackView.distribution = .fill
+        stackView.isUserInteractionEnabled = false
         
         let icon = UIImageView(image: image)
         icon.contentMode = .scaleAspectFit
