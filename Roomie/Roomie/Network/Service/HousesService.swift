@@ -173,6 +173,28 @@ final class MockHousesService: HouseDetailServiceProtocol {
                     "https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F32%2Fab%2F6a%2F32ab6a8f37b33c4d7922505824a1af86.jpg&type=sc960_832",
                     "https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F32%2Fab%2F6a%2F32ab6a8f37b33c4d7922505824a1af86.jpg&type=sc960_832"
                     ]
+                ),
+                HouseDetailRoom(
+                    roomID: 2,
+                    name: "1A 싱글침대",
+                    facility: ["침대, 책상, 옷"],
+                    status: true,
+                    mainImageURL: [
+                    "https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F32%2Fab%2F6a%2F32ab6a8f37b33c4d7922505824a1af86.jpg&type=sc960_832",
+                    "https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F32%2Fab%2F6a%2F32ab6a8f37b33c4d7922505824a1af86.jpg&type=sc960_832",
+                    "https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F32%2Fab%2F6a%2F32ab6a8f37b33c4d7922505824a1af86.jpg&type=sc960_832"
+                    ]
+                ),
+                HouseDetailRoom(
+                    roomID: 3,
+                    name: "1A 싱글침대",
+                    facility: ["침대, 책상, 옷"],
+                    status: true,
+                    mainImageURL: [
+                    "https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F32%2Fab%2F6a%2F32ab6a8f37b33c4d7922505824a1af86.jpg&type=sc960_832",
+                    "https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F32%2Fab%2F6a%2F32ab6a8f37b33c4d7922505824a1af86.jpg&type=sc960_832",
+                    "https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F32%2Fab%2F6a%2F32ab6a8f37b33c4d7922505824a1af86.jpg&type=sc960_832"
+                    ]
                 )
             ]
         )

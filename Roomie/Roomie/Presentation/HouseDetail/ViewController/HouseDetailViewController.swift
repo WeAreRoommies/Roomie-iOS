@@ -102,7 +102,7 @@ final class HouseDetailViewController: BaseViewController {
                 let houseAllPhotoViewController = HouseAllPhotoViewController(
                     title: navigationBarTitle,
                     viewModel: HouseAllPhotoViewModel(
-                        service: HousesService(),
+                        service: MockHousesService(),
                         houseID: viewModel.houseID
                     )
                 )
@@ -365,7 +365,7 @@ extension HouseDetailViewController: UITableViewDelegate {
             title: navigationBarTitle,
             index: indexPath.row,
             viewModel: HouseSinglePhotoViewModel(
-                service: HousesService(),
+                service: MockHousesService(),
                 houseID: viewModel.houseID
             )
         )
