@@ -54,11 +54,7 @@ final class HouseDetailView: BaseView {
     let safetyLivingFacilityView = HouseFacilityExpandView(title: "안전 및 생활시설")
     let kitchenFacilityView = HouseFacilityExpandView(title: "주방시설")
     private let facilityStackView = UIStackView()
-    
-    // roommate Section
-    private let roommateTitleLabel = UILabel()
-    let roommateTableView = UITableView()
-    
+
     // bottom Button
     private let bottomButtonContainerView = UIView()
     private let bottomButtonSeparatorView = UIView()
@@ -173,14 +169,6 @@ final class HouseDetailView: BaseView {
             $0.alignment = .fill
             $0.distribution = .fill
         }
-        
-        roommateTitleLabel.do {
-            $0.setText("룸메이트", style: .heading5, color: .grayscale12)
-        }
-        
-        roommateTableView.do {
-            $0.separatorStyle = .none
-        }
 
         bottomButtonContainerView.do {
             $0.backgroundColor = .grayscale1
@@ -212,8 +200,6 @@ final class HouseDetailView: BaseView {
             roomStatusTableView,
             facilityTitleLabel,
             facilityStackView,
-            roommateTitleLabel,
-            roommateTableView
         )
         
         photoContainerView.addSubview(photoImageView)
@@ -371,20 +357,9 @@ final class HouseDetailView: BaseView {
         facilityStackView.snp.makeConstraints {
             $0.top.equalTo(facilityTitleLabel.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.bottom.equalToSuperview().inset(30)
         }
-        
-        roommateTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(facilityStackView.snp.bottom).offset(48)
-            $0.horizontalEdges.equalToSuperview().inset(20)
-        }
-        
-        roommateTableView.snp.makeConstraints {
-            $0.top.equalTo(roommateTitleLabel.snp.bottom).offset(16)
-            $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.height.equalTo(Screen.height(102 + 12))
-            $0.bottom.equalToSuperview().inset(8)
-        }
-        
+
         bottomButtonContainerView.snp.makeConstraints {
             $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
@@ -434,20 +409,7 @@ extension HouseDetailView {
             $0.height.equalTo(tableViewHeight)
         }
     }
-    
-    /// roommateTableView의 높이를 동적으로 계산하는 함수입니다.
-    func updateRoommateTableViewHeight(
-        _ numberOfItems: Int,
-        height roommateCellHeight: CGFloat
-    ) {
-        let cellCount = numberOfItems == 0 ? 1 : numberOfItems
-        let tableViewHeight = CGFloat(cellCount) * roommateCellHeight
-        
-        roommateTableView.snp.updateConstraints {
-            $0.height.equalTo(tableViewHeight)
-        }
-    }
-    
+
     /// moodTags를 바인딩하는 함수입니다.
     func bindMoodTags(_ moodTags: [String]) {
         moodTagsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
