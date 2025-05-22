@@ -53,7 +53,21 @@ extension HomeService: HomeServiceProtocol {
 final class MockHomeService: HomeServiceProtocol {
     func fetchHomeData() async throws -> BaseResponseBody<HomeResponseDTO>? {
         let mockData: HomeResponseDTO =
-        HomeResponseDTO(name: "김루미", location: "논현동", recentlyViewedHouses: [])
+        HomeResponseDTO(name: "김루미", location: "논현동", recentlyViewedHouses: [
+            HomeHouse(
+                    houseID: 1,
+                    monthlyRent: "43 ~ 50",
+                    deposit: "90 ~ 100",
+                    occupancyTypes: "1,2,3인실",
+                    location: "서대문구 연희동",
+                    genderPolicy: "여성전용",
+                    locationDescription: "자이아파트",
+                    isPinned: false,
+                    moodTag: "차분한",
+                    contractTerm: 3,
+                    mainImageURL: "https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F32%2Fab%2F6a%2F32ab6a8f37b33c4d7922505824a1af86.jpg&type=sc960_832"
+                )
+        ])
         return BaseResponseBody(code: 200, message: "", data: mockData)
     }
     
