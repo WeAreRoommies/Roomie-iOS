@@ -211,9 +211,6 @@ extension OnBoardingContainerViewController:
                             transitionCompleted completed: Bool) {
         if let current = pageViewController.viewControllers?.first as? OnBoardingPageViewController {
             pageIndexSubject.send(current.getType())
-            if current.getType().isLogin {
-                current.setAction()
-            }
         }
     }
 }

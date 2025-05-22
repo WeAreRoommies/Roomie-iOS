@@ -33,6 +33,7 @@ final class OnBoardingPageViewController: UIViewController {
         
         if type.isLogin {
             self.view = loginView
+            setAction()
         } else {
             onBoardingView.configure(with: type)
             self.view = onBoardingView
@@ -56,9 +57,7 @@ final class OnBoardingPageViewController: UIViewController {
                 guard let self = self else { return }
 
                 let homeViewController = HomeViewController(viewModel: self.homeViewModel)
-                let navigationViewController = UINavigationController(rootViewController: homeViewController)
-                navigationViewController.modalPresentationStyle = .fullScreen
-                self.present(navigationViewController, animated: true)
+                self.navigationController?.pushViewController(homeViewController, animated: true)
             }
             .store(in: cancelBag)
     }
