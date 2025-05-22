@@ -89,7 +89,6 @@ final class HouseDetailViewController: BaseViewController {
         super.viewDidLayoutSubviews()
         
         rootView.updateRoomStatusTableViewHeight(viewModel.roomInfos.count, height: roomStatusCellHeight)
-        rootView.updateRoommateTableViewHeight(viewModel.roommateInfos.count, height: roommateCellHeight)
     }
     
     override func setView() {
@@ -135,9 +134,6 @@ final class HouseDetailViewController: BaseViewController {
     override func setDelegate() {
         rootView.roomStatusTableView.dataSource = self
         rootView.roomStatusTableView.delegate = self
-        
-        rootView.roommateTableView.dataSource = self
-        rootView.roommateTableView.delegate = self
         
         rootView.scrollView.delegate = self
     }
@@ -240,30 +236,12 @@ private extension HouseDetailViewController {
                 rootView.kitchenFacilityView.dataBind(kitchenFacilityInfo)
             }
             .store(in: cancelBag)
-        
-        viewModel.$roommateInfos
-            .receive(on: RunLoop.main)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                self.rootView.roommateTableView.reloadData()
-            }
-            .store(in: cancelBag)
     }
     
     func setRegister() {
         rootView.roomStatusTableView.register(
             RoomStatusTableViewCell.self,
             forCellReuseIdentifier: RoomStatusTableViewCell.reuseIdentifier
-        )
-        
-        rootView.roommateTableView.register(
-            RoommateTableViewCell.self,
-            forCellReuseIdentifier: RoommateTableViewCell.reuseIdentifier
-        )
-        
-        rootView.roommateTableView.register(
-            RoommateNotFoundTableViewCell.self,
-            forCellReuseIdentifier: RoommateNotFoundTableViewCell.reuseIdentifier
         )
     }
     
@@ -352,61 +330,23 @@ extension HouseDetailViewController: UITableViewDataSource {
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        if tableView == rootView.roomStatusTableView {
-            return viewModel.roomInfos.count // TODO: DataBind
-        }
-        
-        if tableView == rootView.roommateTableView {
-            let cellCount = viewModel.roommateInfos.count == 0 ? 1 : viewModel.roommateInfos.count
-            return cellCount
-        }
-        
-        return 0
+        return viewModel.roomInfos.count
     }
     
     func tableView(
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
-        if tableView == rootView.roomStatusTableView {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: RoomStatusTableViewCell.reuseIdentifier,
-                for: indexPath
-            ) as? RoomStatusTableViewCell else {
-                return UITableViewCell()
-            }
-            cell.selectionStyle = .none
-            
-            cell.dataBind(viewModel.roomInfos[indexPath.row])
-            return cell
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: RoomStatusTableViewCell.reuseIdentifier,
+            for: indexPath
+        ) as? RoomStatusTableViewCell else {
+            return UITableViewCell()
         }
+        cell.selectionStyle = .none
         
-        if tableView == rootView.roommateTableView {
-            if viewModel.roommateInfos.count == 0 {
-                guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: RoommateNotFoundTableViewCell.reuseIdentifier,
-                    for: indexPath
-                ) as? RoommateNotFoundTableViewCell else {
-                    return UITableViewCell()
-                }
-                cell.selectionStyle = .none
-                
-                return cell
-            } else {
-                guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: RoommateTableViewCell.reuseIdentifier,
-                    for: indexPath
-                ) as? RoommateTableViewCell else {
-                    return UITableViewCell()
-                }
-                cell.selectionStyle = .none
-                
-                cell.dataBind(viewModel.roommateInfos[indexPath.row])
-                return cell
-            }
-        }
-        
-        return UITableViewCell()
+        cell.dataBind(viewModel.roomInfos[indexPath.row])
+        return cell
     }
 }
 
@@ -417,29 +357,19 @@ extension HouseDetailViewController: UITableViewDelegate {
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath
     ) -> CGFloat {
-        if tableView == rootView.roomStatusTableView {
-            return roomStatusCellHeight
-        }
-        
-        if tableView == rootView.roommateTableView {
-            return roommateCellHeight
-        }
-        
-        return 0
+        return roomStatusCellHeight
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView == rootView.roomStatusTableView {
-            let houseSinglePhotoViewController = HouseSinglePhotoViewController(
-                title: navigationBarTitle,
-                index: indexPath.row,
-                viewModel: HouseSinglePhotoViewModel(
-                    service: HousesService(),
-                    houseID: viewModel.houseID
-                )
+        let houseSinglePhotoViewController = HouseSinglePhotoViewController(
+            title: navigationBarTitle,
+            index: indexPath.row,
+            viewModel: HouseSinglePhotoViewModel(
+                service: HousesService(),
+                houseID: viewModel.houseID
             )
-            navigationController?.pushViewController(houseSinglePhotoViewController, animated: true)
-        }
+        )
+        navigationController?.pushViewController(houseSinglePhotoViewController, animated: true)
     }
 }
 
