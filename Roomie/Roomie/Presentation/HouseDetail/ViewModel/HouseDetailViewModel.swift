@@ -27,7 +27,6 @@ final class HouseDetailViewModel {
     @Published var roomName: String = ""
     
     @Published private(set) var roomInfos: [RoomInfo] = []
-    @Published private(set) var roommateInfos: [RoommateInfo] = []
     
     // MARK: - Initializer
     
@@ -131,26 +130,7 @@ extension HouseDetailViewModel: ViewModelType {
                 self.roomInfos = roomInfos
             }
             .store(in: cancelBag)
-        
-        houseDetailDataSubject
-            .compactMap { data in
-                data?.roommates.map {
-                    RoommateInfo(
-                        age: $0.age,
-                        job: $0.job,
-                        mbti: $0.mbti,
-                        name: $0.name,
-                        sleepTime: $0.sleepTime,
-                        activityTime: $0.activityTime
-                    )
-                }
-            }
-            .sink { [weak self] roommateInfos in
-                guard let self else { return }
-                self.roommateInfos = roommateInfos
-            }
-            .store(in: cancelBag)
-        
+
         let safetyLivingFacilityInfo = houseDetailDataSubject
             .compactMap { $0 }
             .map { data in
@@ -164,25 +144,6 @@ extension HouseDetailViewModel: ViewModelType {
                 data.houseInfo.kitchenFacility
             }
             .eraseToAnyPublisher()
-
-        houseDetailDataSubject
-            .compactMap { data in
-                data?.roommates.map {
-                    RoommateInfo(
-                        age: $0.age,
-                        job: $0.job,
-                        mbti: $0.mbti,
-                        name: $0.name,
-                        sleepTime: $0.sleepTime,
-                        activityTime: $0.activityTime
-                    )
-                }
-            }
-            .sink { [weak self] roommateInfos in
-                guard let self else { return }
-                self.roommateInfos = roommateInfos
-            }
-            .store(in: cancelBag)
         
         let isTourApplyButtonEnabled = radioButtonSubject
             .map { _ in true }
