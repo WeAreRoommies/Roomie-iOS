@@ -29,17 +29,20 @@ final class OnBoardingContainerViewController: UIViewController {
     private let pageControl = UIPageControl()
     
     private let viewModel: OnBoardingViewModel
+    
+    private let homeViewModel: HomeViewModel
 
     private let pageIndexSubject = PassthroughSubject<OnBoardingType, Never>()
     
     // MARK: - UIComponent
     
-    private let startButton = UIButton()
+    private let startButton = UIButton(type: .system)
     
     // MARK: - Initializer
     
-    init(viewModel: OnBoardingViewModel) {
+    init(viewModel: OnBoardingViewModel, homeViewModel: HomeViewModel) {
         self.viewModel = viewModel
+        self.homeViewModel = homeViewModel
         self.pageViewController = UIPageViewController(
             transitionStyle: .scroll,
             navigationOrientation: .horizontal
@@ -55,11 +58,13 @@ final class OnBoardingContainerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         setPage()
         setPageViewController()
         setPageIndicators()
         setStartButton()
+        setAction()
         setDelegate()
         bindViewModel()
     }
@@ -75,15 +80,6 @@ private extension OnBoardingContainerViewController {
             $0.backgroundColor = .primaryPurple
             $0.layer.cornerRadius = 8
         }
-        
-        view.addSubview(startButton)
-        
-        startButton.snp.makeConstraints{
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(45)
-            $0.centerX.equalToSuperview()
-            $0.width.equalTo(Screen.width(335))
-            $0.height.equalTo(Screen.height(58))
-        }
     }
     
     func setDelegate() {
@@ -91,18 +87,36 @@ private extension OnBoardingContainerViewController {
         pageViewController.delegate = self
     }
     
+    func setAction() {
+        startButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let navigationViewController = OnBoardingPageViewController(type: .login, viewModel: homeViewModel)
+                self.navigationController?.pushViewController(navigationViewController, animated: true)
+            }
+            .store(in: cancelBag)
+    }
+    
     func setPage() {
         pages = OnBoardingType.onBoardingCases.map {
-            OnBoardingPageViewController(type: $0)
+            OnBoardingPageViewController(type: $0, viewModel: homeViewModel)
         }
-        
-        let loginPage = OnBoardingPageViewController(type: .login)
+        let loginPage = OnBoardingPageViewController(type: .login, viewModel: homeViewModel)
         pages.append(loginPage)
     }
     
     func setPageViewController() {
         addChild(pageViewController)
         view.addSubview(pageViewController.view)
+        
+        pageViewController.view.addSubview(startButton)
+        startButton.snp.makeConstraints{
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(45)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(Screen.width(335))
+            $0.height.equalTo(Screen.height(58))
+        }
         
         pageViewController.didMove(toParent: self)
         pageViewController.setViewControllers([pages[0]], direction: .forward, animated: true)
@@ -197,6 +211,9 @@ extension OnBoardingContainerViewController:
                             transitionCompleted completed: Bool) {
         if let current = pageViewController.viewControllers?.first as? OnBoardingPageViewController {
             pageIndexSubject.send(current.getType())
+            if current.getType().isLogin {
+                current.setAction()
+            }
         }
     }
 }
