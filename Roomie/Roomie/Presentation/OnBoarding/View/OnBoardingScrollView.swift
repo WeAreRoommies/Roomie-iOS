@@ -58,7 +58,7 @@ final class OnBoardingScrollView: BaseView {
         onBoardingImageView.snp.makeConstraints{
             $0.top.equalTo(subtitleLabel.snp.bottom).offset(60)
             $0.centerX.equalToSuperview()
-            $0.size.equalTo(240)
+            $0.size.equalTo(Screen.width(240))
         }
     }
 }

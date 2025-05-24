@@ -62,7 +62,7 @@ final class OnBoardingLoginView: BaseView {
         textLogoImageView.snp.makeConstraints {
             $0.top.equalTo(self.safeAreaLayoutGuide).inset(40)
             $0.centerX.equalToSuperview()
-            $0.size.equalTo(100)
+            $0.size.equalTo(Screen.width(100))
         }
         
         titleLabel.snp.makeConstraints {
