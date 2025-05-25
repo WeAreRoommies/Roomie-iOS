@@ -1,5 +1,5 @@
 //
-//  OnBoardingPageViewController.swift
+//  OnBoardingStepViewController.swift
 //  Roomie
 //
 //  Created by MaengKim on 5/21/25.
@@ -10,11 +10,11 @@ import Combine
 
 import CombineCocoa
 
-final class OnBoardingPageViewController: UIViewController {
+final class OnBoardingStepViewController: UIViewController {
     
     // MARK: - Property
     
-    private let onBoardingView = OnBoardingScrollView()
+    private let onBoardingView = OnBoardingStepView()
     
     let loginView = OnBoardingLoginView()
     

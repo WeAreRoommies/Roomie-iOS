@@ -1,5 +1,5 @@
 //
-//  OnBoardingScrollView.swift
+//  OnBoardingStepView.swift
 //  Roomie
 //
 //  Created by MaengKim on 5/20/25.
@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class OnBoardingScrollView: BaseView {
+final class OnBoardingStepView: BaseView {
     
     // MARK: - UIComponents
     
@@ -65,7 +65,7 @@ final class OnBoardingScrollView: BaseView {
 
 // MARK: - Function
 
-extension OnBoardingScrollView {
+extension OnBoardingStepView {
     func configure(with type: OnBoardingType) {
         titleLabel.text = type.title
         subtitleLabel.text = type.subTitle

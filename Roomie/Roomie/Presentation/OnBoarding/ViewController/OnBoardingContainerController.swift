@@ -1,5 +1,5 @@
 //
-//  OnBoardingContainerViewController.swift
+//  OnBoardingViewController.swift
 //  Roomie
 //
 //  Created by MaengKim on 5/20/25.
@@ -12,7 +12,7 @@ import CombineCocoa
 import SnapKit
 import Then
 
-final class OnBoardingContainerViewController: UIViewController {
+final class OnBoardingViewController: UIViewController {
     
     // MARK: - Property
     
@@ -24,7 +24,7 @@ final class OnBoardingContainerViewController: UIViewController {
     
     private let indicatorStackView = UIStackView()
     
-    private var pages: [OnBoardingPageViewController] = []
+    private var pages: [OnBoardingStepViewController] = []
     
     private let pageControl = UIPageControl()
     
@@ -72,7 +72,7 @@ final class OnBoardingContainerViewController: UIViewController {
 
 // MARK: - Function
 
-private extension OnBoardingContainerViewController {
+private extension OnBoardingViewController {
     
     func setStartButton() {
         startButton.do {
@@ -92,7 +92,7 @@ private extension OnBoardingContainerViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                let navigationViewController = OnBoardingPageViewController(type: .login, viewModel: homeViewModel)
+                let navigationViewController = OnBoardingStepViewController(type: .login, viewModel: homeViewModel)
                 self.navigationController?.pushViewController(navigationViewController, animated: true)
             }
             .store(in: cancelBag)
@@ -100,9 +100,9 @@ private extension OnBoardingContainerViewController {
     
     func setPage() {
         pages = OnBoardingType.onBoardingCases.map {
-            OnBoardingPageViewController(type: $0, viewModel: homeViewModel)
+            OnBoardingStepViewController(type: $0, viewModel: homeViewModel)
         }
-        let loginPage = OnBoardingPageViewController(type: .login, viewModel: homeViewModel)
+        let loginPage = OnBoardingStepViewController(type: .login, viewModel: homeViewModel)
         pages.append(loginPage)
     }
     
@@ -187,12 +187,12 @@ private extension OnBoardingContainerViewController {
     }
 }
 
-extension OnBoardingContainerViewController:
+extension OnBoardingViewController:
     UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerBefore viewController: UIViewController)
     -> UIViewController? {
-        guard let current = viewController as? OnBoardingPageViewController,
+        guard let current = viewController as? OnBoardingStepViewController,
               let index = pages.firstIndex(of: current), index > 0 else { return nil }
         return pages[index - 1]
     }
@@ -200,7 +200,7 @@ extension OnBoardingContainerViewController:
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerAfter viewController: UIViewController)
     -> UIViewController? {
-        guard let current = viewController as? OnBoardingPageViewController,
+        guard let current = viewController as? OnBoardingStepViewController,
               let index = pages.firstIndex(of: current), index < pages.count - 1 else { return nil }
         return pages[index + 1]
     }
@@ -209,7 +209,7 @@ extension OnBoardingContainerViewController:
                             didFinishAnimating finished: Bool,
                             previousViewControllers: [UIViewController],
                             transitionCompleted completed: Bool) {
-        if let current = pageViewController.viewControllers?.first as? OnBoardingPageViewController {
+        if let current = pageViewController.viewControllers?.first as? OnBoardingStepViewController {
             pageIndexSubject.send(current.getType())
         }
     }

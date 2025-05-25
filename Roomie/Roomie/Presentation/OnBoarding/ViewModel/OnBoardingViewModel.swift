@@ -12,7 +12,7 @@ final class OnBoardingViewModel {
     
     // MARK: - Property
     
-    let currentPageSubject = CurrentValueSubject<OnBoardingType, Never>(.infoPage)
+    let currentPageSubject = CurrentValueSubject<OnBoardingType, Never>(.infoStep)
 }
 
 extension OnBoardingViewModel: ViewModelType {

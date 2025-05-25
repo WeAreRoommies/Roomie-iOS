@@ -8,13 +8,13 @@
 import UIKit
 
 enum OnBoardingType: CaseIterable {
-    case infoPage
-    case filterPage
-    case hostPage
+    case infoStep
+    case filterStep
+    case hostStep
     case login
     
     static var onBoardingCases: [OnBoardingType] {
-        return [.infoPage, .filterPage, .hostPage]
+        return [.infoStep, .filterStep, .hostStep]
     }
     
     var isLogin: Bool {
@@ -23,11 +23,11 @@ enum OnBoardingType: CaseIterable {
     
     var title: String? {
         switch self {
-        case .infoPage:
+        case .infoStep:
             return "잘 맞는 셰어하우스를 찾아봐요!"
-        case .filterPage:
+        case .filterStep:
             return "조건에 맞는 곳만 찾아봐요"
-        case .hostPage:
+        case .hostStep:
             return "투어신청 후 계약해요"
         case .login:
             return nil
@@ -36,11 +36,11 @@ enum OnBoardingType: CaseIterable {
     
     var subTitle: String? {
         switch self {
-        case .infoPage:
+        case .infoStep:
             return "셰어하우스의 생활 규칙, 방 분위기 등의\n정보를 확인할 수 있어요"
-        case .filterPage:
+        case .filterStep:
             return "필터를 통해 찾고자 하는 조건의\n셰어하우스만 볼 수 있어요"
-        case .hostPage:
+        case .hostStep:
             return "호스트와 연락해 입주 투어 날짜를 정하고\n문의사항 주고받을 수 있어요"
         case .login:
             return nil
@@ -49,11 +49,11 @@ enum OnBoardingType: CaseIterable {
     
     var onBoardingViewImage: UIImage? {
         switch self {
-        case .infoPage:
+        case .infoStep:
             return UIImage(named: "img_profile")
-        case .filterPage:
+        case .filterStep:
             return UIImage(named: "img_profile")
-        case .hostPage:
+        case .hostStep:
             return UIImage(named: "img_profile")
         case .login:
             return nil
