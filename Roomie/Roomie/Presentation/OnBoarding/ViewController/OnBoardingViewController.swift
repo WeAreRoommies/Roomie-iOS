@@ -30,8 +30,6 @@ final class OnBoardingViewController: UIViewController {
     
     private let viewModel: OnBoardingViewModel
     
-    private let homeViewModel: HomeViewModel
-
     private let pageIndexSubject = PassthroughSubject<OnBoardingType, Never>()
     
     // MARK: - UIComponent
@@ -40,9 +38,8 @@ final class OnBoardingViewController: UIViewController {
     
     // MARK: - Initializer
     
-    init(viewModel: OnBoardingViewModel, homeViewModel: HomeViewModel) {
+    init(viewModel: OnBoardingViewModel) {
         self.viewModel = viewModel
-        self.homeViewModel = homeViewModel
         self.pageViewController = UIPageViewController(
             transitionStyle: .scroll,
             navigationOrientation: .horizontal
@@ -58,8 +55,8 @@ final class OnBoardingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
         
+        setView()
         setPage()
         setPageViewController()
         setPageIndicators()
@@ -73,6 +70,9 @@ final class OnBoardingViewController: UIViewController {
 // MARK: - Function
 
 private extension OnBoardingViewController {
+    func setView() {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
     
     func setStartButton() {
         startButton.do {
@@ -92,7 +92,7 @@ private extension OnBoardingViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                let navigationViewController = LoginViewController(homeViewModel: homeViewModel)
+                let navigationViewController = LoginViewController()
                 self.navigationController?.pushViewController(navigationViewController, animated: true)
             }
             .store(in: cancelBag)
