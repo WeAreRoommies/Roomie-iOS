@@ -92,14 +92,14 @@ private extension OnBoardingViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                let navigationViewController = LoginViewController()
+                let navigationViewController = LoginViewController(homeViewModel: homeViewModel)
                 self.navigationController?.pushViewController(navigationViewController, animated: true)
             }
             .store(in: cancelBag)
     }
     
     func setPage() {
-        pages = OnBoardingType.onBoardingCases.map { type in
+        pages = OnBoardingType.allCases.map { type in
             let viewController = UIViewController()
             viewController.view = OnBoardingStepView().then {
                 $0.configure(with: type)
@@ -130,7 +130,7 @@ private extension OnBoardingViewController {
         indicatorStackView.distribution = .equalSpacing
         indicatorStackView.spacing = 8
         
-        OnBoardingType.onBoardingCases.forEach { _ in
+        OnBoardingType.allCases.forEach { _ in
             let dot = UIView()
             dot.backgroundColor = .grayscale5
             dot.layer.cornerRadius = 4
@@ -148,15 +148,7 @@ private extension OnBoardingViewController {
         }
     }
     
-    func updatePageIndicators(for type: OnBoardingType) {
-        if type.isLogin {
-            indicatorStackView.isHidden = true
-            startButton.isHidden = true
-        } else {
-            indicatorStackView.isHidden = false
-            startButton.isHidden = false
-        }
-        
+    func updatePageIndicators(for type: OnBoardingType) {        
         for (index, dot) in indicators.enumerated() {
             if index == OnBoardingType.allCases.firstIndex(of: type) {
                 dot.backgroundColor = .primaryPurple

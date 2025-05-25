@@ -11,15 +11,6 @@ enum OnBoardingType: CaseIterable {
     case infoStep
     case filterStep
     case hostStep
-    case login
-    
-    static var onBoardingCases: [OnBoardingType] {
-        return [.infoStep, .filterStep, .hostStep]
-    }
-    
-    var isLogin: Bool {
-        return self == .login
-    }
     
     var title: String? {
         switch self {
@@ -29,8 +20,6 @@ enum OnBoardingType: CaseIterable {
             return "조건에 맞는 곳만 찾아봐요"
         case .hostStep:
             return "투어신청 후 계약해요"
-        case .login:
-            return nil
         }
     }
     
@@ -42,8 +31,6 @@ enum OnBoardingType: CaseIterable {
             return "필터를 통해 찾고자 하는 조건의\n셰어하우스만 볼 수 있어요"
         case .hostStep:
             return "호스트와 연락해 입주 투어 날짜를 정하고\n문의사항 주고받을 수 있어요"
-        case .login:
-            return nil
         }
     }
     
@@ -55,8 +42,6 @@ enum OnBoardingType: CaseIterable {
             return UIImage(named: "img_profile")
         case .hostStep:
             return UIImage(named: "img_profile")
-        case .login:
-            return nil
         }
     }
 }
