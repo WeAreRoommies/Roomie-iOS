@@ -12,7 +12,7 @@ import CombineCocoa
 import SnapKit
 import Then
 
-final class OnBoardingViewController: UIViewController {
+final class OnBoardingViewController: BaseViewController {
     
     // MARK: - Property
     
@@ -56,38 +56,23 @@ final class OnBoardingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setView()
         setPage()
         setPageViewController()
         setPageIndicators()
         setStartButton()
-        setAction()
-        setDelegate()
         bindViewModel()
     }
-}
-
-// MARK: - Function
-
-private extension OnBoardingViewController {
-    func setView() {
+    
+    override func setView() {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
-    func setStartButton() {
-        startButton.do {
-            $0.setTitle("바로 시작하기", style: .title2, color: .grayscale1)
-            $0.backgroundColor = .primaryPurple
-            $0.layer.cornerRadius = 8
-        }
-    }
-    
-    func setDelegate() {
+    override func setDelegate() {
         pageViewController.dataSource = self
         pageViewController.delegate = self
     }
     
-    func setAction() {
+    override func setAction() {
         startButton
             .tapPublisher
             .sink { [weak self] in
@@ -96,6 +81,18 @@ private extension OnBoardingViewController {
                 self.navigationController?.pushViewController(navigationViewController, animated: true)
             }
             .store(in: cancelBag)
+    }
+}
+
+// MARK: - Function
+
+private extension OnBoardingViewController {
+    func setStartButton() {
+        startButton.do {
+            $0.setTitle("바로 시작하기", style: .title2, color: .grayscale1)
+            $0.backgroundColor = .primaryPurple
+            $0.layer.cornerRadius = 8
+        }
     }
     
     func setPage() {
