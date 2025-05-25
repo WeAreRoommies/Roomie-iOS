@@ -9,9 +9,6 @@ import Foundation
 import Combine
 
 final class OnBoardingViewModel {
-    
-    // MARK: - Property
-    
     let currentPageSubject = CurrentValueSubject<OnBoardingType, Never>(.infoStep)
 }
 

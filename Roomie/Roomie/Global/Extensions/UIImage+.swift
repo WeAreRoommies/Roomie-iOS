@@ -8,7 +8,6 @@
 import UIKit
 
 extension UIImage {
-    
     func resize(targetSize: CGSize) -> UIImage {
         let aspectRatio = size.width / size.height
         var newSize: CGSize
