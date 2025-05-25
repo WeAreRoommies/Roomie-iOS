@@ -24,7 +24,7 @@ final class OnBoardingViewController: UIViewController {
     
     private let indicatorStackView = UIStackView()
     
-    private var pages: [OnBoardingStepViewController] = []
+    private var pages: [UIViewController] = []
     
     private let pageControl = UIPageControl()
     
@@ -92,18 +92,20 @@ private extension OnBoardingViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                let navigationViewController = OnBoardingStepViewController(type: .login, viewModel: homeViewModel)
+                let navigationViewController = LoginViewController()
                 self.navigationController?.pushViewController(navigationViewController, animated: true)
             }
             .store(in: cancelBag)
     }
     
     func setPage() {
-        pages = OnBoardingType.onBoardingCases.map {
-            OnBoardingStepViewController(type: $0, viewModel: homeViewModel)
+        pages = OnBoardingType.onBoardingCases.map { type in
+            let viewController = UIViewController()
+            viewController.view = OnBoardingStepView().then {
+                $0.configure(with: type)
+            }
+            return viewController
         }
-        let loginPage = OnBoardingStepViewController(type: .login, viewModel: homeViewModel)
-        pages.append(loginPage)
     }
     
     func setPageViewController() {
@@ -192,25 +194,26 @@ extension OnBoardingViewController:
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerBefore viewController: UIViewController)
     -> UIViewController? {
-        guard let current = viewController as? OnBoardingStepViewController,
-              let index = pages.firstIndex(of: current), index > 0 else { return nil }
+        guard let index = pages.firstIndex(of: viewController), index > 0 else { return nil }
         return pages[index - 1]
     }
 
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerAfter viewController: UIViewController)
     -> UIViewController? {
-        guard let current = viewController as? OnBoardingStepViewController,
-              let index = pages.firstIndex(of: current), index < pages.count - 1 else { return nil }
-        return pages[index + 1]
+        guard let index = pages.firstIndex(of: viewController), index < pages.count - 1 else {return nil}
+        return pages[index+1]
     }
 
     func pageViewController(_ pageViewController: UIPageViewController,
                             didFinishAnimating finished: Bool,
                             previousViewControllers: [UIViewController],
                             transitionCompleted completed: Bool) {
-        if let current = pageViewController.viewControllers?.first as? OnBoardingStepViewController {
-            pageIndexSubject.send(current.getType())
+        guard let currentViewController = pageViewController.viewControllers?.first,
+            let currentView = currentViewController.view as? OnBoardingStepView,
+           let type = currentView.type else {
+            return
         }
+        pageIndexSubject.send(type)
     }
 }

@@ -12,6 +12,8 @@ import Then
 
 final class OnBoardingStepView: BaseView {
     
+    var type: OnBoardingType?
+    
     // MARK: - UIComponents
     
     var titleLabel = UILabel()
@@ -67,6 +69,7 @@ final class OnBoardingStepView: BaseView {
 
 extension OnBoardingStepView {
     func configure(with type: OnBoardingType) {
+        self.type = type
         titleLabel.text = type.title
         subtitleLabel.text = type.subTitle
         onBoardingImageView.image = type.onBoardingViewImage
