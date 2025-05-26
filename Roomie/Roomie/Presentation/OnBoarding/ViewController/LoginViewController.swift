@@ -67,6 +67,7 @@ private extension LoginViewController {
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
         
         output.isLoginSucceedSubject
+            .receive(on: RunLoop.main)
             .sink { [weak self] isSucceed in
                 guard let self = self else { return }
                 if isSucceed {

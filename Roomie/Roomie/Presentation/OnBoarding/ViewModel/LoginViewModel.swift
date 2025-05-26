@@ -52,8 +52,10 @@ extension LoginViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
+        let isLoginSucceed = isLoginSucceedSubject.eraseToAnyPublisher()
+        
         return Output(
-            isLoginSucceedSubject: isLoginSucceedSubject.eraseToAnyPublisher()
+            isLoginSucceedSubject: isLoginSucceed
         )
     }
 }
@@ -64,6 +66,7 @@ private extension LoginViewModel {
             do {
                 guard let responseBody = try await service.authLogin(request: request),
                       let data = responseBody.data else { return }
+                isLoginSucceedSubject.send(true)
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
             }
