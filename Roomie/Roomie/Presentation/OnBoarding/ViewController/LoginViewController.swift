@@ -18,7 +18,7 @@ final class LoginViewController: BaseViewController {
     
     // MARK: - UIComponent
     
-    private let rootView = OnBoardingLoginView()
+    private let rootView = LoginView()
     
     override func loadView() {
         super.loadView()

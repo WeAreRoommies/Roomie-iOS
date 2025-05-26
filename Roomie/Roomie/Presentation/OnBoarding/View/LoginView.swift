@@ -1,5 +1,5 @@
 //
-//  OnBoardingLoginView.swift
+//  LoginView.swift
 //  Roomie
 //
 //  Created by MaengKim on 5/21/25.
@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class OnBoardingLoginView: BaseView {
+final class LoginView: BaseView {
     
     // MARK: - UIComponents
     
