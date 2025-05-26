@@ -21,11 +21,7 @@ final class LoginViewController: BaseViewController {
     private let rootView = LoginView()
     
     override func loadView() {
-        super.loadView()
-        view.addSubview(rootView)
-        rootView.snp.makeConstraints{
-            $0.edges.equalToSuperview()
-        }
+        view = rootView
     }
     
     override func setAction() {
