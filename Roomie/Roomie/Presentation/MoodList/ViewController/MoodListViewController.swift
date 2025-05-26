@@ -75,14 +75,14 @@ final class MoodListViewController: BaseViewController {
         setNavigationBar(with: "#\(moodNavibarTitle)")
     }
     
-    // MARK: - Functions
+    // MARK: - Function
     
     override func setDelegate() {
         rootView.moodListCollectionView.delegate = self
     }
 }
 
-// MARK: - Function
+// MARK: - Functions
 
 private extension MoodListViewController {
     func setRegister() {

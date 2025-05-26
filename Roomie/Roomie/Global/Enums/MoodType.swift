@@ -66,15 +66,4 @@ enum MoodType: CaseIterable {
             return UIImage(named: "img_moodview_clean")
         }
     }
-    
-//    var moodListData: [MoodHouse] {
-//        switch self {
-//        case .calm:
-//            return MoodHouse.mockCalmListRoomData()
-//        case .lively:
-//            return MoodHouse.mockLivelyListRoomData()
-//        case .neat:
-//            return MoodHouse.mockNeatListRoomData()
-//        }
-//    }
 }

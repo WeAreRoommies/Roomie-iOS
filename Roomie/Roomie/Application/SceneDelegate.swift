@@ -17,8 +17,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        let onBoardingViewController = OnBoardingViewController()
         self.window = UIWindow(windowScene: windowScene)
-        self.window?.rootViewController = MainTabBarController()
+        self.window?.rootViewController = UINavigationController(rootViewController: onBoardingViewController)
         self.window?.makeKeyAndVisible()
     }
 }
