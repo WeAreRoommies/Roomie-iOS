@@ -28,9 +28,7 @@ final class OnBoardingViewController: BaseViewController {
     
     private let pageControl = UIPageControl()
     
-    private let viewModel: OnBoardingViewModel
-    
-    private let pageIndexSubject = PassthroughSubject<OnBoardingType, Never>()
+    private var type: OnBoardingType?
     
     // MARK: - UIComponent
     
@@ -38,8 +36,8 @@ final class OnBoardingViewController: BaseViewController {
     
     // MARK: - Initializer
     
-    init(viewModel: OnBoardingViewModel) {
-        self.viewModel = viewModel
+    init() {
+        self.type = nil
         self.pageViewController = UIPageViewController(
             transitionStyle: .scroll,
             navigationOrientation: .horizontal
@@ -60,7 +58,6 @@ final class OnBoardingViewController: BaseViewController {
         setPageViewController()
         setPageIndicators()
         setStartButton()
-        bindViewModel()
     }
     
     override func setView() {
@@ -127,12 +124,21 @@ private extension OnBoardingViewController {
         indicatorStackView.distribution = .equalSpacing
         indicatorStackView.spacing = 8
         
-        OnBoardingType.allCases.forEach { _ in
+        OnBoardingType.allCases.enumerated().forEach { index, _ in
             let dot = UIView()
-            dot.backgroundColor = .grayscale5
-            dot.layer.cornerRadius = 4
-            dot.snp.makeConstraints {
-                $0.size.equalTo(CGSize(width: 8, height: 8))
+            
+            if index == 0 {
+                dot.backgroundColor = .primaryPurple
+                dot.layer.cornerRadius = 4
+                dot.snp.remakeConstraints {
+                    $0.size.equalTo(CGSize(width: 16, height: 8))
+                }
+            } else {
+                dot.backgroundColor = .grayscale5
+                dot.layer.cornerRadius = 4
+                dot.snp.makeConstraints {
+                    $0.size.equalTo(CGSize(width: 8, height: 8))
+                }
             }
             indicators.append(dot)
             indicatorStackView.addArrangedSubview(dot)
@@ -162,20 +168,6 @@ private extension OnBoardingViewController {
             }
         }
     }
-    
-    func bindViewModel() {
-        let input = OnBoardingViewModel.Input(
-            currentPageSubject: pageIndexSubject.eraseToAnyPublisher()
-        )
-        
-        let output = viewModel.transform(from: input, cancelBag: cancelBag)
-        
-        output.currentPage
-            .sink { [weak self] type in
-                self?.updatePageIndicators(for: type)
-            }
-            .store(in: cancelBag)
-    }
 }
 
 extension OnBoardingViewController:
@@ -203,6 +195,6 @@ extension OnBoardingViewController:
             let type = currentView.type else {
             return
         }
-        pageIndexSubject.send(type)
+        updatePageIndicators(for: type)
     }
 }
