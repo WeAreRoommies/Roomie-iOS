@@ -16,29 +16,24 @@ final class LoginViewController: BaseViewController {
     
     private let cancelBag = CancelBag()
     
-    private let homeViewModel = HomeViewModel(service: HomeService())
-    
     // MARK: - UIComponent
     
-    private let loginView = OnBoardingLoginView()
+    private let rootView = OnBoardingLoginView()
     
-    // MARK: - LifeCycle
-    
-    override func setView() {
-        super.setView()
-        view.addSubview(loginView)
-        loginView.snp.makeConstraints {
+    override func loadView() {
+        super.loadView()
+        view.addSubview(rootView)
+        rootView.snp.makeConstraints{
             $0.edges.equalToSuperview()
         }
     }
     
     override func setAction() {
-        loginView.kakaoLoginButton
+        rootView.kakaoLoginButton
             .tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                let homeViewController = HomeViewController(viewModel: homeViewModel)
-                self.navigationController?.pushViewController(homeViewController, animated: true)
+                self.navigationController?.pushViewController(MainTabBarController(), animated: true)
             }
             .store(in: cancelBag)
     }

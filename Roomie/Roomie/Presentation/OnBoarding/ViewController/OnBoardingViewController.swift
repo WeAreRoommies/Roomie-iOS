@@ -200,7 +200,7 @@ extension OnBoardingViewController:
                             transitionCompleted completed: Bool) {
         guard let currentViewController = pageViewController.viewControllers?.first,
             let currentView = currentViewController.view as? OnBoardingStepView,
-           let type = currentView.type else {
+            let type = currentView.type else {
             return
         }
         pageIndexSubject.send(type)

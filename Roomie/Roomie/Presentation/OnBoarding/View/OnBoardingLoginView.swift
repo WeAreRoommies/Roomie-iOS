@@ -16,7 +16,7 @@ final class OnBoardingLoginView: BaseView {
     
     private let textLogoImageView = UIImageView()
     private let titleLabel = UILabel()
-    private let onBoardingLoginImageView = UIImageView()
+    private let loginImageView = UIImageView()
     var kakaoLoginButton = UIButton()
     var appleLoginButton = UIButton()
     
@@ -35,7 +35,7 @@ final class OnBoardingLoginView: BaseView {
             $0.setText("한 집에서 시작하는 새로운 연결고리, 루미", style: .title2, color: .primaryPurple)
         }
         
-        onBoardingLoginImageView.do {
+        loginImageView.do {
             $0.image = .imgGomiExcited
         }
         
@@ -52,7 +52,7 @@ final class OnBoardingLoginView: BaseView {
         addSubviews(
             textLogoImageView,
             titleLabel,
-            onBoardingLoginImageView,
+            loginImageView,
             kakaoLoginButton,
             appleLoginButton
         )
@@ -70,14 +70,14 @@ final class OnBoardingLoginView: BaseView {
             $0.centerX.equalToSuperview()
         }
         
-        onBoardingLoginImageView.snp.makeConstraints {
+        loginImageView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(10)
             $0.centerX.equalToSuperview()
             $0.size.equalTo(240)
         }
         
         kakaoLoginButton.snp.makeConstraints {
-            $0.top.equalTo(onBoardingLoginImageView.snp.bottom).offset(20)
+            $0.top.equalTo(loginImageView.snp.bottom).offset(20)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(Screen.width(320))
             $0.height.equalTo(Screen.height(45))

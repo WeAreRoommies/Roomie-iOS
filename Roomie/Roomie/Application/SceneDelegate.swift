@@ -17,10 +17,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        let viewModel = OnBoardingViewModel()
-        let onboarding = OnBoardingViewController(viewModel: viewModel)
+        let onBoardingviewModel = OnBoardingViewModel()
+        let onBoardingViewController = OnBoardingViewController(viewModel: onBoardingviewModel)
         self.window = UIWindow(windowScene: windowScene)
-        self.window?.rootViewController = UINavigationController(rootViewController: onboarding)
+        self.window?.rootViewController = UINavigationController(rootViewController: onBoardingViewController)
         self.window?.makeKeyAndVisible()
     }
 }
