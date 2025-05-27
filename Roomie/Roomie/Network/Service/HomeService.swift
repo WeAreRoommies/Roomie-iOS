@@ -48,9 +48,57 @@ extension HomeService: HomeServiceProtocol {
     func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinnedResponseDTO>? {
         return try await self.request(with: .updatePinnedHouse(houseID: houseID))
     }
+    
+    func fetchLocationSearchData(query: String) async throws -> BaseResponseBody<MapSearchResponseDTO>? {
+        return try await self.request(with: .fetchLocationSearchData(query: query))
+    }
 }
 
 final class MockHomeService: HomeServiceProtocol {
+    func fetchLocationSearchData(query: String) async throws -> BaseResponseBody<MapSearchResponseDTO>? {
+        let mockData: MapSearchResponseDTO = MapSearchResponseDTO(
+            locations: [
+                Location(
+                    x: 0,
+                    y: 0,
+                    location: "이화여자대학교",
+                    address: "서울특별시 서대문구 대현동 11-1",
+                    roadAddress: "서울특별시 서대문구 이화여대길 52"
+                ),
+                Location(
+                    x: 0,
+                    y: 0,
+                    location: "건국대학교",
+                    address: "서울특별시 서대문구 대현동 11-1",
+                    roadAddress: "서울특별시 서대문구 이화여대길 52"
+                ),
+                Location(
+                    x: 0,
+                    y: 0,
+                    location: "성신여자대학교",
+                    address: "서울특별시 서대문구 대현동 11-1",
+                    roadAddress: "서울특별시 서대문구 이화여대길 52"
+                ),
+                Location(
+                    x: 0,
+                    y: 0,
+                    location: "홍익대학교",
+                    address: "서울특별시 서대문구 대현동 11-1",
+                    roadAddress: "서울특별시 서대문구 이화여대길 52"
+                ),
+                Location(
+                    x: 0,
+                    y: 0,
+                    location: "가톨릭대학교",
+                    address: "서울특별시 서대문구 대현동 11-1",
+                    roadAddress: "서울특별시 서대문구 이화여대길 52"
+                )
+            ]
+        )
+        
+        return BaseResponseBody(code: 200, message: "", data: mockData)
+    }
+    
     func fetchHomeData() async throws -> BaseResponseBody<HomeResponseDTO>? {
         let mockData: HomeResponseDTO =
         HomeResponseDTO(name: "김루미", location: "논현동", recentlyViewedHouses: [

@@ -13,13 +13,16 @@ final class HomeViewModel {
     // MARK: - Property
     
     private let service: HomeServiceProtocol
+    private let builder: MapRequestDTO.Builder
     
     let homeDataSubject = CurrentValueSubject<HomeResponseDTO?, Never>(nil)
     let pinnedInfoDataSubject = PassthroughSubject<(Int, Bool), Never>()
     private let didTapHouseDataSubject = PassthroughSubject<Int, Never>()
+    private let locationSearchDataSubject = PassthroughSubject<MapSearchResponseDTO, Never>()
     
-    init(service: HomeServiceProtocol) {
+    init(service: HomeServiceProtocol, builder: MapRequestDTO.Builder) {
         self.service = service
+        self.builder = builder
     }
 }
 
@@ -27,6 +30,8 @@ extension HomeViewModel: ViewModelType {
     struct Input {
         let viewWillAppear: AnyPublisher<Void, Never>
         let pinnedHouseIDSubject: AnyPublisher<Int, Never>
+        let searchTextFieldEnterSubject: AnyPublisher<String, Never>
+        let locationDidSelectSubject: AnyPublisher<String, Never>
     }
     
     struct Output {
@@ -34,6 +39,7 @@ extension HomeViewModel: ViewModelType {
         let houseList: AnyPublisher<[HomeHouse], Never>
         let houseCount: AnyPublisher<Int, Never>
         let pinnedInfo: AnyPublisher<(Int,Bool), Never>
+        let locationSearchData: AnyPublisher<MapSearchResponseDTO, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -46,6 +52,19 @@ extension HomeViewModel: ViewModelType {
         input.pinnedHouseIDSubject
             .sink { [weak self] houseID in
                 self?.updatePinnedHouse(houseID: houseID)
+            }
+            .store(in: cancelBag)
+        
+        input.searchTextFieldEnterSubject
+            .sink { [weak self] in
+                self?.featchSearchLocationData(query: $0)
+            }
+            .store(in: cancelBag)
+        
+        input.locationDidSelectSubject
+            .sink { [weak self] location in
+                guard let self = self else { return }
+                self.builder.setLocation(location)
             }
             .store(in: cancelBag)
         
@@ -85,11 +104,15 @@ extension HomeViewModel: ViewModelType {
         let pinnedInfoData = pinnedInfoDataSubject
             .eraseToAnyPublisher()
         
+        let locationSearchData = locationSearchDataSubject
+            .eraseToAnyPublisher()
+        
         return Output(
             userInfo: userInfo,
             houseList: houseListData,
             houseCount: houseCount,
-            pinnedInfo: pinnedInfoData
+            pinnedInfo: pinnedInfoData,
+            locationSearchData: locationSearchData
         )
     }
 }
@@ -101,6 +124,18 @@ private extension HomeViewModel {
                 guard let responseBody = try await service.fetchHomeData(),
                       let data = responseBody.data else { return }
                 homeDataSubject.send(data)
+            } catch {
+                print(">>> \(error.localizedDescription) : \(#function)")
+            }
+        }
+    }
+    
+    func featchSearchLocationData(query: String) {
+        Task {
+            do {
+                guard let responseBody = try await service.fetchLocationSearchData(query: query),
+                      let data = responseBody.data else { return }
+                locationSearchDataSubject.send(data)
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
             }
