@@ -23,6 +23,7 @@ final class LoginViewModel {
 extension LoginViewModel: ViewModelType {
     struct Input {
         let kakaoLoginButtonDidTapSubject: AnyPublisher<Void, Never>
+        let appleLoginResultSubject: AnyPublisher<String, Never>
     }
     
     struct Output {
@@ -48,6 +49,19 @@ extension LoginViewModel: ViewModelType {
                         }
                     }
                 }
+            }
+            .store(in: cancelBag)
+        
+        input.appleLoginResultSubject
+            .sink { [weak self] identityToken in
+                guard let self else { return }
+                print("identityToken: \(identityToken)")
+                self.authLogin(
+                    request: AuthLoginRequestDTO(
+                        provider: "APPLE",
+                        accessToken: identityToken
+                    )
+                )
             }
             .store(in: cancelBag)
         

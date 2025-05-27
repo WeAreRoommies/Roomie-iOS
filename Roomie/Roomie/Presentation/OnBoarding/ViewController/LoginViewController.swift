@@ -20,6 +20,8 @@ final class LoginViewController: BaseViewController {
     
     private let kakaoLoginButtonDidTap = PassthroughSubject<Void, Never>()
     
+    private let appleLoginResultSubject = PassthroughSubject<String, Never>()
+    
     private let viewModel: LoginViewModel
     
     private let cancelBag = CancelBag()
@@ -47,8 +49,6 @@ final class LoginViewController: BaseViewController {
         bindViewModel()
     }
     
-    // MARK: - Functions
-    
     override func setAction() {
         rootView.kakaoLoginButton
             .tapPublisher
@@ -57,13 +57,24 @@ final class LoginViewController: BaseViewController {
                 self.kakaoLoginButtonDidTap.send()
             }
             .store(in: cancelBag)
+        
+        rootView.appleLoginButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self else { return }
+                self.performAppleLogin()
+            }
+            .store(in: cancelBag)
     }
 }
+
+// MARK: - Functions
 
 private extension LoginViewController {
     func bindViewModel() {
         let input = LoginViewModel.Input(
-            kakaoLoginButtonDidTapSubject: kakaoLoginButtonDidTap.eraseToAnyPublisher()
+            kakaoLoginButtonDidTapSubject: kakaoLoginButtonDidTap.eraseToAnyPublisher(),
+            appleLoginResultSubject: appleLoginResultSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -77,24 +88,12 @@ private extension LoginViewController {
                 }
             }
             .store(in: cancelBag)
-        
-        rootView.appleLoginButton
-            .tapPublisher
-            .sink { [weak self] in
-                guard let self else { return }
-                self.appleLoginButtonDidTap()
-            }
-            .store(in: cancelBag)
     }
-}
-
-extension LoginViewController {
-    func appleLoginButtonDidTap() {
-        print("애플 로그인 시작")
-        
+    
+    func performAppleLogin() {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()
-        request.requestedScopes = []
+        request.requestedScopes = [.fullName]
         
         let authorizationController = ASAuthorizationController(authorizationRequests: [request])
         authorizationController.delegate = self
@@ -103,44 +102,39 @@ extension LoginViewController {
     }
 }
 
+// MARK: - ASAuthorizationControllerPresentationContextProviding
+
 extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
-    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+    func presentationAnchor(
+        for controller: ASAuthorizationController
+    ) -> ASPresentationAnchor {
         return self.view.window!
     }
 }
+
+// MARK: - ASAuthorizationControllerDelegate
 
 extension LoginViewController: ASAuthorizationControllerDelegate {
     func authorizationController(
         controller: ASAuthorizationController,
         didCompleteWithAuthorization authorization: ASAuthorization
     ) {
-        guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential else {
-            return
-        }
+        guard let appleIDCredential = authorization.credential
+                as? ASAuthorizationAppleIDCredential else { return }
         
         let identityToken = appleIDCredential.identityToken.flatMap {
             String(data: $0, encoding: .utf8)
         }
         
-        print("✅ Apple 로그인 성공!!!")
-        print("IdentityToken: \(String(describing: identityToken))")
-        
-        /*
-         Todo: Keychain에 애플 로그인 정보 저장
-         */
-
-        /*
-         Todo: 서버 통신 메서드 호출
-         */
+        if let identityToken {
+            appleLoginResultSubject.send(identityToken)
+        }
     }
     
     func authorizationController(
         controller: ASAuthorizationController,
         didCompleteWithError error: Error
     ) {
-        /*
-         Todo: 에러 핸들링 (ex. alert창)
-         */
         print("🚨Apple 로그인 실패: \(error.localizedDescription)")
     }
 }
