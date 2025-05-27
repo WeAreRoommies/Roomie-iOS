@@ -15,7 +15,7 @@ final class MainTabBarController: UITabBarController {
     // MARK: - Property
     
     let homeViewController: HomeViewController = HomeViewController(
-        viewModel: HomeViewModel(service: MockHomeService())
+        viewModel: HomeViewModel(service: MockHomeService(), builder: MapRequestDTO.Builder.shared)
     ).then {
         $0.tabBarItem.title = "홈"
         $0.tabBarItem.image = .icnHomeLine24
