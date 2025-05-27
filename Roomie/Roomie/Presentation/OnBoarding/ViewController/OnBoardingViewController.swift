@@ -74,7 +74,9 @@ final class OnBoardingViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                let navigationViewController = LoginViewController()
+                let navigationViewController = LoginViewController(
+                    viewModel: LoginViewModel(service: AuthService())
+                )
                 self.navigationController?.pushViewController(navigationViewController, animated: true)
             }
             .store(in: cancelBag)
