@@ -37,8 +37,7 @@ extension LoginViewModel: ViewModelType {
                     UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
                         if let error = error {
                             print(">>> \(error.localizedDescription) : \(#function)")
-                        }
-                        else {
+                        } else {
                             guard let oauthToken = oauthToken else { return }
                             self.authLogin(
                                 request: AuthLoginRequestDTO(
