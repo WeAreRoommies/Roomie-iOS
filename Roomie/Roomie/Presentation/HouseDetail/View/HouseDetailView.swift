@@ -199,7 +199,7 @@ final class HouseDetailView: BaseView {
             roomStatusTitleLabel,
             roomStatusTableView,
             facilityTitleLabel,
-            facilityStackView,
+            facilityStackView
         )
         
         photoContainerView.addSubview(photoImageView)
