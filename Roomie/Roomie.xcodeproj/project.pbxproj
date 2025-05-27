@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		42D5EA59A4989AF59719BD17 /* libPods-Roomie.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2333A10B8CCAE5AB88BA7974 /* libPods-Roomie.a */; };
+		A3128C052DE4A2B800DA4CA7 /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = A3128C042DE4A2B800DA4CA7 /* KakaoSDK */; };
+		A3128C072DE4A2B800DA4CA7 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A3128C062DE4A2B800DA4CA7 /* KakaoSDKAuth */; };
+		A3128C092DE4A2B800DA4CA7 /* KakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = A3128C082DE4A2B800DA4CA7 /* KakaoSDKCommon */; };
 		A346BD422D2E23F0002BA445 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD412D2E23F0002BA445 /* SnapKit */; };
 		A346BD452D2E23FD002BA445 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD442D2E23FD002BA445 /* Then */; };
 		A346BD482D2E2449002BA445 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD472D2E2449002BA445 /* Moya */; };
@@ -16,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		0ABCF9387F76F9D8837E2F9E /* Pods-Roomie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roomie.debug.xcconfig"; path = "Target Support Files/Pods-Roomie/Pods-Roomie.debug.xcconfig"; sourceTree = "<group>"; };
+		2333A10B8CCAE5AB88BA7974 /* libPods-Roomie.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Roomie.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A346BA412D2CDF13002BA445 /* Roomie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Roomie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8959DCCF833BE3AC6F237CE /* Pods-Roomie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roomie.release.xcconfig"; path = "Target Support Files/Pods-Roomie/Pods-Roomie.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -46,11 +51,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3128C092DE4A2B800DA4CA7 /* KakaoSDKCommon in Frameworks */,
+				A3128C072DE4A2B800DA4CA7 /* KakaoSDKAuth in Frameworks */,
 				A346BD4B2D2E2477002BA445 /* Kingfisher in Frameworks */,
 				A346BD422D2E23F0002BA445 /* SnapKit in Frameworks */,
 				A346BD452D2E23FD002BA445 /* Then in Frameworks */,
 				A346BD4E2D2E2489002BA445 /* CombineCocoa in Frameworks */,
 				A346BD482D2E2449002BA445 /* Moya in Frameworks */,
+				A3128C052DE4A2B800DA4CA7 /* KakaoSDK in Frameworks */,
+				42D5EA59A4989AF59719BD17 /* libPods-Roomie.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,12 +75,21 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		983635455A99347013C271DE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2333A10B8CCAE5AB88BA7974 /* libPods-Roomie.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A346BA382D2CDF13002BA445 = {
 			isa = PBXGroup;
 			children = (
 				A346BA432D2CDF13002BA445 /* Roomie */,
 				A346BA422D2CDF13002BA445 /* Products */,
 				9058F962AE18635590BD14B9 /* Pods */,
+				983635455A99347013C271DE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -138,6 +156,7 @@
 				A346BD462D2E2449002BA445 /* XCRemoteSwiftPackageReference "Moya" */,
 				A346BD492D2E2477002BA445 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				A346BD4C2D2E2489002BA445 /* XCRemoteSwiftPackageReference "CombineCocoa" */,
+				A3128C032DE4A2B800DA4CA7 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A346BA422D2CDF13002BA445 /* Products */;
@@ -429,6 +448,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A3128C032DE4A2B800DA4CA7 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.24.2;
+			};
+		};
 		A346BD402D2E23F0002BA445 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
@@ -472,6 +499,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A3128C042DE4A2B800DA4CA7 /* KakaoSDK */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3128C032DE4A2B800DA4CA7 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDK;
+		};
+		A3128C062DE4A2B800DA4CA7 /* KakaoSDKAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3128C032DE4A2B800DA4CA7 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKAuth;
+		};
+		A3128C082DE4A2B800DA4CA7 /* KakaoSDKCommon */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3128C032DE4A2B800DA4CA7 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKCommon;
+		};
 		A346BD412D2E23F0002BA445 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A346BD402D2E23F0002BA445 /* XCRemoteSwiftPackageReference "SnapKit" */;
