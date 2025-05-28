@@ -10,13 +10,17 @@ import UIKit
 import SnapKit
 import Combine
 
+import AuthenticationServices
+
 final class LoginViewController: BaseViewController {
     
     // MARK: - Property
     
     private let rootView = LoginView()
     
-    private let kakaoLoginButtonDidTap = PassthroughSubject<Void, Never>()
+    private let kakaoLoginButtonTapSubject = PassthroughSubject<Void, Never>()
+    
+    private let appleLoginTokenSubject = PassthroughSubject<String, Never>()
     
     private let viewModel: LoginViewModel
     
@@ -45,23 +49,32 @@ final class LoginViewController: BaseViewController {
         bindViewModel()
     }
     
-    // MARK: - Functions
-    
     override func setAction() {
         rootView.kakaoLoginButton
             .tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                self.kakaoLoginButtonDidTap.send()
+                self.kakaoLoginButtonTapSubject.send()
+            }
+            .store(in: cancelBag)
+        
+        rootView.appleLoginButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self else { return }
+                self.performAppleLogin()
             }
             .store(in: cancelBag)
     }
 }
 
+// MARK: - Functions
+
 private extension LoginViewController {
     func bindViewModel() {
         let input = LoginViewModel.Input(
-            kakaoLoginButtonDidTapSubject: kakaoLoginButtonDidTap.eraseToAnyPublisher()
+            kakaoLoginButtonTapSubject: kakaoLoginButtonTapSubject.eraseToAnyPublisher(),
+            appleLoginTokenSubject: appleLoginTokenSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -75,5 +88,53 @@ private extension LoginViewController {
                 }
             }
             .store(in: cancelBag)
+    }
+    
+    func performAppleLogin() {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName]
+        
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
+    }
+}
+
+// MARK: - ASAuthorizationControllerPresentationContextProviding
+
+extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(
+        for controller: ASAuthorizationController
+    ) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+}
+
+// MARK: - ASAuthorizationControllerDelegate
+
+extension LoginViewController: ASAuthorizationControllerDelegate {
+    func authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithAuthorization authorization: ASAuthorization
+    ) {
+        guard let appleIDCredential = authorization.credential
+                as? ASAuthorizationAppleIDCredential else { return }
+        
+        let identityToken = appleIDCredential.identityToken.flatMap {
+            String(data: $0, encoding: .utf8)
+        }
+        
+        if let identityToken {
+            appleLoginTokenSubject.send(identityToken)
+        }
+    }
+    
+    func authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithError error: Error
+    ) {
+        print("🚨Apple 로그인 실패: \(error.localizedDescription)")
     }
 }
