@@ -80,9 +80,15 @@ private extension LoginViewModel {
                 guard let responseBody = try await service.authLogin(request: request),
                       let data = responseBody.data else { return }
                 isLoginSucceedSubject.send(true)
+                saveTokens(accessToken: data.accessToken, refreshToken: data.refreshToken)
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
             }
         }
+    }
+    
+    func saveTokens(accessToken: String, refreshToken: String) {
+        KeychainManager.shared.create(forKey: .accessToken, token: accessToken)
+        KeychainManager.shared.create(forKey: .refreshToken, token: refreshToken)
     }
 }
