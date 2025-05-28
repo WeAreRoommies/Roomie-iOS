@@ -18,9 +18,9 @@ final class LoginViewController: BaseViewController {
     
     private let rootView = LoginView()
     
-    private let kakaoLoginButtonDidTap = PassthroughSubject<Void, Never>()
+    private let kakaoLoginButtonTapSubject = PassthroughSubject<Void, Never>()
     
-    private let appleLoginResultSubject = PassthroughSubject<String, Never>()
+    private let appleLoginTokenSubject = PassthroughSubject<String, Never>()
     
     private let viewModel: LoginViewModel
     
@@ -54,7 +54,7 @@ final class LoginViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                self.kakaoLoginButtonDidTap.send()
+                self.kakaoLoginButtonTapSubject.send()
             }
             .store(in: cancelBag)
         
@@ -73,8 +73,8 @@ final class LoginViewController: BaseViewController {
 private extension LoginViewController {
     func bindViewModel() {
         let input = LoginViewModel.Input(
-            kakaoLoginButtonDidTapSubject: kakaoLoginButtonDidTap.eraseToAnyPublisher(),
-            appleLoginResultSubject: appleLoginResultSubject.eraseToAnyPublisher()
+            kakaoLoginButtonTapSubject: kakaoLoginButtonTapSubject.eraseToAnyPublisher(),
+            appleLoginTokenSubject: appleLoginTokenSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -127,7 +127,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
         }
         
         if let identityToken {
-            appleLoginResultSubject.send(identityToken)
+            appleLoginTokenSubject.send(identityToken)
         }
     }
     
