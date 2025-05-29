@@ -11,6 +11,7 @@ import Moya
 
 enum AuthTargetType {
     case authLogin(request: AuthLoginRequestDTO)
+    case authReissue(refreshToken: String)
 }
 
 extension AuthTargetType: TargetType {
@@ -22,12 +23,16 @@ extension AuthTargetType: TargetType {
         switch self {
         case .authLogin:
             return "/auth/oauth/login"
+        case .authReissue:
+            return "/auth/oauth/reissue"
         }
     }
     
     var method: Moya.Method {
         switch self {
         case .authLogin:
+            return .post
+        case .authReissue:
             return .post
         }
     }
@@ -36,10 +41,20 @@ extension AuthTargetType: TargetType {
         switch self {
         case .authLogin(let request):
             return .requestJSONEncodable(request)
+        case .authReissue:
+            return .requestPlain
         }
     }
     
     var headers: [String : String]? {
-        return ["Content-Type": "application/json"]
+        switch self {
+        case .authLogin:
+            return ["Content-Type": "application/json"]
+        case .authReissue(let refreshToken):
+            return [
+                "Content-Type": "application/json",
+                "Authorization": "Bearer \(refreshToken)"
+            ]
+        }
     }
 }
