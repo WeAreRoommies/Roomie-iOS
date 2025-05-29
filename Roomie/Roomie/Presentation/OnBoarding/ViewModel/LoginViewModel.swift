@@ -88,7 +88,6 @@ private extension LoginViewModel {
     }
     
     func saveTokens(accessToken: String, refreshToken: String) {
-        KeychainManager.shared.create(forKey: .accessToken, token: accessToken)
-        KeychainManager.shared.create(forKey: .refreshToken, token: refreshToken)
+        TokenManager.shared.saveTokens(accessToken: accessToken, refreshToken: refreshToken)
     }
 }
