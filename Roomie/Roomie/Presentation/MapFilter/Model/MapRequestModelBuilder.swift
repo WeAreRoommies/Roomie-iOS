@@ -22,7 +22,7 @@ extension MapRequestDTO {
         private var excludeFull: Bool = false
         
         @discardableResult
-        func setLocation(_ location: String) -> Self {
+        func setLocation(_ location: String?) -> Self {
             self.location = location
             return self
         }
