@@ -106,8 +106,8 @@ final class MockMapSearchService: MapSearchServiceProtocol {
             houses: [
                 House(
                     houseID: 1,
-                    x: 37.555184166,
-                    y: 126.936910322,
+                    latitude: 37.555184166,
+                    longitude: 126.936910322,
                     monthlyRent: "35~50",
                     deposit: "200~300",
                     occupancyTypes: "2인실",
@@ -121,8 +121,8 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                 ),
                 House(
                     houseID: 2,
-                    x: 37.552502661,
-                    y: 126.934998613,
+                    latitude: 37.552502661,
+                    longitude: 126.934998613,
                     monthlyRent: "25~40",
                     deposit: "50~100",
                     occupancyTypes: "4인실",
@@ -136,8 +136,8 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                 ),
                 House(
                     houseID: 3,
-                    x: 37.553909,
-                    y: 126.933960,
+                    latitude: 37.553909,
+                    longitude: 126.933960,
                     monthlyRent: "50~80",
                     deposit: "300~500",
                     occupancyTypes: "1인실",
@@ -151,8 +151,8 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                 ),
                 House(
                     houseID: 4,
-                    x: 37.556304,
-                    y: 126.943263,
+                    latitude: 37.556304,
+                    longitude: 126.943263,
                     monthlyRent: "30~50",
                     deposit: "100~300",
                     occupancyTypes: "2인실",
@@ -166,8 +166,8 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                 ),
                 House(
                     houseID: 5,
-                    x: 37.547670,
-                    y: 126.942370,
+                    latitude: 37.547670,
+                    longitude: 126.942370,
                     monthlyRent: "50~70",
                     deposit: "50~100",
                     occupancyTypes: "3인실",
