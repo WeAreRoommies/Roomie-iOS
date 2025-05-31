@@ -11,23 +11,24 @@ extension MapRequestDTO {
     final class Builder {
         static let shared = MapRequestDTO.Builder()
         
-        private var location: String = "서울특별시 마포구 노고산동"
-        private var moodTag: String? = nil
+        private var location: String? = nil
+        private var moodTag: [String] = []
         private var depositRange: MinMaxRange = MinMaxRange(min: 0, max: 500)
         private var monthlyRentRange: MinMaxRange = MinMaxRange(min: 0, max: 150)
         private var genderPolicy: [String] = []
         private var preferredDate: String? = nil
         private var occupancyTypes: [String] = []
         private var contractPeroid: [Int] = []
+        private var excludeFull: Bool = false
         
         @discardableResult
-        func setLocation(_ location: String) -> Self {
+        func setLocation(_ location: String?) -> Self {
             self.location = location
             return self
         }
         
         @discardableResult
-        func setMoodTag(_ moodTag: String?) -> Self {
+        func setMoodTag(_ moodTag: [String]) -> Self {
             self.moodTag = moodTag
             return self
         }
@@ -77,7 +78,8 @@ extension MapRequestDTO {
                 genderPolicy: genderPolicy,
                 preferredDate: preferredDate,
                 occupancyTypes: occupancyTypes,
-                contractPeriod: contractPeroid
+                contractPeriod: contractPeroid,
+                excludeFull: excludeFull
             )
         }
     }
