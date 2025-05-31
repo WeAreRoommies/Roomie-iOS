@@ -1,5 +1,5 @@
 //
-//  LocationSearchViewController.swift
+//  LocationSearchSheetViewController.swift
 //  Roomie
 //
 //  Created by MaengKim on 5/26/25.
@@ -10,15 +10,15 @@ import Combine
 
 import CombineCocoa
 
-protocol LocationSearchViewControllerDelegate: AnyObject {
+protocol LocationSearchSheetViewControllerDelegate: AnyObject {
     func didSelectLocation(location: String, lat: Double, lng: Double)
 }
 
-final class LocationSearchViewController: BaseViewController {
+final class LocationSearchSheetViewController: BaseViewController {
     
     // MARK: - Property
     
-    private let rootView = LocationSearchView()
+    private let rootView = LocationSearchSheetView()
     
     private let viewModel: HomeViewModel
     
@@ -26,10 +26,10 @@ final class LocationSearchViewController: BaseViewController {
     
     private lazy var dataSource = createDiffableDataSource()
     
-    weak var delegate: LocationSearchViewControllerDelegate?
+    weak var delegate: LocationSearchSheetViewControllerDelegate?
     
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 40
-    private let cellHeight: CGFloat = 118
+    final let cellHeight: CGFloat = 118
     final let contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     
     private let searchTextFieldEnterSubject = PassthroughSubject<String, Never>()
@@ -50,8 +50,6 @@ final class LocationSearchViewController: BaseViewController {
     
     override func loadView() {
         view = rootView
-
-        navigationController?.navigationBar.isTranslucent = false
     }
     
     override func viewDidLoad() {
@@ -62,12 +60,6 @@ final class LocationSearchViewController: BaseViewController {
         setRegister()
         bindViewModel()
         updateEmptyView(isEmpty: true)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     // MARK: - Functions
@@ -103,7 +95,7 @@ final class LocationSearchViewController: BaseViewController {
     }
 }
 
-private extension LocationSearchViewController {
+private extension LocationSearchSheetViewController {
     func setRegister() {
         rootView.collectionView.register(
             MapSearchCollectionViewCell.self,
@@ -161,7 +153,7 @@ private extension LocationSearchViewController {
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
-extension LocationSearchViewController: UICollectionViewDelegateFlowLayout {
+extension LocationSearchSheetViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,

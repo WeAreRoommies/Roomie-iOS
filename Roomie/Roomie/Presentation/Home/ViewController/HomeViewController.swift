@@ -90,7 +90,8 @@ final class HomeViewController: BaseViewController {
         locationButton
             .tapPublisher
             .sink { [weak self] in
-                self?.presentLocationSearchSheet()
+                guard let self = self else { return }
+                self.presentLocationSearchSheet()
             }
             .store(in: cancelBag)
         
@@ -332,14 +333,13 @@ private extension HomeViewController {
     }
     
     func presentLocationSearchSheet() {
-        let locationViewController = LocationSearchViewController(
-            viewModel: HomeViewModel(service: MockHomeService(),
+        let locationViewController = LocationSearchSheetViewController(
+            viewModel: HomeViewModel(service: HomeService(),
                                                builder: MapRequestDTO.Builder.shared)
         )
         locationViewController.delegate = self
         if let sheet = locationViewController.sheetPresentationController {
             sheet.detents = [.large()]
-            sheet.prefersGrabberVisible = true
             sheet.prefersGrabberVisible = false
             sheet.preferredCornerRadius = 20
         }
@@ -407,8 +407,8 @@ extension HomeViewController: UIScrollViewDelegate {
     }
 }
 
-extension HomeViewController: LocationSearchViewControllerDelegate {
+extension HomeViewController: LocationSearchSheetViewControllerDelegate {
     func didSelectLocation(location: String, lat: Double, lng: Double) {
-        //추후 연결...
+        // TODO: - 서버 작업 완료 시 추후 연결
     }
 }

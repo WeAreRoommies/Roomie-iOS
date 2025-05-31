@@ -1,5 +1,5 @@
 //
-//  LocationSearchView.swift
+//  LocationSearchSheetView.swift
 //  Roomie
 //
 //  Created by MaengKim on 5/26/25.
@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class LocationSearchView: BaseView {
+final class LocationSearchSheetView: BaseView {
     
     // MARK: - UIComponent
     
@@ -27,7 +27,7 @@ final class LocationSearchView: BaseView {
         }
     )
     
-    let emptyView = LocationSearchEmptyView()
+    let emptyView = LocationSearchSheetEmptyView()
     
     // MARK: - UISetting
     

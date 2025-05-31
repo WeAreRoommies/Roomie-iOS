@@ -1,5 +1,5 @@
 //
-//  LocationSearchEmptyView.swift
+//  LocationSearchSheetEmptyView.swift
 //  Roomie
 //
 //  Created by MaengKim on 5/26/25.
@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class LocationSearchEmptyView: BaseView {
+final class LocationSearchSheetEmptyView: BaseView {
     
     // MARK: - UIComponent
     
@@ -42,7 +42,8 @@ final class LocationSearchEmptyView: BaseView {
         emptyHomeImageView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(132)
             $0.centerX.equalToSuperview()
-            $0.size.equalTo(180)
+            $0.height.equalTo(Screen.height(180))
+            $0.width.equalTo(Screen.width(180))
         }
         
         titleLabel.snp.makeConstraints {
