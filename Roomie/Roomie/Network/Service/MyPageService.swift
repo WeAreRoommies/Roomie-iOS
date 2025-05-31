@@ -47,7 +47,7 @@ extension MyPageService: MyPageServiceProtocol {
 
 final class MockMyPageService: MyPageServiceProtocol {
     func fetchMyPageData() async throws -> BaseResponseBody<MyPageResponseDTO>? {
-        let mockData = MyPageResponseDTO(name: "김루미", socialType: "KAKAO")
+        let mockData = MyPageResponseDTO(nickname: "김루미", socialType: "KAKAO")
         return BaseResponseBody(code: 200, message: "", data: mockData)
     }
 }
