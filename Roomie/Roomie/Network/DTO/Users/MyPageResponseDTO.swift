@@ -8,5 +8,5 @@
 import Foundation
 
 struct MyPageResponseDTO: ResponseModelType {
-    let name, socialType: String
+    let nickname, socialType: String
 }
