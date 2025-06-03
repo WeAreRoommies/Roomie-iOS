@@ -14,10 +14,17 @@ final class TokenManager {
     
     private init() {}
     
-    /// 로그인 성공 시 토큰을 저장합니다.
-    func saveTokens(accessToken: String, refreshToken: String) {
+    /// 로그인 성공 후 발급받은 토큰을 Keychain에 저장합니다.
+    ///
+    /// - Parameters:
+    ///   - accessToken: 사용자 인증에 사용되는 액세스 토큰입니다. 필수로 저장됩니다.
+    ///   - refreshToken: 액세스 토큰 만료 시 재발급에 사용되는 리프레시 토큰입니다. 값이 있는 경우에만 저장됩니다.
+    func saveTokens(accessToken: String, refreshToken: String? = nil) {
         keychain.create(forKey: .accessToken, token: accessToken)
-        keychain.create(forKey: .refreshToken, token: refreshToken)
+        
+        if let refreshToken {
+            keychain.create(forKey: .refreshToken, token: refreshToken)
+        }
     }
     
     /// 저장된 accessToken을 반환합니다.
