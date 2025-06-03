@@ -40,9 +40,7 @@ final class AuthService {
 }
 
 extension AuthService: AuthServiceProtocol {
-    func authLogin(
-        request: AuthLoginRequestDTO
-    ) async throws -> BaseResponseBody<AuthLoginResponseDTO>? {
+    func authLogin(request: AuthLoginRequestDTO) async throws -> BaseResponseBody<AuthLoginResponseDTO>? {
         return try await self.request(with: .authLogin(request: request))
     }
     

@@ -9,5 +9,4 @@ import Foundation
 
 struct AuthReissueResponseDTO: ResponseModelType {
     let accessToken: String
-    let refreshToken: String
 }
