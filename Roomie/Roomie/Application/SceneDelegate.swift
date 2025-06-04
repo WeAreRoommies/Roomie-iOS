@@ -19,10 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        let onBoardingViewController = OnBoardingViewController()
-        self.window = UIWindow(windowScene: windowScene)
-        self.window?.rootViewController = UINavigationController(rootViewController: onBoardingViewController)
-        self.window?.makeKeyAndVisible()
+        configureNotificationCenter()
+        configureRootWindow(in: windowScene)
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
@@ -31,5 +29,65 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 _ = AuthController.handleOpenUrl(url: url)
             }
         }
+    }
+}
+
+extension SceneDelegate {
+    @objc
+    private func handleLogout() {
+        TokenManager.shared.clearTokens()
+        DispatchQueue.main.async {
+            self.updateRootViewController()
+        }
+    }
+
+    @objc
+    private func handleLogin(_ notification: Notification) {
+        let fromManualLogin = notification.userInfo?["manualLogin"] as? Bool ?? false
+        
+        DispatchQueue.main.async {
+            self.updateRootViewController()
+            
+            if fromManualLogin {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    Toast.show(message: "로그인에 성공했어요", bottomInset: Screen.height(100))
+                }
+            }
+        }
+    }
+    
+    private func configureNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleLogout),
+            name: Notification.shouldLogout,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleLogin),
+            name: Notification.shouldLogin,
+            object: nil
+        )
+    }
+    
+    private func configureRootWindow(in windowScene: UIWindowScene) {
+        let window = UIWindow(windowScene: windowScene)
+        self.window = window
+        updateRootViewController()
+        window.makeKeyAndVisible()
+    }
+
+    private func updateRootViewController() {
+        var rootViewController = UIViewController()
+        
+        if TokenManager.shared.isSessionAvailable {
+            rootViewController = MainTabBarController()
+        } else {
+            rootViewController = UINavigationController(rootViewController: OnBoardingViewController())
+        }
+        
+        window?.rootViewController = rootViewController
     }
 }
