@@ -15,13 +15,13 @@ final class Interceptor: RequestInterceptor {
     private init() {}
     
     let retryLimit = 3
-    let retryDelay: TimeInterval = 1
     
     func adapt(
         _ urlRequest: URLRequest,
         for session: Session,
         completion: @escaping (Result<URLRequest, Error>) -> Void
     ) {
+        print("➡️[Interceptor] - adapt")
         var urlRequest = urlRequest
         
         if let accessToken = TokenManager.shared.fetchAccessToken() {
@@ -41,52 +41,97 @@ final class Interceptor: RequestInterceptor {
             RetryResult
         ) -> Void
     ) {
-        print("----------------- [ retry 진입 ] -----------------")
+        print("🔄[Interceptor] - retry start")
         guard let response = request.task?.response as? HTTPURLResponse,response.statusCode == 401 else {
             return completion(.doNotRetryWithError(error))
         }
         
         guard request.retryCount < retryLimit else {
-                return completion(.doNotRetryWithError(error))
-            }
+            return completion(.doNotRetryWithError(error))
+        }
 
         Task {
             do {
-                let (accessToken, refreshToken) = try await authReissue()
-                TokenManager.shared.saveTokens(accessToken: accessToken, refreshToken: refreshToken)
-                completion(.retryWithDelay(retryDelay))
+                let accessToken = try await authReissue()
+                print("▶️[Interceptor] - retry success, token reissued")
+                TokenManager.shared.saveTokens(accessToken: accessToken)
+                completion(.retry)
                 
-            } catch  {
-                print("토큰 재발급 오류: \(error.localizedDescription)")
+            } catch let error as TokenError {
+                print("⏸️[Interceptor] - retry failed: \(error.description)")
+                switch error {
+                case .noRefreshToken, .refreshTokenExpired, .userNotFound:
+                    NotificationCenter.default.post(name: Notification.shouldLogout, object: nil)
+                    await Toast.show(message: "세션이 만료되었어요. 다시 로그인해주세요")
+                    break
+                case .reissueFailed:
+                    await Toast.show(message: "서버 오류입니다. 다시 시도해주세요")
+                    break
+                case .unknownError:
+                    await Toast.show(message: "요청에 실패했습니다. 잠시 후 다시 시도해주세요")
+                    break
+                }
+                
+                completion(.doNotRetryWithError(error))
+            } catch {
+                await Toast.show(message: "예기치 못한 오류가 발생했어요")
                 completion(.doNotRetryWithError(error))
             }
         }
     }
 }
 
-private extension Interceptor {
-    func authReissue() async throws -> (String, String) {
-        /*
-         Todo: 에러처리 필요
-         */
+extension Interceptor {
+    enum TokenError: Error {
+        case noRefreshToken
+        case reissueFailed
+        case refreshTokenExpired
+        case userNotFound
+        case unknownError(error: Error)
+        
+        var description: String {
+            switch self {
+            case .noRefreshToken:
+                return "저장된 refreshToken이 없습니다."
+            case .reissueFailed:
+                return "토큰 재발급 요청에 실패했습니다."
+            case .refreshTokenExpired:
+                return "refresthToken이 만료되었습니다."
+            case .userNotFound:
+                return "해당 유저를 찾을 수 없습니다."
+            case .unknownError:
+                return "알 수 없는 에러가 발생했습니다."
+            }
+        }
+    }
+    
+    private func authReissue() async throws -> String {
         do {
             guard let refreshToken = TokenManager.shared.fetchRefreshToken() else {
-                throw NSError(domain: "RefreshTokenError", code: -1, userInfo: [NSLocalizedDescriptionKey: "refreshToken 없음"])
+                throw TokenError.noRefreshToken
             }
             
-            /*
-             Todo: 의존성 주입 필요
-             */
-            guard let responseBody = try await AuthService().authReissue(refreshToken: refreshToken),
-                  let data = responseBody.data else {
-                
-                throw NSError(domain: "ReissueError", code: -1, userInfo: [NSLocalizedDescriptionKey: "재발급 데이터 없음"])
+            guard let response = try await AuthService().authReissue(refreshToken: refreshToken) else {
+                throw TokenError.reissueFailed
             }
             
-            return (data.accessToken, data.refreshToken)
+            guard let data = response.data else {
+                switch response.code {
+                case 40102:
+                    throw TokenError.refreshTokenExpired
+                case 40403:
+                    throw TokenError.userNotFound
+                default:
+                    throw TokenError.reissueFailed
+                }
+            }
             
-        } catch {
+            return data.accessToken
+            
+        } catch let error as TokenError {
             throw error
+        } catch {
+            throw TokenError.unknownError(error: error)
         }
     }
 }
