@@ -11,8 +11,11 @@ import Moya
 
 final class HousesService {
     let provider: MoyaProvider<HousesTargetType>
-    
-    init(provider: MoyaProvider<HousesTargetType> = MoyaProvider(plugins: [MoyaLoggingPlugin()])) {
+
+    init(provider: MoyaProvider<HousesTargetType> = MoyaProvider(
+        session: Session(interceptor: Interceptor.shared),
+        plugins: [MoyaLoggingPlugin()])
+    ) {
         self.provider = provider
     }
     
