@@ -43,9 +43,12 @@ final class TokenManager {
         keychain.delete(forKey: .refreshToken)
     }
     
-    /// accessToken이 저장되어 있는지 확인합니다.
-    /// 로그인 확인용으로 사용합니다.
-    var hasValidAccessToken: Bool {
-        return fetchAccessToken()?.isEmpty == false
+    /// accessToken과 refreshToken이 모두 존재하는지 확인합니다.
+    /// 자동 로그인 가능한 상태인지를 판별합니다.
+    var isSessionAvailable: Bool {
+        guard let accessToken = fetchAccessToken(), !accessToken.isEmpty,
+              let refreshToken = fetchRefreshToken(), !refreshToken.isEmpty else { return false }
+        
+        return true
     }
 }
