@@ -12,9 +12,10 @@ import Moya
 final class HomeService {
     let provider: MoyaProvider<HomeTargetType>
     
-//    private let provider = MoyaProvider<SearchTargetType>.init(session: Session(interceptor: APIInterceptor.shared), plugins: [MoyaPlugin()])
-    
-    init(provider: MoyaProvider<HomeTargetType> = MoyaProvider(session: Session(interceptor: Interceptor.shared), plugins: [MoyaLoggingPlugin()])) {
+    init(provider: MoyaProvider<HomeTargetType> = MoyaProvider(
+        session: Session(interceptor: Interceptor.shared),
+        plugins: [MoyaLoggingPlugin()])
+    ) {
         self.provider = provider
     }
     
