@@ -12,7 +12,10 @@ import Moya
 final class MapsService {
     let provider: MoyaProvider<MapsTargetType>
     
-    init(provider: MoyaProvider<MapsTargetType> = MoyaProvider(plugins: [MoyaLoggingPlugin()])) {
+    init(provider: MoyaProvider<MapsTargetType> = MoyaProvider(
+        session: Session(interceptor: Interceptor.shared),
+        plugins: [MoyaLoggingPlugin()])
+    ) {
         self.provider = provider
     }
     
