@@ -74,7 +74,6 @@ private extension LoginViewModel {
             do {
                 guard let responseBody = try await service.authLogin(request: request),
                       let data = responseBody.data else { return }
-                isLoginSucceedSubject.send(true)
                 saveTokens(accessToken: data.accessToken, refreshToken: data.refreshToken)
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
@@ -84,6 +83,8 @@ private extension LoginViewModel {
     
     func saveTokens(accessToken: String, refreshToken: String) {
         TokenManager.shared.saveTokens(accessToken: accessToken, refreshToken: refreshToken)
+        isLoginSucceedSubject.send(true)
+        NotificationCenter.default.post(name: Notification.shouldLogin, object: nil)
     }
     
     func performAppleLogin() {

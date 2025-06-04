@@ -81,10 +81,13 @@ private extension LoginViewController {
         
         output.isLoginSucceedSubject
             .receive(on: RunLoop.main)
-            .sink { [weak self] isSucceed in
-                guard let self = self else { return }
+            .sink { isSucceed in
                 if isSucceed {
-                    self.navigationController?.pushViewController(MainTabBarController(), animated: true)
+                    NotificationCenter.default.post(
+                        name: Notification.shouldLogin,
+                        object: nil,
+                        userInfo: ["manualLogin": true]
+                    )
                 }
             }
             .store(in: cancelBag)
