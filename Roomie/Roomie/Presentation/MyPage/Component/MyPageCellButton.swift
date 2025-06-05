@@ -25,7 +25,7 @@ final class MyPageCellButton: BaseView {
     private let titleStackView = UIStackView()
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
-    private let nextImageView = UIImageView(image: .icnIn)
+    private let nextImageView = UIImageView()
     private let myPageButton = UIButton()
     
     // MARK: - Initializer

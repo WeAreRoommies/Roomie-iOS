@@ -24,7 +24,7 @@ final class MyAccountCellButton: UIView {
     
     private let titleLabel = UILabel()
     private let contentLabel = UILabel()
-    private let nextImageView = UIImageView(image: .icnIn)
+    private let nextImageView = UIImageView()
     private let myAccountButton = UIButton()
     
     // MARK: - Initializer
