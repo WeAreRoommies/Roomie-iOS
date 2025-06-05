@@ -58,7 +58,7 @@ final class MyAccountTypeView: UIView {
     
     // MARK: - functions
     
-    private func configure(socialType: SocialType = .kakao) {
+    private func configure(socialType: SocialType = .apple) {
         contentImageView.image = (socialType == .apple) ? .icnApple : .icnKakao
         contentLabel.updateText((socialType == .apple) ? "Apple" : "카카오톡")
     }
@@ -67,7 +67,7 @@ final class MyAccountTypeView: UIView {
     
     private func setStyle() {
         titleLabel.do {
-            $0.setText("계정 연동", style: .body2, color: .grayscale12)
+            $0.setText("계정 연동", style: .body1, color: .grayscale7)
         }
         
         contentStackView.do {
