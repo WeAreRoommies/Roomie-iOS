@@ -12,7 +12,10 @@ import Moya
 final class MyPageService {
     let provider: MoyaProvider<MyPageTargetType>
     
-    init(provider: MoyaProvider<MyPageTargetType> = MoyaProvider(plugins: [MoyaLoggingPlugin()])) {
+    init(provider: MoyaProvider<MyPageTargetType> = MoyaProvider(
+        session: Session(interceptor: Interceptor.shared),
+        plugins: [MoyaLoggingPlugin()])
+    ) {
         self.provider = provider
     }
     

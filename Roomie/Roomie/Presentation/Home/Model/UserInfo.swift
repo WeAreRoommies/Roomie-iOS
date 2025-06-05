@@ -8,6 +8,6 @@
 import Foundation
 
 struct UserInfo: Hashable {
-    let name: String
+    let nickname: String
     let location: String
 }
