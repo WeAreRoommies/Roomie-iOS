@@ -23,7 +23,7 @@ final class MyAccountCellButton: UIView {
     // MARK: - UIComponent
     
     private let titleLabel = UILabel()
-    private let contentLabel = UILabel()
+    let contentLabel = UILabel()
     private let nextImageView = UIImageView()
     private let myAccountButton = UIButton()
     

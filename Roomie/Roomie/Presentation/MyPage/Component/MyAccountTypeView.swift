@@ -97,7 +97,7 @@ final class MyAccountTypeView: BaseView {
     }
 }
 
-private extension MyAccountTypeView {
+extension MyAccountTypeView {
     func configure(socialType: SocialType = .apple) {
         contentImageView.image = (socialType == .apple) ? .icnApple : .icnKakao
         contentLabel.updateText((socialType == .apple) ? "Apple" : "카카오톡")

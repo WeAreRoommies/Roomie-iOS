@@ -15,12 +15,12 @@ final class MyAccountView: BaseView {
     // MARK: - UIComponent
 
     private let myAccountStackView = UIStackView()
-    private let socialTypeView = MyAccountTypeView()
-    private let nameCellButton = MyAccountCellButton(title: "이름")
-    private let nicknameCellButton = MyAccountCellButton(title: "닉네임")
-    private let birthCellButton = MyAccountCellButton(title: "생년월일")
-    private let contactCellButton = MyAccountCellButton(title: "연락처")
-    private let genderCellButton = MyAccountCellButton(title: "성별")
+    let socialTypeView = MyAccountTypeView()
+    let nameCellButton = MyAccountCellButton(title: "이름")
+    let nicknameCellButton = MyAccountCellButton(title: "닉네임")
+    let birthDateCellButton = MyAccountCellButton(title: "생년월일")
+    let phoneNumberCellButton = MyAccountCellButton(title: "연락처")
+    let genderCellButton = MyAccountCellButton(title: "성별")
     
     private let logoutButton = UIButton()
     private let signoutButton = UIButton()
@@ -53,8 +53,8 @@ final class MyAccountView: BaseView {
             socialTypeView,
             nameCellButton,
             nicknameCellButton,
-            birthCellButton,
-            contactCellButton,
+            birthDateCellButton,
+            phoneNumberCellButton,
             genderCellButton
         )
     }

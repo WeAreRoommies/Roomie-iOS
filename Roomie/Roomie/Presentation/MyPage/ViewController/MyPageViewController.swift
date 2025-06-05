@@ -64,7 +64,9 @@ final class MyPageViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] _ in
                 guard let self = self else { return }
-                let myAccountViewController = MyAccountViewController()
+                let myAccountViewController = MyAccountViewController(
+                    viewModel: MyAccountViewModel(service: MyPageService())
+                )
                 myAccountViewController.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(myAccountViewController, animated: true)
             }
