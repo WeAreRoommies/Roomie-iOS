@@ -1,8 +1,8 @@
 //
-//  MyPageButton.swift
+//  MyAccountCellButton.swift
 //  Roomie
 //
-//  Created by 예삐 on 5/30/25.
+//  Created by 예삐 on 6/5/25.
 //
 
 import UIKit
@@ -12,32 +12,31 @@ import CombineCocoa
 import SnapKit
 import Then
 
-final class MyPageButton: UIView {
+final class MyAccountCellButton: UIView {
     
     // MARK: - Property
     
-    static let defaultHeight: CGFloat = Screen.height(56)
+    static let defaultHeight: CGFloat = Screen.height(76)
     
     private let cancelBag = CancelBag()
     
     // MARK: - UIComponent
     
-    private let titleStackView = UIStackView()
     private let titleLabel = UILabel()
-    private let subtitleLabel = UILabel()
+    private let contentLabel = UILabel()
     private let nextImageView = UIImageView(image: .icnIn)
-    private let myPageButton = UIButton()
+    private let myAccountButton = UIButton()
     
     // MARK: - Initializer
 
-    init(title: String, subtitle: String? = nil) {
+    init(title: String) {
         super.init(frame: .zero)
         
         setStyle()
         setUI()
         setLayout()
         setButton()
-        dataBind(title: title, subtitle: subtitle)
+        configure(title: title)
     }
     
     override init(frame: CGRect) {
@@ -47,7 +46,7 @@ final class MyPageButton: UIView {
         setUI()
         setLayout()
         setButton()
-        dataBind()
+        configure()
     }
     
     required init?(coder: NSCoder) {
@@ -57,20 +56,17 @@ final class MyPageButton: UIView {
         setUI()
         setLayout()
         setButton()
-        dataBind()
+        configure()
     }
     
-    private func dataBind(title: String = "", subtitle: String? = nil) {
+    // MARK: - functions
+    
+    private func configure(title: String = "") {
         titleLabel.updateText(title)
-        if subtitle != nil {
-            subtitleLabel.updateText(subtitle)
-        } else {
-            subtitleLabel.isHidden = true
-        }
     }
     
     private func setButton() {
-        myPageButton
+        myAccountButton
             .controlEventPublisher(for: .touchDown)
             .map { UIColor.grayscale3 }
             .sink { buttonColor in
@@ -79,9 +75,9 @@ final class MyPageButton: UIView {
             .store(in: cancelBag)
         
         Publishers.MergeMany(
-            myPageButton.controlEventPublisher(for: .touchUpInside),
-            myPageButton.controlEventPublisher(for: .touchUpOutside),
-            myPageButton.controlEventPublisher(for: .touchCancel)
+            myAccountButton.controlEventPublisher(for: .touchUpInside),
+            myAccountButton.controlEventPublisher(for: .touchUpOutside),
+            myAccountButton.controlEventPublisher(for: .touchCancel)
         )
         .map { UIColor.grayscale1 }
         .sink { buttonColor in
@@ -93,19 +89,12 @@ final class MyPageButton: UIView {
     // MARK: - UISetting
     
     private func setStyle() {
-        titleStackView.do {
-            $0.axis = .vertical
-            $0.alignment = .top
-            $0.distribution = .fill
-            $0.spacing = 4
-        }
-        
         titleLabel.do {
-            $0.setText(style: .body2, color: .grayscale12)
+            $0.setText(style: .body1, color: .grayscale7)
         }
         
-        subtitleLabel.do {
-            $0.setText(style: .body4, color: .grayscale7)
+        contentLabel.do {
+            $0.setText(style: .body2, color: .grayscale12)
         }
         
         nextImageView.do {
@@ -115,17 +104,21 @@ final class MyPageButton: UIView {
     }
     
     private func setUI() {
-        addSubviews(titleStackView, nextImageView, myPageButton)
-        titleStackView.addArrangedSubviews(titleLabel, subtitleLabel)
+        addSubviews(titleLabel, contentLabel, nextImageView, myAccountButton)
     }
     
     private func setLayout() {
         self.snp.makeConstraints {
-            $0.height.equalTo(MyPageButton.defaultHeight)
+            $0.height.equalTo(MyAccountCellButton.defaultHeight)
         }
         
-        titleStackView.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
+        titleLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(12)
+            $0.leading.equalToSuperview().inset(20)
+        }
+        
+        contentLabel.snp.makeConstraints {
+            $0.bottom.equalToSuperview().inset(12)
             $0.leading.equalToSuperview().inset(20)
         }
         
@@ -135,7 +128,7 @@ final class MyPageButton: UIView {
             $0.size.equalTo(44)
         }
         
-        myPageButton.snp.makeConstraints {
+        myAccountButton.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
