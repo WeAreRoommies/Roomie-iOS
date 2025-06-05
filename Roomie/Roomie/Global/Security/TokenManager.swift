@@ -20,7 +20,6 @@ final class TokenManager {
     ///   - accessToken: 사용자 인증에 사용되는 액세스 토큰입니다. 필수로 저장됩니다.
     ///   - refreshToken: 액세스 토큰 만료 시 재발급에 사용되는 리프레시 토큰입니다. 값이 있는 경우에만 저장됩니다.
     func saveTokens(accessToken: String, refreshToken: String? = nil) {
-        clearTokens()
         keychain.create(forKey: .accessToken, token: accessToken)
         
         if let refreshToken {
