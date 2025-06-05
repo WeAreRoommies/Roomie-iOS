@@ -71,6 +71,18 @@ final class MyPageViewController: BaseViewController {
                 self.navigationController?.pushViewController(myAccountViewController, animated: true)
             }
             .store(in: cancelBag)
+        
+        rootView.wishListButton.myPageButton
+            .tapPublisher
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                let wishListViewController = WishListViewController(
+                    viewModel: WishListViewModel(service: WishListService())
+                )
+                wishListViewController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(wishListViewController, animated: true)
+            }
+            .store(in: cancelBag)
     }
 }
 

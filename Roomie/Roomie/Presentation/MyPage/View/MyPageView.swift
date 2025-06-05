@@ -18,7 +18,7 @@ final class MyPageView: BaseView {
     
     private let plusLabel = UILabel()
     private let plusStackView = UIStackView()
-    private let wishListButton = MyPageCellButton(title: "찜리스트")
+    let wishListButton = MyPageCellButton(title: "찜리스트")
     private let searchHouseButton = MyPageCellButton(
         title: "쉐어하우스 찾기",
         subtitle: "원하는 매물이 없다면 새로 요청해보세요"
