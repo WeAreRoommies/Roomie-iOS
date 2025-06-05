@@ -41,6 +41,7 @@ final class MyAccountView: BaseView {
             signoutButton
         )
         myAccountStackView.addArrangedSubviews(
+            socialTypeView,
             nameCellButton,
             nicknameCellButton,
             birthCellButton,
