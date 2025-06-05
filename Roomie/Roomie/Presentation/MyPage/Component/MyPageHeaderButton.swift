@@ -30,7 +30,7 @@ final class MyPageHeaderButton: BaseView {
     
     private let seperatorView = UIView()
     
-    private let myPageHeaderButton = UIButton()
+    let myPageHeaderButton = UIButton()
     
     // MARK: - functions
 
@@ -101,7 +101,8 @@ final class MyPageHeaderButton: BaseView {
             nicknameDefaultLabel,
             loginTypeView,
             nextImageView,
-            seperatorView
+            seperatorView,
+            myPageHeaderButton
         )
         loginTypeView.addSubview(loginTypeLabel)
     }
@@ -143,6 +144,10 @@ final class MyPageHeaderButton: BaseView {
             $0.top.equalTo(profileImageView.snp.bottom).offset(24)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(12)
+        }
+        
+        myPageHeaderButton.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
     }
 }

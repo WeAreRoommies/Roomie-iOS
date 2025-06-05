@@ -8,6 +8,8 @@
 import UIKit
 import Combine
 
+import CombineCocoa
+
 final class MyPageViewController: BaseViewController {
     
     // MARK: - UIComponent
@@ -55,6 +57,18 @@ final class MyPageViewController: BaseViewController {
 
     override func setView() {
         setNavigationBar(with: "마이페이지", isBackButtonHidden: true)
+    }
+    
+    override func setAction() {
+        rootView.myPageHeaderButton.myPageHeaderButton
+            .tapPublisher
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                let myAccountViewController = MyAccountViewController()
+                myAccountViewController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(myAccountViewController, animated: true)
+            }
+            .store(in: cancelBag)
     }
 }
 
