@@ -77,5 +77,9 @@ final class MainTabBarController: UITabBarController {
             mapNavigationController,
             myPageViewNavigationController
         ], animated: true)
+        
+        self.view.do {
+            $0.backgroundColor = .grayscale1
+        }
     }
 }
