@@ -43,4 +43,8 @@ extension AuthService: AuthServiceProtocol {
     func authLogin(request: AuthLoginRequestDTO) async throws -> BaseResponseBody<AuthLoginResponseDTO>? {
         return try await self.request(with: .authLogin(request: request))
     }
+    
+    func authReissue(refreshToken: String) async throws -> BaseResponseBody<AuthReissueResponseDTO>? {
+        return try await self.request(with: .authReissue(refreshToken: refreshToken))
+    }
 }

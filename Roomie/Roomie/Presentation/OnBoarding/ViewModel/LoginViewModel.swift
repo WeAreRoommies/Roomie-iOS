@@ -5,12 +5,13 @@
 //  Created by 예삐 on 5/27/25.
 //
 
+import AuthenticationServices
 import Foundation
 import Combine
 
 import KakaoSDKUser
 
-final class LoginViewModel {
+final class LoginViewModel: NSObject {
     private let service: AuthServiceProtocol
     
     private let isLoginSucceedSubject = PassthroughSubject<Bool, Never>()
@@ -23,7 +24,7 @@ final class LoginViewModel {
 extension LoginViewModel: ViewModelType {
     struct Input {
         let kakaoLoginButtonTapSubject: AnyPublisher<Void, Never>
-        let appleLoginTokenSubject: AnyPublisher<String, Never>
+        let appleLoginButtonTapSubject: AnyPublisher<Void, Never>
     }
     
     struct Output {
@@ -52,16 +53,10 @@ extension LoginViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
-        input.appleLoginTokenSubject
-            .sink { [weak self] identityToken in
+        input.appleLoginButtonTapSubject
+            .sink { [weak self] in
                 guard let self else { return }
-                print("identityToken: \(identityToken)")
-                self.authLogin(
-                    request: AuthLoginRequestDTO(
-                        provider: "APPLE",
-                        accessToken: identityToken
-                    )
-                )
+                self.performAppleLogin()
             }
             .store(in: cancelBag)
         
@@ -79,10 +74,71 @@ private extension LoginViewModel {
             do {
                 guard let responseBody = try await service.authLogin(request: request),
                       let data = responseBody.data else { return }
-                isLoginSucceedSubject.send(true)
+                saveTokens(accessToken: data.accessToken, refreshToken: data.refreshToken)
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
             }
         }
+    }
+    
+    func saveTokens(accessToken: String, refreshToken: String) {
+        TokenManager.shared.saveTokens(accessToken: accessToken, refreshToken: refreshToken)
+        isLoginSucceedSubject.send(true)
+        NotificationCenter.default.post(name: Notification.shouldLogin, object: nil)
+    }
+    
+    func performAppleLogin() {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+        
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
+    }
+}
+
+// MARK: - ASAuthorizationControllerPresentationContextProviding
+
+extension LoginViewModel: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(
+        for controller: ASAuthorizationController
+    ) -> ASPresentationAnchor {
+        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        let window = windowScene?.windows.first
+        return window!
+    }
+}
+
+// MARK: - ASAuthorizationControllerDelegate
+
+extension LoginViewModel: ASAuthorizationControllerDelegate {
+    func authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithAuthorization authorization: ASAuthorization
+    ) {
+        guard let appleIDCredential = authorization.credential
+                as? ASAuthorizationAppleIDCredential else { return }
+        
+        let identityToken = appleIDCredential.identityToken.flatMap {
+            String(data: $0, encoding: .utf8)
+        }
+        
+        if let identityToken {
+            self.authLogin(
+                request: AuthLoginRequestDTO(
+                    provider: "APPLE",
+                    accessToken: identityToken
+                )
+            )
+        }
+    }
+    
+    func authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithError error: Error
+    ) {
+        print("🚨Apple 로그인 실패: \(error.localizedDescription)")
     }
 }

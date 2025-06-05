@@ -8,7 +8,7 @@
 import Foundation
 
 struct HomeResponseDTO: ResponseModelType {
-    let name, location: String
+    let nickname, location: String
     let recentlyViewedHouses: [HomeHouse]
 }
 
