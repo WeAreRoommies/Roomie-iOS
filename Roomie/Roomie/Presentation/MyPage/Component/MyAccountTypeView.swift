@@ -12,7 +12,7 @@ import CombineCocoa
 import SnapKit
 import Then
 
-final class MyAccountTypeView: UIView {
+final class MyAccountTypeView: BaseView {
     
     // MARK: - Property
     
@@ -56,16 +56,9 @@ final class MyAccountTypeView: UIView {
         configure()
     }
     
-    // MARK: - functions
-    
-    private func configure(socialType: SocialType = .apple) {
-        contentImageView.image = (socialType == .apple) ? .icnApple : .icnKakao
-        contentLabel.updateText((socialType == .apple) ? "Apple" : "카카오톡")
-    }
-    
     // MARK: - UISetting
     
-    private func setStyle() {
+    override func setStyle() {
         titleLabel.do {
             $0.setText("계정 연동", style: .body1, color: .grayscale7)
         }
@@ -82,12 +75,12 @@ final class MyAccountTypeView: UIView {
         }
     }
     
-    private func setUI() {
+    override func setUI() {
         addSubviews(titleLabel, contentStackView)
         contentStackView.addArrangedSubviews(contentImageView, contentLabel)
     }
     
-    private func setLayout() {
+    override func setLayout() {
         self.snp.makeConstraints {
             $0.height.equalTo(MyAccountTypeView.defaultHeight)
         }
@@ -101,5 +94,12 @@ final class MyAccountTypeView: UIView {
             $0.bottom.equalToSuperview().inset(12)
             $0.leading.equalToSuperview().inset(20)
         }
+    }
+}
+
+private extension MyAccountTypeView {
+    func configure(socialType: SocialType = .apple) {
+        contentImageView.image = (socialType == .apple) ? .icnApple : .icnKakao
+        contentLabel.updateText((socialType == .apple) ? "Apple" : "카카오톡")
     }
 }

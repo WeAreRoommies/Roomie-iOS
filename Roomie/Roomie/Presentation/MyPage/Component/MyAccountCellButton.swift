@@ -59,33 +59,6 @@ final class MyAccountCellButton: UIView {
         configure()
     }
     
-    // MARK: - functions
-    
-    private func configure(title: String = "") {
-        titleLabel.updateText(title)
-    }
-    
-    private func setButton() {
-        myAccountButton
-            .controlEventPublisher(for: .touchDown)
-            .map { UIColor.grayscale3 }
-            .sink { buttonColor in
-                self.backgroundColor = buttonColor
-            }
-            .store(in: cancelBag)
-        
-        Publishers.MergeMany(
-            myAccountButton.controlEventPublisher(for: .touchUpInside),
-            myAccountButton.controlEventPublisher(for: .touchUpOutside),
-            myAccountButton.controlEventPublisher(for: .touchCancel)
-        )
-        .map { UIColor.grayscale1 }
-        .sink { buttonColor in
-            self.backgroundColor = buttonColor
-        }
-        .store(in: cancelBag)
-    }
-    
     // MARK: - UISetting
     
     private func setStyle() {
@@ -131,5 +104,32 @@ final class MyAccountCellButton: UIView {
         myAccountButton.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+    }
+}
+
+private extension MyAccountCellButton {
+    func setButton() {
+        myAccountButton
+            .controlEventPublisher(for: .touchDown)
+            .map { UIColor.grayscale3 }
+            .sink { buttonColor in
+                self.backgroundColor = buttonColor
+            }
+            .store(in: cancelBag)
+        
+        Publishers.MergeMany(
+            myAccountButton.controlEventPublisher(for: .touchUpInside),
+            myAccountButton.controlEventPublisher(for: .touchUpOutside),
+            myAccountButton.controlEventPublisher(for: .touchCancel)
+        )
+        .map { UIColor.grayscale1 }
+        .sink { buttonColor in
+            self.backgroundColor = buttonColor
+        }
+        .store(in: cancelBag)
+    }
+    
+    func configure(title: String = "") {
+        titleLabel.updateText(title)
     }
 }

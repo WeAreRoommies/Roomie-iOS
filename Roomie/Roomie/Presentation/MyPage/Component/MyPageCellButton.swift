@@ -60,36 +60,6 @@ final class MyPageCellButton: BaseView {
         configure()
     }
     
-    private func configure(title: String = "", subtitle: String? = nil) {
-        titleLabel.updateText(title)
-        if subtitle != nil {
-            subtitleLabel.updateText(subtitle)
-        } else {
-            subtitleLabel.isHidden = true
-        }
-    }
-    
-    private func setButton() {
-        myPageButton
-            .controlEventPublisher(for: .touchDown)
-            .map { UIColor.grayscale3 }
-            .sink { buttonColor in
-                self.backgroundColor = buttonColor
-            }
-            .store(in: cancelBag)
-        
-        Publishers.MergeMany(
-            myPageButton.controlEventPublisher(for: .touchUpInside),
-            myPageButton.controlEventPublisher(for: .touchUpOutside),
-            myPageButton.controlEventPublisher(for: .touchCancel)
-        )
-        .map { UIColor.grayscale1 }
-        .sink { buttonColor in
-            self.backgroundColor = buttonColor
-        }
-        .store(in: cancelBag)
-    }
-    
     // MARK: - UISetting
     
     override func setStyle() {
@@ -137,6 +107,38 @@ final class MyPageCellButton: BaseView {
         
         myPageButton.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+    }
+}
+
+private extension MyPageCellButton {
+    func setButton() {
+        myPageButton
+            .controlEventPublisher(for: .touchDown)
+            .map { UIColor.grayscale3 }
+            .sink { buttonColor in
+                self.backgroundColor = buttonColor
+            }
+            .store(in: cancelBag)
+        
+        Publishers.MergeMany(
+            myPageButton.controlEventPublisher(for: .touchUpInside),
+            myPageButton.controlEventPublisher(for: .touchUpOutside),
+            myPageButton.controlEventPublisher(for: .touchCancel)
+        )
+        .map { UIColor.grayscale1 }
+        .sink { buttonColor in
+            self.backgroundColor = buttonColor
+        }
+        .store(in: cancelBag)
+    }
+    
+    func configure(title: String = "", subtitle: String? = nil) {
+        titleLabel.updateText(title)
+        if subtitle != nil {
+            subtitleLabel.updateText(subtitle)
+        } else {
+            subtitleLabel.isHidden = true
         }
     }
 }

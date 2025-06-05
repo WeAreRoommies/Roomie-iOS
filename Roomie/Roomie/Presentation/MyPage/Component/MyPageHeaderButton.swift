@@ -32,29 +32,6 @@ final class MyPageHeaderButton: BaseView {
     
     let myPageHeaderButton = UIButton()
     
-    // MARK: - functions
-
-    private func setButton() {
-        myPageHeaderButton
-            .controlEventPublisher(for: .touchDown)
-            .map { UIColor.grayscale3 }
-            .sink { buttonColor in
-                self.backgroundColor = buttonColor
-            }
-            .store(in: cancelBag)
-        
-        Publishers.MergeMany(
-            myPageHeaderButton.controlEventPublisher(for: .touchUpInside),
-            myPageHeaderButton.controlEventPublisher(for: .touchUpOutside),
-            myPageHeaderButton.controlEventPublisher(for: .touchCancel)
-        )
-        .map { UIColor.grayscale1 }
-        .sink { buttonColor in
-            self.backgroundColor = buttonColor
-        }
-        .store(in: cancelBag)
-    }
-    
     // MARK: - UISetting
     
     override func setStyle() {
@@ -149,5 +126,28 @@ final class MyPageHeaderButton: BaseView {
         myPageHeaderButton.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+    }
+}
+
+private extension MyPageHeaderButton {
+    func setButton() {
+        myPageHeaderButton
+            .controlEventPublisher(for: .touchDown)
+            .map { UIColor.grayscale3 }
+            .sink { buttonColor in
+                self.backgroundColor = buttonColor
+            }
+            .store(in: cancelBag)
+        
+        Publishers.MergeMany(
+            myPageHeaderButton.controlEventPublisher(for: .touchUpInside),
+            myPageHeaderButton.controlEventPublisher(for: .touchUpOutside),
+            myPageHeaderButton.controlEventPublisher(for: .touchCancel)
+        )
+        .map { UIColor.grayscale1 }
+        .sink { buttonColor in
+            self.backgroundColor = buttonColor
+        }
+        .store(in: cancelBag)
     }
 }
