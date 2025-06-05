@@ -32,31 +32,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 }
 
-extension SceneDelegate {
-    @objc
-    private func handleLogout() {
-        TokenManager.shared.clearTokens()
-        DispatchQueue.main.async {
-            self.updateRootViewController()
-        }
-    }
-
-    @objc
-    private func handleLogin(_ notification: Notification) {
-        let fromManualLogin = notification.userInfo?["manualLogin"] as? Bool ?? false
-        
-        DispatchQueue.main.async {
-            self.updateRootViewController()
-            
-            if fromManualLogin {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    Toast.show(message: "로그인에 성공했어요", bottomInset: Screen.height(100))
-                }
-            }
-        }
-    }
-    
-    private func configureNotificationCenter() {
+private extension SceneDelegate {
+    func configureNotificationCenter() {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(handleLogout),
@@ -72,14 +49,14 @@ extension SceneDelegate {
         )
     }
     
-    private func configureRootWindow(in windowScene: UIWindowScene) {
+    func configureRootWindow(in windowScene: UIWindowScene) {
         let window = UIWindow(windowScene: windowScene)
         self.window = window
         updateRootViewController()
         window.makeKeyAndVisible()
     }
 
-    private func updateRootViewController() {
+    func updateRootViewController() {
         var rootViewController = UIViewController()
         
         if TokenManager.shared.isSessionAvailable {
@@ -89,5 +66,28 @@ extension SceneDelegate {
         }
         
         window?.rootViewController = rootViewController
+    }
+    
+    @objc
+    func handleLogout() {
+        TokenManager.shared.clearTokens()
+        DispatchQueue.main.async {
+            self.updateRootViewController()
+        }
+    }
+
+    @objc
+    func handleLogin(_ notification: Notification) {
+        let fromManualLogin = notification.userInfo?["manualLogin"] as? Bool ?? false
+        
+        DispatchQueue.main.async {
+            self.updateRootViewController()
+            
+            if fromManualLogin {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    Toast.show(message: "로그인에 성공했어요")
+                }
+            }
+        }
     }
 }

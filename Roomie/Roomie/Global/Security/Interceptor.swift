@@ -12,9 +12,9 @@ import Alamofire
 final class Interceptor: RequestInterceptor {
     
     static let shared = Interceptor()
-    private init() {}
-    
     let retryLimit = 3
+    
+    private init() {}
     
     func adapt(
         _ urlRequest: URLRequest,
@@ -37,9 +37,7 @@ final class Interceptor: RequestInterceptor {
         _ request: Request,
         for session: Session,
         dueTo error: Error,
-        completion: @escaping (
-            RetryResult
-        ) -> Void
+        completion: @escaping (RetryResult) -> Void
     ) {
         print("🔄[Interceptor] - retry start")
         guard let response = request.task?.response as? HTTPURLResponse,response.statusCode == 401 else {
@@ -81,31 +79,8 @@ final class Interceptor: RequestInterceptor {
     }
 }
 
-extension Interceptor {
-    enum TokenError: Error {
-        case noRefreshToken
-        case reissueFailed
-        case refreshTokenExpired
-        case userNotFound
-        case unknownError(error: Error)
-        
-        var description: String {
-            switch self {
-            case .noRefreshToken:
-                return "저장된 refreshToken이 없습니다."
-            case .reissueFailed:
-                return "토큰 재발급 요청에 실패했습니다."
-            case .refreshTokenExpired:
-                return "refresthToken이 만료되었습니다."
-            case .userNotFound:
-                return "해당 유저를 찾을 수 없습니다."
-            case .unknownError:
-                return "알 수 없는 에러가 발생했습니다."
-            }
-        }
-    }
-    
-    private func authReissue() async throws -> String {
+private extension Interceptor {
+    func authReissue() async throws -> String {
         do {
             guard let refreshToken = TokenManager.shared.fetchRefreshToken() else {
                 throw TokenError.noRefreshToken
