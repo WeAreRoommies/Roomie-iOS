@@ -70,7 +70,7 @@ private extension MyPageViewController {
             .receive(on: RunLoop.main)
             .sink { [weak self] name in
                 guard let self = self else { return }
-                rootView.myPageHeaderView.nicknameLabel.updateText(name)
+                rootView.myPageHeaderButton.nicknameLabel.updateText(name)
             }
             .store(in: cancelBag)
         
@@ -78,7 +78,7 @@ private extension MyPageViewController {
             .receive(on: RunLoop.main)
             .sink { [weak self] socialType in
                 guard let self = self else { return }
-                rootView.myPageHeaderView.loginTypeLabel.updateText("\(socialType) 계정 회원")
+                rootView.myPageHeaderButton.loginTypeLabel.updateText("\(socialType) 계정 회원")
             }
             .store(in: cancelBag)
     }
