@@ -104,7 +104,7 @@ final class MyPageView: BaseView {
         
         seperatorView.snp.makeConstraints {
             $0.top.equalTo(plusStackView.snp.bottom).offset(8)
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.leading.trailing.equalToSuperview().inset(20).priority(.high)
             $0.height.equalTo(1)
         }
         

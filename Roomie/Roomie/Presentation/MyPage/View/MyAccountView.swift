@@ -67,7 +67,7 @@ final class MyAccountView: BaseView {
         
         logoutButton.snp.makeConstraints {
             $0.bottom.equalTo(signoutButton.snp.top).offset(-20)
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.leading.trailing.equalToSuperview().inset(20).priority(.high)
             $0.height.equalTo(Screen.height(44))
         }
         

@@ -12,7 +12,7 @@ import CombineCocoa
 import SnapKit
 import Then
 
-final class MyPageCellButton: UIView {
+final class MyPageCellButton: BaseView {
     
     // MARK: - Property
     
@@ -92,7 +92,7 @@ final class MyPageCellButton: UIView {
     
     // MARK: - UISetting
     
-    private func setStyle() {
+    override func setStyle() {
         titleStackView.do {
             $0.axis = .vertical
             $0.alignment = .top
@@ -114,12 +114,12 @@ final class MyPageCellButton: UIView {
         }
     }
     
-    private func setUI() {
+    override func setUI() {
         addSubviews(titleStackView, nextImageView, myPageButton)
         titleStackView.addArrangedSubviews(titleLabel, subtitleLabel)
     }
     
-    private func setLayout() {
+    override func setLayout() {
         self.snp.makeConstraints {
             $0.height.equalTo(MyPageCellButton.defaultHeight)
         }
