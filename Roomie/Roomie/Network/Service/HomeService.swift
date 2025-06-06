@@ -12,7 +12,10 @@ import Moya
 final class HomeService {
     let provider: MoyaProvider<HomeTargetType>
     
-    init(provider: MoyaProvider<HomeTargetType> = MoyaProvider(plugins: [MoyaLoggingPlugin()])) {
+    init(provider: MoyaProvider<HomeTargetType> = MoyaProvider(
+        session: Session(interceptor: Interceptor.shared),
+        plugins: [MoyaLoggingPlugin()])
+    ) {
         self.provider = provider
     }
     
@@ -101,7 +104,7 @@ final class MockHomeService: HomeServiceProtocol {
     
     func fetchHomeData() async throws -> BaseResponseBody<HomeResponseDTO>? {
         let mockData: HomeResponseDTO =
-        HomeResponseDTO(name: "김루미", location: "논현동", recentlyViewedHouses: [
+        HomeResponseDTO(nickname: "김루미", location: "논현동", recentlyViewedHouses: [
             HomeHouse(
                     houseID: 1,
                     monthlyRent: "43 ~ 50",

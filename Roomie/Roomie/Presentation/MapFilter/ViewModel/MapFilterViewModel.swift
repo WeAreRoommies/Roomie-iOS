@@ -22,6 +22,7 @@ final class MapFilterViewModel {
     
     private let genderSubject = CurrentValueSubject<[String], Never>([])
     private let occupancyTypeSubject = CurrentValueSubject<[String], Never>([])
+    private let moodTagSubject = CurrentValueSubject<[String], Never>([])
     
     private let preferredDateSubject = CurrentValueSubject<String?, Never>(nil)
     private let contractPeriodSubject = CurrentValueSubject<[Int], Never>([])
@@ -52,8 +53,11 @@ extension MapFilterViewModel: ViewModelType {
         let doubleButtonDidTap: AnyPublisher<Void, Never>
         let tripleButtonDidTap: AnyPublisher<Void, Never>
         let quadButtonDidTap: AnyPublisher<Void, Never>
-        let quintButtonDidTap: AnyPublisher<Void, Never>
-        let sextButtonDidTap: AnyPublisher<Void, Never>
+        
+        /// 분위기 옵션
+        let calmButtonDidTap: AnyPublisher<Void, Never>
+        let livelyButtonDidTap: AnyPublisher<Void, Never>
+        let neatButtonDidTap: AnyPublisher<Void, Never>
         
         /// 계약기간 옵션
         let preferredDate: AnyPublisher<String?, Never>
@@ -78,6 +82,7 @@ extension MapFilterViewModel: ViewModelType {
         /// 방 형태
         let isGenderEmpty: AnyPublisher<Bool, Never>
         let isOccupancyTypeEmpty: AnyPublisher<Bool, Never>
+        let isMoodTagEmpty: AnyPublisher<Bool, Never>
         
         /// 계약기간
         let isPreferredDateEmpty: AnyPublisher<Bool, Never>
@@ -241,28 +246,41 @@ extension MapFilterViewModel: ViewModelType {
             }
             .store(in: cancelBag)
         
-        input.quintButtonDidTap
+        input.calmButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                let occupancyType = "5인실"
+                let moodTag = "#차분한"
                 
-                self.occupancyTypeSubject.send(
-                    self.occupancyTypeSubject.value.contains(occupancyType)
-                    ? self.occupancyTypeSubject.value.filter { $0 != occupancyType }
-                    : self.occupancyTypeSubject.value + [occupancyType]
+                self.moodTagSubject.send(
+                    self.moodTagSubject.value.contains(moodTag)
+                    ? self.moodTagSubject.value.filter { $0 != moodTag }
+                    : self.moodTagSubject.value + [moodTag]
                 )
             }
             .store(in: cancelBag)
         
-        input.sextButtonDidTap
+        input.livelyButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                let occupancyType = "6인실"
+                let moodTag = "#활기찬"
                 
-                self.occupancyTypeSubject.send(
-                    self.occupancyTypeSubject.value.contains(occupancyType)
-                    ? self.occupancyTypeSubject.value.filter { $0 != occupancyType }
-                    : self.occupancyTypeSubject.value + [occupancyType]
+                self.moodTagSubject.send(
+                    self.moodTagSubject.value.contains(moodTag)
+                    ? self.moodTagSubject.value.filter { $0 != moodTag }
+                    : self.moodTagSubject.value + [moodTag]
+                )
+            }
+            .store(in: cancelBag)
+        
+        input.neatButtonDidTap
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let moodTag = "#깔끔한"
+                
+                self.moodTagSubject.send(
+                    self.moodTagSubject.value.contains(moodTag)
+                    ? self.moodTagSubject.value.filter { $0 != moodTag }
+                    : self.moodTagSubject.value + [moodTag]
                 )
             }
             .store(in: cancelBag)
@@ -324,6 +342,7 @@ extension MapFilterViewModel: ViewModelType {
                 self.monthlyRentMinSubject.send(0)
                 self.genderSubject.send([])
                 self.occupancyTypeSubject.send([])
+                self.moodTagSubject.send([])
                 self.preferredDateSubject.send("")
                 self.contractPeriodSubject.send([])
             }
@@ -348,6 +367,7 @@ extension MapFilterViewModel: ViewModelType {
                     )
                     .setGenderPolicy(genderSubject.value)
                     .setOccupancyTypes(occupancyTypeSubject.value)
+                    .setMoodTag(moodTagSubject.value)
                     .setPreferredDate(preferredDateSubject.value)
                     .setContractPeroid(contractPeriodSubject.value)
             }
@@ -373,6 +393,10 @@ extension MapFilterViewModel: ViewModelType {
             .map { $0.isEmpty }
             .eraseToAnyPublisher()
         
+        let isMoodTagEmpty = moodTagSubject
+            .map { $0.isEmpty }
+            .eraseToAnyPublisher()
+        
         let isPreferredEmpty = preferredDateSubject
             .map { $0?.isEmpty ?? true }
             .eraseToAnyPublisher()
@@ -388,6 +412,7 @@ extension MapFilterViewModel: ViewModelType {
             monthlyRentMaxText: monthlyRentMax,
             isGenderEmpty: isGenderEmpty,
             isOccupancyTypeEmpty: isOccupancyTypeEmpty,
+            isMoodTagEmpty: isMoodTagEmpty,
             isPreferredDateEmpty: isPreferredEmpty,
             isContractPeriodEmpty: isContractPeriodEmpty
         )

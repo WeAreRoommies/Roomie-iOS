@@ -77,7 +77,7 @@ extension MapViewModel: ViewModelType {
         
         let markersInfo = mapDataSubject
             .compactMap { data in
-                data?.houses.map { MarkerInfo(houseID: $0.houseID, x: $0.x, y: $0.y) }
+                data?.houses.map { MarkerInfo(houseID: $0.houseID, x: $0.latitude, y: $0.longitude) }
             }
             .eraseToAnyPublisher()
         

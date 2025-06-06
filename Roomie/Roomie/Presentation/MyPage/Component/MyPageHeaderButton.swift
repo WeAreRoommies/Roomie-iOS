@@ -6,27 +6,31 @@
 //
 
 import UIKit
+import Combine
 
+import CombineCocoa
 import SnapKit
 import Then
 
-final class MyPagePlusHeaderView: BaseCollectionReusableView {
+final class MyPageHeaderButton: BaseView {
+    
+    private let cancelBag = CancelBag()
     
     // MARK: - UIComponent
 
     private let profileImageView = UIImageView()
     
-    private let nicknameLabel = UILabel()
+    let nicknameLabel = UILabel()
     private let nicknameDefaultLabel = UILabel()
     
     private let loginTypeView = UIView()
-    private let loginTypeLabel = UILabel()
+    let loginTypeLabel = UILabel()
     
     private let nextImageView = UIImageView()
     
-    private let dividerView = UIView()
+    private let seperatorView = UIView()
     
-    private let titleLabel = UILabel()
+    let myPageHeaderButton = UIButton()
     
     // MARK: - UISetting
     
@@ -53,21 +57,17 @@ final class MyPagePlusHeaderView: BaseCollectionReusableView {
         }
         
         loginTypeLabel.do {
-            $0.setText("카카오 계정 회원", style: .caption1, color: .grayscale9)
+            $0.setText("계정 회원", style: .caption1, color: .grayscale9)
         }
         
         nextImageView.do {
             $0.image = .icnIn
         }
         
-        dividerView.do {
+        seperatorView.do {
             $0.backgroundColor = .grayscale3
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.grayscale4.cgColor
-        }
-        
-        titleLabel.do {
-            $0.setText(style: .body1, color: .grayscale7)
         }
     }
     
@@ -78,8 +78,8 @@ final class MyPagePlusHeaderView: BaseCollectionReusableView {
             nicknameDefaultLabel,
             loginTypeView,
             nextImageView,
-            dividerView,
-            titleLabel
+            seperatorView,
+            myPageHeaderButton
         )
         loginTypeView.addSubview(loginTypeLabel)
     }
@@ -117,25 +117,37 @@ final class MyPagePlusHeaderView: BaseCollectionReusableView {
             $0.leading.trailing.equalToSuperview().inset(8)
         }
         
-        dividerView.snp.makeConstraints {
+        seperatorView.snp.makeConstraints {
             $0.top.equalTo(profileImageView.snp.bottom).offset(24)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(12)
         }
         
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(dividerView.snp.bottom).offset(16)
-            $0.leading.equalToSuperview().inset(20)
+        myPageHeaderButton.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
     }
 }
 
-extension MyPagePlusHeaderView {
-    func configureHeader(title: String) {
-        titleLabel.updateText(title)
-    }
-    
-    func dataBind(nickname: String) {
-        nicknameLabel.updateText(nickname)
+private extension MyPageHeaderButton {
+    func setButton() {
+        myPageHeaderButton
+            .controlEventPublisher(for: .touchDown)
+            .map { UIColor.grayscale3 }
+            .sink { buttonColor in
+                self.backgroundColor = buttonColor
+            }
+            .store(in: cancelBag)
+        
+        Publishers.MergeMany(
+            myPageHeaderButton.controlEventPublisher(for: .touchUpInside),
+            myPageHeaderButton.controlEventPublisher(for: .touchUpOutside),
+            myPageHeaderButton.controlEventPublisher(for: .touchCancel)
+        )
+        .map { UIColor.grayscale1 }
+        .sink { buttonColor in
+            self.backgroundColor = buttonColor
+        }
+        .store(in: cancelBag)
     }
 }

@@ -365,7 +365,7 @@ extension HouseDetailViewController: UITableViewDelegate {
             title: navigationBarTitle,
             index: indexPath.row,
             viewModel: HouseSinglePhotoViewModel(
-                service: MockHousesService(),
+                service: HousesService(),
                 houseID: viewModel.houseID
             )
         )

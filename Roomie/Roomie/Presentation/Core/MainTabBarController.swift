@@ -15,7 +15,7 @@ final class MainTabBarController: UITabBarController {
     // MARK: - Property
     
     let homeViewController: HomeViewController = HomeViewController(
-        viewModel: HomeViewModel(service: MockHomeService(), builder: MapRequestDTO.Builder.shared)
+        viewModel: HomeViewModel(service: HomeService())
     ).then {
         $0.tabBarItem.title = "홈"
         $0.tabBarItem.image = .icnHomeLine24
@@ -77,5 +77,9 @@ final class MainTabBarController: UITabBarController {
             mapNavigationController,
             myPageViewNavigationController
         ], animated: true)
+        
+        self.view.do {
+            $0.backgroundColor = .grayscale1
+        }
     }
 }

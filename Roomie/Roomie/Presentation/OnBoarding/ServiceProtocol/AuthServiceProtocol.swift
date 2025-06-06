@@ -9,4 +9,5 @@ import Foundation
 
 protocol AuthServiceProtocol {
     func authLogin(request: AuthLoginRequestDTO) async throws -> BaseResponseBody<AuthLoginResponseDTO>?
+    func authReissue(refreshToken: String) async throws -> BaseResponseBody<AuthReissueResponseDTO>?
 }

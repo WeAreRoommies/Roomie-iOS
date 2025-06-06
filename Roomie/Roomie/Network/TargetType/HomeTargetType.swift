@@ -54,4 +54,8 @@ extension HomeTargetType: TargetType {
     var headers: [String : String]? {
         return ["Content-Type": "application/json"]
     }
+    
+    var validationType: ValidationType {
+        return .successCodes
+    }
 }

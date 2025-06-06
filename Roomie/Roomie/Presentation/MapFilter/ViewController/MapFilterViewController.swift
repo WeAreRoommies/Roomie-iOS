@@ -37,8 +37,10 @@ final class MapFilterViewController: BaseViewController {
     private let doubleButtonDidTapSubject = PassthroughSubject<Void, Never>()
     private let tripleButtonDidTapSubject = PassthroughSubject<Void, Never>()
     private let quadButtonDidTapSubject = PassthroughSubject<Void, Never>()
-    private let quintButtonDidTapSubject = PassthroughSubject<Void, Never>()
-    private let sextButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    
+    private let calmButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let livelyButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let neatButtonDidTapSubject = PassthroughSubject<Void, Never>()
     
     private let preferredDateSubject = PassthroughSubject<String?, Never>()
     
@@ -201,19 +203,27 @@ final class MapFilterViewController: BaseViewController {
             }
             .store(in: cancelBag)
         
-        rootView.filterRoomView.quintButton.optionButton
+        rootView.filterRoomView.calmButton.optionButton
             .tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                self.quintButtonDidTapSubject.send(())
+                self.calmButtonDidTapSubject.send(())
             }
             .store(in: cancelBag)
         
-        rootView.filterRoomView.sextButton.optionButton
+        rootView.filterRoomView.livelyButton.optionButton
             .tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                self.sextButtonDidTapSubject.send(())
+                self.livelyButtonDidTapSubject.send(())
+            }
+            .store(in: cancelBag)
+        
+        rootView.filterRoomView.neatButton.optionButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.neatButtonDidTapSubject.send(())
             }
             .store(in: cancelBag)
         
@@ -286,8 +296,9 @@ private extension MapFilterViewController {
             doubleButtonDidTap: doubleButtonDidTapSubject.eraseToAnyPublisher(),
             tripleButtonDidTap: tripleButtonDidTapSubject.eraseToAnyPublisher(),
             quadButtonDidTap: quadButtonDidTapSubject.eraseToAnyPublisher(),
-            quintButtonDidTap: quintButtonDidTapSubject.eraseToAnyPublisher(),
-            sextButtonDidTap: sextButtonDidTapSubject.eraseToAnyPublisher(),
+            calmButtonDidTap: calmButtonDidTapSubject.eraseToAnyPublisher(),
+            livelyButtonDidTap: livelyButtonDidTapSubject.eraseToAnyPublisher(),
+            neatButtonDidTap: neatButtonDidTapSubject.eraseToAnyPublisher(),
             preferredDate: preferredDateSubject.eraseToAnyPublisher(),
             threeMonthButtonDidTap: threeMonthButtonDidTapSubject.eraseToAnyPublisher(),
             sixMonthButtonDidTap: sixMonthButtonDidTapSubject.eraseToAnyPublisher(),
@@ -355,9 +366,23 @@ private extension MapFilterViewController {
                     self.rootView.filterRoomView.singleButton,
                     self.rootView.filterRoomView.doubleButton,
                     self.rootView.filterRoomView.tripleButton,
-                    self.rootView.filterRoomView.quadButton,
-                    self.rootView.filterRoomView.quintButton,
-                    self.rootView.filterRoomView.sextButton
+                    self.rootView.filterRoomView.quadButton
+                ]
+                
+                if isEmpty {
+                    buttons.forEach { $0.isSelected = false }
+                }
+            }
+            .store(in: cancelBag)
+        
+        output.isMoodTagEmpty
+            .sink { [weak self] isEmpty in
+                guard let self = self else { return }
+                
+                let buttons = [
+                    self.rootView.filterRoomView.calmButton,
+                    self.rootView.filterRoomView.livelyButton,
+                    self.rootView.filterRoomView.neatButton
                 ]
                 
                 if isEmpty {

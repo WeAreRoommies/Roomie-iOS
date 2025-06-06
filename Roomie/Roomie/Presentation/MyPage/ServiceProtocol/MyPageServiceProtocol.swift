@@ -9,4 +9,5 @@ import Foundation
 
 protocol MyPageServiceProtocol {
     func fetchMyPageData() async throws -> BaseResponseBody<MyPageResponseDTO>?
+    func fetchMyAccountData() async throws -> BaseResponseBody<MyAccountResponseDTO>?
 }

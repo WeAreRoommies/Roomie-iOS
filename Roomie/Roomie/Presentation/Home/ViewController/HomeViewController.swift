@@ -174,7 +174,7 @@ private extension HomeViewController {
             .receive(on: RunLoop.main)
             .sink { [weak self] data in
                 guard let self else { return }
-                self.rootView.nameLabel.text = data.name
+                self.rootView.nameLabel.text = data.nickname
                 self.setHomeNavigationBar(locaton: data.location)
             }
             .store(in: cancelBag)
@@ -382,7 +382,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
     ) {
         guard let houseID = viewModel.homeDataSubject.value?.recentlyViewedHouses[indexPath.item].houseID else { return }
         let houseDetailViewController = HouseDetailViewController(
-            viewModel: HouseDetailViewModel(houseID: houseID, service: MockHousesService())
+            viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
         )
         houseDetailViewController.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(houseDetailViewController, animated: true)

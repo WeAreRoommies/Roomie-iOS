@@ -92,7 +92,7 @@ extension HomeViewModel: ViewModelType {
         let userInfo = homeDataSubject
             .compactMap { $0 }
             .map { data in
-                UserInfo(name: data.name, location: data.location)
+                UserInfo(nickname: data.nickname, location: data.location)
             }
             .eraseToAnyPublisher()
         
