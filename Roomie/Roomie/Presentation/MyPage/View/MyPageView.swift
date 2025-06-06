@@ -14,28 +14,28 @@ final class MyPageView: BaseView {
     
     // MARK: - UIComponent
     
-    let myPageHeaderView = MyPageHeaderView()
+    let myPageHeaderButton = MyPageHeaderButton()
     
     private let plusLabel = UILabel()
     private let plusStackView = UIStackView()
-    private let wishListButton = MyPageButton(title: "찜리스트")
-    private let searchHouseButton = MyPageButton(
+    let wishListButton = MyPageCellButton(title: "찜리스트")
+    private let searchHouseButton = MyPageCellButton(
         title: "쉐어하우스 찾기",
         subtitle: "원하는 매물이 없다면 새로 요청해보세요"
     )
-    private let registerHouseButton = MyPageButton(
+    private let registerHouseButton = MyPageCellButton(
         title: "매물 등록하기",
         subtitle: "쉐어하우스 사장님이라면 매물을 등록해보세요"
     )
-    private let sendFeedbackButton = MyPageButton(title: "의견 보내기")
+    private let sendFeedbackButton = MyPageCellButton(title: "의견 보내기")
     
     private let seperatorView = UIView()
     
     private let serviceLabel = UILabel()
     private let serviceStackView = UIStackView()
-    private let introduceServiceButton = MyPageButton(title: "서비스 소개")
-    private let latestNewsButton = MyPageButton(title: "최근 소식")
-    private let policyButton = MyPageButton(title: "약관 및 소개")
+    private let introduceServiceButton = MyPageCellButton(title: "서비스 소개")
+    private let latestNewsButton = MyPageCellButton(title: "최근 소식")
+    private let policyButton = MyPageCellButton(title: "약관 및 소개")
     
     // MARK: - UISetting
     
@@ -65,7 +65,7 @@ final class MyPageView: BaseView {
     
     override func setUI() {
         addSubviews(
-            myPageHeaderView,
+            myPageHeaderButton,
             plusLabel,
             plusStackView,
             seperatorView,
@@ -86,14 +86,14 @@ final class MyPageView: BaseView {
     }
     
     override func setLayout() {
-        myPageHeaderView.snp.makeConstraints {
+        myPageHeaderButton.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(Screen.height(120))
         }
         
         plusLabel.snp.makeConstraints {
-            $0.top.equalTo(myPageHeaderView.snp.bottom).offset(16)
+            $0.top.equalTo(myPageHeaderButton.snp.bottom).offset(16)
             $0.leading.equalToSuperview().inset(20)
         }
         
@@ -104,7 +104,7 @@ final class MyPageView: BaseView {
         
         seperatorView.snp.makeConstraints {
             $0.top.equalTo(plusStackView.snp.bottom).offset(8)
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.leading.trailing.equalToSuperview().inset(20).priority(.high)
             $0.height.equalTo(1)
         }
         

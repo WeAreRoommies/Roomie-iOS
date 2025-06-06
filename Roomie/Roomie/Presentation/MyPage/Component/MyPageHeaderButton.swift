@@ -6,11 +6,15 @@
 //
 
 import UIKit
+import Combine
 
+import CombineCocoa
 import SnapKit
 import Then
 
-final class MyPageHeaderView: BaseView {
+final class MyPageHeaderButton: BaseView {
+    
+    private let cancelBag = CancelBag()
     
     // MARK: - UIComponent
 
@@ -25,6 +29,8 @@ final class MyPageHeaderView: BaseView {
     private let nextImageView = UIImageView()
     
     private let seperatorView = UIView()
+    
+    let myPageHeaderButton = UIButton()
     
     // MARK: - UISetting
     
@@ -72,7 +78,8 @@ final class MyPageHeaderView: BaseView {
             nicknameDefaultLabel,
             loginTypeView,
             nextImageView,
-            seperatorView
+            seperatorView,
+            myPageHeaderButton
         )
         loginTypeView.addSubview(loginTypeLabel)
     }
@@ -115,5 +122,32 @@ final class MyPageHeaderView: BaseView {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(12)
         }
+        
+        myPageHeaderButton.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+    }
+}
+
+private extension MyPageHeaderButton {
+    func setButton() {
+        myPageHeaderButton
+            .controlEventPublisher(for: .touchDown)
+            .map { UIColor.grayscale3 }
+            .sink { buttonColor in
+                self.backgroundColor = buttonColor
+            }
+            .store(in: cancelBag)
+        
+        Publishers.MergeMany(
+            myPageHeaderButton.controlEventPublisher(for: .touchUpInside),
+            myPageHeaderButton.controlEventPublisher(for: .touchUpOutside),
+            myPageHeaderButton.controlEventPublisher(for: .touchCancel)
+        )
+        .map { UIColor.grayscale1 }
+        .sink { buttonColor in
+            self.backgroundColor = buttonColor
+        }
+        .store(in: cancelBag)
     }
 }

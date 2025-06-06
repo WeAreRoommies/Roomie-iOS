@@ -12,7 +12,7 @@ import CombineCocoa
 import SnapKit
 import Then
 
-final class MyPageButton: UIView {
+final class MyPageCellButton: BaseView {
     
     // MARK: - Property
     
@@ -25,8 +25,8 @@ final class MyPageButton: UIView {
     private let titleStackView = UIStackView()
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
-    private let nextImageView = UIImageView(image: .icnIn)
-    private let myPageButton = UIButton()
+    private let nextImageView = UIImageView()
+    let myPageButton = UIButton()
     
     // MARK: - Initializer
 
@@ -37,7 +37,7 @@ final class MyPageButton: UIView {
         setUI()
         setLayout()
         setButton()
-        dataBind(title: title, subtitle: subtitle)
+        configure(title: title, subtitle: subtitle)
     }
     
     override init(frame: CGRect) {
@@ -47,7 +47,7 @@ final class MyPageButton: UIView {
         setUI()
         setLayout()
         setButton()
-        dataBind()
+        configure()
     }
     
     required init?(coder: NSCoder) {
@@ -57,42 +57,12 @@ final class MyPageButton: UIView {
         setUI()
         setLayout()
         setButton()
-        dataBind()
-    }
-    
-    private func dataBind(title: String = "", subtitle: String? = nil) {
-        titleLabel.updateText(title)
-        if subtitle != nil {
-            subtitleLabel.updateText(subtitle)
-        } else {
-            subtitleLabel.isHidden = true
-        }
-    }
-    
-    private func setButton() {
-        myPageButton
-            .controlEventPublisher(for: .touchDown)
-            .map { UIColor.grayscale3 }
-            .sink { buttonColor in
-                self.backgroundColor = buttonColor
-            }
-            .store(in: cancelBag)
-        
-        Publishers.MergeMany(
-            myPageButton.controlEventPublisher(for: .touchUpInside),
-            myPageButton.controlEventPublisher(for: .touchUpOutside),
-            myPageButton.controlEventPublisher(for: .touchCancel)
-        )
-        .map { UIColor.grayscale1 }
-        .sink { buttonColor in
-            self.backgroundColor = buttonColor
-        }
-        .store(in: cancelBag)
+        configure()
     }
     
     // MARK: - UISetting
     
-    private func setStyle() {
+    override func setStyle() {
         titleStackView.do {
             $0.axis = .vertical
             $0.alignment = .top
@@ -114,14 +84,14 @@ final class MyPageButton: UIView {
         }
     }
     
-    private func setUI() {
+    override func setUI() {
         addSubviews(titleStackView, nextImageView, myPageButton)
         titleStackView.addArrangedSubviews(titleLabel, subtitleLabel)
     }
     
-    private func setLayout() {
+    override func setLayout() {
         self.snp.makeConstraints {
-            $0.height.equalTo(MyPageButton.defaultHeight)
+            $0.height.equalTo(MyPageCellButton.defaultHeight)
         }
         
         titleStackView.snp.makeConstraints {
@@ -137,6 +107,38 @@ final class MyPageButton: UIView {
         
         myPageButton.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+    }
+}
+
+private extension MyPageCellButton {
+    func setButton() {
+        myPageButton
+            .controlEventPublisher(for: .touchDown)
+            .map { UIColor.grayscale3 }
+            .sink { buttonColor in
+                self.backgroundColor = buttonColor
+            }
+            .store(in: cancelBag)
+        
+        Publishers.MergeMany(
+            myPageButton.controlEventPublisher(for: .touchUpInside),
+            myPageButton.controlEventPublisher(for: .touchUpOutside),
+            myPageButton.controlEventPublisher(for: .touchCancel)
+        )
+        .map { UIColor.grayscale1 }
+        .sink { buttonColor in
+            self.backgroundColor = buttonColor
+        }
+        .store(in: cancelBag)
+    }
+    
+    func configure(title: String = "", subtitle: String? = nil) {
+        titleLabel.updateText(title)
+        if subtitle != nil {
+            subtitleLabel.updateText(subtitle)
+        } else {
+            subtitleLabel.isHidden = true
         }
     }
 }

@@ -8,6 +8,8 @@
 import UIKit
 import Combine
 
+import CombineCocoa
+
 final class MyPageViewController: BaseViewController {
     
     // MARK: - UIComponent
@@ -56,6 +58,32 @@ final class MyPageViewController: BaseViewController {
     override func setView() {
         setNavigationBar(with: "마이페이지", isBackButtonHidden: true)
     }
+    
+    override func setAction() {
+        rootView.myPageHeaderButton.myPageHeaderButton
+            .tapPublisher
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                let myAccountViewController = MyAccountViewController(
+                    viewModel: MyAccountViewModel(service: MyPageService())
+                )
+                myAccountViewController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(myAccountViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
+        rootView.wishListButton.myPageButton
+            .tapPublisher
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                let wishListViewController = WishListViewController(
+                    viewModel: WishListViewModel(service: WishListService())
+                )
+                wishListViewController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(wishListViewController, animated: true)
+            }
+            .store(in: cancelBag)
+    }
 }
 
 private extension MyPageViewController {
@@ -70,7 +98,7 @@ private extension MyPageViewController {
             .receive(on: RunLoop.main)
             .sink { [weak self] name in
                 guard let self = self else { return }
-                rootView.myPageHeaderView.nicknameLabel.updateText(name)
+                rootView.myPageHeaderButton.nicknameLabel.updateText(name)
             }
             .store(in: cancelBag)
         
@@ -78,7 +106,7 @@ private extension MyPageViewController {
             .receive(on: RunLoop.main)
             .sink { [weak self] socialType in
                 guard let self = self else { return }
-                rootView.myPageHeaderView.loginTypeLabel.updateText("\(socialType) 계정 회원")
+                rootView.myPageHeaderButton.loginTypeLabel.updateText("\(socialType) 계정 회원")
             }
             .store(in: cancelBag)
     }
