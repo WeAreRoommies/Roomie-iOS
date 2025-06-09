@@ -120,7 +120,8 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                     isPinned: true,
                     moodTag: "#차분한",
                     contractTerm: 6,
-                    mainImageURL: ""
+                    mainImageURL: "",
+                    excludeFull: false
                 ),
                 House(
                     houseID: 2,
@@ -135,7 +136,8 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                     isPinned: true,
                     moodTag: "#깔끔한",
                     contractTerm: 6,
-                    mainImageURL: ""
+                    mainImageURL: "",
+                    excludeFull: false
                 ),
                 House(
                     houseID: 3,
@@ -150,7 +152,8 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                     isPinned: false,
                     moodTag: "#활발한",
                     contractTerm: 12,
-                    mainImageURL: ""
+                    mainImageURL: "",
+                    excludeFull: false
                 ),
                 House(
                     houseID: 4,
@@ -165,7 +168,8 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                     isPinned: true,
                     moodTag: "#활발한",
                     contractTerm: 12,
-                    mainImageURL: ""
+                    mainImageURL: "",
+                    excludeFull: false
                 ),
                 House(
                     houseID: 5,
@@ -180,7 +184,8 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                     isPinned: true,
                     moodTag: "#조용한",
                     contractTerm: 6,
-                    mainImageURL: ""
+                    mainImageURL: "",
+                    excludeFull: true
                 )
             ]
         )
