@@ -13,16 +13,14 @@ final class HomeViewModel {
     // MARK: - Property
     
     private let service: HomeServiceProtocol
-    private let builder: MapRequestDTO.Builder
     
     let homeDataSubject = CurrentValueSubject<HomeResponseDTO?, Never>(nil)
     let pinnedInfoDataSubject = PassthroughSubject<(Int, Bool), Never>()
     private let didTapHouseDataSubject = PassthroughSubject<Int, Never>()
     private let locationSearchDataSubject = PassthroughSubject<MapSearchResponseDTO, Never>()
     
-    init(service: HomeServiceProtocol, builder: MapRequestDTO.Builder) {
+    init(service: HomeServiceProtocol) {
         self.service = service
-        self.builder = builder
     }
 }
 
@@ -64,7 +62,7 @@ extension HomeViewModel: ViewModelType {
         input.locationDidSelectSubject
             .sink { [weak self] location in
                 guard let self = self else { return }
-                self.builder.setLocation(location)
+                
             }
             .store(in: cancelBag)
         

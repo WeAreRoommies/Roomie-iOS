@@ -334,13 +334,12 @@ private extension HomeViewController {
     
     func presentLocationSearchSheet() {
         let locationViewController = LocationSearchSheetViewController(
-            viewModel: HomeViewModel(service: HomeService(),
-                                               builder: MapRequestDTO.Builder.shared)
+            viewModel: HomeViewModel(service: HomeService())
         )
         locationViewController.delegate = self
         if let sheet = locationViewController.sheetPresentationController {
             sheet.detents = [.large()]
-            sheet.prefersGrabberVisible = false
+            sheet.prefersGrabberVisible = true
             sheet.preferredCornerRadius = 20
         }
         locationViewController.isModalInPresentation = false

@@ -14,7 +14,6 @@ final class LocationSearchSheetView: BaseView {
     
     // MARK: - UIComponent
     
-    private let indicatorView = UIView()
     let searchTextField = MapSearchTextField("원하는 장소를 찾아보세요")
     private let searchImageView = UIImageView()
     private let seperatorView = UIView()
@@ -32,11 +31,6 @@ final class LocationSearchSheetView: BaseView {
     // MARK: - UISetting
     
     override func setStyle() {
-        indicatorView.do {
-            $0.backgroundColor = .grayscale5
-            $0.layer.cornerRadius = Screen.height(3)
-        }
-        
         searchImageView.do {
             $0.image = .icnSearch40
         }
@@ -58,7 +52,6 @@ final class LocationSearchSheetView: BaseView {
     
     override func setUI() {
         addSubviews(
-            indicatorView,
             searchTextField,
             searchImageView,
             seperatorView,
@@ -68,15 +61,8 @@ final class LocationSearchSheetView: BaseView {
     }
     
     override func setLayout() {
-        indicatorView.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(12)
-            $0.centerX.equalToSuperview()
-            $0.width.equalTo(Screen.width(40))
-            $0.height.equalTo(Screen.height(6))
-        }
-        
         searchTextField.snp.makeConstraints {
-            $0.top.equalTo(indicatorView.snp.bottom).offset(14)
+            $0.top.equalToSuperview().offset(20)
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.height.equalTo(Screen.height(50))
         }
