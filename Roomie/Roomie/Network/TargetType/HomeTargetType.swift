@@ -11,6 +11,7 @@ import Moya
 
 enum HomeTargetType {
     case fetchUserHomeData
+    case fetchLocationSearchData(query: String)
     case updatePinnedHouse(houseID: Int)
 }
 
@@ -23,6 +24,8 @@ extension HomeTargetType: TargetType {
         switch self {
         case .fetchUserHomeData:
             return "/users/home"
+        case .fetchLocationSearchData:
+            return "/locations"
         case .updatePinnedHouse(houseID: let houseID):
             return "/houses/\(houseID)/pins"
         }
@@ -34,11 +37,18 @@ extension HomeTargetType: TargetType {
             return .get
         case .updatePinnedHouse:
             return .patch
+        case .fetchLocationSearchData:
+            return .get
         }
     }
     
     var task: Moya.Task {
-        return .requestPlain
+        switch self {
+        case .fetchLocationSearchData(let query):
+            return .requestParameters(parameters: ["q": query], encoding: URLEncoding.queryString)
+        default:
+            return .requestPlain
+        }
     }
     
     var headers: [String : String]? {

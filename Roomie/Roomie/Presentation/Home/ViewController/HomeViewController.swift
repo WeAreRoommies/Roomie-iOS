@@ -29,6 +29,8 @@ final class HomeViewController: BaseViewController {
     
     private lazy var dataSource = createDiffableDataSource()
     
+    private let locationButton = UIButton(type: .system)
+    
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
         
@@ -85,6 +87,14 @@ final class HomeViewController: BaseViewController {
     // MARK: - Functions
     
     override func setAction() {
+        locationButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.presentLocationSearchSheet()
+            }
+            .store(in: cancelBag)
+        
         rootView.updateButton.updateButton
             .tapPublisher
             .sink {
@@ -153,7 +163,9 @@ private extension HomeViewController {
     func bindViewModel() {
         let input = HomeViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
-            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher()
+            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher(),
+            searchTextFieldEnterSubject: Empty().eraseToAnyPublisher(),
+            locationDidSelectSubject: Empty().eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -259,7 +271,7 @@ private extension HomeViewController {
         navigationController?.navigationBar.scrollEdgeAppearance = barAppearance
     }
     
-    func setHomeNavigationBar(locaton location:String) {
+    func setHomeNavigationBar(locaton location: String) {
         title = nil
         navigationItem.leftBarButtonItem = nil
         
@@ -271,9 +283,33 @@ private extension HomeViewController {
             action: #selector(wishLishButtonDidTap)
         )
         let dropDownImageView = UIImageView(image: .icnArrowDownFilled16)
+        let locationButtonStack = UIStackView()
         
-        let locationItem = UIBarButtonItem(customView: locationLabel)
-        let dropDownItem = UIBarButtonItem(customView: dropDownImageView)
+        dropDownImageView.snp.makeConstraints {
+            $0.size.equalTo(16)
+        }
+        
+        locationButtonStack.addArrangedSubviews(locationLabel, dropDownImageView)
+        locationButtonStack.do {
+            $0.axis = .horizontal
+                    $0.spacing = 8
+                    $0.alignment = .center
+                    $0.isUserInteractionEnabled = false
+        }
+        
+        locationButton.addSubview(locationButtonStack)
+        locationButtonStack.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        locationButton.sizeToFit()
+        locationButton.snp.makeConstraints {
+            $0.height.equalTo(22)
+            $0.width.equalTo(Screen.width(66))
+        }
+        
+        let locationBarButton = UIBarButtonItem(customView: locationButton)
+        
         likedButton.tintColor = .grayscale10
         barAppearance.backgroundColor = .primaryLight4
         locationLabel.do {
@@ -281,7 +317,7 @@ private extension HomeViewController {
         }
         
         navigationItem.rightBarButtonItem = likedButton
-        navigationItem.leftBarButtonItems = [locationItem, dropDownItem]
+        navigationItem.leftBarButtonItem = locationBarButton
         
         view.setNeedsLayout()
         view.layoutIfNeeded()
@@ -294,6 +330,20 @@ private extension HomeViewController {
                 cell.isSelected = false
             }
         }
+    }
+    
+    func presentLocationSearchSheet() {
+        let locationViewController = LocationSearchSheetViewController(
+            viewModel: HomeViewModel(service: HomeService())
+        )
+        locationViewController.delegate = self
+        if let sheet = locationViewController.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 20
+        }
+        locationViewController.isModalInPresentation = false
+        self.present(locationViewController, animated: true)
     }
     
     @objc
@@ -356,3 +406,8 @@ extension HomeViewController: UIScrollViewDelegate {
     }
 }
 
+extension HomeViewController: LocationSearchSheetViewControllerDelegate {
+    func didSelectLocation(location: String, lat: Double, lng: Double) {
+        // TODO: - 서버 작업 완료 시 추후 연결
+    }
+}
