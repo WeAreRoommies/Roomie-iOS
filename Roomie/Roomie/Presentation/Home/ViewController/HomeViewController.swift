@@ -176,6 +176,7 @@ private extension HomeViewController {
                 guard let self else { return }
                 self.rootView.nameLabel.text = data.nickname
                 self.setHomeNavigationBar(locaton: data.location)
+                
             }
             .store(in: cancelBag)
         
