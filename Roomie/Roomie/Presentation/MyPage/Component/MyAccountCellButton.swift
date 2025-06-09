@@ -25,7 +25,7 @@ final class MyAccountCellButton: UIView {
     private let titleLabel = UILabel()
     let contentLabel = UILabel()
     private let nextImageView = UIImageView()
-    private let myAccountButton = UIButton()
+    private let button = UIButton()
     
     // MARK: - Initializer
 
@@ -77,7 +77,7 @@ final class MyAccountCellButton: UIView {
     }
     
     private func setUI() {
-        addSubviews(titleLabel, contentLabel, nextImageView, myAccountButton)
+        addSubviews(titleLabel, contentLabel, nextImageView, button)
     }
     
     private func setLayout() {
@@ -101,7 +101,7 @@ final class MyAccountCellButton: UIView {
             $0.size.equalTo(44)
         }
         
-        myAccountButton.snp.makeConstraints {
+        button.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
@@ -109,7 +109,7 @@ final class MyAccountCellButton: UIView {
 
 private extension MyAccountCellButton {
     func setButton() {
-        myAccountButton
+        button
             .controlEventPublisher(for: .touchDown)
             .map { UIColor.grayscale3 }
             .sink { buttonColor in
@@ -118,9 +118,9 @@ private extension MyAccountCellButton {
             .store(in: cancelBag)
         
         Publishers.MergeMany(
-            myAccountButton.controlEventPublisher(for: .touchUpInside),
-            myAccountButton.controlEventPublisher(for: .touchUpOutside),
-            myAccountButton.controlEventPublisher(for: .touchCancel)
+            button.controlEventPublisher(for: .touchUpInside),
+            button.controlEventPublisher(for: .touchUpOutside),
+            button.controlEventPublisher(for: .touchCancel)
         )
         .map { UIColor.grayscale1 }
         .sink { buttonColor in

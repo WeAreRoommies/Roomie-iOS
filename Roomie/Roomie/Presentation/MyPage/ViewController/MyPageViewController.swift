@@ -60,7 +60,7 @@ final class MyPageViewController: BaseViewController {
     }
     
     override func setAction() {
-        rootView.myPageHeaderButton.myPageHeaderButton
+        rootView.myPageHeaderButton.button
             .tapPublisher
             .sink { [weak self] _ in
                 guard let self = self else { return }
@@ -72,7 +72,7 @@ final class MyPageViewController: BaseViewController {
             }
             .store(in: cancelBag)
         
-        rootView.wishListButton.myPageButton
+        rootView.wishListButton.button
             .tapPublisher
             .sink { [weak self] _ in
                 guard let self = self else { return }
