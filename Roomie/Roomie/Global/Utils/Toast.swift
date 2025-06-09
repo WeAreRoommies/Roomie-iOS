@@ -57,7 +57,7 @@ private extension Toast {
 
 extension Toast {
     /// 화면의 최상단에 Toast 메시지를 표시합니다.
-    static func show(message: String, bottomInset: CGFloat = Screen.height(32)) {
+    static func show(message: String, bottomInset: CGFloat = Screen.height(100)) {
         guard let window = UIApplication.shared.connectedScenes
             .compactMap({ $0 as? UIWindowScene })
             .first?.windows
