@@ -8,6 +8,8 @@
 import UIKit
 import Combine
 
+import CombineCocoa
+
 final class MyAccountViewController: BaseViewController {
     
     // MARK: - UIComponent
@@ -55,6 +57,22 @@ final class MyAccountViewController: BaseViewController {
 
     override func setView() {
         setNavigationBar(with: "나의 계정 정보")
+    }
+    
+    override func setAction() {
+        rootView.logoutButton
+            .tapPublisher
+            .sink { [weak self] in
+                // TODO: 로그아웃 구현
+            }
+            .store(in: cancelBag)
+        
+        rootView.signoutButton
+            .tapPublisher
+            .sink { [weak self] in
+                // TODO: 회원탈퇴 구현
+            }
+            .store(in: cancelBag)
     }
 }
 
