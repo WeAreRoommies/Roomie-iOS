@@ -18,9 +18,7 @@ final class LoginViewController: BaseViewController {
     
     private let rootView = LoginView()
     
-    private let kakaoLoginButtonTapSubject = PassthroughSubject<Void, Never>()
-    
-    private let appleLoginButtonTapSubject = PassthroughSubject<Void, Never>()
+    private let loginButtonTapSubject = PassthroughSubject<SocialType, Never>()
     
     private let viewModel: LoginViewModel
     
@@ -54,7 +52,7 @@ final class LoginViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                self.kakaoLoginButtonTapSubject.send()
+                self.loginButtonTapSubject.send(.kakao)
             }
             .store(in: cancelBag)
         
@@ -62,7 +60,7 @@ final class LoginViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self else { return }
-                self.appleLoginButtonTapSubject.send()
+                self.loginButtonTapSubject.send(.apple)
             }
             .store(in: cancelBag)
     }
@@ -73,8 +71,7 @@ final class LoginViewController: BaseViewController {
 private extension LoginViewController {
     func bindViewModel() {
         let input = LoginViewModel.Input(
-            kakaoLoginButtonTapSubject: kakaoLoginButtonTapSubject.eraseToAnyPublisher(),
-            appleLoginButtonTapSubject: appleLoginButtonTapSubject.eraseToAnyPublisher()
+            loginButtonTapSubject: loginButtonTapSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)

@@ -23,8 +23,7 @@ final class LoginViewModel: NSObject {
 
 extension LoginViewModel: ViewModelType {
     struct Input {
-        let kakaoLoginButtonTapSubject: AnyPublisher<Void, Never>
-        let appleLoginButtonTapSubject: AnyPublisher<Void, Never>
+        let loginButtonTapSubject: AnyPublisher<SocialType, Never>
     }
     
     struct Output {
@@ -32,31 +31,15 @@ extension LoginViewModel: ViewModelType {
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
-        input.kakaoLoginButtonTapSubject
-            .sink { [weak self] in
-                guard let self = self else { return }
-                if (UserApi.isKakaoTalkLoginAvailable()) {
-                    UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
-                        if let error = error {
-                            print(">>> \(error.localizedDescription) : \(#function)")
-                        } else {
-                            guard let oauthToken = oauthToken else { return }
-                            self.authLogin(
-                                request: AuthLoginRequestDTO(
-                                    provider: "KAKAO",
-                                    accessToken: oauthToken.accessToken
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-            .store(in: cancelBag)
-        
-        input.appleLoginButtonTapSubject
-            .sink { [weak self] in
+        input.loginButtonTapSubject
+            .sink { [weak self] socialType in
                 guard let self else { return }
-                self.performAppleLogin()
+                switch socialType {
+                case .kakao:
+                    self.performKakaoLogin()
+                case .apple:
+                    self.performAppleLogin()
+                }
             }
             .store(in: cancelBag)
         
@@ -97,6 +80,24 @@ private extension LoginViewModel {
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
     }
+    
+    func performKakaoLogin() {
+        if (UserApi.isKakaoTalkLoginAvailable()) {
+            UserApi.shared.loginWithKakaoTalk {(oauthToken, error) in
+                if let error = error {
+                    print(">>> \(error.localizedDescription) : \(#function)")
+                } else {
+                    guard let oauthToken = oauthToken else { return }
+                    self.authLogin(
+                        request: AuthLoginRequestDTO(
+                            provider: SocialType.kakao.rawValue,
+                            accessToken: oauthToken.accessToken
+                        )
+                    )
+                }
+            }
+        }
+    }
 }
 
 // MARK: - ASAuthorizationControllerPresentationContextProviding
@@ -128,7 +129,7 @@ extension LoginViewModel: ASAuthorizationControllerDelegate {
         if let identityToken {
             self.authLogin(
                 request: AuthLoginRequestDTO(
-                    provider: "APPLE",
+                    provider: SocialType.apple.rawValue,
                     accessToken: identityToken
                 )
             )
