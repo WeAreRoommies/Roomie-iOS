@@ -80,8 +80,6 @@ final class LocationSearchSheetViewController: BaseViewController {
     override func setAction() {
         hideKeyboardWhenDidTap()
         
-        rootView.searchTextField.becomeFirstResponder()
-        
         rootView.searchTextField
             .controlEventPublisher(for: .editingDidEndOnExit)
             .sink { [weak self] in

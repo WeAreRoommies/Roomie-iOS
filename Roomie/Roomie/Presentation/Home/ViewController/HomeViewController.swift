@@ -79,6 +79,7 @@ final class HomeViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        setAction()
         updateSeletedCell()
         setHomeNavigationBarStatus()
         viewWillAppearSubject.send()
@@ -339,11 +340,13 @@ private extension HomeViewController {
         )
         locationViewController.delegate = self
         if let sheet = locationViewController.sheetPresentationController {
-            sheet.detents = [.large()]
+            sheet.detents = [.medium(), .large()]
             sheet.prefersGrabberVisible = true
             sheet.preferredCornerRadius = 20
         }
         locationViewController.isModalInPresentation = false
+        locationViewController.isModalInPresentation = false
+        
         self.present(locationViewController, animated: true)
     }
     

@@ -73,7 +73,7 @@ final class LocationSearchSheetView: BaseView {
     
     override func setLayout() {
         locationSettingLabel.snp.makeConstraints{
-            $0.top.equalToSuperview().inset(14)
+            $0.top.equalToSuperview().inset(32)
             $0.leading.equalToSuperview().inset(16)
         }
         
