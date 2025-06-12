@@ -40,6 +40,7 @@ final class LocationSearchSheetView: BaseView {
         locationLabel.do {
             $0.setText(style: .body5, color: .grayscale10)
         }
+        
         searchImageView.do {
             $0.image = .icnSearch40
         }

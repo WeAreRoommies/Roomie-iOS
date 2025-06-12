@@ -37,6 +37,7 @@ final class HomeViewController: BaseViewController {
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
+    final let bottomSheetHeight: CGFloat = UIScreen.main.bounds.height * 0.85
     
     private var homeNavigationBarStatus: homeNavigationBarStatus = .scrolled {
         didSet {
@@ -79,7 +80,6 @@ final class HomeViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        setAction()
         updateSeletedCell()
         setHomeNavigationBarStatus()
         viewWillAppearSubject.send()
@@ -177,7 +177,6 @@ private extension HomeViewController {
                 guard let self else { return }
                 self.rootView.nameLabel.text = data.nickname
                 self.setHomeNavigationBar(locaton: data.location)
-                
             }
             .store(in: cancelBag)
         
@@ -338,14 +337,16 @@ private extension HomeViewController {
         let locationViewController = LocationSearchSheetViewController(
             viewModel: HomeViewModel(service: HomeService())
         )
+        
         locationViewController.delegate = self
+        
+        let customDetent = UISheetPresentationController.Detent.custom { _ in self.bottomSheetHeight }
+        
         if let sheet = locationViewController.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
+            sheet.detents = [customDetent]
             sheet.prefersGrabberVisible = true
             sheet.preferredCornerRadius = 20
         }
-        locationViewController.isModalInPresentation = false
-        locationViewController.isModalInPresentation = false
         
         self.present(locationViewController, animated: true)
     }
