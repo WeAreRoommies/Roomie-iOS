@@ -33,7 +33,10 @@ final class LocationSearchSheetViewController: BaseViewController {
     final let contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     
     private let searchTextFieldEnterSubject = PassthroughSubject<String, Never>()
+    
     private let locationDidSelectSubject = PassthroughSubject<String, Never>()
+    
+    private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     
     // MARK: - Initializer
 
@@ -62,6 +65,12 @@ final class LocationSearchSheetViewController: BaseViewController {
         updateEmptyView(isEmpty: true)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        viewWillAppearSubject.send()
+    }
+    
     // MARK: - Functions
     
     override func setDelegate() {
@@ -70,8 +79,6 @@ final class LocationSearchSheetViewController: BaseViewController {
     
     override func setAction() {
         hideKeyboardWhenDidTap()
-        
-        rootView.searchTextField.becomeFirstResponder()
         
         rootView.searchTextField
             .controlEventPublisher(for: .editingDidEndOnExit)
@@ -105,13 +112,22 @@ private extension LocationSearchSheetViewController {
     
     func bindViewModel() {
         let input = HomeViewModel.Input(
-            viewWillAppear: Empty().eraseToAnyPublisher(),
+            viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
             pinnedHouseIDSubject: Empty().eraseToAnyPublisher(),
             searchTextFieldEnterSubject: searchTextFieldEnterSubject.eraseToAnyPublisher(),
             locationDidSelectSubject: locationDidSelectSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
+
+        output.userInfo
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] data in
+                guard let self = self else { return }
+                let result = data.location
+                self.rootView.locationLabel.text = result
+            }
+            .store(in: cancelBag)
         
         output.locationSearchData
             .receive(on: RunLoop.main)
