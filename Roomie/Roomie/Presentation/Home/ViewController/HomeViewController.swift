@@ -37,6 +37,7 @@ final class HomeViewController: BaseViewController {
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
+    final let bottomSheetHeight: CGFloat = UIScreen.main.bounds.height * 0.85
     
     private var homeNavigationBarStatus: homeNavigationBarStatus = .scrolled {
         didSet {
@@ -336,13 +337,17 @@ private extension HomeViewController {
         let locationViewController = LocationSearchSheetViewController(
             viewModel: HomeViewModel(service: HomeService())
         )
+        
         locationViewController.delegate = self
+        
+        let customDetent = UISheetPresentationController.Detent.custom { _ in self.bottomSheetHeight }
+        
         if let sheet = locationViewController.sheetPresentationController {
-            sheet.detents = [.large()]
+            sheet.detents = [customDetent]
             sheet.prefersGrabberVisible = true
             sheet.preferredCornerRadius = 20
         }
-        locationViewController.isModalInPresentation = false
+        
         self.present(locationViewController, animated: true)
     }
     
