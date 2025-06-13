@@ -67,7 +67,6 @@ private extension LoginViewModel {
     func saveTokens(accessToken: String, refreshToken: String) {
         TokenManager.shared.saveTokens(accessToken: accessToken, refreshToken: refreshToken)
         isLoginSucceedSubject.send(true)
-        NotificationCenter.default.post(name: Notification.shouldLogin, object: nil)
     }
     
     func performAppleLogin() {

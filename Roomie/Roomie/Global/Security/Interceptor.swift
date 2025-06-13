@@ -60,7 +60,6 @@ final class Interceptor: RequestInterceptor {
                 switch error {
                 case .noRefreshToken, .refreshTokenExpired, .userNotFound:
                     NotificationCenter.default.post(name: Notification.shouldLogout, object: nil)
-                    await Toast.show(.sessionExpired)
                     break
                 case .reissueFailed:
                     await Toast.show(.serverError)

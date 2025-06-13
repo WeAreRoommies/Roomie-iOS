@@ -80,11 +80,7 @@ private extension LoginViewController {
             .receive(on: RunLoop.main)
             .sink { isSucceed in
                 if isSucceed {
-                    NotificationCenter.default.post(
-                        name: Notification.shouldLogin,
-                        object: nil,
-                        userInfo: ["manualLogin": true]
-                    )
+                    NotificationCenter.default.post(name: Notification.shouldLogin, object: nil)
                 }
             }
             .store(in: cancelBag)
