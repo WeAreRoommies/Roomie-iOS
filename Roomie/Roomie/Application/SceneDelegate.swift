@@ -84,8 +84,8 @@ private extension SceneDelegate {
             self.updateRootViewController()
             
             if fromManualLogin {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    Toast.show(message: "로그인에 성공했어요")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {                    
+                    Toast.show(.loginSuccess)
                 }
             }
         }
