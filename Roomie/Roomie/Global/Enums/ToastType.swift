@@ -24,9 +24,6 @@ enum ToastType {
     }
     
     var bottomInset: CGFloat {
-        switch self {
-        case .serverError, .requestFailed, .unexpectedError:
-            return Screen.height(100)
-        }
+        return Screen.height(100)
     }
 }
