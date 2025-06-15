@@ -78,16 +78,8 @@ private extension SceneDelegate {
 
     @objc
     func handleLogin(_ notification: Notification) {
-        let fromManualLogin = notification.userInfo?["manualLogin"] as? Bool ?? false
-        
         DispatchQueue.main.async {
             self.updateRootViewController()
-            
-            if fromManualLogin {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    Toast.show(message: "로그인에 성공했어요")
-                }
-            }
         }
     }
 }
