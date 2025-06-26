@@ -291,9 +291,6 @@ private extension HomeViewController {
         
         locationLabel.do {
             $0.setText(location, style: .title2, color: .grayscale10)
-            $0.numberOfLines = 1
-            $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
-            $0.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         }
         
         dropDownImageView.snp.makeConstraints {
@@ -313,11 +310,10 @@ private extension HomeViewController {
             $0.edges.equalToSuperview()
         }
         
-        locationButton.sizeToFit()
         locationButton.snp.makeConstraints {
             $0.height.equalTo(22)
-            $0.width.equalTo(Screen.width(66))
         }
+        locationButton.sizeToFit()
         
         let locationBarButton = UIBarButtonItem(customView: locationButton)
         
