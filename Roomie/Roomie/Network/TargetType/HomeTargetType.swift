@@ -13,6 +13,7 @@ enum HomeTargetType {
     case fetchUserHomeData
     case fetchLocationSearchData(query: String)
     case updatePinnedHouse(houseID: Int)
+    case fetchUserLocation(latitude: Double, longitude: Double, location: String)
 }
 
 extension HomeTargetType: TargetType {
@@ -28,6 +29,8 @@ extension HomeTargetType: TargetType {
             return "/locations"
         case .updatePinnedHouse(houseID: let houseID):
             return "/houses/\(houseID)/pins"
+        case .fetchUserLocation:
+            return "users/location"
         }
     }
     
@@ -39,6 +42,8 @@ extension HomeTargetType: TargetType {
             return .patch
         case .fetchLocationSearchData:
             return .get
+        case .fetchUserLocation:
+            return .patch
         }
     }
     
@@ -46,6 +51,11 @@ extension HomeTargetType: TargetType {
         switch self {
         case .fetchLocationSearchData(let query):
             return .requestParameters(parameters: ["q": query], encoding: URLEncoding.queryString)
+        case .fetchUserLocation(let lat, let lng, let location):
+            return .requestParameters(
+                parameters: ["latitude": lat, "longitude": lng, "location": location],
+                encoding: JSONEncoding.default
+            )
         default:
             return .requestPlain
         }
