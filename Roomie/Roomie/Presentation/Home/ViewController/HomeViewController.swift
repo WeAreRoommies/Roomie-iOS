@@ -279,13 +279,13 @@ private extension HomeViewController {
         
         locationButton.subviews.forEach { $0.removeFromSuperview() }
         
-        let locationLabel = UILabel()
         let likedButton = UIBarButtonItem(
             image: .icnHeartLine24,
             style: .plain,
             target: self,
             action: #selector(wishLishButtonDidTap)
         )
+        let locationLabel = UILabel()
         let dropDownImageView = UIImageView(image: .icnArrowDownFilled16)
         let locationButtonStack = UIStackView()
         
@@ -390,7 +390,8 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        guard let houseID = viewModel.homeDataSubject.value?.recentlyViewedHouses[indexPath.item].houseID else { return }
+        guard let houseID = viewModel.homeDataSubject.value?.recentlyViewedHouses[indexPath.item].houseID
+        else { return }
         let houseDetailViewController = HouseDetailViewController(
             viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
         )

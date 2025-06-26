@@ -8,7 +8,6 @@
 import Foundation
 
 struct UserLocationResponseDTO: ResponseModelType {
-    let latitude: Double
-    let longitude: Double
+    let latitude, longitude: Double
     let location: String
 }

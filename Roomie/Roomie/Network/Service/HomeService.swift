@@ -132,7 +132,11 @@ final class MockHomeService: HomeServiceProtocol {
     }
     
     func fetchUserLocation(latitude: Double, longitude: Double, location: String) async throws -> BaseResponseBody<UserLocationResponseDTO>? {
-        let mockData: UserLocationResponseDTO = UserLocationResponseDTO(latitude: 11, longitude: 11, location: "MOCK")
+        let mockData: UserLocationResponseDTO = UserLocationResponseDTO(
+            latitude: 11,
+            longitude: 11,
+            location: "MOCK"
+        )
         return BaseResponseBody(code: 200, message: "", data: mockData)
     }
 }
