@@ -18,7 +18,7 @@ final class TourUserView: BaseView {
     private let subTitleLabel = UILabel()
     
     private let nameLabel = UILabel()
-    let nameTextField = TourTextField()
+    let nameTextField = RoomieTextField()
     
     private let birthLabel = UILabel()
     let birthPickerView = DatePickerView(true)
@@ -29,7 +29,7 @@ final class TourUserView: BaseView {
     private let genderButtonStackView = UIStackView()
     
     private let phoneNumberLabel = UILabel()
-    let phoneNumberTextField = TourTextField(isErrorExist: true)
+    let phoneNumberTextField = RoomieTextField()
     
     private let inValidErrorIcon = UIImageView()
     private let inValidErrorLabel = UILabel()
@@ -139,7 +139,7 @@ final class TourUserView: BaseView {
         nameTextField.snp.makeConstraints {
             $0.top.equalTo(nameLabel.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.height.equalTo(TourTextField.defaultHeight)
+            $0.height.equalTo(RoomieTextField.defaultHeight)
         }
         
         birthLabel.snp.makeConstraints {
@@ -172,7 +172,7 @@ final class TourUserView: BaseView {
         phoneNumberTextField.snp.makeConstraints {
             $0.top.equalTo(phoneNumberLabel.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.height.equalTo(TourTextField.defaultHeight)
+            $0.height.equalTo(RoomieTextField.defaultHeight)
         }
         
         inValidErrorIcon.snp.makeConstraints {

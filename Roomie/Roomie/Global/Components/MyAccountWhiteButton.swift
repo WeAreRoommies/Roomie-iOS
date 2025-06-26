@@ -10,7 +10,7 @@ import Combine
 
 import CombineCocoa
 
-final class LogoutButton: UIButton {
+final class MyAccountWhiteButton: UIButton {
     
     // MARK: - Property
     
@@ -50,7 +50,7 @@ final class LogoutButton: UIButton {
 
 // MARK: - Functions
 
-private extension LogoutButton {
+private extension MyAccountWhiteButton {
     func setButton(with title: String = " ", isEnabled: Bool = true) {
         setTitle(title, style: .body2, color: isEnabled ? .primaryPurple : .grayscale7)
         setLayer(borderWidth: 1, borderColor: isEnabled ? .primaryPurple : .grayscale5, cornerRadius: 8)

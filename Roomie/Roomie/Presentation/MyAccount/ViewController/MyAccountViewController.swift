@@ -60,6 +60,18 @@ final class MyAccountViewController: BaseViewController {
     }
     
     override func setAction() {
+        rootView.nameCellButton.button
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let nameEditViewController = NameEditViewController(
+                    viewModel: NameEditViewModel()
+                )
+                nameEditViewController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(nameEditViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
         rootView.logoutButton
             .tapPublisher
             .sink { [weak self] in

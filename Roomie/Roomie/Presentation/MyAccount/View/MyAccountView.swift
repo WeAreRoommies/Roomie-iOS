@@ -22,7 +22,7 @@ final class MyAccountView: BaseView {
     let phoneNumberCellButton = MyAccountCellButton(title: "연락처")
     let genderCellButton = MyAccountCellButton(title: "성별")
     
-    let logoutButton = LogoutButton(title: "로그아웃", isEnabled: false)
+    let logoutButton = MyAccountWhiteButton(title: "로그아웃", isEnabled: false)
     let signoutButton = UIButton()
     
     // MARK: - UISetting
