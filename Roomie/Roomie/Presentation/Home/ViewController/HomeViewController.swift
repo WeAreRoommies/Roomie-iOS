@@ -33,6 +33,7 @@ final class HomeViewController: BaseViewController {
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
+    private let locationDidSelectSubject = PassthroughSubject<(Double, Double, String), Never>()
         
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
@@ -166,7 +167,7 @@ private extension HomeViewController {
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
             pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher(),
             searchTextFieldEnterSubject: Empty().eraseToAnyPublisher(),
-            locationDidSelectSubject: Empty().eraseToAnyPublisher()
+            locationDidSelectSubject: locationDidSelectSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -276,6 +277,8 @@ private extension HomeViewController {
         title = nil
         navigationItem.leftBarButtonItem = nil
         
+        locationButton.subviews.forEach { $0.removeFromSuperview() }
+        
         let locationLabel = UILabel()
         let likedButton = UIBarButtonItem(
             image: .icnHeartLine24,
@@ -285,6 +288,13 @@ private extension HomeViewController {
         )
         let dropDownImageView = UIImageView(image: .icnArrowDownFilled16)
         let locationButtonStack = UIStackView()
+        
+        locationLabel.do {
+            $0.setText(location, style: .title2, color: .grayscale10)
+            $0.numberOfLines = 1
+            $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
+            $0.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        }
         
         dropDownImageView.snp.makeConstraints {
             $0.size.equalTo(16)
@@ -313,9 +323,6 @@ private extension HomeViewController {
         
         likedButton.tintColor = .grayscale10
         barAppearance.backgroundColor = .primaryLight4
-        locationLabel.do {
-            $0.setText(location, style: .title2, color: .grayscale10)
-        }
         
         navigationItem.rightBarButtonItem = likedButton
         navigationItem.leftBarButtonItem = locationBarButton
@@ -335,8 +342,7 @@ private extension HomeViewController {
     
     func presentLocationSearchSheet() {
         let locationViewController = LocationSearchSheetViewController(
-            viewModel: HomeViewModel(service: HomeService())
-        )
+            viewModel: self.viewModel)
         
         locationViewController.delegate = self
         
@@ -412,7 +418,8 @@ extension HomeViewController: UIScrollViewDelegate {
 }
 
 extension HomeViewController: LocationSearchSheetViewControllerDelegate {
-    func didSelectLocation(location: String, lat: Double, lng: Double) {
-        // TODO: - 서버 작업 완료 시 추후 연결
+    func didSelectLocation(location: String, latitude: Double, longitude: Double) {
+        locationDidSelectSubject.send((latitude, longitude, location))
+        dismiss(animated: true)
     }
 }
