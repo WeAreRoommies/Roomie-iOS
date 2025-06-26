@@ -29,7 +29,7 @@ extension HomeViewModel: ViewModelType {
         let viewWillAppear: AnyPublisher<Void, Never>
         let pinnedHouseIDSubject: AnyPublisher<Int, Never>
         let searchTextFieldEnterSubject: AnyPublisher<String, Never>
-        let locationDidSelectSubject: AnyPublisher<String, Never>
+        let locationDidSelectSubject: AnyPublisher<(Double, Double, String), Never>
     }
     
     struct Output {
@@ -55,14 +55,13 @@ extension HomeViewModel: ViewModelType {
         
         input.searchTextFieldEnterSubject
             .sink { [weak self] in
-                self?.featchSearchLocationData(query: $0)
+                self?.fetchSearchLocationData(query: $0)
             }
             .store(in: cancelBag)
         
         input.locationDidSelectSubject
-            .sink { [weak self] location in
-                guard let self = self else { return }
-                
+            .sink { [weak self] (latitude, longitude, location) in
+                self?.fetchUserLocation(latitude: latitude, longitude: longitude, location: location)
             }
             .store(in: cancelBag)
         
@@ -128,7 +127,7 @@ private extension HomeViewModel {
         }
     }
     
-    func featchSearchLocationData(query: String) {
+    func fetchSearchLocationData(query: String) {
         Task {
             do {
                 guard let responseBody = try await service.fetchLocationSearchData(query: query),
@@ -146,6 +145,22 @@ private extension HomeViewModel {
                 guard let responseBody = try await service.updatePinnedHouse(houseID: houseID),
                       let data = responseBody.data else { return }
                 self.pinnedInfoDataSubject.send((houseID, data.isPinned))
+            } catch {
+                print(">>> \(error.localizedDescription) : \(#function)")
+            }
+        }
+    }
+    
+    func fetchUserLocation(latitude: Double, longitude: Double, location: String) {
+        Task {
+            do {
+                guard let responseBody = try await service.fetchUserLocation(
+                    latitude: latitude,
+                    longitude: longitude,
+                    location: location
+                ),
+                      let data = responseBody.data else { return }
+                fetchHomeData()
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
             }

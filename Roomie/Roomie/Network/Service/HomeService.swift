@@ -55,6 +55,10 @@ extension HomeService: HomeServiceProtocol {
     func fetchLocationSearchData(query: String) async throws -> BaseResponseBody<MapSearchResponseDTO>? {
         return try await self.request(with: .fetchLocationSearchData(query: query))
     }
+    
+    func fetchUserLocation(latitude: Double, longitude: Double, location: String) async throws -> BaseResponseBody<UserLocationResponseDTO>? {
+        return try await self.request(with: .fetchUserLocation(latitude: latitude, longitude: longitude, location: location))
+    }
 }
 
 final class MockHomeService: HomeServiceProtocol {
@@ -124,6 +128,11 @@ final class MockHomeService: HomeServiceProtocol {
     
     func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinnedResponseDTO>? {
         let mockData: PinnedResponseDTO = PinnedResponseDTO(isPinned: false)
+        return BaseResponseBody(code: 200, message: "", data: mockData)
+    }
+    
+    func fetchUserLocation(latitude: Double, longitude: Double, location: String) async throws -> BaseResponseBody<UserLocationResponseDTO>? {
+        let mockData: UserLocationResponseDTO = UserLocationResponseDTO(latitude: 11, longitude: 11, location: "MOCK")
         return BaseResponseBody(code: 200, message: "", data: mockData)
     }
 }
