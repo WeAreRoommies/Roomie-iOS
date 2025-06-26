@@ -1,18 +1,18 @@
 //
-//  UserService.swift
+//  MyAccountService.swift
 //  Roomie
 //
-//  Created by MaengKim on 1/21/25.
+//  Created by 예삐 on 6/26/25.
 //
 
 import Foundation
 
 import Moya
 
-final class MyPageService {
-    let provider: MoyaProvider<MyPageTargetType>
+final class MyAccountService {
+    let provider: MoyaProvider<MyAccountTargetType>
     
-    init(provider: MoyaProvider<MyPageTargetType> = MoyaProvider(
+    init(provider: MoyaProvider<MyAccountTargetType> = MoyaProvider(
         session: Session(interceptor: Interceptor.shared),
         plugins: [MoyaLoggingPlugin()])
     ) {
@@ -20,7 +20,7 @@ final class MyPageService {
     }
     
     func request<T: ResponseModelType>(
-        with request: MyPageTargetType
+        with request: MyAccountTargetType
     ) async throws -> BaseResponseBody<T>? {
         return try await withCheckedThrowingContinuation {
             continuation in provider.request(request) { result in
@@ -42,15 +42,22 @@ final class MyPageService {
     }
 }
 
-extension MyPageService: MyPageServiceProtocol {
-    func fetchMyPageData() async throws -> BaseResponseBody<MyPageResponseDTO>? {
-        return try await self.request(with: .fetchMyPageData)
+extension MyAccountService: MyAccountServiceProtocol {
+    func fetchMyAccountData() async throws -> BaseResponseBody<MyAccountResponseDTO>? {
+        return try await self.request(with: .fetchMyAccountData)
     }
 }
 
-final class MockMyPageService: MyPageServiceProtocol {
-    func fetchMyPageData() async throws -> BaseResponseBody<MyPageResponseDTO>? {
-        let mockData = MyPageResponseDTO(nickname: "김루미", socialType: "KAKAO")
+final class MockMyAccountService: MyAccountServiceProtocol {
+    func fetchMyAccountData() async throws -> BaseResponseBody<MyAccountResponseDTO>? {
+        let mockData = MyAccountResponseDTO(
+            nickname: "카드값줘체리",
+            socialType: "KAKAO",
+            name: "김루미",
+            birthDate: "2025-06-06",
+            phoneNumber: "010-1234-5678",
+            gender: "여성"
+        )
         return BaseResponseBody(code: 200, message: "", data: mockData)
     }
 }

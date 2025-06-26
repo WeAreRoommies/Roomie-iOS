@@ -65,7 +65,7 @@ final class MyPageViewController: BaseViewController {
             .sink { [weak self] _ in
                 guard let self = self else { return }
                 let myAccountViewController = MyAccountViewController(
-                    viewModel: MyAccountViewModel(service: MyPageService())
+                    viewModel: MyAccountViewModel(service: MyAccountService())
                 )
                 myAccountViewController.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(myAccountViewController, animated: true)
