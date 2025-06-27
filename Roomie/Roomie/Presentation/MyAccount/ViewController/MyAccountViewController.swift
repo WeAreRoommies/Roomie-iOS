@@ -84,6 +84,18 @@ final class MyAccountViewController: BaseViewController {
             }
             .store(in: cancelBag)
         
+        rootView.birthDateCellButton.button
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let birthDateEditViewController = BirthDateEditViewController(
+                    viewModel: BirthDateEditViewModel(service: MyAccountService())
+                )
+                birthDateEditViewController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(birthDateEditViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
         rootView.phoneNumberCellButton.button
             .tapPublisher
             .sink { [weak self] in

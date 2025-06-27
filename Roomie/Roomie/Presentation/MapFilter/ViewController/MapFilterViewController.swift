@@ -80,6 +80,10 @@ final class MapFilterViewController: BaseViewController {
         setNavigationBar(with: "필터", isBorderHidden: true)
     }
     
+    override func setDelegate() {
+        rootView.filterPeriodView.preferredDatePickerView.delegate = self
+    }
+    
     override func setAction() {
         hideKeyboardWhenDidTap()
         
@@ -224,17 +228,6 @@ final class MapFilterViewController: BaseViewController {
             .sink { [weak self] in
                 guard let self = self else { return }
                 self.neatButtonDidTapSubject.send(())
-            }
-            .store(in: cancelBag)
-        
-        rootView.filterPeriodView.preferredDatePickerView.datePicker
-            .controlEventPublisher(for: .valueChanged)
-            .compactMap { [weak self] _ in
-                let date = self?.rootView.filterPeriodView.preferredDatePickerView.dateLabel.text
-                return date
-            }
-            .sink { [weak self] formattedDate in
-                self?.preferredDateSubject.send(formattedDate)
             }
             .store(in: cancelBag)
         
@@ -437,5 +430,13 @@ private extension MapFilterViewController {
             rootView.filterRoomView.isHidden = true
             rootView.filterPeriodView.isHidden = false
         }
+    }
+}
+
+// MARK: - DatePickerViewDelegate
+
+extension MapFilterViewController: DatePickerViewDelegate {
+    func dateDidPick(date: String) {
+        preferredDateSubject.send(date)
     }
 }

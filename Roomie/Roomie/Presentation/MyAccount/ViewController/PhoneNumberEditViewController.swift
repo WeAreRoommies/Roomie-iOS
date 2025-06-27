@@ -70,13 +70,6 @@ final class PhoneNumberEditViewController: BaseViewController {
                 self.phoneNumberTextSubject.send(formatted)
             }
             .store(in: cancelBag)
-//            .textPublisher
-//            .compactMap { $0 }
-//            .sink { [weak self] phoneNumber in
-//                guard let self = self else { return }
-//                self.phoneNumberTextSubject.send(phoneNumber)
-//            }
-//            .store(in: cancelBag)
         
         rootView.editButton
             .tapPublisher
