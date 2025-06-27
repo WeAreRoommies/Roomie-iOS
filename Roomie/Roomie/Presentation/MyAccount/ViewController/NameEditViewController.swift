@@ -15,6 +15,7 @@ final class NameEditViewController: BaseViewController {
     
     private let viewModel: NameEditViewModel
     
+    private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let nameTextSubject = PassthroughSubject<String, Never>()
     private let editButtonDidTapSubject = PassthroughSubject<Void, Never>()
     
@@ -39,6 +40,12 @@ final class NameEditViewController: BaseViewController {
         super.viewDidLoad()
         
         bindViewModel()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        viewWillAppearSubject.send(())
     }
     
     // MARK: - Functions
@@ -72,11 +79,20 @@ final class NameEditViewController: BaseViewController {
 extension NameEditViewController {
     func bindViewModel() {
         let input = NameEditViewModel.Input(
+            viewWillAppearSubject: viewWillAppearSubject.eraseToAnyPublisher(),
             nameTextSubject: nameTextSubject.eraseToAnyPublisher(),
             editButtonDidTapSubject: editButtonDidTapSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
+        
+        output.previousName
+            .receive(on: RunLoop.main)
+            .sink { [weak self] name in
+                guard let self = self else { return }
+                self.rootView.nameTextField.text = name
+            }
+            .store(in: cancelBag)
         
         output.isNameValid
             .sink { [weak self] isValid in
