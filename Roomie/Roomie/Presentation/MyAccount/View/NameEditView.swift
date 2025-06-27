@@ -11,6 +11,14 @@ import SnapKit
 import Then
 
 final class NameEditView: BaseView {
+    
+    // MARK: - Property
+
+    private(set) var editButtonBottomConstraint: Constraint?
+    let defaultButtonBottomInset: CGFloat = 20
+    
+    // MARK: - UIComponent
+
     let nameTextField = RoomieTextField("이름")
     
     let inValidErrorStackView = UIStackView()
@@ -19,6 +27,8 @@ final class NameEditView: BaseView {
     
     let editButton = MyAccountWhiteButton(title: "수정하기")
     
+    // MARK: - UISetting
+
     override func setStyle() {
         inValidErrorIcon.do {
             $0.image = .icnWarning14
@@ -56,7 +66,9 @@ final class NameEditView: BaseView {
         }
         
         editButton.snp.makeConstraints {
-            $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(20)
+            editButtonBottomConstraint = $0.bottom
+                .equalTo(safeAreaLayoutGuide.snp.bottom)
+                .inset(defaultButtonBottomInset).constraint
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(MyAccountWhiteButton.defaultHeight)
         }

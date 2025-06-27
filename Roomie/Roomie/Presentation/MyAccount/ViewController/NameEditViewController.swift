@@ -21,6 +21,8 @@ final class NameEditViewController: BaseViewController {
     
     private let cancelBag = CancelBag()
     
+    private var keyboardHandler: KeyboardConstraintHandler?
+    
     init(viewModel: NameEditViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -40,6 +42,7 @@ final class NameEditViewController: BaseViewController {
         super.viewDidLoad()
         
         bindViewModel()
+        setupKeyboardHandler()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -114,5 +117,19 @@ extension NameEditViewController {
                 }
             }
             .store(in: cancelBag)
+    }
+    
+    private func setupKeyboardHandler() {
+        guard let bottomConstraint = rootView.editButtonBottomConstraint else { return }
+        keyboardHandler = KeyboardConstraintHandler(
+            containerView: view,
+            adjustments: [
+                .init(
+                    constraint: bottomConstraint,
+                    defaultInset: rootView.defaultButtonBottomInset
+                )
+            ]
+        )
+        keyboardHandler?.startObserving()
     }
 }
