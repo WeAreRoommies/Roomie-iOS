@@ -16,6 +16,7 @@ final class NameEditViewController: BaseViewController {
     private let viewModel: NameEditViewModel
     
     private let nameTextSubject = PassthroughSubject<String, Never>()
+    private let editButtonDidTapSubject = PassthroughSubject<Void, Never>()
     
     private let cancelBag = CancelBag()
     
@@ -53,7 +54,16 @@ final class NameEditViewController: BaseViewController {
             .textPublisher
             .compactMap { $0 }
             .sink { [weak self] name in
-                self?.nameTextSubject.send(name)
+                guard let self = self else { return }
+                self.nameTextSubject.send(name)
+            }
+            .store(in: cancelBag)
+        
+        rootView.editButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.editButtonDidTapSubject.send(())
             }
             .store(in: cancelBag)
     }
@@ -62,18 +72,30 @@ final class NameEditViewController: BaseViewController {
 extension NameEditViewController {
     func bindViewModel() {
         let input = NameEditViewModel.Input(
-            nameTextSubject: nameTextSubject.eraseToAnyPublisher()
+            nameTextSubject: nameTextSubject.eraseToAnyPublisher(),
+            editButtonDidTapSubject: editButtonDidTapSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
         
         output.isNameValid
             .sink { [weak self] isValid in
+                guard let self = self else { return }
                 let borderColor = isValid ? UIColor.grayscale5.cgColor : UIColor.actionError.cgColor
-                self?.rootView.nameTextField.layer.borderColor = borderColor
-                self?.rootView.inValidErrorStackView.isHidden = isValid
+                self.rootView.nameTextField.layer.borderColor = borderColor
+                self.rootView.inValidErrorStackView.isHidden = isValid
                 
-                self?.rootView.nameTextField.shouldShowActionColor = !isValid
+                self.rootView.nameTextField.shouldShowActionColor = !isValid
+            }
+            .store(in: cancelBag)
+        
+        output.isSuccess
+            .receive(on: RunLoop.main)
+            .sink { [weak self] isSuccess in
+                if isSuccess {
+                    guard let self = self else { return }
+                    self.navigationController?.popViewController(animated: true)
+                }
             }
             .store(in: cancelBag)
     }

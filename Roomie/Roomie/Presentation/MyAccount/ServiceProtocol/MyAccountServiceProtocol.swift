@@ -9,4 +9,5 @@ import Foundation
 
 protocol MyAccountServiceProtocol {
     func fetchMyAccountData() async throws -> BaseResponseBody<MyAccountResponseDTO>?
+    func updateNameData(request: NameRequestDTO) async throws -> BaseResponseBody<NameResponseDTO>?
 }

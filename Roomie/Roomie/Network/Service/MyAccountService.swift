@@ -46,6 +46,10 @@ extension MyAccountService: MyAccountServiceProtocol {
     func fetchMyAccountData() async throws -> BaseResponseBody<MyAccountResponseDTO>? {
         return try await self.request(with: .fetchMyAccountData)
     }
+    
+    func updateNameData(request: NameRequestDTO) async throws -> BaseResponseBody<NameResponseDTO>? {
+        return try await self.request(with: .updateNameData(request: request))
+    }
 }
 
 final class MockMyAccountService: MyAccountServiceProtocol {
@@ -58,6 +62,11 @@ final class MockMyAccountService: MyAccountServiceProtocol {
             phoneNumber: "010-1234-5678",
             gender: "여성"
         )
+        return BaseResponseBody(code: 200, message: "", data: mockData)
+    }
+    
+    func updateNameData(request: NameRequestDTO) async throws -> BaseResponseBody<NameResponseDTO>? {
+        let mockData = NameResponseDTO(name: "루미")
         return BaseResponseBody(code: 200, message: "", data: mockData)
     }
 }

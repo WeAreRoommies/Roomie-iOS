@@ -11,6 +11,7 @@ import Moya
 
 enum MyAccountTargetType {
     case fetchMyAccountData
+    case updateNameData(request: NameRequestDTO)
 }
 
 extension MyAccountTargetType: TargetType {
@@ -22,15 +23,27 @@ extension MyAccountTargetType: TargetType {
         switch self {
         case .fetchMyAccountData:
             return "/v1/users/mypage/accountinfo"
+        case .updateNameData:
+            return "/v1/users/name"
         }
     }
     
     var method: Moya.Method {
-        return .get
+        switch self {
+        case .fetchMyAccountData:
+            return .get
+        case .updateNameData:
+            return .patch
+        }
     }
     
     var task: Moya.Task {
-        return .requestPlain
+        switch self {
+        case .fetchMyAccountData:
+            return .requestPlain
+        case .updateNameData(let request):
+            return .requestJSONEncodable(request)
+        }
     }
     
     var headers: [String : String]? {

@@ -65,7 +65,7 @@ final class MyAccountViewController: BaseViewController {
             .sink { [weak self] in
                 guard let self = self else { return }
                 let nameEditViewController = NameEditViewController(
-                    viewModel: NameEditViewModel()
+                    viewModel: NameEditViewModel(service: MyAccountService())
                 )
                 nameEditViewController.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(nameEditViewController, animated: true)
