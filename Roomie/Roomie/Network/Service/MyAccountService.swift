@@ -50,6 +50,22 @@ extension MyAccountService: MyAccountServiceProtocol {
     func updateNameData(request: NameRequestDTO) async throws -> BaseResponseBody<NameResponseDTO>? {
         return try await self.request(with: .updateNameData(request: request))
     }
+    
+    func updateNicknameData(request: NicknameRequestDTO) async throws -> BaseResponseBody<NicknameResponseDTO>? {
+        return try await self.request(with: .updateNicknameData(request: request))
+    }
+    
+    func updateBirthDateData(request: BirthDateRequestDTO) async throws -> BaseResponseBody<BirthDateResponseDTO>? {
+        return try await self.request(with: .updateBirthDateData(request: request))
+    }
+    
+    func updatePhoneNumberData(request: PhoneNumberRequestDTO) async throws -> BaseResponseBody<PhoneNumberResponseDTO>? {
+        return try await self.request(with: .updatePhoneNumberData(request: request))
+    }
+    
+    func updateGenderData(request: GenderRequestDTO) async throws -> BaseResponseBody<GenderResponseDTO>? {
+        return try await self.request(with: .updateGenderData(request: request))
+    }
 }
 
 final class MockMyAccountService: MyAccountServiceProtocol {
@@ -67,6 +83,26 @@ final class MockMyAccountService: MyAccountServiceProtocol {
     
     func updateNameData(request: NameRequestDTO) async throws -> BaseResponseBody<NameResponseDTO>? {
         let mockData = NameResponseDTO(name: "루미")
+        return BaseResponseBody(code: 200, message: "", data: mockData)
+    }
+    
+    func updateNicknameData(request: NicknameRequestDTO) async throws -> BaseResponseBody<NicknameResponseDTO>? {
+        let mockData = NicknameResponseDTO(nickname: "야옹")
+        return BaseResponseBody(code: 200, message: "", data: mockData)
+    }
+    
+    func updateBirthDateData(request: BirthDateRequestDTO) async throws -> BaseResponseBody<BirthDateResponseDTO>? {
+        let mockData = BirthDateResponseDTO(birthDate: "2025-06-27")
+        return BaseResponseBody(code: 200, message: "", data: mockData)
+    }
+    
+    func updatePhoneNumberData(request: PhoneNumberRequestDTO) async throws -> BaseResponseBody<PhoneNumberResponseDTO>? {
+        let mockData = PhoneNumberResponseDTO(phoneNumber: "010-1234-1234")
+        return BaseResponseBody(code: 200, message: "", data: mockData)
+    }
+    
+    func updateGenderData(request: GenderRequestDTO) async throws -> BaseResponseBody<GenderResponseDTO>? {
+        let mockData = GenderResponseDTO(gender: "여성")
         return BaseResponseBody(code: 200, message: "", data: mockData)
     }
 }

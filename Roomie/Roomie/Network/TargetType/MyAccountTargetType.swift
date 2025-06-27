@@ -12,19 +12,31 @@ import Moya
 enum MyAccountTargetType {
     case fetchMyAccountData
     case updateNameData(request: NameRequestDTO)
+    case updateNicknameData(request: NicknameRequestDTO)
+    case updateBirthDateData(request: BirthDateRequestDTO)
+    case updatePhoneNumberData(request: PhoneNumberRequestDTO)
+    case updateGenderData(request: GenderRequestDTO)
 }
 
 extension MyAccountTargetType: TargetType {
     var baseURL: URL {
-        return URL(string: Environment.baseURL)!
+        return URL(string: "\(Environment.baseURL)/v1/users")!
     }
     
     var path: String {
         switch self {
         case .fetchMyAccountData:
-            return "/v1/users/mypage/accountinfo"
+            return "/mypage/accountinfo"
         case .updateNameData:
-            return "/v1/users/name"
+            return "/name"
+        case .updateNicknameData:
+            return "/nickname"
+        case .updateBirthDateData:
+            return "/birthday"
+        case .updatePhoneNumberData:
+            return "/phonenumber"
+        case .updateGenderData:
+            return "/gender"
         }
     }
     
@@ -32,7 +44,7 @@ extension MyAccountTargetType: TargetType {
         switch self {
         case .fetchMyAccountData:
             return .get
-        case .updateNameData:
+        default:
             return .patch
         }
     }
@@ -42,6 +54,14 @@ extension MyAccountTargetType: TargetType {
         case .fetchMyAccountData:
             return .requestPlain
         case .updateNameData(let request):
+            return .requestJSONEncodable(request)
+        case .updateNicknameData(let request):
+            return .requestJSONEncodable(request)
+        case .updateBirthDateData(let request):
+            return .requestJSONEncodable(request)
+        case .updatePhoneNumberData(let request):
+            return .requestJSONEncodable(request)
+        case .updateGenderData(let request):
             return .requestJSONEncodable(request)
         }
     }
