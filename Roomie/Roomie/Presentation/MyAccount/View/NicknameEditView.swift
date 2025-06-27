@@ -1,8 +1,8 @@
 //
-//  NameEditView.swift
+//  NicknameEditView.swift
 //  Roomie
 //
-//  Created by 예삐 on 6/26/25.
+//  Created by 예삐 on 6/27/25.
 //
 
 import UIKit
@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class NameEditView: BaseView {
+final class NicknameEditView: BaseView {
     
     // MARK: - Property
 
@@ -19,7 +19,7 @@ final class NameEditView: BaseView {
     
     // MARK: - UIComponent
 
-    let nameTextField = RoomieTextField("이름")
+    let nicknameTextField = RoomieTextField("닉네임")
     
     let inValidErrorStackView = UIStackView()
     private let inValidErrorIcon = UIImageView()
@@ -36,7 +36,7 @@ final class NameEditView: BaseView {
         }
         
         inValidErrorLabel.do {
-            $0.setText("이름은 한글, 영문만 입력 가능합니다", style: .body4, color: .actionError)
+            $0.setText("닉네임은 2~12자의 한글, 영문, 숫자만 입력 가능합니다", style: .body4, color: .actionError)
         }
         
         inValidErrorStackView.do {
@@ -49,19 +49,19 @@ final class NameEditView: BaseView {
     }
     
     override func setUI() {
-        addSubviews(nameTextField, inValidErrorStackView, editButton)
+        addSubviews(nicknameTextField, inValidErrorStackView, editButton)
         inValidErrorStackView.addArrangedSubviews(inValidErrorIcon, inValidErrorLabel)
     }
     
     override func setLayout() {
-        nameTextField.snp.makeConstraints {
+        nicknameTextField.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide.snp.top).inset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(RoomieTextField.defaultHeight)
         }
         
         inValidErrorStackView.snp.makeConstraints {
-            $0.top.equalTo(nameTextField.snp.bottom).offset(4)
+            $0.top.equalTo(nicknameTextField.snp.bottom).offset(4)
             $0.leading.equalToSuperview().inset(20)
         }
         

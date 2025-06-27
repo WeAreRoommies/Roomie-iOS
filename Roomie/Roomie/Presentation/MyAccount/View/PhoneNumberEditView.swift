@@ -1,8 +1,8 @@
 //
-//  NameEditView.swift
+//  PhoneNumberEditView.swift
 //  Roomie
 //
-//  Created by 예삐 on 6/26/25.
+//  Created by 예삐 on 6/27/25.
 //
 
 import UIKit
@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class NameEditView: BaseView {
+final class PhoneNumberEditView: BaseView {
     
     // MARK: - Property
 
@@ -19,7 +19,7 @@ final class NameEditView: BaseView {
     
     // MARK: - UIComponent
 
-    let nameTextField = RoomieTextField("이름")
+    let phoneNumberTextField = RoomieTextField("연락처")
     
     let inValidErrorStackView = UIStackView()
     private let inValidErrorIcon = UIImageView()
@@ -30,13 +30,17 @@ final class NameEditView: BaseView {
     // MARK: - UISetting
 
     override func setStyle() {
+        phoneNumberTextField.do {
+            $0.keyboardType = .numberPad
+        }
+        
         inValidErrorIcon.do {
             $0.image = .icnWarning14
             $0.contentMode = .scaleAspectFit
         }
         
         inValidErrorLabel.do {
-            $0.setText("이름은 한글, 영문만 입력 가능합니다", style: .body4, color: .actionError)
+            $0.setText("올바른 연락처를 입력해주세요", style: .body4, color: .actionError)
         }
         
         inValidErrorStackView.do {
@@ -49,19 +53,19 @@ final class NameEditView: BaseView {
     }
     
     override func setUI() {
-        addSubviews(nameTextField, inValidErrorStackView, editButton)
+        addSubviews(phoneNumberTextField, inValidErrorStackView, editButton)
         inValidErrorStackView.addArrangedSubviews(inValidErrorIcon, inValidErrorLabel)
     }
     
     override func setLayout() {
-        nameTextField.snp.makeConstraints {
+        phoneNumberTextField.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide.snp.top).inset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(RoomieTextField.defaultHeight)
         }
         
         inValidErrorStackView.snp.makeConstraints {
-            $0.top.equalTo(nameTextField.snp.bottom).offset(4)
+            $0.top.equalTo(phoneNumberTextField.snp.bottom).offset(4)
             $0.leading.equalToSuperview().inset(20)
         }
         

@@ -72,6 +72,30 @@ final class MyAccountViewController: BaseViewController {
             }
             .store(in: cancelBag)
         
+        rootView.nicknameCellButton.button
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let nicknameEditViewController = NicknameEditViewController(
+                    viewModel: NicknameEditViewModel(service: MyAccountService())
+                )
+                nicknameEditViewController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(nicknameEditViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
+        rootView.phoneNumberCellButton.button
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let phoneNumberEditViewController = PhoneNumberEditViewController(
+                    viewModel: PhoneNumberEditViewModel(service: MyAccountService())
+                )
+                phoneNumberEditViewController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(phoneNumberEditViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
         rootView.logoutButton
             .tapPublisher
             .sink { [weak self] in
