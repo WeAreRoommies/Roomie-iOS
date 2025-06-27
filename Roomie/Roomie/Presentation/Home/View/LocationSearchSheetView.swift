@@ -14,6 +14,8 @@ final class LocationSearchSheetView: BaseView {
     
     // MARK: - UIComponent
     
+    private let locationSettingLabel = UILabel()
+    let locationLabel = UILabel()
     let searchTextField = MapSearchTextField("원하는 장소를 찾아보세요")
     private let searchImageView = UIImageView()
     private let seperatorView = UIView()
@@ -31,6 +33,14 @@ final class LocationSearchSheetView: BaseView {
     // MARK: - UISetting
     
     override func setStyle() {
+        locationSettingLabel.do {
+            $0.setText("현재 설정된 위치:", style: .body5, color: .grayscale10)
+        }
+        
+        locationLabel.do {
+            $0.setText(style: .body5, color: .grayscale10)
+        }
+        
         searchImageView.do {
             $0.image = .icnSearch40
         }
@@ -52,6 +62,8 @@ final class LocationSearchSheetView: BaseView {
     
     override func setUI() {
         addSubviews(
+            locationSettingLabel,
+            locationLabel,
             searchTextField,
             searchImageView,
             seperatorView,
@@ -61,8 +73,18 @@ final class LocationSearchSheetView: BaseView {
     }
     
     override func setLayout() {
+        locationSettingLabel.snp.makeConstraints{
+            $0.top.equalToSuperview().inset(32)
+            $0.leading.equalToSuperview().inset(16)
+        }
+        
+        locationLabel.snp.makeConstraints{
+            $0.top.equalTo(locationSettingLabel.snp.top)
+            $0.leading.equalTo(locationSettingLabel.snp.trailing).offset(4)
+        }
+        
         searchTextField.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(20)
+            $0.top.equalTo(locationSettingLabel.snp.bottom).offset(14)
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.height.equalTo(Screen.height(50))
         }

@@ -60,19 +60,18 @@ final class Interceptor: RequestInterceptor {
                 switch error {
                 case .noRefreshToken, .refreshTokenExpired, .userNotFound:
                     NotificationCenter.default.post(name: Notification.shouldLogout, object: nil)
-                    await Toast.show(message: "세션이 만료되었어요. 다시 로그인해주세요")
                     break
                 case .reissueFailed:
-                    await Toast.show(message: "서버 오류입니다. 다시 시도해주세요")
+                    await Toast.show(.serverError)
                     break
                 case .unknownError:
-                    await Toast.show(message: "요청에 실패했습니다. 잠시 후 다시 시도해주세요")
+                    await Toast.show(.requestFailed)
                     break
                 }
                 
                 completion(.doNotRetryWithError(error))
             } catch {
-                await Toast.show(message: "예기치 못한 오류가 발생했어요")
+                await Toast.show(.unexpectedError)
                 completion(.doNotRetryWithError(error))
             }
         }
