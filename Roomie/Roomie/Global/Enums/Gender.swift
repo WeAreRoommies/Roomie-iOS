@@ -7,10 +7,12 @@
 
 import Foundation
 
-enum Gender {
-    case male
-    case female
-    case none // 선택되지 않은 상태를 나타냄
+enum Gender: String {
+    case male = "MALE"
+    case female = "FEMALE"
+    case none = ""
+    
+    var apiValue: String { rawValue }
     
     var genderString: String {
         switch self {

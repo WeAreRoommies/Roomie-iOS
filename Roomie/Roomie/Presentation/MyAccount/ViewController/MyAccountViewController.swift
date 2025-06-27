@@ -108,6 +108,18 @@ final class MyAccountViewController: BaseViewController {
             }
             .store(in: cancelBag)
         
+        rootView.genderCellButton.button
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let genderEditViewController = GenderEditViewController(
+                    viewModel: GenderEditViewModel(service: MyAccountService())
+                )
+                genderEditViewController.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(genderEditViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
         rootView.logoutButton
             .tapPublisher
             .sink { [weak self] in
