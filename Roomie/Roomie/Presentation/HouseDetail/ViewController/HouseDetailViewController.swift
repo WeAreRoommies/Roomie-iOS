@@ -102,7 +102,7 @@ final class HouseDetailViewController: BaseViewController {
                 let houseAllPhotoViewController = HouseAllPhotoViewController(
                     title: navigationBarTitle,
                     viewModel: HouseAllPhotoViewModel(
-                        service: MockHousesService(),
+                        service: HousesService(),
                         houseID: viewModel.houseID
                     )
                 )
