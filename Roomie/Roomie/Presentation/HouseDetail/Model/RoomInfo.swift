@@ -13,7 +13,6 @@ struct RoomInfo {
     let name: String
     let roomType: String
     let deposit: String
-    let prepaidUtilities: String
     let monthlyRent: String
     let contractPeriod: String
     let managementFee: String

@@ -118,7 +118,6 @@ extension HouseDetailViewModel: ViewModelType {
                         name: $0.name,
                         roomType: "\($0.occupancyType)인실 · \($0.gender)",
                         deposit: String.formattedWonString(from: $0.deposit),
-                        prepaidUtilities: String.formattedWonString(from: $0.prepaidUtilities),
                         monthlyRent: String.formattedWonString(from: $0.monthlyRent),
                         contractPeriod: $0.contractPeriod ?? "-",
                         managementFee: $0.managementFee
