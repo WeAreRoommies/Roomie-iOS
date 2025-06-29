@@ -8,11 +8,9 @@
 import Foundation
 
 enum Gender: String {
-    case male = "MALE"
-    case female = "FEMALE"
-    case none = ""
-    
-    var apiValue: String { rawValue }
+    case male
+    case female
+    case none
     
     var genderString: String {
         switch self {
@@ -21,6 +19,17 @@ enum Gender: String {
         case .female:
             return "여성"
         case .none:
+            return ""
+        }
+    }
+    
+    var apiValue: String {
+        switch self {
+        case .male:
+            return "MALE"
+        case .female:
+            return "FEMALE"
+        case .none: 
             return ""
         }
     }
