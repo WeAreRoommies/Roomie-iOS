@@ -18,6 +18,7 @@ final class HomeViewModel {
     let pinnedInfoDataSubject = PassthroughSubject<(Int, Bool), Never>()
     private let didTapHouseDataSubject = PassthroughSubject<Int, Never>()
     private let locationSearchDataSubject = PassthroughSubject<MapSearchResponseDTO, Never>()
+    private let isSuccessSubject = PassthroughSubject<Bool, Never>()
     
     init(service: HomeServiceProtocol) {
         self.service = service
@@ -38,6 +39,7 @@ extension HomeViewModel: ViewModelType {
         let houseCount: AnyPublisher<Int, Never>
         let pinnedInfo: AnyPublisher<(Int,Bool), Never>
         let locationSearchData: AnyPublisher<MapSearchResponseDTO, Never>
+        let isSuccess: AnyPublisher<Bool, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -104,12 +106,15 @@ extension HomeViewModel: ViewModelType {
         let locationSearchData = locationSearchDataSubject
             .eraseToAnyPublisher()
         
+        let isSuccess = isSuccessSubject.eraseToAnyPublisher()
+        
         return Output(
             userInfo: userInfo,
             houseList: houseListData,
             houseCount: houseCount,
             pinnedInfo: pinnedInfoData,
-            locationSearchData: locationSearchData
+            locationSearchData: locationSearchData,
+            isSuccess: isSuccess
         )
     }
 }
@@ -158,11 +163,12 @@ private extension HomeViewModel {
                     latitude: latitude,
                     longitude: longitude,
                     location: location
-                ),
-                      let data = responseBody.data else { return }
+                ), let _ = responseBody.data else { return }
                 fetchHomeData()
+                isSuccessSubject.send(true)
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
+                isSuccessSubject.send(false)
             }
         }
     }

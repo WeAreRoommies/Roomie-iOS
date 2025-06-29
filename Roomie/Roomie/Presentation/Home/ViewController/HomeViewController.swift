@@ -178,7 +178,7 @@ private extension HomeViewController {
                 guard let self else { return }
                 self.rootView.nameLabel.text = data.nickname
                 self.setHomeNavigationBar(locaton: data.location)
-                self.rootView.subGreetingLabel.text = "루미가 \(data.nickname)님의 완벽한 집을\n찾아드릴게요."
+                self.rootView.subGreetingLabel.updateText( "루미가 \(data.nickname)님의 완벽한 집을\n찾아드릴게요.")
             }
             .store(in: cancelBag)
         
@@ -216,6 +216,16 @@ private extension HomeViewController {
                 }
                 if isPinned == false {
                     Toast().show(message: "찜 목록에서 삭제되었어요", inset: 8, view: rootView)
+                }
+            }
+            .store(in: cancelBag)
+        
+        output.isSuccess
+            .receive(on: RunLoop.main)
+            .sink{ [weak self] isSuccess in
+                if isSuccess {
+                    guard let self = self else { return }
+                    self.dismiss(animated: true)
                 }
             }
             .store(in: cancelBag)
@@ -338,8 +348,7 @@ private extension HomeViewController {
     }
     
     func presentLocationSearchSheet() {
-        let locationViewController = LocationSearchSheetViewController(
-            viewModel: self.viewModel)
+        let locationViewController = LocationSearchSheetViewController(viewModel: self.viewModel)
         
         locationViewController.delegate = self
         
@@ -418,6 +427,5 @@ extension HomeViewController: UIScrollViewDelegate {
 extension HomeViewController: LocationSearchSheetViewControllerDelegate {
     func didSelectLocation(location: String, latitude: Double, longitude: Double) {
         locationDidSelectSubject.send((latitude, longitude, location))
-        dismiss(animated: true)
     }
 }
