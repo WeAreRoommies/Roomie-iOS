@@ -74,7 +74,16 @@ extension MyAccountViewModel: ViewModelType {
             .eraseToAnyPublisher()
         
         let genderData = genderDataSubject
-            .map { $0 ?? "정보없음" }
+            .compactMap { gender in
+                switch gender {
+                case Gender.male.apiValue:
+                    return Gender.male.genderString
+                case Gender.female.apiValue:
+                    return Gender.female.genderString
+                default:
+                    return "정보없음"
+                }
+            }
             .eraseToAnyPublisher()
         
         return Output(
