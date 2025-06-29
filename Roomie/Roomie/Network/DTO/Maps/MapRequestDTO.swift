@@ -15,7 +15,6 @@ struct MapRequestDTO: RequestModelType {
     let preferredDate: String?
     let occupancyTypes: [String]
     let contractPeriod: [Int]
-    let excludeFull: Bool
 }
 
 struct MinMaxRange: Codable {

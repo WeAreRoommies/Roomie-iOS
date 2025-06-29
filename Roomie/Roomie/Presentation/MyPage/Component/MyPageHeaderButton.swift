@@ -30,7 +30,7 @@ final class MyPageHeaderButton: BaseView {
     
     private let seperatorView = UIView()
     
-    let myPageHeaderButton = UIButton()
+    let button = UIButton()
     
     // MARK: - UISetting
     
@@ -79,7 +79,7 @@ final class MyPageHeaderButton: BaseView {
             loginTypeView,
             nextImageView,
             seperatorView,
-            myPageHeaderButton
+            button
         )
         loginTypeView.addSubview(loginTypeLabel)
     }
@@ -123,7 +123,7 @@ final class MyPageHeaderButton: BaseView {
             $0.height.equalTo(12)
         }
         
-        myPageHeaderButton.snp.makeConstraints {
+        button.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
@@ -131,7 +131,7 @@ final class MyPageHeaderButton: BaseView {
 
 private extension MyPageHeaderButton {
     func setButton() {
-        myPageHeaderButton
+        button
             .controlEventPublisher(for: .touchDown)
             .map { UIColor.grayscale3 }
             .sink { buttonColor in
@@ -140,9 +140,9 @@ private extension MyPageHeaderButton {
             .store(in: cancelBag)
         
         Publishers.MergeMany(
-            myPageHeaderButton.controlEventPublisher(for: .touchUpInside),
-            myPageHeaderButton.controlEventPublisher(for: .touchUpOutside),
-            myPageHeaderButton.controlEventPublisher(for: .touchCancel)
+            button.controlEventPublisher(for: .touchUpInside),
+            button.controlEventPublisher(for: .touchUpOutside),
+            button.controlEventPublisher(for: .touchCancel)
         )
         .map { UIColor.grayscale1 }
         .sink { buttonColor in

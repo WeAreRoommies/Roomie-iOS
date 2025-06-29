@@ -12,7 +12,7 @@ import CombineCocoa
 import SnapKit
 import Then
 
-final class TourTextField: UITextField {
+final class RoomieTextField: UITextField {
     
     // MARK: - Property
     
@@ -24,10 +24,10 @@ final class TourTextField: UITextField {
     
     // MARK: - Initializer
     
-    init(_ placeHolder: String = "", isErrorExist: Bool = false) {
+    init(_ placeHolder: String = "") {
         super.init(frame: .zero)
         
-        setTextField(placeHolder: placeHolder, isErrorExist: isErrorExist)
+        setTextField(placeHolder: placeHolder)
         setTextFieldBorder()
     }
     
@@ -48,10 +48,11 @@ final class TourTextField: UITextField {
 
 // MARK: - Functions
 
-private extension TourTextField {
-    func setTextField(placeHolder: String = "", isErrorExist: Bool = false) {
+private extension RoomieTextField {
+    func setTextField(placeHolder: String = "") {
         setText(
             placeholder: placeHolder,
+            placeholderColor: .grayscale6,
             textColor: .grayscale12,
             backgroundColor: .grayscale2,
             style: .body1

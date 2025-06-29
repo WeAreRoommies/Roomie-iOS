@@ -22,8 +22,8 @@ final class MyAccountView: BaseView {
     let phoneNumberCellButton = MyAccountCellButton(title: "연락처")
     let genderCellButton = MyAccountCellButton(title: "성별")
     
-    private let logoutButton = UIButton()
-    private let signoutButton = UIButton()
+    let logoutButton = MyAccountWhiteButton(title: "로그아웃", isEnabled: false)
+    let signoutButton = UIButton()
     
     // MARK: - UISetting
     
@@ -31,11 +31,6 @@ final class MyAccountView: BaseView {
         myAccountStackView.do {
             $0.axis = .vertical
             $0.spacing = 0
-        }
-        
-        logoutButton.do {
-            $0.setTitle("로그아웃", style: .body2, color: .grayscale7)
-            $0.setLayer(borderWidth: 1, borderColor: .grayscale5, cornerRadius: 8)
         }
         
         signoutButton.do {

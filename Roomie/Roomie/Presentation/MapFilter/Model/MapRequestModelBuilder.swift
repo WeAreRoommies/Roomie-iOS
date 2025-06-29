@@ -19,7 +19,6 @@ extension MapRequestDTO {
         private var preferredDate: String? = nil
         private var occupancyTypes: [String] = []
         private var contractPeroid: [Int] = []
-        private var excludeFull: Bool = false
         
         @discardableResult
         func setLocation(_ location: String?) -> Self {
@@ -78,8 +77,7 @@ extension MapRequestDTO {
                 genderPolicy: genderPolicy,
                 preferredDate: preferredDate,
                 occupancyTypes: occupancyTypes,
-                contractPeriod: contractPeroid,
-                excludeFull: excludeFull
+                contractPeriod: contractPeroid
             )
         }
     }

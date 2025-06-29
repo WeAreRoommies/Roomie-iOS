@@ -24,7 +24,7 @@ final class MapViewController: BaseViewController {
     private var markers: [NMFMarker] = []
     private var selectedMarker: NMFMarker?
     
-    private let viewWillAppearSubject = CurrentValueSubject<Void, Never>(())
+    private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let markerDidSelectSubject = CurrentValueSubject<Int, Never>(0)
     private let eraseButtonDidTapSubject = PassthroughSubject<Void, Never>()
     

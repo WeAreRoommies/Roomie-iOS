@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 final class MyAccountViewModel {
-    private let service: MyPageServiceProtocol
+    private let service: MyAccountServiceProtocol
     private let socialTypeDataSubject = CurrentValueSubject<String?, Never>(nil)
     private let nameDataSubject = CurrentValueSubject<String?, Never>(nil)
     private let nicknameDataSubject = CurrentValueSubject<String?, Never>(nil)
@@ -17,7 +17,7 @@ final class MyAccountViewModel {
     private let phoneNumberDataSubject = CurrentValueSubject<String?, Never>(nil)
     private let genderDataSubject = CurrentValueSubject<String?, Never>(nil)
     
-    init(service: MyPageServiceProtocol) {
+    init(service: MyAccountServiceProtocol) {
         self.service = service
     }
 }
@@ -74,7 +74,16 @@ extension MyAccountViewModel: ViewModelType {
             .eraseToAnyPublisher()
         
         let genderData = genderDataSubject
-            .map { $0 ?? "정보없음" }
+            .compactMap { gender in
+                switch gender {
+                case Gender.male.apiValue:
+                    return Gender.male.genderString
+                case Gender.female.apiValue:
+                    return Gender.female.genderString
+                default:
+                    return "정보없음"
+                }
+            }
             .eraseToAnyPublisher()
         
         return Output(

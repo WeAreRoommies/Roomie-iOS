@@ -26,7 +26,7 @@ final class MyPageCellButton: BaseView {
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
     private let nextImageView = UIImageView()
-    let myPageButton = UIButton()
+    let button = UIButton()
     
     // MARK: - Initializer
 
@@ -85,7 +85,7 @@ final class MyPageCellButton: BaseView {
     }
     
     override func setUI() {
-        addSubviews(titleStackView, nextImageView, myPageButton)
+        addSubviews(titleStackView, nextImageView, button)
         titleStackView.addArrangedSubviews(titleLabel, subtitleLabel)
     }
     
@@ -105,7 +105,7 @@ final class MyPageCellButton: BaseView {
             $0.size.equalTo(44)
         }
         
-        myPageButton.snp.makeConstraints {
+        button.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
@@ -113,7 +113,7 @@ final class MyPageCellButton: BaseView {
 
 private extension MyPageCellButton {
     func setButton() {
-        myPageButton
+        button
             .controlEventPublisher(for: .touchDown)
             .map { UIColor.grayscale3 }
             .sink { buttonColor in
@@ -122,9 +122,9 @@ private extension MyPageCellButton {
             .store(in: cancelBag)
         
         Publishers.MergeMany(
-            myPageButton.controlEventPublisher(for: .touchUpInside),
-            myPageButton.controlEventPublisher(for: .touchUpOutside),
-            myPageButton.controlEventPublisher(for: .touchCancel)
+            button.controlEventPublisher(for: .touchUpInside),
+            button.controlEventPublisher(for: .touchUpOutside),
+            button.controlEventPublisher(for: .touchCancel)
         )
         .map { UIColor.grayscale1 }
         .sink { buttonColor in

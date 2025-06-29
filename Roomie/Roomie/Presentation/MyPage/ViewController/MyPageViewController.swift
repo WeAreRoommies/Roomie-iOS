@@ -60,19 +60,19 @@ final class MyPageViewController: BaseViewController {
     }
     
     override func setAction() {
-        rootView.myPageHeaderButton.myPageHeaderButton
+        rootView.myPageHeaderButton.button
             .tapPublisher
             .sink { [weak self] _ in
                 guard let self = self else { return }
                 let myAccountViewController = MyAccountViewController(
-                    viewModel: MyAccountViewModel(service: MyPageService())
+                    viewModel: MyAccountViewModel(service: MyAccountService())
                 )
                 myAccountViewController.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(myAccountViewController, animated: true)
             }
             .store(in: cancelBag)
         
-        rootView.wishListButton.myPageButton
+        rootView.wishListButton.button
             .tapPublisher
             .sink { [weak self] _ in
                 guard let self = self else { return }
