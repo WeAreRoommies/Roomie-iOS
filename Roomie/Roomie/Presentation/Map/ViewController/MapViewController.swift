@@ -221,6 +221,9 @@ private extension MapViewController {
                 self?.rootView.mapDetailCardView.moodTagLabel.updateText(
                     markerDetailInfo.moodTag
                 )
+                self?.rootView.mapDetailCardView.wishButton.setImage(
+                    markerDetailInfo.isPinned ? .btnHeart40Active : .btnHeart40Normal, for: .normal
+                )
             }
             .store(in: cancelBag)
         
