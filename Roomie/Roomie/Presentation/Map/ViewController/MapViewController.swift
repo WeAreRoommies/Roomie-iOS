@@ -164,7 +164,9 @@ private extension MapViewController {
                 removeAllMarkers()
                 
                 for markerInfo in markersInfo {
-                    let marker = NMFMarker(position: NMGLatLng(lat: markerInfo.latitude, lng: markerInfo.longitude))
+                    let marker = NMFMarker(
+                        position: NMGLatLng(lat: markerInfo.latitude, lng: markerInfo.longitude)
+                    )
                     marker.mapView = self.rootView.mapView
                     let iconName = markerInfo.isFull ? "icn_full_pin_normal" : "icn_map_pin_normal"
                     marker.iconImage = NMFOverlayImage(name: iconName)
@@ -175,10 +177,10 @@ private extension MapViewController {
                         guard let self = self else { return false }
                         
                         erasePreviousSelectedMarker()
+                        
                         let iconName = markerInfo.isFull ? "icn_full_pin_active" : "icn_map_pin_active"
                         marker.iconImage = NMFOverlayImage(name: iconName)
                         self.selectedMarker = marker
-                        self.selectedHouseID = markerInfo.houseID
                         self.selectedIsFull = markerInfo.isFull
                         
                         let cameraUpdate = NMFCameraUpdate(
@@ -271,7 +273,6 @@ private extension MapViewController {
 
 extension MapViewController: MapSearchViewControllerDelegate {
     func didSelectLocation(location: String, lat: Double, lng: Double) {
-        
         rootView.searchBarLabel.setText(location, style: .title1, color: .grayscale12)
         rootView.searchImageView.isHidden = true
         rootView.eraseButton.isHidden = false

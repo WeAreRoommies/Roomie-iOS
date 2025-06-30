@@ -92,6 +92,7 @@ extension MapViewModel: ViewModelType {
             .sink { [weak self] houseID in
                 guard let self = self else { return }
                 self.updatePinnedHouse(houseID: houseID)
+                self.fetchMapData(request: builder.build())
             }
             .store(in: cancelBag)
         
