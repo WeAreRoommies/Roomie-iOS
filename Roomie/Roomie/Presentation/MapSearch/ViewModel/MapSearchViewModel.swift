@@ -38,9 +38,9 @@ extension MapSearchViewModel: ViewModelType {
             .store(in: cancelBag)
         
         input.locationDidSelectSubject
-            .sink { [weak self] location in
+            .sink { [weak self] address in
                 guard let self = self else { return }
-                self.builder.setLocation(location)
+                self.builder.setAddress(address)
             }
             .store(in: cancelBag)
         

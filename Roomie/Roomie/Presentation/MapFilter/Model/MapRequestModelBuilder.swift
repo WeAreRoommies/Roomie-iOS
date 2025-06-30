@@ -11,7 +11,7 @@ extension MapRequestDTO {
     final class Builder {
         static let shared = MapRequestDTO.Builder()
         
-        private var location: String? = nil
+        private var address: String? = nil
         private var moodTag: [String] = []
         private var depositRange: MinMaxRange = MinMaxRange(min: 0, max: 500)
         private var monthlyRentRange: MinMaxRange = MinMaxRange(min: 0, max: 150)
@@ -19,10 +19,12 @@ extension MapRequestDTO {
         private var preferredDate: String? = nil
         private var occupancyTypes: [String] = []
         private var contractPeroid: [Int] = []
+        private var latitude: Double = 0
+        private var longitude: Double = 0
         
         @discardableResult
-        func setLocation(_ location: String?) -> Self {
-            self.location = location
+        func setAddress(_ address: String?) -> Self {
+            self.address = address
             return self
         }
         
@@ -68,16 +70,30 @@ extension MapRequestDTO {
             return self
         }
         
+        @discardableResult
+        func setLatitude(_ latitude: Double) -> Self {
+            self.latitude = latitude
+            return self
+        }
+        
+        @discardableResult
+        func setLongitude(_ longitude: Double) -> Self {
+            self.longitude = longitude
+            return self
+        }
+        
         func build() -> MapRequestDTO {
             return MapRequestDTO(
-                location: location,
+                address: address,
                 moodTag: moodTag,
                 depositRange: depositRange,
                 monthlyRentRange: monthlyRentRange,
                 genderPolicy: genderPolicy,
                 preferredDate: preferredDate,
                 occupancyTypes: occupancyTypes,
-                contractPeriod: contractPeroid
+                contractPeriod: contractPeroid,
+                latitude: latitude,
+                longitude: longitude
             )
         }
     }

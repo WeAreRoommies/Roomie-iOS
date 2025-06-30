@@ -57,7 +57,7 @@ extension HomeViewModel: ViewModelType {
         
         input.searchTextFieldEnterSubject
             .sink { [weak self] in
-                self?.fetchSearchLocationData(query: $0)
+                self?.fetchLocationSearchData(query: $0)
             }
             .store(in: cancelBag)
         
@@ -132,7 +132,7 @@ private extension HomeViewModel {
         }
     }
     
-    func fetchSearchLocationData(query: String) {
+    func fetchLocationSearchData(query: String) {
         Task {
             do {
                 guard let responseBody = try await service.fetchLocationSearchData(query: query),

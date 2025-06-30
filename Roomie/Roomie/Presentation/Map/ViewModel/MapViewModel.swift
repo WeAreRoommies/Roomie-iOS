@@ -56,7 +56,7 @@ extension MapViewModel: ViewModelType {
         input.eraseButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                self.builder.setLocation("서울특별시 마포구 노고산동")
+                self.builder.setAddress("서울특별시 마포구 노고산동")
                 self.fetchMapData(request: builder.build())
             }
             .store(in: cancelBag)
