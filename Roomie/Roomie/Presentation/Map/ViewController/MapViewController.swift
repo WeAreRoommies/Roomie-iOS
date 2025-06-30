@@ -181,6 +181,7 @@ private extension MapViewController {
                         let iconName = markerInfo.isFull ? "icn_full_pin_active" : "icn_map_pin_active"
                         marker.iconImage = NMFOverlayImage(name: iconName)
                         self.selectedMarker = marker
+                        self.selectedHouseID = markerInfo.houseID
                         self.selectedIsFull = markerInfo.isFull
                         
                         let cameraUpdate = NMFCameraUpdate(
