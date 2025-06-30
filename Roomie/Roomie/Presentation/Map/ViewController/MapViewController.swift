@@ -23,6 +23,7 @@ final class MapViewController: BaseViewController {
     
     private var markers: [NMFMarker] = []
     private var selectedMarker: NMFMarker?
+    private var selectedIsFull: Bool?
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let markerDidSelectSubject = CurrentValueSubject<Int, Never>(0)
@@ -163,6 +164,7 @@ private extension MapViewController {
                         let iconName = markerInfo.isFull ? "icn_full_pin_active" : "icn_map_pin_active"
                         marker.iconImage = NMFOverlayImage(name: iconName)
                         self.selectedMarker = marker
+                        self.selectedIsFull = markerInfo.isFull
                         
                         let cameraUpdate = NMFCameraUpdate(
                             scrollTo: NMGLatLng(lat: markerInfo.latitude, lng: markerInfo.longitude),
@@ -229,9 +231,9 @@ private extension MapViewController {
     }
     
     func erasePreviousSelectedMarker() {
-        if let previousMarker = self.selectedMarker {
-            previousMarker.iconImage = NMFOverlayImage(name: "icn_map_pin_normal")
-        }
+        guard let previousMarker = self.selectedMarker, let previousIsFull = self.selectedIsFull else { return }
+        let iconName = previousIsFull ? "icn_full_pin_normal" : "icn_map_pin_normal"
+        previousMarker.iconImage = NMFOverlayImage(name: iconName)
     }
 }
 
