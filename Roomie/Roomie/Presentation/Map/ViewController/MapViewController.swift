@@ -168,8 +168,15 @@ private extension MapViewController {
                         position: NMGLatLng(lat: markerInfo.latitude, lng: markerInfo.longitude)
                     )
                     marker.mapView = self.rootView.mapView
-                    let iconName = markerInfo.isFull ? "icn_full_pin_normal" : "icn_map_pin_normal"
-                    marker.iconImage = NMFOverlayImage(name: iconName)
+                    if markerInfo.houseID == self.selectedHouseID {
+                        let iconName = markerInfo.isFull ? "icn_full_pin_active" : "icn_map_pin_active"
+                        marker.iconImage = NMFOverlayImage(name: iconName)
+                    } else {
+                        let iconName = markerInfo.isFull ? "icn_full_pin_normal" : "icn_map_pin_normal"
+                        marker.iconImage = NMFOverlayImage(name: iconName)
+                    }
+//                    let iconName = markerInfo.isFull ? "icn_full_pin_normal" : "icn_map_pin_normal"
+//                    marker.iconImage = NMFOverlayImage(name: iconName)
                     marker.width = 36
                     marker.height = 40
                     
@@ -264,9 +271,20 @@ private extension MapViewController {
     }
     
     func erasePreviousSelectedMarker() {
-        guard let previousMarker = self.selectedMarker, let previousIsFull = self.selectedIsFull else { return }
+        guard let previousMarker = self.selectedMarker,
+              let previousIsFull = self.selectedIsFull
+        else { return }
+        
+        previousMarker.mapView = nil
+        
         let iconName = previousIsFull ? "icn_full_pin_normal" : "icn_map_pin_normal"
         previousMarker.iconImage = NMFOverlayImage(name: iconName)
+        
+        previousMarker.mapView = rootView.mapView
+        
+        self.selectedMarker  = nil
+        self.selectedHouseID = nil
+        self.selectedIsFull  = nil
     }
 }
 
