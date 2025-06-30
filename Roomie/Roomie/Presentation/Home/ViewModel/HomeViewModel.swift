@@ -63,7 +63,7 @@ extension HomeViewModel: ViewModelType {
         
         input.locationDidSelectSubject
             .sink { [weak self] (latitude, longitude, location) in
-                self?.fetchUserLocation(latitude: latitude, longitude: longitude, location: location)
+                self?.updateUserLocation(latitude: latitude, longitude: longitude, location: location)
             }
             .store(in: cancelBag)
         
@@ -156,10 +156,10 @@ private extension HomeViewModel {
         }
     }
     
-    func fetchUserLocation(latitude: Double, longitude: Double, location: String) {
+    func updateUserLocation(latitude: Double, longitude: Double, location: String) {
         Task {
             do {
-                guard let responseBody = try await service.fetchUserLocation(
+                guard let responseBody = try await service.updateUserLocation(
                     latitude: latitude,
                     longitude: longitude,
                     location: location

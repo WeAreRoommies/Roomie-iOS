@@ -56,8 +56,8 @@ extension HomeService: HomeServiceProtocol {
         return try await self.request(with: .fetchLocationSearchData(query: query))
     }
     
-    func fetchUserLocation(latitude: Double, longitude: Double, location: String) async throws -> BaseResponseBody<UserLocationResponseDTO>? {
-        return try await self.request(with: .fetchUserLocation(latitude: latitude, longitude: longitude, location: location))
+    func updateUserLocation(latitude: Double, longitude: Double, location: String) async throws -> BaseResponseBody<UserLocationResponseDTO>? {
+        return try await self.request(with: .updateUserLocation(latitude: latitude, longitude: longitude, location: location))
     }
 }
 
@@ -66,36 +66,36 @@ final class MockHomeService: HomeServiceProtocol {
         let mockData: MapSearchResponseDTO = MapSearchResponseDTO(
             locations: [
                 Location(
-                    x: 0,
-                    y: 0,
+                    latitude: 0,
+                    longitude: 0,
                     location: "이화여자대학교",
                     address: "서울특별시 서대문구 대현동 11-1",
                     roadAddress: "서울특별시 서대문구 이화여대길 52"
                 ),
                 Location(
-                    x: 0,
-                    y: 0,
+                    latitude: 0,
+                    longitude: 0,
                     location: "건국대학교",
                     address: "서울특별시 서대문구 대현동 11-1",
                     roadAddress: "서울특별시 서대문구 이화여대길 52"
                 ),
                 Location(
-                    x: 0,
-                    y: 0,
+                    latitude: 0,
+                    longitude: 0,
                     location: "성신여자대학교",
                     address: "서울특별시 서대문구 대현동 11-1",
                     roadAddress: "서울특별시 서대문구 이화여대길 52"
                 ),
                 Location(
-                    x: 0,
-                    y: 0,
+                    latitude: 0,
+                    longitude: 0,
                     location: "홍익대학교",
                     address: "서울특별시 서대문구 대현동 11-1",
                     roadAddress: "서울특별시 서대문구 이화여대길 52"
                 ),
                 Location(
-                    x: 0,
-                    y: 0,
+                    latitude: 0,
+                    longitude: 0,
                     location: "가톨릭대학교",
                     address: "서울특별시 서대문구 대현동 11-1",
                     roadAddress: "서울특별시 서대문구 이화여대길 52"
@@ -131,7 +131,7 @@ final class MockHomeService: HomeServiceProtocol {
         return BaseResponseBody(code: 200, message: "", data: mockData)
     }
     
-    func fetchUserLocation(latitude: Double, longitude: Double, location: String) async throws -> BaseResponseBody<UserLocationResponseDTO>? {
+    func updateUserLocation(latitude: Double, longitude: Double, location: String) async throws -> BaseResponseBody<UserLocationResponseDTO>? {
         let mockData: UserLocationResponseDTO = UserLocationResponseDTO(
             latitude: 11,
             longitude: 11,

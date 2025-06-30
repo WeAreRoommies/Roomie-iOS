@@ -184,8 +184,8 @@ extension MapSearchViewController: UICollectionViewDelegateFlowLayout {
         if let selectedLocation = dataSource.itemIdentifier(for: indexPath) {
             delegate?.didSelectLocation(
                 location: selectedLocation.location,
-                lat: selectedLocation.y,
-                lng: selectedLocation.x
+                lat: selectedLocation.latitude,
+                lng: selectedLocation.longitude
             )
         }
         
