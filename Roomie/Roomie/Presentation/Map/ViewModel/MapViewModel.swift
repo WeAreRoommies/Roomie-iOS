@@ -16,6 +16,7 @@ final class MapViewModel {
     
     let mapDataSubject = CurrentValueSubject<MapResponseDTO?, Never>(nil)
     private let pinnedInfoSubject = PassthroughSubject<(Int, Bool), Never>()
+    private let isFullExcludedSubject = PassthroughSubject<Bool, Never>()
     
     init(service: MapServiceProtocol, builder: MapRequestDTO.Builder) {
         self.service = service
@@ -29,6 +30,7 @@ extension MapViewModel: ViewModelType {
         let markerDidSelect: AnyPublisher<Int, Never>
         let eraseButtonDidTap: AnyPublisher<Void, Never>
         let pinnedHouseID: AnyPublisher<Int, Never>
+        let fullExcludedButtonDidTap: AnyPublisher<Bool, Never>
     }
     
     struct Output {
@@ -37,6 +39,7 @@ extension MapViewModel: ViewModelType {
         let mapListData: AnyPublisher<MapResponseDTO, Never>
         let defaultLocationInfo: AnyPublisher<(Double, Double), Never>
         let pinnedInfo: AnyPublisher<(Int, Bool), Never>
+        let isFullExcluded: AnyPublisher<Bool, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -65,6 +68,15 @@ extension MapViewModel: ViewModelType {
             .sink { [weak self] houseID in
                 guard let self = self else { return }
                 self.updatePinnedHouse(houseID: houseID)
+            }
+            .store(in: cancelBag)
+        
+        input.fullExcludedButtonDidTap
+            .sink { [weak self] isFullExcluded in
+                guard let self = self, let currentData = self.mapDataSubject.value else { return }
+                let filteredData = isFullExcluded ? currentData.houses.filter { !$0.excludeFull } : currentData.houses
+                self.mapDataSubject.send(MapResponseDTO(houses: filteredData))
+                self.isFullExcludedSubject.send(isFullExcluded)
             }
             .store(in: cancelBag)
         
@@ -106,12 +118,17 @@ extension MapViewModel: ViewModelType {
             .map { (37.567764, 126.916784) }
             .eraseToAnyPublisher()
         
+        let isFullExcluded = isFullExcludedSubject
+            .compactMap { $0 }
+            .eraseToAnyPublisher()
+        
         return Output(
             markersInfo: markersInfo,
             markerDetailInfo: markerDetailInfo,
             mapListData: mapListData,
             defaultLocationInfo: defaultLocationInfo,
-            pinnedInfo: pinnedInfo
+            pinnedInfo: pinnedInfo,
+            isFullExcluded: isFullExcluded
         )
     }
 }
