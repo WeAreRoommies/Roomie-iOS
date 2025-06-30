@@ -18,6 +18,7 @@ final class HomeViewModel {
     let pinnedInfoDataSubject = PassthroughSubject<(Int, Bool), Never>()
     private let didTapHouseDataSubject = PassthroughSubject<Int, Never>()
     private let locationSearchDataSubject = PassthroughSubject<MapSearchResponseDTO, Never>()
+    private let isSuccessSubject = PassthroughSubject<Bool, Never>()
     
     init(service: HomeServiceProtocol) {
         self.service = service
@@ -29,7 +30,7 @@ extension HomeViewModel: ViewModelType {
         let viewWillAppear: AnyPublisher<Void, Never>
         let pinnedHouseIDSubject: AnyPublisher<Int, Never>
         let searchTextFieldEnterSubject: AnyPublisher<String, Never>
-        let locationDidSelectSubject: AnyPublisher<String, Never>
+        let locationDidSelectSubject: AnyPublisher<(Double, Double, String), Never>
     }
     
     struct Output {
@@ -38,6 +39,7 @@ extension HomeViewModel: ViewModelType {
         let houseCount: AnyPublisher<Int, Never>
         let pinnedInfo: AnyPublisher<(Int,Bool), Never>
         let locationSearchData: AnyPublisher<MapSearchResponseDTO, Never>
+        let isSuccess: AnyPublisher<Bool, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -55,14 +57,13 @@ extension HomeViewModel: ViewModelType {
         
         input.searchTextFieldEnterSubject
             .sink { [weak self] in
-                self?.featchSearchLocationData(query: $0)
+                self?.fetchSearchLocationData(query: $0)
             }
             .store(in: cancelBag)
         
         input.locationDidSelectSubject
-            .sink { [weak self] location in
-                guard let self = self else { return }
-                
+            .sink { [weak self] (latitude, longitude, location) in
+                self?.fetchUserLocation(latitude: latitude, longitude: longitude, location: location)
             }
             .store(in: cancelBag)
         
@@ -105,12 +106,15 @@ extension HomeViewModel: ViewModelType {
         let locationSearchData = locationSearchDataSubject
             .eraseToAnyPublisher()
         
+        let isSuccess = isSuccessSubject.eraseToAnyPublisher()
+        
         return Output(
             userInfo: userInfo,
             houseList: houseListData,
             houseCount: houseCount,
             pinnedInfo: pinnedInfoData,
-            locationSearchData: locationSearchData
+            locationSearchData: locationSearchData,
+            isSuccess: isSuccess
         )
     }
 }
@@ -128,7 +132,7 @@ private extension HomeViewModel {
         }
     }
     
-    func featchSearchLocationData(query: String) {
+    func fetchSearchLocationData(query: String) {
         Task {
             do {
                 guard let responseBody = try await service.fetchLocationSearchData(query: query),
@@ -148,6 +152,23 @@ private extension HomeViewModel {
                 self.pinnedInfoDataSubject.send((houseID, data.isPinned))
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
+            }
+        }
+    }
+    
+    func fetchUserLocation(latitude: Double, longitude: Double, location: String) {
+        Task {
+            do {
+                guard let responseBody = try await service.fetchUserLocation(
+                    latitude: latitude,
+                    longitude: longitude,
+                    location: location
+                ), let _ = responseBody.data else { return }
+                fetchHomeData()
+                isSuccessSubject.send(true)
+            } catch {
+                print(">>> \(error.localizedDescription) : \(#function)")
+                isSuccessSubject.send(false)
             }
         }
     }

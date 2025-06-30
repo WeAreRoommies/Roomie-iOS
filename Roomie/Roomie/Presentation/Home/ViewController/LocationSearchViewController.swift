@@ -11,7 +11,7 @@ import Combine
 import CombineCocoa
 
 protocol LocationSearchSheetViewControllerDelegate: AnyObject {
-    func didSelectLocation(location: String, lat: Double, lng: Double)
+    func didSelectLocation(location: String, latitude: Double, longitude: Double)
 }
 
 final class LocationSearchSheetViewController: BaseViewController {
@@ -34,7 +34,7 @@ final class LocationSearchSheetViewController: BaseViewController {
     
     private let searchTextFieldEnterSubject = PassthroughSubject<String, Never>()
     
-    private let locationDidSelectSubject = PassthroughSubject<String, Never>()
+    private let locationDidSelectSubject = PassthroughSubject<(Double, Double, String), Never>()
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     
@@ -190,16 +190,11 @@ extension LocationSearchSheetViewController: UICollectionViewDelegateFlowLayout 
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        let selectedLocation = dataSource.itemIdentifier(for: indexPath)
-        if let location = selectedLocation {
-            self.locationDidSelectSubject.send(location.address)
-        }
-        
         if let selectedLocation = dataSource.itemIdentifier(for: indexPath) {
             delegate?.didSelectLocation(
-                location: selectedLocation.location,
-                lat: selectedLocation.x,
-                lng: selectedLocation.y
+                location: selectedLocation.address,
+                latitude: selectedLocation.x,
+                longitude: selectedLocation.y
             )
         }
         self.navigationController?.popViewController(animated: true)

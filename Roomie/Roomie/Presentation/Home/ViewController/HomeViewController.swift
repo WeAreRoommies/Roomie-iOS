@@ -33,6 +33,7 @@ final class HomeViewController: BaseViewController {
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
+    private let locationDidSelectSubject = PassthroughSubject<(Double, Double, String), Never>()
         
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
@@ -166,7 +167,7 @@ private extension HomeViewController {
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
             pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher(),
             searchTextFieldEnterSubject: Empty().eraseToAnyPublisher(),
-            locationDidSelectSubject: Empty().eraseToAnyPublisher()
+            locationDidSelectSubject: locationDidSelectSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -177,6 +178,7 @@ private extension HomeViewController {
                 guard let self else { return }
                 self.rootView.nameLabel.text = data.nickname
                 self.setHomeNavigationBar(locaton: data.location)
+                self.rootView.subGreetingLabel.updateText("루미가 \(data.nickname)님의 완벽한 집을\n찾아드릴게요.")
             }
             .store(in: cancelBag)
         
@@ -214,6 +216,16 @@ private extension HomeViewController {
                 }
                 if isPinned == false {
                     Toast().show(message: "찜 목록에서 삭제되었어요", inset: 8, view: rootView)
+                }
+            }
+            .store(in: cancelBag)
+        
+        output.isSuccess
+            .receive(on: RunLoop.main)
+            .sink{ [weak self] isSuccess in
+                if isSuccess {
+                    guard let self = self else { return }
+                    self.dismiss(animated: true)
                 }
             }
             .store(in: cancelBag)
@@ -276,15 +288,21 @@ private extension HomeViewController {
         title = nil
         navigationItem.leftBarButtonItem = nil
         
-        let locationLabel = UILabel()
+        locationButton.subviews.forEach { $0.removeFromSuperview() }
+        
         let likedButton = UIBarButtonItem(
             image: .icnHeartLine24,
             style: .plain,
             target: self,
             action: #selector(wishLishButtonDidTap)
         )
+        let locationLabel = UILabel()
         let dropDownImageView = UIImageView(image: .icnArrowDownFilled16)
         let locationButtonStack = UIStackView()
+        
+        locationLabel.do {
+            $0.setText(location, style: .title2, color: .grayscale10)
+        }
         
         dropDownImageView.snp.makeConstraints {
             $0.size.equalTo(16)
@@ -303,19 +321,15 @@ private extension HomeViewController {
             $0.edges.equalToSuperview()
         }
         
-        locationButton.sizeToFit()
         locationButton.snp.makeConstraints {
             $0.height.equalTo(22)
-            $0.width.equalTo(Screen.width(66))
         }
+        locationButton.sizeToFit()
         
         let locationBarButton = UIBarButtonItem(customView: locationButton)
         
         likedButton.tintColor = .grayscale10
         barAppearance.backgroundColor = .primaryLight4
-        locationLabel.do {
-            $0.setText(location, style: .title2, color: .grayscale10)
-        }
         
         navigationItem.rightBarButtonItem = likedButton
         navigationItem.leftBarButtonItem = locationBarButton
@@ -334,9 +348,7 @@ private extension HomeViewController {
     }
     
     func presentLocationSearchSheet() {
-        let locationViewController = LocationSearchSheetViewController(
-            viewModel: HomeViewModel(service: HomeService())
-        )
+        let locationViewController = LocationSearchSheetViewController(viewModel: self.viewModel)
         
         locationViewController.delegate = self
         
@@ -384,7 +396,8 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        guard let houseID = viewModel.homeDataSubject.value?.recentlyViewedHouses[indexPath.item].houseID else { return }
+        guard let houseID = viewModel.homeDataSubject.value?.recentlyViewedHouses[indexPath.item].houseID
+        else { return }
         let houseDetailViewController = HouseDetailViewController(
             viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
         )
@@ -412,7 +425,7 @@ extension HomeViewController: UIScrollViewDelegate {
 }
 
 extension HomeViewController: LocationSearchSheetViewControllerDelegate {
-    func didSelectLocation(location: String, lat: Double, lng: Double) {
-        // TODO: - 서버 작업 완료 시 추후 연결
+    func didSelectLocation(location: String, latitude: Double, longitude: Double) {
+        locationDidSelectSubject.send((latitude, longitude, location))
     }
 }

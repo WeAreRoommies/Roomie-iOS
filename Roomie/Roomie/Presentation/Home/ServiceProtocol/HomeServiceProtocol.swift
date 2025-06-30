@@ -13,4 +13,6 @@ protocol HomeServiceProtocol {
     func updatePinnedHouse(houseID: Int) async throws -> BaseResponseBody<PinnedResponseDTO>?
     
     func fetchLocationSearchData(query: String) async throws -> BaseResponseBody<MapSearchResponseDTO>?
+    
+    func fetchUserLocation(latitude: Double, longitude: Double, location: String) async throws -> BaseResponseBody<UserLocationResponseDTO>?
 }
