@@ -33,7 +33,7 @@ final class MapSearchViewController: BaseViewController {
     final let contentInset = UIEdgeInsets(top: 16, left: 20, bottom: 16, right: 20)
     
     private let searchTextFieldEnterSubject = PassthroughSubject<String, Never>()
-    private let locationDidSelectSubject = PassthroughSubject<String, Never>()
+    private let locationDidSelectSubject = PassthroughSubject<AddressInfo, Never>()
     
     // MARK: - Initializer
 
@@ -176,18 +176,21 @@ extension MapSearchViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        let selectedLocation = dataSource.itemIdentifier(for: indexPath)
-        if let location = selectedLocation {
-            self.locationDidSelectSubject.send(location.address)
-        }
+        guard let selectedLocation = dataSource.itemIdentifier(for: indexPath) else { return }
         
-        if let selectedLocation = dataSource.itemIdentifier(for: indexPath) {
-            delegate?.didSelectLocation(
-                location: selectedLocation.location,
-                lat: selectedLocation.latitude,
-                lng: selectedLocation.longitude
-            )
-        }
+        let addressData = AddressInfo(
+            address: selectedLocation.address,
+            latitude: selectedLocation.latitude,
+            longitude: selectedLocation.longitude
+        )
+        
+        self.locationDidSelectSubject.send(addressData)
+        
+        delegate?.didSelectLocation(
+            location: selectedLocation.location,
+            lat: selectedLocation.latitude,
+            lng: selectedLocation.longitude
+        )
         
         self.navigationController?.popViewController(animated: true)
     }
