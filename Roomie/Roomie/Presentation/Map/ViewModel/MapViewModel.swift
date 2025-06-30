@@ -32,6 +32,7 @@ extension MapViewModel: ViewModelType {
         let eraseButtonDidTap: AnyPublisher<Void, Never>
         let pinnedHouseID: AnyPublisher<Int, Never>
         let fullExcludedButtonDidTap: AnyPublisher<Bool, Never>
+        let wishButtonDidTap: AnyPublisher<Int, Never>
     }
     
     struct Output {
@@ -84,6 +85,13 @@ extension MapViewModel: ViewModelType {
                 }
                 
                 self.isFullExcludedSubject.send(isFullExcluded)
+            }
+            .store(in: cancelBag)
+        
+        input.wishButtonDidTap
+            .sink { [weak self] houseID in
+                guard let self = self else { return }
+                self.updatePinnedHouse(houseID: houseID)
             }
             .store(in: cancelBag)
         

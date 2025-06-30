@@ -91,7 +91,8 @@ private extension MapListSheetViewController {
             markerDidSelect: PassthroughSubject<Int, Never>().eraseToAnyPublisher(),
             eraseButtonDidTap: PassthroughSubject<Void, Never>().eraseToAnyPublisher(),
             pinnedHouseID: pinnedHouseIDSubject.eraseToAnyPublisher(),
-            fullExcludedButtonDidTap: fullExcludedButtonDidTapSubject.eraseToAnyPublisher()
+            fullExcludedButtonDidTap: fullExcludedButtonDidTapSubject.eraseToAnyPublisher(),
+            wishButtonDidTap: PassthroughSubject<Int, Never>().eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
