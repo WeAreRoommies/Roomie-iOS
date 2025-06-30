@@ -149,9 +149,10 @@ private extension MapViewController {
                 removeAllMarkers()
                 
                 for markerInfo in markersInfo {
-                    let marker = NMFMarker(position: NMGLatLng(lat: markerInfo.x, lng: markerInfo.y))
+                    let marker = NMFMarker(position: NMGLatLng(lat: markerInfo.latitude, lng: markerInfo.longitude))
                     marker.mapView = self.rootView.mapView
-                    marker.iconImage = NMFOverlayImage(name: "icn_map_pin_normal")
+                    let iconName = markerInfo.isFull ? "icn_full_pin_normal" : "icn_map_pin_normal"
+                    marker.iconImage = NMFOverlayImage(name: iconName)
                     marker.width = 36
                     marker.height = 40
                     
@@ -159,11 +160,12 @@ private extension MapViewController {
                         guard let self = self else { return false }
                         
                         erasePreviousSelectedMarker()
-                        marker.iconImage = NMFOverlayImage(name: "icn_map_pin_active")
+                        let iconName = markerInfo.isFull ? "icn_full_pin_active" : "icn_map_pin_active"
+                        marker.iconImage = NMFOverlayImage(name: iconName)
                         self.selectedMarker = marker
                         
                         let cameraUpdate = NMFCameraUpdate(
-                            scrollTo: NMGLatLng(lat: markerInfo.x, lng: markerInfo.y),
+                            scrollTo: NMGLatLng(lat: markerInfo.latitude, lng: markerInfo.longitude),
                             zoomTo: 13
                         )
                         cameraUpdate.animation = .easeIn

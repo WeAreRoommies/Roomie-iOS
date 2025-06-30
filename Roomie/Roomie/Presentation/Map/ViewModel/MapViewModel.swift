@@ -74,7 +74,7 @@ extension MapViewModel: ViewModelType {
         input.fullExcludedButtonDidTap
             .sink { [weak self] isFullExcluded in
                 guard let self = self, let currentData = self.mapDataSubject.value else { return }
-                let filteredData = isFullExcluded ? currentData.houses.filter { !$0.excludeFull } : currentData.houses
+                let filteredData = isFullExcluded ? currentData.houses.filter { !$0.isFull } : currentData.houses
                 self.mapDataSubject.send(MapResponseDTO(houses: filteredData))
                 self.isFullExcludedSubject.send(isFullExcluded)
             }
@@ -89,7 +89,14 @@ extension MapViewModel: ViewModelType {
         
         let markersInfo = mapDataSubject
             .compactMap { data in
-                data?.houses.map { MarkerInfo(houseID: $0.houseID, x: $0.latitude, y: $0.longitude) }
+                data?.houses.map {
+                    MarkerInfo(
+                        houseID: $0.houseID,
+                        latitude: $0.latitude,
+                        longitude: $0.longitude,
+                        isFull: $0.isFull
+                    )
+                }
             }
             .eraseToAnyPublisher()
         
