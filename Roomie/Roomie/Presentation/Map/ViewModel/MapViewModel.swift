@@ -15,8 +15,9 @@ final class MapViewModel {
     private var houseID: Int?
     
     let mapDataSubject = CurrentValueSubject<MapResponseDTO?, Never>(nil)
+    
     private let pinnedInfoSubject = PassthroughSubject<(Int, Bool), Never>()
-    private let isFullExcludedSubject = PassthroughSubject<Bool, Never>()
+    private let isFullExcludedSubject = CurrentValueSubject<Bool, Never>(false)
     
     init(service: MapServiceProtocol, builder: MapRequestDTO.Builder) {
         self.service = service
@@ -74,8 +75,14 @@ extension MapViewModel: ViewModelType {
         input.fullExcludedButtonDidTap
             .sink { [weak self] isFullExcluded in
                 guard let self = self, let currentData = self.mapDataSubject.value else { return }
-                let filteredData = isFullExcluded ? currentData.houses.filter { !$0.isFull } : currentData.houses
-                self.mapDataSubject.send(MapResponseDTO(houses: filteredData))
+                
+                if isFullExcluded {
+                    let filteredData = MapResponseDTO(houses: currentData.houses.filter { !$0.isFull })
+                    self.mapDataSubject.send(filteredData)
+                } else {
+                    self.fetchMapData(request: builder.build())
+                }
+                
                 self.isFullExcludedSubject.send(isFullExcluded)
             }
             .store(in: cancelBag)
