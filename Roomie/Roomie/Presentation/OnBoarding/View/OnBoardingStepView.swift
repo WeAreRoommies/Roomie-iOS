@@ -63,6 +63,23 @@ final class OnBoardingStepView: BaseView {
             $0.size.equalTo(Screen.width(240))
         }
     }
+    
+    override func updateConstraints() {
+        super.updateConstraints()
+        
+        onBoardingImageView.snp.remakeConstraints {
+            $0.centerX.equalToSuperview()
+            
+            if type == .hostStep {
+                $0.top.equalTo(subtitleLabel.snp.bottom).offset(23)
+                $0.width.equalTo(Screen.width(375))
+                $0.height.equalTo(Screen.height(300))
+            } else {
+                $0.top.equalTo(subtitleLabel.snp.bottom).offset(60)
+                $0.size.equalTo(Screen.width(240))
+            }
+        }
+    }
 }
 
 // MARK: - Function
@@ -73,5 +90,7 @@ extension OnBoardingStepView {
         titleLabel.text = type.title
         subtitleLabel.text = type.subTitle
         onBoardingImageView.image = type.onBoardingViewImage
+        
+        setNeedsUpdateConstraints()
     }
 }
