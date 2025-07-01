@@ -19,7 +19,8 @@ struct MapRequestDTO: RequestModelType {
     
     enum CodingKeys: String, CodingKey {
         case address = "location"
-        case moodTag, depositRange, monthlyRentRange, genderPolicy, preferredDate, occupancyTypes, contractPeriod, latitude, longitude
+        case moodTag, depositRange, monthlyRentRange, genderPolicy
+        case preferredDate, occupancyTypes, contractPeriod, latitude, longitude
     }
 }
 
