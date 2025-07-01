@@ -23,8 +23,8 @@
 		<string>kakaolink</string>
 		<string>kakaoplus</string>
 	</array>
-	<key>NMFClientId</key>
-	<string>$(NMFClientId)</string>
+	<key>NMFNcpKeyId</key>
+	<string>$(NMFNcpKeyId)</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
