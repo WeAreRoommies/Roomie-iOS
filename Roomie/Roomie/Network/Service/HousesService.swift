@@ -86,7 +86,6 @@ final class MockHousesService: HouseDetailServiceProtocol {
                 moodTags: ["#차분한", "#유쾌한", "#경쾌한"],
                 roomMood: "전반적으로 조용하고 깔끔한 환경을 선호하는 아침형 룸메이트들이에요.",
                 groundRule: ["요리 후 바로 설거지해요", "청소는 주3회 돌아가면서 해요"],
-                maintenanceCost: 300000,
                 isPinned: true,
                 safetyLivingFacility: ["소화기", "소화기"],
                 kitchenFacility: ["주걱", "밥솥"]
@@ -100,7 +99,6 @@ final class MockHousesService: HouseDetailServiceProtocol {
                     occupancyType: 2,
                     gender: "여성",
                     deposit: 5000000,
-                    prepaidUtilities: 100000,
                     monthlyRent: 500000,
                     contractPeriod: "24-12-20",
                     managementFee: "1/n"
@@ -113,7 +111,6 @@ final class MockHousesService: HouseDetailServiceProtocol {
                     occupancyType: 2,
                     gender: "여성",
                     deposit: 5000000,
-                    prepaidUtilities: 100000,
                     monthlyRent: 500000,
                     contractPeriod: "24-12-20",
                     managementFee: "1/n"
@@ -126,20 +123,9 @@ final class MockHousesService: HouseDetailServiceProtocol {
                     occupancyType: 2,
                     gender: "여성",
                     deposit: 5000000,
-                    prepaidUtilities: 100000,
                     monthlyRent: 500000,
                     contractPeriod: "24-12-20",
                     managementFee: "1/n"
-                )
-            ],
-            roommates: [
-                Roommate(
-                    name: "1A 싱글침대",
-                    age: "20대 초반",
-                    job: "대학생",
-                    mbti: "INFP",
-                    sleepTime: "21:00 - 21:00",
-                    activityTime: "21:00 - 21:00"
                 )
             ]
         )
