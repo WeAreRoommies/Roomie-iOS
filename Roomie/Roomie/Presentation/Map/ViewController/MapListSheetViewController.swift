@@ -8,6 +8,8 @@
 import UIKit
 import Combine
 
+import CombineCocoa
+
 protocol MapListSheetViewControllerDelegate: AnyObject {
     func houseCellDidTap(houseID: Int)
 }
@@ -24,11 +26,12 @@ final class MapListSheetViewController: BaseViewController {
     
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let cellHeight: CGFloat = 112
-    final let contentInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    final let contentInset = UIEdgeInsets(top: 4, left: 16, bottom: 16, right: 16)
     
     weak var delegate: MapListSheetViewControllerDelegate?
     
     private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
+    private let fullExcludedButtonDidTapSubject = PassthroughSubject<Bool, Never>()
     
     private lazy var dataSource = createDiffableDataSource()
     
@@ -61,6 +64,17 @@ final class MapListSheetViewController: BaseViewController {
     override func setDelegate() {
         rootView.collectionView.delegate = self
     }
+    
+    override func setAction() {
+        rootView.fullExcludedButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                let isFullExcluded = rootView.fullExcludedButton.currentImage == .btnCircleDefault
+                fullExcludedButtonDidTapSubject.send(isFullExcluded)
+            }
+            .store(in: cancelBag)
+    }
 }
 
 private extension MapListSheetViewController {
@@ -76,7 +90,9 @@ private extension MapListSheetViewController {
             viewWillAppear: Just(()).eraseToAnyPublisher(),
             markerDidSelect: PassthroughSubject<Int, Never>().eraseToAnyPublisher(),
             eraseButtonDidTap: PassthroughSubject<Void, Never>().eraseToAnyPublisher(),
-            pinnedHouseID: pinnedHouseIDSubject.eraseToAnyPublisher()
+            pinnedHouseID: pinnedHouseIDSubject.eraseToAnyPublisher(),
+            fullExcludedButtonDidTap: fullExcludedButtonDidTapSubject.eraseToAnyPublisher(),
+            wishButtonDidTap: PassthroughSubject<Int, Never>().eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -111,6 +127,17 @@ private extension MapListSheetViewController {
                 if isPinned == false {
                     Toast().show(message: "찜 목록에서 삭제되었어요", inset: 32, view: rootView)
                 }
+            }
+            .store(in: cancelBag)
+        
+        output.isFullExcluded
+            .sink { [weak self] isFullExcluded in
+                guard let self = self else { return }
+                let defaultImage: UIImage = .btnCircleDefault
+                let activeImage: UIImage = .btnCircleActive
+                self.rootView.fullExcludedButton.setImage(
+                    isFullExcluded ? activeImage : defaultImage, for: .normal
+                )
             }
             .store(in: cancelBag)
     }

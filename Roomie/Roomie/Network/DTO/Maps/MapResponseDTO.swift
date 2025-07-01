@@ -21,12 +21,12 @@ struct House: Codable, Hashable {
     let moodTag: String
     let contractTerm: Int
     let mainImageURL: String
-    let excludeFull: Bool
+    let isFull: Bool
     
     enum CodingKeys: String, CodingKey {
         case houseID = "houseId"
         case latitude, longitude, monthlyRent, deposit, occupancyTypes, location, genderPolicy, locationDescription, isPinned, moodTag, contractTerm
         case mainImageURL = "mainImgUrl"
-        case excludeFull
+        case isFull = "excludeFull"
     }
 }

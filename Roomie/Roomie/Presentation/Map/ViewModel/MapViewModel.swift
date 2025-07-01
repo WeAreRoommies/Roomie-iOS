@@ -15,7 +15,9 @@ final class MapViewModel {
     private var houseID: Int?
     
     let mapDataSubject = CurrentValueSubject<MapResponseDTO?, Never>(nil)
+    
     private let pinnedInfoSubject = PassthroughSubject<(Int, Bool), Never>()
+    private let isFullExcludedSubject = CurrentValueSubject<Bool, Never>(false)
     
     init(service: MapServiceProtocol, builder: MapRequestDTO.Builder) {
         self.service = service
@@ -29,6 +31,8 @@ extension MapViewModel: ViewModelType {
         let markerDidSelect: AnyPublisher<Int, Never>
         let eraseButtonDidTap: AnyPublisher<Void, Never>
         let pinnedHouseID: AnyPublisher<Int, Never>
+        let fullExcludedButtonDidTap: AnyPublisher<Bool, Never>
+        let wishButtonDidTap: AnyPublisher<Int, Never>
     }
     
     struct Output {
@@ -37,6 +41,7 @@ extension MapViewModel: ViewModelType {
         let mapListData: AnyPublisher<MapResponseDTO, Never>
         let defaultLocationInfo: AnyPublisher<(Double, Double), Never>
         let pinnedInfo: AnyPublisher<(Int, Bool), Never>
+        let isFullExcluded: AnyPublisher<Bool, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -56,7 +61,7 @@ extension MapViewModel: ViewModelType {
         input.eraseButtonDidTap
             .sink { [weak self] in
                 guard let self = self else { return }
-                self.builder.setLocation("서울특별시 마포구 노고산동")
+                self.builder.setAddress("서울특별시 마포구 노고산동")
                 self.fetchMapData(request: builder.build())
             }
             .store(in: cancelBag)
@@ -65,6 +70,29 @@ extension MapViewModel: ViewModelType {
             .sink { [weak self] houseID in
                 guard let self = self else { return }
                 self.updatePinnedHouse(houseID: houseID)
+            }
+            .store(in: cancelBag)
+        
+        input.fullExcludedButtonDidTap
+            .sink { [weak self] isFullExcluded in
+                guard let self = self, let currentData = self.mapDataSubject.value else { return }
+                
+                if isFullExcluded {
+                    let filteredData = MapResponseDTO(houses: currentData.houses.filter { !$0.isFull })
+                    self.mapDataSubject.send(filteredData)
+                } else {
+                    self.fetchMapData(request: builder.build())
+                }
+                
+                self.isFullExcludedSubject.send(isFullExcluded)
+            }
+            .store(in: cancelBag)
+        
+        input.wishButtonDidTap
+            .sink { [weak self] houseID in
+                guard let self = self else { return }
+                self.updatePinnedHouse(houseID: houseID)
+                self.fetchMapData(request: builder.build())
             }
             .store(in: cancelBag)
         
@@ -77,7 +105,14 @@ extension MapViewModel: ViewModelType {
         
         let markersInfo = mapDataSubject
             .compactMap { data in
-                data?.houses.map { MarkerInfo(houseID: $0.houseID, x: $0.latitude, y: $0.longitude) }
+                data?.houses.map {
+                    MarkerInfo(
+                        houseID: $0.houseID,
+                        latitude: $0.latitude,
+                        longitude: $0.longitude,
+                        isFull: $0.isFull
+                    )
+                }
             }
             .eraseToAnyPublisher()
         
@@ -106,12 +141,17 @@ extension MapViewModel: ViewModelType {
             .map { (37.567764, 126.916784) }
             .eraseToAnyPublisher()
         
+        let isFullExcluded = isFullExcludedSubject
+            .compactMap { $0 }
+            .eraseToAnyPublisher()
+        
         return Output(
             markersInfo: markersInfo,
             markerDetailInfo: markerDetailInfo,
             mapListData: mapListData,
             defaultLocationInfo: defaultLocationInfo,
-            pinnedInfo: pinnedInfo
+            pinnedInfo: pinnedInfo,
+            isFullExcluded: isFullExcluded
         )
     }
 }

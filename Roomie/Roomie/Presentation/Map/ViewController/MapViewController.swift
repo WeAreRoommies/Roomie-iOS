@@ -23,10 +23,14 @@ final class MapViewController: BaseViewController {
     
     private var markers: [NMFMarker] = []
     private var selectedMarker: NMFMarker?
+    private var selectedHouseID: Int?
+    private var selectedIsFull: Bool?
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let markerDidSelectSubject = CurrentValueSubject<Int, Never>(0)
     private let eraseButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    
+    private let wishButtonDidTapSubject = PassthroughSubject<Int, Never>()
     
     // MARK: - Initializer
 
@@ -106,24 +110,34 @@ final class MapViewController: BaseViewController {
         rootView.eraseButton
             .tapPublisher
             .sink { [weak self] in
-                self?.eraseButtonDidTapSubject.send()
-                self?.rootView.searchBarLabel.setText("원하는 장소를 찾아보세요", style: .title1, color: .grayscale7)
-                self?.rootView.eraseButton.isHidden = true
-                self?.rootView.searchImageView.isHidden = false
+                guard let self = self else { return }
+                self.eraseButtonDidTapSubject.send()
+                self.rootView.searchBarLabel.setText("원하는 장소를 찾아보세요", style: .title1, color: .grayscale7)
+                self.rootView.eraseButton.isHidden = true
+                self.rootView.searchImageView.isHidden = false
             }
             .store(in: cancelBag)
         
         rootView.mapDetailCardView.nextButton
             .tapPublisher
             .sink { [weak self] in
+                guard let self = self else { return }
                 let houseDetailViewController = HouseDetailViewController(
                     viewModel: HouseDetailViewModel(
-                        houseID: self?.markerDidSelectSubject.value ?? 0,
+                        houseID: self.markerDidSelectSubject.value,
                         service: HousesService()
                     )
                 )
                 houseDetailViewController.hidesBottomBarWhenPushed = true
-                self?.navigationController?.pushViewController(houseDetailViewController, animated: true)
+                self.navigationController?.pushViewController(houseDetailViewController, animated: true)
+            }
+            .store(in: cancelBag)
+        
+        rootView.mapDetailCardView.wishButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self, let selectedHouseID = selectedHouseID else { return }
+                self.wishButtonDidTapSubject.send(selectedHouseID)
             }
             .store(in: cancelBag)
     }
@@ -135,7 +149,9 @@ private extension MapViewController {
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
             markerDidSelect: markerDidSelectSubject.eraseToAnyPublisher(),
             eraseButtonDidTap: eraseButtonDidTapSubject.eraseToAnyPublisher(),
-            pinnedHouseID: PassthroughSubject<Int, Never>().eraseToAnyPublisher()
+            pinnedHouseID: PassthroughSubject<Int, Never>().eraseToAnyPublisher(),
+            fullExcludedButtonDidTap: PassthroughSubject<Bool, Never>().eraseToAnyPublisher(),
+            wishButtonDidTap: wishButtonDidTapSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -148,9 +164,19 @@ private extension MapViewController {
                 removeAllMarkers()
                 
                 for markerInfo in markersInfo {
-                    let marker = NMFMarker(position: NMGLatLng(lat: markerInfo.x, lng: markerInfo.y))
+                    let marker = NMFMarker(
+                        position: NMGLatLng(lat: markerInfo.latitude, lng: markerInfo.longitude)
+                    )
                     marker.mapView = self.rootView.mapView
-                    marker.iconImage = NMFOverlayImage(name: "icn_map_pin_normal")
+                    if markerInfo.houseID == self.selectedHouseID {
+                        let iconName = markerInfo.isFull ? "icn_full_pin_active" : "icn_map_pin_active"
+                        marker.iconImage = NMFOverlayImage(name: iconName)
+                    } else {
+                        let iconName = markerInfo.isFull ? "icn_full_pin_normal" : "icn_map_pin_normal"
+                        marker.iconImage = NMFOverlayImage(name: iconName)
+                    }
+//                    let iconName = markerInfo.isFull ? "icn_full_pin_normal" : "icn_map_pin_normal"
+//                    marker.iconImage = NMFOverlayImage(name: iconName)
                     marker.width = 36
                     marker.height = 40
                     
@@ -158,11 +184,15 @@ private extension MapViewController {
                         guard let self = self else { return false }
                         
                         erasePreviousSelectedMarker()
-                        marker.iconImage = NMFOverlayImage(name: "icn_map_pin_active")
+                        
+                        let iconName = markerInfo.isFull ? "icn_full_pin_active" : "icn_map_pin_active"
+                        marker.iconImage = NMFOverlayImage(name: iconName)
                         self.selectedMarker = marker
+                        self.selectedHouseID = markerInfo.houseID
+                        self.selectedIsFull = markerInfo.isFull
                         
                         let cameraUpdate = NMFCameraUpdate(
-                            scrollTo: NMGLatLng(lat: markerInfo.x, lng: markerInfo.y),
+                            scrollTo: NMGLatLng(lat: markerInfo.latitude, lng: markerInfo.longitude),
                             zoomTo: 13
                         )
                         cameraUpdate.animation = .easeIn
@@ -201,6 +231,9 @@ private extension MapViewController {
                 self?.rootView.mapDetailCardView.moodTagLabel.updateText(
                     markerDetailInfo.moodTag
                 )
+                self?.rootView.mapDetailCardView.wishButton.setImage(
+                    markerDetailInfo.isPinned ? .btnHeart40Active : .btnHeart40Normal, for: .normal
+                )
             }
             .store(in: cancelBag)
         
@@ -216,6 +249,18 @@ private extension MapViewController {
                 self.rootView.mapView.moveCamera(cameraUpdate)
             }
             .store(in: cancelBag)
+        
+        output.pinnedInfo
+            .receive(on: RunLoop.main)
+            .sink { [weak self] (houseID, isPinned) in
+                guard let self = self else { return }
+                if houseID == selectedHouseID {
+                    rootView.mapDetailCardView.wishButton.setImage(
+                        isPinned ? .btnHeart40Active : .btnHeart40Normal, for: .normal
+                    )
+                }
+            }
+            .store(in: cancelBag)
     }
     
     func removeAllMarkers() {
@@ -226,9 +271,20 @@ private extension MapViewController {
     }
     
     func erasePreviousSelectedMarker() {
-        if let previousMarker = self.selectedMarker {
-            previousMarker.iconImage = NMFOverlayImage(name: "icn_map_pin_normal")
-        }
+        guard let previousMarker = self.selectedMarker,
+              let previousIsFull = self.selectedIsFull
+        else { return }
+        
+        previousMarker.mapView = nil
+        
+        let iconName = previousIsFull ? "icn_full_pin_normal" : "icn_map_pin_normal"
+        previousMarker.iconImage = NMFOverlayImage(name: iconName)
+        
+        previousMarker.mapView = rootView.mapView
+        
+        self.selectedMarker  = nil
+        self.selectedHouseID = nil
+        self.selectedIsFull  = nil
     }
 }
 
@@ -236,7 +292,6 @@ private extension MapViewController {
 
 extension MapViewController: MapSearchViewControllerDelegate {
     func didSelectLocation(location: String, lat: Double, lng: Double) {
-        
         rootView.searchBarLabel.setText(location, style: .title1, color: .grayscale12)
         rootView.searchImageView.isHidden = true
         rootView.eraseButton.isHidden = false

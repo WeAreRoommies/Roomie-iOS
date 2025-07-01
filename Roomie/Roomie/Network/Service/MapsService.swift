@@ -64,36 +64,36 @@ final class MockMapSearchService: MapSearchServiceProtocol {
         let mockData: MapSearchResponseDTO = MapSearchResponseDTO(
             locations: [
                 Location(
-                    x: 0,
-                    y: 0,
+                    latitude: 0,
+                    longitude: 0,
                     location: "이화여자대학교",
                     address: "서울특별시 서대문구 대현동 11-1",
                     roadAddress: "서울특별시 서대문구 이화여대길 52"
                 ),
                 Location(
-                    x: 0,
-                    y: 0,
+                    latitude: 0,
+                    longitude: 0,
                     location: "건국대학교",
                     address: "서울특별시 서대문구 대현동 11-1",
                     roadAddress: "서울특별시 서대문구 이화여대길 52"
                 ),
                 Location(
-                    x: 0,
-                    y: 0,
+                    latitude: 0,
+                    longitude: 0,
                     location: "성신여자대학교",
                     address: "서울특별시 서대문구 대현동 11-1",
                     roadAddress: "서울특별시 서대문구 이화여대길 52"
                 ),
                 Location(
-                    x: 0,
-                    y: 0,
+                    latitude: 0,
+                    longitude: 0,
                     location: "홍익대학교",
                     address: "서울특별시 서대문구 대현동 11-1",
                     roadAddress: "서울특별시 서대문구 이화여대길 52"
                 ),
                 Location(
-                    x: 0,
-                    y: 0,
+                    latitude: 0,
+                    longitude: 0,
                     location: "가톨릭대학교",
                     address: "서울특별시 서대문구 대현동 11-1",
                     roadAddress: "서울특별시 서대문구 이화여대길 52"
@@ -121,7 +121,7 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                     moodTag: "#차분한",
                     contractTerm: 6,
                     mainImageURL: "",
-                    excludeFull: false
+                    isFull: false
                 ),
                 House(
                     houseID: 2,
@@ -137,7 +137,7 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                     moodTag: "#깔끔한",
                     contractTerm: 6,
                     mainImageURL: "",
-                    excludeFull: false
+                    isFull: false
                 ),
                 House(
                     houseID: 3,
@@ -153,7 +153,7 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                     moodTag: "#활발한",
                     contractTerm: 12,
                     mainImageURL: "",
-                    excludeFull: false
+                    isFull: false
                 ),
                 House(
                     houseID: 4,
@@ -169,7 +169,7 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                     moodTag: "#활발한",
                     contractTerm: 12,
                     mainImageURL: "",
-                    excludeFull: false
+                    isFull: false
                 ),
                 House(
                     houseID: 5,
@@ -185,7 +185,7 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                     moodTag: "#조용한",
                     contractTerm: 6,
                     mainImageURL: "",
-                    excludeFull: true
+                    isFull: true
                 )
             ]
         )

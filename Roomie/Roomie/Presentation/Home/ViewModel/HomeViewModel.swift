@@ -57,13 +57,13 @@ extension HomeViewModel: ViewModelType {
         
         input.searchTextFieldEnterSubject
             .sink { [weak self] in
-                self?.fetchSearchLocationData(query: $0)
+                self?.fetchLocationSearchData(query: $0)
             }
             .store(in: cancelBag)
         
         input.locationDidSelectSubject
             .sink { [weak self] (latitude, longitude, location) in
-                self?.fetchUserLocation(latitude: latitude, longitude: longitude, location: location)
+                self?.updateUserLocation(latitude: latitude, longitude: longitude, location: location)
             }
             .store(in: cancelBag)
         
@@ -132,7 +132,7 @@ private extension HomeViewModel {
         }
     }
     
-    func fetchSearchLocationData(query: String) {
+    func fetchLocationSearchData(query: String) {
         Task {
             do {
                 guard let responseBody = try await service.fetchLocationSearchData(query: query),
@@ -156,10 +156,10 @@ private extension HomeViewModel {
         }
     }
     
-    func fetchUserLocation(latitude: Double, longitude: Double, location: String) {
+    func updateUserLocation(latitude: Double, longitude: Double, location: String) {
         Task {
             do {
-                guard let responseBody = try await service.fetchUserLocation(
+                guard let responseBody = try await service.updateUserLocation(
                     latitude: latitude,
                     longitude: longitude,
                     location: location

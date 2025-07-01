@@ -193,8 +193,8 @@ extension LocationSearchSheetViewController: UICollectionViewDelegateFlowLayout 
         if let selectedLocation = dataSource.itemIdentifier(for: indexPath) {
             delegate?.didSelectLocation(
                 location: selectedLocation.address,
-                latitude: selectedLocation.x,
-                longitude: selectedLocation.y
+                latitude: selectedLocation.latitude,
+                longitude: selectedLocation.longitude
             )
         }
         self.navigationController?.popViewController(animated: true)
