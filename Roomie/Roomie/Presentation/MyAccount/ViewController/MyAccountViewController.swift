@@ -23,6 +23,7 @@ final class MyAccountViewController: BaseViewController {
     // MARK: - Property
     
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
+    private let logoutButtonDidTapSubject = PassthroughSubject<Void, Never>()
     
     // MARK: - Initializer
 
@@ -123,7 +124,8 @@ final class MyAccountViewController: BaseViewController {
         rootView.logoutButton
             .tapPublisher
             .sink { [weak self] in
-                // TODO: 로그아웃 구현
+                guard let self else { return }
+                self.logoutButtonDidTapSubject.send()
             }
             .store(in: cancelBag)
         
@@ -139,7 +141,8 @@ final class MyAccountViewController: BaseViewController {
 private extension MyAccountViewController {
     func bindViewModel() {
         let input = MyAccountViewModel.Input(
-            viewWillAppearSubject: viewWillAppearSubject.eraseToAnyPublisher()
+            viewWillAppearSubject: viewWillAppearSubject.eraseToAnyPublisher(),
+            logoutButtonDidTapSubject: logoutButtonDidTapSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
