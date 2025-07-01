@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		42D5EA59A4989AF59719BD17 /* libPods-Roomie.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2333A10B8CCAE5AB88BA7974 /* libPods-Roomie.a */; };
 		A3128C052DE4A2B800DA4CA7 /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = A3128C042DE4A2B800DA4CA7 /* KakaoSDK */; };
 		A3128C072DE4A2B800DA4CA7 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A3128C062DE4A2B800DA4CA7 /* KakaoSDKAuth */; };
 		A3128C092DE4A2B800DA4CA7 /* KakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = A3128C082DE4A2B800DA4CA7 /* KakaoSDKCommon */; };
@@ -16,13 +15,11 @@
 		A346BD482D2E2449002BA445 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD472D2E2449002BA445 /* Moya */; };
 		A346BD4B2D2E2477002BA445 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD4A2D2E2477002BA445 /* Kingfisher */; };
 		A346BD4E2D2E2489002BA445 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = A346BD4D2D2E2489002BA445 /* CombineCocoa */; };
+		A3DE9C5B2E132B5C00A540AD /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = A3DE9C5A2E132B5C00A540AD /* NMapsMap */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0ABCF9387F76F9D8837E2F9E /* Pods-Roomie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roomie.debug.xcconfig"; path = "Target Support Files/Pods-Roomie/Pods-Roomie.debug.xcconfig"; sourceTree = "<group>"; };
-		2333A10B8CCAE5AB88BA7974 /* libPods-Roomie.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Roomie.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A346BA412D2CDF13002BA445 /* Roomie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Roomie.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C8959DCCF833BE3AC6F237CE /* Pods-Roomie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roomie.release.xcconfig"; path = "Target Support Files/Pods-Roomie/Pods-Roomie.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -55,41 +52,22 @@
 				A3128C072DE4A2B800DA4CA7 /* KakaoSDKAuth in Frameworks */,
 				A346BD4B2D2E2477002BA445 /* Kingfisher in Frameworks */,
 				A346BD422D2E23F0002BA445 /* SnapKit in Frameworks */,
+				A3DE9C5B2E132B5C00A540AD /* NMapsMap in Frameworks */,
 				A346BD452D2E23FD002BA445 /* Then in Frameworks */,
 				A346BD4E2D2E2489002BA445 /* CombineCocoa in Frameworks */,
 				A346BD482D2E2449002BA445 /* Moya in Frameworks */,
 				A3128C052DE4A2B800DA4CA7 /* KakaoSDK in Frameworks */,
-				42D5EA59A4989AF59719BD17 /* libPods-Roomie.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9058F962AE18635590BD14B9 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				0ABCF9387F76F9D8837E2F9E /* Pods-Roomie.debug.xcconfig */,
-				C8959DCCF833BE3AC6F237CE /* Pods-Roomie.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		983635455A99347013C271DE /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				2333A10B8CCAE5AB88BA7974 /* libPods-Roomie.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		A346BA382D2CDF13002BA445 = {
 			isa = PBXGroup;
 			children = (
 				A346BA432D2CDF13002BA445 /* Roomie */,
 				A346BA422D2CDF13002BA445 /* Products */,
-				9058F962AE18635590BD14B9 /* Pods */,
-				983635455A99347013C271DE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -108,11 +86,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A346BA542D2CDF16002BA445 /* Build configuration list for PBXNativeTarget "Roomie" */;
 			buildPhases = (
-				04B3EF15FB06D401DED8E2A3 /* [CP] Check Pods Manifest.lock */,
 				A346BA3D2D2CDF13002BA445 /* Sources */,
 				A346BA3E2D2CDF13002BA445 /* Frameworks */,
 				A346BA3F2D2CDF13002BA445 /* Resources */,
-				6517468F8D5ADAA56C710780 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -157,6 +133,7 @@
 				A346BD492D2E2477002BA445 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				A346BD4C2D2E2489002BA445 /* XCRemoteSwiftPackageReference "CombineCocoa" */,
 				A3128C032DE4A2B800DA4CA7 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				A3DE9C592E132B5C00A540AD /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A346BA422D2CDF13002BA445 /* Products */;
@@ -178,52 +155,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		04B3EF15FB06D401DED8E2A3 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Roomie-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6517468F8D5ADAA56C710780 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Roomie/Pods-Roomie-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Roomie/Pods-Roomie-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Roomie/Pods-Roomie-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		A346BA3D2D2CDF13002BA445 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -237,7 +168,6 @@
 /* Begin XCBuildConfiguration section */
 		A346BA552D2CDF16002BA445 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0ABCF9387F76F9D8837E2F9E /* Pods-Roomie.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -271,7 +201,6 @@
 		};
 		A346BA562D2CDF16002BA445 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C8959DCCF833BE3AC6F237CE /* Pods-Roomie.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -498,6 +427,14 @@
 				minimumVersion = 0.4.1;
 			};
 		};
+		A3DE9C592E132B5C00A540AD /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/navermaps/SPM-NMapsMap";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.22.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -540,6 +477,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A346BD4C2D2E2489002BA445 /* XCRemoteSwiftPackageReference "CombineCocoa" */;
 			productName = CombineCocoa;
+		};
+		A3DE9C5A2E132B5C00A540AD /* NMapsMap */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3DE9C592E132B5C00A540AD /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */;
+			productName = NMapsMap;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

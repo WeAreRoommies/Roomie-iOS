@@ -10,7 +10,6 @@ import Foundation
 struct HouseDetailResponseDTO: ResponseModelType {
     let houseInfo: HouseInfo
     let rooms: [Room]
-    let roommates: [Roommate]
 }
 
 struct HouseInfo: Codable {
@@ -21,7 +20,6 @@ struct HouseInfo: Codable {
     let moodTags: [String]
     let roomMood: String
     let groundRule: [String]
-    let maintenanceCost: Int
     let isPinned: Bool
     let safetyLivingFacility, kitchenFacility: [String]
 
@@ -30,13 +28,8 @@ struct HouseInfo: Codable {
         case name
         case mainImageURL = "mainImgUrl"
         case monthlyRent, deposit, location, occupancyTypes, occupancyStatus, genderPolicy, contractTerm
-        case moodTags, roomMood, groundRule, maintenanceCost, isPinned, safetyLivingFacility, kitchenFacility
+        case moodTags, roomMood, groundRule, isPinned, safetyLivingFacility, kitchenFacility
     }
-}
-
-struct Roommate: Codable {
-    let name, age, job, mbti: String
-    let sleepTime, activityTime: String
 }
 
 struct Room: Codable {
@@ -45,13 +38,14 @@ struct Room: Codable {
     let status, isTourAvailable: Bool
     let occupancyType: Int
     let gender: String
-    let deposit, prepaidUtilities, monthlyRent: Int
+    let deposit: Int
+    let monthlyRent: Int
     let contractPeriod: String?
     let managementFee: String
 
     enum CodingKeys: String, CodingKey {
         case roomID = "roomId"
-        case name, status, isTourAvailable, occupancyType, gender, deposit, prepaidUtilities
+        case name, status, isTourAvailable, occupancyType, gender, deposit
         case monthlyRent, contractPeriod, managementFee
     }
 }
