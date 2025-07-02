@@ -29,6 +29,7 @@ final class LocationSearchSheetView: BaseView {
     )
     
     let emptyView = LocationSearchSheetEmptyView()
+    let emptyResultView = LocationSearchSheetEmptyResultView()
     
     // MARK: - UISetting
     
@@ -56,6 +57,10 @@ final class LocationSearchSheetView: BaseView {
         }
         
         emptyView.do {
+            $0.isHidden = false
+        }
+        
+        emptyResultView.do {
             $0.isHidden = true
         }
     }
@@ -68,6 +73,7 @@ final class LocationSearchSheetView: BaseView {
             searchImageView,
             seperatorView,
             emptyView,
+            emptyResultView,
             collectionView
         )
     }
@@ -108,6 +114,12 @@ final class LocationSearchSheetView: BaseView {
         }
         
         emptyView.snp.makeConstraints {
+            $0.top.equalTo(seperatorView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        
+        emptyResultView.snp.makeConstraints {
             $0.top.equalTo(seperatorView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
