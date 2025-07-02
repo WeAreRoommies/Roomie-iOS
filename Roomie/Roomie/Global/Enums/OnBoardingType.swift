@@ -37,11 +37,11 @@ enum OnBoardingType: CaseIterable {
     var onBoardingViewImage: UIImage? {
         switch self {
         case .infoStep:
-            return UIImage(named: "img_profile")
+            return UIImage(named: "img_search_place")
         case .filterStep:
-            return UIImage(named: "img_profile")
+            return UIImage(named: "img_gomi_excited")
         case .hostStep:
-            return UIImage(named: "img_profile")
+            return UIImage(named: "img_gomi_onboarding3")
         }
     }
 }
