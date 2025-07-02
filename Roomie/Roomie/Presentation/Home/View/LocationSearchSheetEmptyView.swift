@@ -22,7 +22,7 @@ final class LocationSearchSheetEmptyView: BaseView {
     
     override func setStyle() {
         emptyHomeImageView.do {
-            $0.image = .imgEmptyview
+            $0.image = .imgSearchPlace
         }
         
         titleLabel.do {
