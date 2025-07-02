@@ -14,6 +14,7 @@ final class LoginView: BaseView {
     
     // MARK: - UIComponents
     
+    private let backgroundImageView = UIImageView()
     private let textLogoImageView = UIImageView()
     private let titleLabel = UILabel()
     private let loginImageView = UIImageView()
@@ -23,20 +24,21 @@ final class LoginView: BaseView {
     // MARK: - UISetting
     
     override func setStyle() {
-        self.do {
-            $0.backgroundColor = .grayscale1
+        backgroundImageView.do {
+            $0.image = .imgOnboardingBg
+            
         }
         
         textLogoImageView.do {
-            $0.image = .icnHeart24Active
+            $0.image = .imgLogoBgwhite
         }
         
         titleLabel.do {
-            $0.setText("한 집에서 시작하는 새로운 연결고리, 루미", style: .title2, color: .primaryPurple)
+            $0.setText("한 집에서 시작하는 새로운 연결고리, 루미", style: .title2, color: .grayscale1)
         }
         
         loginImageView.do {
-            $0.image = .imgGomiExcited
+            $0.image = .imgOnboardingLogin
         }
         
         kakaoLoginButton.do {
@@ -50,6 +52,7 @@ final class LoginView: BaseView {
     
     override func setUI() {
         addSubviews(
+            backgroundImageView,
             textLogoImageView,
             titleLabel,
             loginImageView,
@@ -59,25 +62,31 @@ final class LoginView: BaseView {
     }
     
     override func setLayout() {
+        backgroundImageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
         textLogoImageView.snp.makeConstraints {
-            $0.top.equalTo(self.safeAreaLayoutGuide).inset(40)
+            $0.top.equalTo(self.safeAreaLayoutGuide).inset(90)
             $0.centerX.equalToSuperview()
-            $0.size.equalTo(Screen.width(100))
+            $0.width.equalTo(Screen.width(240))
+            $0.height.equalTo(Screen.height(60))
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(textLogoImageView.snp.bottom).offset(8)
+            $0.top.equalTo(textLogoImageView.snp.bottom).offset(20)
             $0.centerX.equalToSuperview()
         }
         
         loginImageView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(10)
+            $0.top.equalTo(titleLabel.snp.bottom)
             $0.centerX.equalToSuperview()
-            $0.size.equalTo(240)
+            $0.width.equalTo(Screen.width(375))
+            $0.height.equalTo(Screen.height(395))
         }
         
         kakaoLoginButton.snp.makeConstraints {
-            $0.top.equalTo(loginImageView.snp.bottom).offset(20)
+            $0.top.equalTo(loginImageView.snp.bottom).offset(1)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(Screen.width(320))
             $0.height.equalTo(Screen.height(45))
