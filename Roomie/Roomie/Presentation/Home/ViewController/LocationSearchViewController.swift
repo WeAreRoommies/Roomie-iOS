@@ -162,7 +162,11 @@ private extension LocationSearchSheetViewController {
     }
     
     func updateEmptyView(isEmpty: Bool) {
-        rootView.emptyView.isHidden = !isEmpty
+        let query = rootView.searchTextField.text ?? ""
+        let hasQuery = !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        
+        rootView.emptyView.isHidden = hasQuery
+        rootView.emptyResultView.isHidden = !hasQuery
         rootView.collectionView.isHidden = isEmpty
     }
 }
