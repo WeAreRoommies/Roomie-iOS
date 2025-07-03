@@ -1,8 +1,8 @@
 //
-//  LocationSearchSheetEmptyView.swift
+//  LocationSearchSheetEmptyResultView.swift
 //  Roomie
 //
-//  Created by MaengKim on 5/26/25.
+//  Created by MaengKim on 7/3/25.
 //
 
 import UIKit
@@ -10,44 +10,44 @@ import UIKit
 import SnapKit
 import Then
 
-final class LocationSearchSheetEmptyView: BaseView {
+final class LocationSearchSheetEmptyResultView: BaseView {
     
     // MARK: - UIComponent
     
-    private let emptyHomeImageView = UIImageView()
+    private let emptyResultImageView = UIImageView()
     private let titleLabel = UILabel()
     private let subTitleLabel = UILabel()
     
     // MARK: - UISetting
     
     override func setStyle() {
-        emptyHomeImageView.do {
-            $0.image = .imgSearchPlace
+        emptyResultImageView.do {
+            $0.image = .imgSweatGomi
         }
         
         titleLabel.do {
-            $0.setText("관심 지역을 찾아봐요", style: .heading5, color: .grayscale12)
+            $0.setText("찾으시는 장소가 존재하지 않아요", style: .heading5, color: .grayscale12)
         }
         
         subTitleLabel.do {
-            $0.setText("관심 지역에 위치한 셰어하우스를 확인할 수 있어요", style: .body1, color: .grayscale7)
+            $0.setText("장소명을 다시 한번 확인해주세요", style: .body1, color: .grayscale7)
         }
     }
     
     override func setUI() {
-        addSubviews(emptyHomeImageView, titleLabel, subTitleLabel)
+        addSubviews(emptyResultImageView, titleLabel, subTitleLabel)
     }
     
     override func setLayout() {
-        emptyHomeImageView.snp.makeConstraints {
+        emptyResultImageView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(132)
             $0.centerX.equalToSuperview()
-            $0.height.equalTo(Screen.height(180))
-            $0.width.equalTo(Screen.width(180))
+            $0.height.equalTo(Screen.height(160))
+            $0.width.equalTo(Screen.width(160))
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(emptyHomeImageView.snp.bottom)
+            $0.top.equalTo(emptyResultImageView.snp.bottom).offset(4)
             $0.centerX.equalToSuperview()
         }
         

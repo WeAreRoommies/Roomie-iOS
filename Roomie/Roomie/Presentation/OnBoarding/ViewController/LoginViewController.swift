@@ -44,6 +44,8 @@ final class LoginViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        
         bindViewModel()
     }
     
