@@ -47,6 +47,10 @@ final class RoomStatusTableViewCell: BaseTableViewCell {
     // MARK: - UISetting
     
     override func setStyle() {
+        self.do {
+            $0.backgroundColor = .grayscale1
+        }
+        
         containerView.do {
             $0.layer.borderColor = UIColor.grayscale5.cgColor
             $0.layer.cornerRadius = 8
