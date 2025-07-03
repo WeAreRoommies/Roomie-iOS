@@ -176,6 +176,5 @@ extension DatePickerView {
         datePicker.setDate(date, animated: false)
         let formatted = String.formattedDate(date: date)
         dateLabel.setText(formatted, style: .body1, color: .grayscale11)
-        delegate?.dateDidPick(date: formatted)
     }
 }

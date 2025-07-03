@@ -382,7 +382,6 @@ private extension MapFilterViewController {
             .store(in: cancelBag)
         
         output.selectedPreferredDate
-            .receive(on: RunLoop.main)
             .sink { [weak self] dateString in
                 guard let self = self else { return }
                 let filterPeriodView = self.rootView.filterPeriodView
