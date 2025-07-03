@@ -15,4 +15,5 @@ protocol MyAccountServiceProtocol {
     func updatePhoneNumberData(request: PhoneNumberRequestDTO) async throws -> BaseResponseBody<PhoneNumberResponseDTO>?
     func updateGenderData(request: GenderRequestDTO) async throws -> BaseResponseBody<GenderResponseDTO>?
     func authLogout(refreshToken: String) async throws -> BaseResponseBody<EmptyModel>?
+    func authSignout(refreshToken: String) async throws -> BaseResponseBody<EmptyModel>?
 }

@@ -17,6 +17,7 @@ enum MyAccountTargetType {
     case updatePhoneNumberData(request: PhoneNumberRequestDTO)
     case updateGenderData(request: GenderRequestDTO)
     case authLogout(refreshToken: String)
+    case authSignout(refreshToken: String)
 }
 
 extension MyAccountTargetType: TargetType {
@@ -40,6 +41,8 @@ extension MyAccountTargetType: TargetType {
             return "/users/gender"
         case .authLogout:
             return "/auth/oauth/logout"
+        case .authSignout:
+            return "/users/delete"
         }
     }
     
@@ -47,7 +50,7 @@ extension MyAccountTargetType: TargetType {
         switch self {
         case .fetchMyAccountData:
             return .get
-        case .authLogout:
+        case .authLogout, .authSignout:
             return .delete
         default:
             return .patch
@@ -69,14 +72,14 @@ extension MyAccountTargetType: TargetType {
             return .requestJSONEncodable(request)
         case .updateGenderData(let request):
             return .requestJSONEncodable(request)
-        case .authLogout:
+        case .authLogout, .authSignout:
             return .requestPlain
         }
     }
     
     var headers: [String : String]? {
         switch self {
-        case .authLogout(let refreshToken):
+        case .authLogout(let refreshToken), .authSignout(let refreshToken):
             return [
                 "Content-Type": "application/json",
                 "Authorization": "Bearer \(refreshToken)"
