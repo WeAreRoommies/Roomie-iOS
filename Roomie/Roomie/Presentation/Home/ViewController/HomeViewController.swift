@@ -178,7 +178,7 @@ private extension HomeViewController {
                 guard let self else { return }
                 self.rootView.nameLabel.text = data.nickname
                 self.setHomeNavigationBar(locaton: data.location)
-                self.rootView.subGreetingLabel.updateText("루미가 \(data.nickname)님의 완벽한 집을\n찾아드릴게요.")
+                self.rootView.subGreetingLabel.updateText("루미가 \(data.nickname) 님의 완벽한 집을\n찾아드릴게요.")
             }
             .store(in: cancelBag)
         
