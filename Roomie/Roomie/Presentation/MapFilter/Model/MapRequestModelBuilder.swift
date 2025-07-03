@@ -12,15 +12,15 @@ extension MapRequestDTO {
         static let shared = MapRequestDTO.Builder()
         
         private var address: String? = nil
-        private var moodTag: [String] = []
-        private var depositRange: MinMaxRange = MinMaxRange(min: 0, max: 500)
-        private var monthlyRentRange: MinMaxRange = MinMaxRange(min: 0, max: 150)
-        private var genderPolicy: [String] = []
-        private var preferredDate: String? = nil
-        private var occupancyTypes: [String] = []
-        private var contractPeroid: [Int] = []
-        private var latitude: Double = 0
-        private var longitude: Double = 0
+        var moodTag: [String] = []
+        var depositRange: MinMaxRange = MinMaxRange(min: 0, max: 500)
+        var monthlyRentRange: MinMaxRange = MinMaxRange(min: 0, max: 150)
+        var genderPolicy: [String] = []
+        var preferredDate: String? = nil
+        var occupancyTypes: [String] = []
+        var contractPeriod: [Int] = []
+        var latitude: Double = 0
+        var longitude: Double = 0
         
         @discardableResult
         func setAddress(_ address: String?) -> Self {
@@ -65,8 +65,8 @@ extension MapRequestDTO {
         }
         
         @discardableResult
-        func setContractPeroid(_ contractPeriod: [Int]) -> Self {
-            self.contractPeroid = contractPeriod
+        func setContractPeriod(_ contractPeriod: [Int]) -> Self {
+            self.contractPeriod = contractPeriod
             return self
         }
         
@@ -91,7 +91,7 @@ extension MapRequestDTO {
                 genderPolicy: genderPolicy,
                 preferredDate: preferredDate,
                 occupancyTypes: occupancyTypes,
-                contractPeriod: contractPeroid,
+                contractPeriod: contractPeriod,
                 latitude: latitude,
                 longitude: longitude
             )
