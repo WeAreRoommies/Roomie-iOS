@@ -30,6 +30,8 @@ final class OnBoardingViewController: BaseViewController {
     
     private var type: OnBoardingType?
     
+    private var currentIndex: Int = 0
+    
     // MARK: - UIComponent
     
     private let startButton = UIButton(type: .system)
@@ -107,7 +109,7 @@ private extension OnBoardingViewController {
     func setPageViewController() {
         addChild(pageViewController)
         view.addSubview(pageViewController.view)
-        
+
         pageViewController.view.addSubview(startButton)
         startButton.snp.makeConstraints{
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(45)
@@ -115,9 +117,13 @@ private extension OnBoardingViewController {
             $0.width.equalTo(Screen.width(335))
             $0.height.equalTo(Screen.height(58))
         }
-        
+
         pageViewController.didMove(toParent: self)
         pageViewController.setViewControllers([pages[0]], direction: .forward, animated: true)
+        
+        if let scrollView = pageViewController.view.subviews.first(where: { $0 is UIScrollView }) as? UIScrollView {
+            scrollView.delegate = self
+        }
     }
     
     func setPageIndicators() {
@@ -194,9 +200,20 @@ extension OnBoardingViewController:
                             transitionCompleted completed: Bool) {
         guard let currentViewController = pageViewController.viewControllers?.first,
             let currentView = currentViewController.view as? OnBoardingStepView,
-            let type = currentView.type else {
+            let type = currentView.type,
+        let index = OnBoardingType.allCases.firstIndex(of: type)
+        else {
             return
         }
+        
+        currentIndex = index
         updatePageIndicators(for: type)
+    }
+}
+
+extension OnBoardingViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let isEdgePage = (currentIndex == 0) || (currentIndex == OnBoardingType.allCases.count - 1)
+        scrollView.bounces = !isEdgePage
     }
 }
