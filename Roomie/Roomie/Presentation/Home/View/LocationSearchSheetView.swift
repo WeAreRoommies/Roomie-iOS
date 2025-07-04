@@ -34,6 +34,10 @@ final class LocationSearchSheetView: BaseView {
     // MARK: - UISetting
     
     override func setStyle() {
+        self.do {
+            $0.backgroundColor = .grayscale1
+        }
+        
         locationSettingLabel.do {
             $0.setText("현재 설정된 위치:", style: .body5, color: .grayscale10)
         }
@@ -51,7 +55,7 @@ final class LocationSearchSheetView: BaseView {
         }
         
         collectionView.do {
-            backgroundColor = .clear
+            $0.backgroundColor = .grayscale1
             $0.showsVerticalScrollIndicator = true
             $0.showsHorizontalScrollIndicator = false
         }
