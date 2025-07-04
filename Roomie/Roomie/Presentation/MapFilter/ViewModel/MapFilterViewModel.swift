@@ -29,6 +29,18 @@ final class MapFilterViewModel {
     
     init(builder: MapRequestDTO.Builder) {
         self.builder = builder
+        
+        depositMinSubject.send(builder.depositRange.min)
+        depositMaxSubject.send(builder.depositRange.max)
+        monthlyRentMinSubject.send(builder.monthlyRentRange.min)
+        monthlyRentMaxSubject.send(builder.monthlyRentRange.max)
+        
+        genderSubject.send(builder.genderPolicy)
+        occupancyTypeSubject.send(builder.occupancyTypes)
+        moodTagSubject.send(builder.moodTag)
+        
+        preferredDateSubject.send(builder.preferredDate)
+        contractPeriodSubject.send(builder.contractPeriod)
     }
 }
 
@@ -80,13 +92,13 @@ extension MapFilterViewModel: ViewModelType {
         let monthlyRentMaxText: AnyPublisher<Int, Never>
         
         /// 방 형태
-        let isGenderEmpty: AnyPublisher<Bool, Never>
-        let isOccupancyTypeEmpty: AnyPublisher<Bool, Never>
-        let isMoodTagEmpty: AnyPublisher<Bool, Never>
+        let selectedGenders: AnyPublisher<[String], Never>
+        let selectedOccupancyTypes: AnyPublisher<[String], Never>
+        let selectedMoodTags: AnyPublisher<[String], Never>
         
         /// 계약기간
-        let isPreferredDateEmpty: AnyPublisher<Bool, Never>
-        let isContractPeriodEmpty: AnyPublisher<Bool, Never>
+        let selectedPreferredDate: AnyPublisher<String?, Never>
+        let selectedContractPeriods: AnyPublisher<[Int], Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -369,7 +381,7 @@ extension MapFilterViewModel: ViewModelType {
                     .setOccupancyTypes(occupancyTypeSubject.value)
                     .setMoodTag(moodTagSubject.value)
                     .setPreferredDate(preferredDateSubject.value)
-                    .setContractPeroid(contractPeriodSubject.value)
+                    .setContractPeriod(contractPeriodSubject.value)
             }
             .store(in: cancelBag)
         
@@ -385,24 +397,19 @@ extension MapFilterViewModel: ViewModelType {
         let monthlyRentMax = monthlyRentMaxSubject
             .eraseToAnyPublisher()
         
-        let isGenderEmpty = genderSubject
-            .map { $0.isEmpty }
+        let selectedGenders = genderSubject
             .eraseToAnyPublisher()
         
-        let isOccupancyTypeEmpty = occupancyTypeSubject
-            .map { $0.isEmpty }
+        let selectedOccupancyTypes = occupancyTypeSubject
             .eraseToAnyPublisher()
         
-        let isMoodTagEmpty = moodTagSubject
-            .map { $0.isEmpty }
+        let selectedMoodTags = moodTagSubject
             .eraseToAnyPublisher()
         
-        let isPreferredEmpty = preferredDateSubject
-            .map { $0?.isEmpty ?? true }
+        let selectedPreferredDate = preferredDateSubject
             .eraseToAnyPublisher()
         
-        let isContractPeriodEmpty = contractPeriodSubject
-            .map { $0.isEmpty }
+        let selectedContractPeriods = contractPeriodSubject
             .eraseToAnyPublisher()
         
         return Output(
@@ -410,11 +417,11 @@ extension MapFilterViewModel: ViewModelType {
             depositMaxText: depositMax,
             monthlyRentMinText: monthlyRentMin,
             monthlyRentMaxText: monthlyRentMax,
-            isGenderEmpty: isGenderEmpty,
-            isOccupancyTypeEmpty: isOccupancyTypeEmpty,
-            isMoodTagEmpty: isMoodTagEmpty,
-            isPreferredDateEmpty: isPreferredEmpty,
-            isContractPeriodEmpty: isContractPeriodEmpty
+            selectedGenders: selectedGenders,
+            selectedOccupancyTypes: selectedOccupancyTypes,
+            selectedMoodTags: selectedMoodTags,
+            selectedPreferredDate: selectedPreferredDate,
+            selectedContractPeriods: selectedContractPeriods
         )
     }
 }

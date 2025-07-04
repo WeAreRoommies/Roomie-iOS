@@ -9,11 +9,14 @@ import Foundation
 
 extension String {
     
+    /// "yyyy/MM/dd" 타입의 String을 Date로 변환
+    func toDate(inputFormat: DateFormatter = .inputSlash) -> Date? {
+        return inputFormat.date(from: self)
+    }
+    
     /// Date를 "yyyy/MM/dd" 타입의 String으로 변환
-    static func formattedDate(date: Date, format: String = "yyyy/MM/dd") -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = format
-        return formatter.string(from: date)
+    static func formattedDate(date: Date) -> String {
+        return DateFormatter.inputSlash.string(from: date)
     }
     
     /// "yyyy/MM/dd" 타입의 String을 Date 타입의 String으로 변환
@@ -22,14 +25,8 @@ extension String {
         inputFormat: String = "yyyy/MM/dd",
         outputFormat: String = "yyyy-MM-dd"
     ) -> String? {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        
-        formatter.dateFormat = inputFormat
-        guard let date = formatter.date(from: dateString) else { return nil }
-        
-        formatter.dateFormat = outputFormat
-        return formatter.string(from: date)
+        guard let date = DateFormatter.inputSlash.date(from: dateString) else { return nil }
+        return DateFormatter.outputHyphen.string(from: date)
     }
     
     /// Int 타입을 받아 "123,456,789원" 형식의 String 값으로 변환

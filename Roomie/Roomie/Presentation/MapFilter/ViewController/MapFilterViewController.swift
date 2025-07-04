@@ -334,78 +334,62 @@ private extension MapFilterViewController {
             }
             .store(in: cancelBag)
         
-        output.isGenderEmpty
-            .sink { [weak self] isEmpty in
+        output.selectedGenders
+            .sink { [weak self] genders in
                 guard let self = self else { return }
+                let filterRoomView = self.rootView.filterRoomView
                 
-                let buttons = [
-                    self.rootView.filterRoomView.maleButton,
-                    self.rootView.filterRoomView.femaleButton,
-                    self.rootView.filterRoomView.genderDivisionButton,
-                    self.rootView.filterRoomView.genderFreeButton
-                ]
+                filterRoomView.maleButton.isSelected = genders.contains("남성전용")
+                filterRoomView.femaleButton.isSelected = genders.contains("여성전용")
+                filterRoomView.genderDivisionButton.isSelected = genders.contains("남녀분리")
+                filterRoomView.genderFreeButton.isSelected = genders.contains("성별무관")
                 
-                if isEmpty {
-                    buttons.forEach { $0.isSelected = false }
-                }
             }
             .store(in: cancelBag)
         
-        output.isOccupancyTypeEmpty
-            .sink { [weak self] isEmpty in
+        output.selectedOccupancyTypes
+            .sink { [weak self] types in
                 guard let self = self else { return }
+                let filterRoomView = self.rootView.filterRoomView
                 
-                let buttons = [
-                    self.rootView.filterRoomView.singleButton,
-                    self.rootView.filterRoomView.doubleButton,
-                    self.rootView.filterRoomView.tripleButton,
-                    self.rootView.filterRoomView.quadButton
-                ]
-                
-                if isEmpty {
-                    buttons.forEach { $0.isSelected = false }
-                }
+                filterRoomView.singleButton.isSelected = types.contains("1인실")
+                filterRoomView.doubleButton.isSelected = types.contains("2인실")
+                filterRoomView.tripleButton.isSelected = types.contains("3인실")
+                filterRoomView.quadButton.isSelected = types.contains("4인실")
             }
             .store(in: cancelBag)
         
-        output.isMoodTagEmpty
-            .sink { [weak self] isEmpty in
+        output.selectedMoodTags
+            .sink { [weak self] tags in
                 guard let self = self else { return }
+                let filterRoomView = self.rootView.filterRoomView
                 
-                let buttons = [
-                    self.rootView.filterRoomView.calmButton,
-                    self.rootView.filterRoomView.livelyButton,
-                    self.rootView.filterRoomView.neatButton
-                ]
-                
-                if isEmpty {
-                    buttons.forEach { $0.isSelected = false }
-                }
+                filterRoomView.calmButton.isSelected = tags.contains("#차분한")
+                filterRoomView.livelyButton.isSelected = tags.contains("#활기찬")
+                filterRoomView.neatButton.isSelected = tags.contains("#깔끔한")
             }
             .store(in: cancelBag)
         
-        output.isContractPeriodEmpty
-            .sink { [weak self] isEmpty in
+        output.selectedContractPeriods
+            .sink { [weak self] periods in
                 guard let self = self else { return }
+                let filterPeriodView = self.rootView.filterPeriodView
                 
-                let buttons = [
-                    self.rootView.filterPeriodView.threeMonthButton,
-                    self.rootView.filterPeriodView.sixMonthButton,
-                    self.rootView.filterPeriodView.oneYearButton
-                ]
-                
-                if isEmpty {
-                    buttons.forEach { $0.isSelected = false }
-                }
+                filterPeriodView.threeMonthButton.isSelected = periods.contains(3)
+                filterPeriodView.sixMonthButton.isSelected = periods.contains(6)
+                filterPeriodView.oneYearButton.isSelected = periods.contains(12)
             }
             .store(in: cancelBag)
         
-        output.isPreferredDateEmpty
-            .sink { [weak self] isEmpty in
+        output.selectedPreferredDate
+            .sink { [weak self] dateString in
                 guard let self = self else { return }
+                let filterPeriodView = self.rootView.filterPeriodView
                 
-                if isEmpty {
-                    self.rootView.filterPeriodView.preferredDatePickerView.dateLabel.setText(
+                if let dateString = dateString, let date = dateString.toDate() {
+                    filterPeriodView.preferredDatePickerView.setDate(date)
+                } else {
+                    filterPeriodView.preferredDatePickerView.dateLabel.setText(
                         String.formattedDate(date: Date()),
                         style: .body1,
                         color: .grayscale6
