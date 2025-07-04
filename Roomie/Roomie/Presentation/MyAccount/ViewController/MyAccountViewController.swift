@@ -126,7 +126,12 @@ final class MyAccountViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self else { return }
-                self.logoutButtonDidTapSubject.send()
+                AlertManager.shared.showAlert(
+                    on: self,
+                    alertType: .logout
+                ) { _ in
+                    self.logoutButtonDidTapSubject.send()
+                }
             }
             .store(in: cancelBag)
         
@@ -134,7 +139,12 @@ final class MyAccountViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self else { return }
-                self.signoutButtonDidTapSubject.send()
+                AlertManager.shared.showAlert(
+                    on: self,
+                    alertType: .signout
+                ) { _ in
+                    self.signoutButtonDidTapSubject.send()
+                }
             }
             .store(in: cancelBag)
     }
