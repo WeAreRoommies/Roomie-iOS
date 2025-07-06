@@ -66,6 +66,14 @@ extension MyAccountService: MyAccountServiceProtocol {
     func updateGenderData(request: GenderRequestDTO) async throws -> BaseResponseBody<GenderResponseDTO>? {
         return try await self.request(with: .updateGenderData(request: request))
     }
+    
+    func authLogout(refreshToken: String) async throws -> BaseResponseBody<EmptyModel>? {
+        return try await self.request(with: .authLogout(refreshToken: refreshToken))
+    }
+    
+    func authSignout(refreshToken: String) async throws -> BaseResponseBody<EmptyModel>? {
+        return try await self.request(with: .authSignout(refreshToken: refreshToken))
+    }
 }
 
 final class MockMyAccountService: MyAccountServiceProtocol {
@@ -104,5 +112,15 @@ final class MockMyAccountService: MyAccountServiceProtocol {
     func updateGenderData(request: GenderRequestDTO) async throws -> BaseResponseBody<GenderResponseDTO>? {
         let mockData = GenderResponseDTO(gender: "여성")
         return BaseResponseBody(code: 200, message: "", data: mockData)
+    }
+    
+    func authLogout(refreshToken: String) async throws -> BaseResponseBody<EmptyModel>? {
+        TokenManager.shared.clearTokens()
+        return BaseResponseBody(code: 20012, message: "로그아웃 성공", data: nil)
+    }
+    
+    func authSignout(refreshToken: String) async throws -> BaseResponseBody<EmptyModel>? {
+        TokenManager.shared.clearTokens()
+        return BaseResponseBody(code: 20013, message: "회원 탈퇴 성공", data: nil)
     }
 }

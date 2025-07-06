@@ -16,27 +16,33 @@ enum MyAccountTargetType {
     case updateBirthDateData(request: BirthDateRequestDTO)
     case updatePhoneNumberData(request: PhoneNumberRequestDTO)
     case updateGenderData(request: GenderRequestDTO)
+    case authLogout(refreshToken: String)
+    case authSignout(refreshToken: String)
 }
 
 extension MyAccountTargetType: TargetType {
     var baseURL: URL {
-        return URL(string: "\(Environment.baseURL)/v1/users")!
+        return URL(string: "\(Environment.baseURL)/v1")!
     }
     
     var path: String {
         switch self {
         case .fetchMyAccountData:
-            return "/mypage/accountinfo"
+            return "/users/mypage/accountinfo"
         case .updateNameData:
-            return "/name"
+            return "/users/name"
         case .updateNicknameData:
-            return "/nickname"
+            return "/users/nickname"
         case .updateBirthDateData:
-            return "/birthday"
+            return "/users/birthday"
         case .updatePhoneNumberData:
-            return "/phonenumber"
+            return "/users/phonenumber"
         case .updateGenderData:
-            return "/gender"
+            return "/users/gender"
+        case .authLogout:
+            return "/auth/oauth/logout"
+        case .authSignout:
+            return "/users/delete"
         }
     }
     
@@ -44,9 +50,12 @@ extension MyAccountTargetType: TargetType {
         switch self {
         case .fetchMyAccountData:
             return .get
+        case .authLogout, .authSignout:
+            return .delete
         default:
             return .patch
         }
+        
     }
     
     var task: Moya.Task {
@@ -63,11 +72,21 @@ extension MyAccountTargetType: TargetType {
             return .requestJSONEncodable(request)
         case .updateGenderData(let request):
             return .requestJSONEncodable(request)
+        case .authLogout, .authSignout:
+            return .requestPlain
         }
     }
     
     var headers: [String : String]? {
-        return ["Content-Type": "application/json"]
+        switch self {
+        case .authLogout(let refreshToken), .authSignout(let refreshToken):
+            return [
+                "Content-Type": "application/json",
+                "Authorization": "Bearer \(refreshToken)"
+            ]
+        default:
+            return ["Content-Type": "application/json"]
+        }
     }
     
     var validationType: ValidationType {

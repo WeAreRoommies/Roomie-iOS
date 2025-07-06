@@ -25,6 +25,8 @@ final class MyAccountViewModel {
 extension MyAccountViewModel: ViewModelType {
     struct Input {
         let viewWillAppearSubject: AnyPublisher<Void, Never>
+        let logoutButtonDidTapSubject: AnyPublisher<Void, Never>
+        let signoutButtonDidTapSubject: AnyPublisher<Void, Never>
     }
     
     struct Output {
@@ -40,6 +42,20 @@ extension MyAccountViewModel: ViewModelType {
         input.viewWillAppearSubject
             .sink { [weak self] in
                 self?.fetchMyAccountData()
+            }
+            .store(in: cancelBag)
+        
+        input.logoutButtonDidTapSubject
+            .sink { [weak self] in
+                guard let self else { return }
+                self.authLogout()
+            }
+            .store(in: cancelBag)
+        
+        input.signoutButtonDidTapSubject
+            .sink { [weak self] in
+                guard let self else { return }
+                self.authSignout()
             }
             .store(in: cancelBag)
         
@@ -109,6 +125,32 @@ private extension MyAccountViewModel {
                 birthDateDataSubject.send(data.birthDate)
                 phoneNumberDataSubject.send(data.phoneNumber)
                 genderDataSubject.send(data.gender)
+            } catch {
+                print(">>> \(error.localizedDescription) : \(#function)")
+            }
+        }
+    }
+    
+    func authLogout() {
+        guard let refreshToken = TokenManager.shared.fetchRefreshToken() else { return }
+        
+        Task {
+            do {
+                guard let _ = try await service.authLogout(refreshToken: refreshToken) else { return }
+                NotificationCenter.default.post(name: Notification.shouldLogout, object: nil)
+            } catch {
+                print(">>> \(error.localizedDescription) : \(#function)")
+            }
+        }
+    }
+    
+    func authSignout() {
+        guard let refreshToken = TokenManager.shared.fetchRefreshToken() else { return }
+        
+        Task {
+            do {
+                guard let _ = try await service.authSignout(refreshToken: refreshToken) else { return }
+                NotificationCenter.default.post(name: Notification.shouldLogout, object: nil)
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
             }
