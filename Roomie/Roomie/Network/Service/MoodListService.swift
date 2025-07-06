@@ -12,7 +12,10 @@ import Moya
 final class MoodListService {
     let provider: MoyaProvider<MoodListTargetType>
     
-    init(provider: MoyaProvider<MoodListTargetType> = MoyaProvider(plugins: [MoyaLoggingPlugin()])) {
+    init(provider: MoyaProvider<MoodListTargetType> = MoyaProvider(
+        session: Session(interceptor: Interceptor.shared),
+        plugins: [MoyaLoggingPlugin()])
+    ) {
         self.provider = provider
     }
     

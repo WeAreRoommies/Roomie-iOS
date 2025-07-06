@@ -19,14 +19,14 @@ final class HouseAllPhotoView: BaseView {
     
     // 대표시설
     private let mainTitleLabel = UILabel()
-    private let mainBackView = UIView()
+    private let mainContainerView = UIView()
     let mainImageView = UIImageView()
     let mainDescriptionLabel = UILabel()
     
     // 공용시설
     private let facilityTitleLabel = UILabel()
-    private let facilityBackView = UIView()
-    let facilityImageView = UIImageView()
+    private let facilityContainerView = UIView()
+    let facilityImageScrollView = ImageHorizontalScrollView()
     let facilityDescriptionLabel = UILabel()
     
     // 각 방 시설
@@ -35,7 +35,7 @@ final class HouseAllPhotoView: BaseView {
     
     // 평면도
     private let floorTitleLabel = UILabel()
-    private let floorBackView = UIView()
+    private let floorContainerView = UIView()
     let floorImageView = UIImageView()
     
     // MARK: - UISetting
@@ -45,7 +45,7 @@ final class HouseAllPhotoView: BaseView {
             $0.setText("대표사진", style: .heading5, color: .grayscale12)
         }
         
-        mainBackView.do {
+        mainContainerView.do {
             $0.layer.borderColor = UIColor.grayscale5.cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 10
@@ -67,17 +67,10 @@ final class HouseAllPhotoView: BaseView {
             $0.setText("공용시설", style: .heading5, color: .grayscale12)
         }
         
-        facilityBackView.do {
+        facilityContainerView.do {
             $0.layer.borderColor = UIColor.grayscale5.cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 10
-            $0.clipsToBounds = true
-        }
-        
-        facilityImageView.do {
-            $0.backgroundColor = .grayscale5
-            $0.contentMode = .scaleAspectFill
-            $0.layer.cornerRadius = 8
             $0.clipsToBounds = true
         }
         
@@ -100,7 +93,7 @@ final class HouseAllPhotoView: BaseView {
             $0.setText("평면도", style: .heading5, color: .grayscale12)
         }
         
-        floorBackView.do {
+        floorContainerView.do {
             $0.layer.borderColor = UIColor.grayscale5.cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 10
@@ -118,22 +111,21 @@ final class HouseAllPhotoView: BaseView {
     override func setUI() {
         addSubview(scrollView)
         scrollView.addSubview(contentView)
+        
         contentView.addSubviews(
                 mainTitleLabel,
-                mainBackView,
+                mainContainerView,
                 facilityTitleLabel,
-                facilityBackView,
+                facilityContainerView,
                 roomTitleLabel,
                 roomStackView,
                 floorTitleLabel,
-                floorBackView
+                floorContainerView
             )
         
-        mainBackView.addSubviews(mainImageView, mainDescriptionLabel)
-        
-        facilityBackView.addSubviews(facilityImageView, facilityDescriptionLabel)
-        
-        floorBackView.addSubview(floorImageView)
+        mainContainerView.addSubviews(mainImageView, mainDescriptionLabel)
+        facilityContainerView.addSubviews(facilityImageScrollView, facilityDescriptionLabel)
+        floorContainerView.addSubview(floorImageView)
     }
     
     override func setLayout() {
@@ -153,7 +145,7 @@ final class HouseAllPhotoView: BaseView {
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
-        mainBackView.snp.makeConstraints {
+        mainContainerView.snp.makeConstraints {
             $0.top.equalTo(mainTitleLabel.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
@@ -170,28 +162,28 @@ final class HouseAllPhotoView: BaseView {
         }
         
         facilityTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(mainBackView.snp.bottom).offset(40)
+            $0.top.equalTo(mainContainerView.snp.bottom).offset(40)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
-        facilityBackView.snp.makeConstraints {
+        facilityContainerView.snp.makeConstraints {
             $0.top.equalTo(facilityTitleLabel.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
-        facilityImageView.snp.makeConstraints {
+        facilityImageScrollView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview().inset(8)
             $0.height.equalTo(Screen.height(192))
         }
         
         facilityDescriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(facilityImageView.snp.bottom).offset(8)
+            $0.top.equalTo(facilityImageScrollView.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(8)
             $0.bottom.equalToSuperview().inset(12)
         }
         
         roomTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(facilityBackView.snp.bottom).offset(40)
+            $0.top.equalTo(facilityContainerView.snp.bottom).offset(40)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
@@ -205,7 +197,7 @@ final class HouseAllPhotoView: BaseView {
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
-        floorBackView.snp.makeConstraints {
+        floorContainerView.snp.makeConstraints {
             $0.top.equalTo(floorTitleLabel.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview().inset(24)
@@ -221,13 +213,15 @@ final class HouseAllPhotoView: BaseView {
 extension HouseAllPhotoView {
     func fetchRooms(_ rooms: [HouseDetailRoom]) {
         roomStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
         for index in 0..<rooms.count {
             let expendView = RoomFacilityExpandView(
                 title: rooms[index].name,
                 status: rooms[index].status
             )
             expendView.dataBind(rooms[index].facility)
-            expendView.configure(rooms[index].mainImageURL[0])
+            expendView.configure(rooms[index].mainImageURL)
+            
             roomStackView.addArrangedSubview(expendView)
         }
     }

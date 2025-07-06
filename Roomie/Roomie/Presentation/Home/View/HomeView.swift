@@ -26,7 +26,7 @@ final class HomeView: BaseView {
     private let nameTitleLabel = UILabel()
     
     private let greetingLabel = UILabel()
-    private let subGreetingLabel = UILabel()
+    let subGreetingLabel = UILabel()
     private let roomieImageView = UIImageView()
     
     let updateButton = AppleLoverClub()
@@ -66,7 +66,7 @@ final class HomeView: BaseView {
         }
         
         subGreetingLabel.do {
-            $0.setText("루미가 루미님의 완벽한 집을\n찾아드릴게요" ,style: .body4, color: .grayscale7)
+            $0.setText(style: .body4, color: .grayscale7)
             $0.numberOfLines = 2
         }
         roomieImageView.do {

@@ -12,7 +12,10 @@ import Moya
 final class MyPageService {
     let provider: MoyaProvider<MyPageTargetType>
     
-    init(provider: MoyaProvider<MyPageTargetType> = MoyaProvider(plugins: [MoyaLoggingPlugin()])) {
+    init(provider: MoyaProvider<MyPageTargetType> = MoyaProvider(
+        session: Session(interceptor: Interceptor.shared),
+        plugins: [MoyaLoggingPlugin()])
+    ) {
         self.provider = provider
     }
     
@@ -47,7 +50,7 @@ extension MyPageService: MyPageServiceProtocol {
 
 final class MockMyPageService: MyPageServiceProtocol {
     func fetchMyPageData() async throws -> BaseResponseBody<MyPageResponseDTO>? {
-        let mockData = MyPageResponseDTO(name: "김루미")
+        let mockData = MyPageResponseDTO(nickname: "김루미", socialType: "KAKAO")
         return BaseResponseBody(code: 200, message: "", data: mockData)
     }
 }

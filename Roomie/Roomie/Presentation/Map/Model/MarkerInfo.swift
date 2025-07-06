@@ -9,6 +9,7 @@ import Foundation
 
 struct MarkerInfo {
     let houseID: Int
-    let x: CGFloat
-    let y: CGFloat
+    let latitude: CGFloat
+    let longitude: CGFloat
+    let isFull: Bool
 }

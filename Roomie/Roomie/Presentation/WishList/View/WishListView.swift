@@ -47,9 +47,6 @@ final class WishListView: BaseView {
     override func setLayout() {
         wishListCollectionView.snp.makeConstraints{
             $0.edges.equalTo(safeAreaLayoutGuide)
-//            $0.top.equalTo(safeAreaLayoutGuide)
-//            $0.horizontalEdges.equalToSuperview()
-//            $0.bottom.equalToSuperview()
         }
         
         emptyView.snp.makeConstraints{

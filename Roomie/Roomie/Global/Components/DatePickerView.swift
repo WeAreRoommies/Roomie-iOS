@@ -44,7 +44,7 @@ final class DatePickerView: UIView {
     
     // MARK: - Initializer
     
-    init(_ canSelectPassedDate: Bool = false) {
+    init(canSelectPassedDate: Bool = false) {
         self.canSelectPassedDate = canSelectPassedDate
         
         super.init(frame: .zero)
@@ -167,5 +167,14 @@ private extension DatePickerView {
             nextResponder = responder.next
         }
         return nil
+    }
+}
+
+extension DatePickerView {
+    /// 외부에서 Picker와 Label의 초기 날짜를 설정하는 경우
+    func setDate(_ date: Date) {
+        datePicker.setDate(date, animated: false)
+        let formatted = String.formattedDate(date: date)
+        dateLabel.setText(formatted, style: .body1, color: .grayscale11)
     }
 }

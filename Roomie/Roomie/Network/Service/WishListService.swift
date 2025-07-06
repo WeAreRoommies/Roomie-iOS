@@ -12,7 +12,10 @@ import Moya
 final class WishListService {
     let provider: MoyaProvider<WishListTargetType>
     
-    init(provider: MoyaProvider<WishListTargetType> = MoyaProvider(plugins: [MoyaLoggingPlugin()])) {
+    init(provider: MoyaProvider<WishListTargetType> = MoyaProvider(
+        session: Session(interceptor: Interceptor.shared),
+        plugins: [MoyaLoggingPlugin()])
+    ) {
         self.provider = provider
     }
     

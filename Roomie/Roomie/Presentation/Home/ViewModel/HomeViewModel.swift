@@ -17,6 +17,8 @@ final class HomeViewModel {
     let homeDataSubject = CurrentValueSubject<HomeResponseDTO?, Never>(nil)
     let pinnedInfoDataSubject = PassthroughSubject<(Int, Bool), Never>()
     private let didTapHouseDataSubject = PassthroughSubject<Int, Never>()
+    private let locationSearchDataSubject = PassthroughSubject<MapSearchResponseDTO, Never>()
+    private let isSuccessSubject = PassthroughSubject<Bool, Never>()
     
     init(service: HomeServiceProtocol) {
         self.service = service
@@ -27,6 +29,8 @@ extension HomeViewModel: ViewModelType {
     struct Input {
         let viewWillAppear: AnyPublisher<Void, Never>
         let pinnedHouseIDSubject: AnyPublisher<Int, Never>
+        let searchTextFieldEnterSubject: AnyPublisher<String, Never>
+        let locationDidSelectSubject: AnyPublisher<(Double, Double, String), Never>
     }
     
     struct Output {
@@ -34,6 +38,8 @@ extension HomeViewModel: ViewModelType {
         let houseList: AnyPublisher<[HomeHouse], Never>
         let houseCount: AnyPublisher<Int, Never>
         let pinnedInfo: AnyPublisher<(Int,Bool), Never>
+        let locationSearchData: AnyPublisher<MapSearchResponseDTO, Never>
+        let isSuccess: AnyPublisher<Bool, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -46,6 +52,18 @@ extension HomeViewModel: ViewModelType {
         input.pinnedHouseIDSubject
             .sink { [weak self] houseID in
                 self?.updatePinnedHouse(houseID: houseID)
+            }
+            .store(in: cancelBag)
+        
+        input.searchTextFieldEnterSubject
+            .sink { [weak self] in
+                self?.fetchLocationSearchData(query: $0)
+            }
+            .store(in: cancelBag)
+        
+        input.locationDidSelectSubject
+            .sink { [weak self] (latitude, longitude, location) in
+                self?.updateUserLocation(latitude: latitude, longitude: longitude, location: location)
             }
             .store(in: cancelBag)
         
@@ -73,7 +91,7 @@ extension HomeViewModel: ViewModelType {
         let userInfo = homeDataSubject
             .compactMap { $0 }
             .map { data in
-                UserInfo(name: data.name, location: data.location)
+                UserInfo(nickname: data.nickname, location: data.location)
             }
             .eraseToAnyPublisher()
         
@@ -85,11 +103,18 @@ extension HomeViewModel: ViewModelType {
         let pinnedInfoData = pinnedInfoDataSubject
             .eraseToAnyPublisher()
         
+        let locationSearchData = locationSearchDataSubject
+            .eraseToAnyPublisher()
+        
+        let isSuccess = isSuccessSubject.eraseToAnyPublisher()
+        
         return Output(
             userInfo: userInfo,
             houseList: houseListData,
             houseCount: houseCount,
-            pinnedInfo: pinnedInfoData
+            pinnedInfo: pinnedInfoData,
+            locationSearchData: locationSearchData,
+            isSuccess: isSuccess
         )
     }
 }
@@ -107,6 +132,18 @@ private extension HomeViewModel {
         }
     }
     
+    func fetchLocationSearchData(query: String) {
+        Task {
+            do {
+                guard let responseBody = try await service.fetchLocationSearchData(query: query),
+                      let data = responseBody.data else { return }
+                locationSearchDataSubject.send(data)
+            } catch {
+                print(">>> \(error.localizedDescription) : \(#function)")
+            }
+        }
+    }
+    
     func updatePinnedHouse(houseID: Int) {
         Task {
             do {
@@ -115,6 +152,23 @@ private extension HomeViewModel {
                 self.pinnedInfoDataSubject.send((houseID, data.isPinned))
             } catch {
                 print(">>> \(error.localizedDescription) : \(#function)")
+            }
+        }
+    }
+    
+    func updateUserLocation(latitude: Double, longitude: Double, location: String) {
+        Task {
+            do {
+                guard let responseBody = try await service.updateUserLocation(
+                    latitude: latitude,
+                    longitude: longitude,
+                    location: location
+                ), let _ = responseBody.data else { return }
+                fetchHomeData()
+                isSuccessSubject.send(true)
+            } catch {
+                print(">>> \(error.localizedDescription) : \(#function)")
+                isSuccessSubject.send(false)
             }
         }
     }

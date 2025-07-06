@@ -29,12 +29,16 @@ final class HomeViewController: BaseViewController {
     
     private lazy var dataSource = createDiffableDataSource()
     
+    private let locationButton = UIButton(type: .system)
+    
     private let viewWillAppearSubject = PassthroughSubject<Void, Never>()
     private let pinnedHouseIDSubject = PassthroughSubject<Int, Never>()
+    private let locationDidSelectSubject = PassthroughSubject<(Double, Double, String), Never>()
         
     final let cellHeight: CGFloat = 112
     final let cellWidth: CGFloat = UIScreen.main.bounds.width - 32
     final let contentInterSpacing: CGFloat = 4
+    final let bottomSheetHeight: CGFloat = UIScreen.main.bounds.height * 0.85
     
     private var homeNavigationBarStatus: homeNavigationBarStatus = .scrolled {
         didSet {
@@ -85,6 +89,14 @@ final class HomeViewController: BaseViewController {
     // MARK: - Functions
     
     override func setAction() {
+        locationButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.presentLocationSearchSheet()
+            }
+            .store(in: cancelBag)
+        
         rootView.updateButton.updateButton
             .tapPublisher
             .sink {
@@ -153,7 +165,9 @@ private extension HomeViewController {
     func bindViewModel() {
         let input = HomeViewModel.Input(
             viewWillAppear: viewWillAppearSubject.eraseToAnyPublisher(),
-            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher()
+            pinnedHouseIDSubject: pinnedHouseIDSubject.eraseToAnyPublisher(),
+            searchTextFieldEnterSubject: Empty().eraseToAnyPublisher(),
+            locationDidSelectSubject: locationDidSelectSubject.eraseToAnyPublisher()
         )
         
         let output = viewModel.transform(from: input, cancelBag: cancelBag)
@@ -162,8 +176,9 @@ private extension HomeViewController {
             .receive(on: RunLoop.main)
             .sink { [weak self] data in
                 guard let self else { return }
-                self.rootView.nameLabel.text = data.name
+                self.rootView.nameLabel.text = data.nickname
                 self.setHomeNavigationBar(locaton: data.location)
+                self.rootView.subGreetingLabel.updateText("루미가 \(data.nickname) 님의 완벽한 집을\n찾아드릴게요.")
             }
             .store(in: cancelBag)
         
@@ -201,6 +216,16 @@ private extension HomeViewController {
                 }
                 if isPinned == false {
                     Toast().show(message: "찜 목록에서 삭제되었어요", inset: 8, view: rootView)
+                }
+            }
+            .store(in: cancelBag)
+        
+        output.isSuccess
+            .receive(on: RunLoop.main)
+            .sink{ [weak self] isSuccess in
+                if isSuccess {
+                    guard let self = self else { return }
+                    self.dismiss(animated: true)
                 }
             }
             .store(in: cancelBag)
@@ -259,29 +284,55 @@ private extension HomeViewController {
         navigationController?.navigationBar.scrollEdgeAppearance = barAppearance
     }
     
-    func setHomeNavigationBar(locaton location:String) {
+    func setHomeNavigationBar(locaton location: String) {
         title = nil
         navigationItem.leftBarButtonItem = nil
         
-        let locationLabel = UILabel()
+        locationButton.subviews.forEach { $0.removeFromSuperview() }
+        
         let likedButton = UIBarButtonItem(
             image: .icnHeartLine24,
             style: .plain,
             target: self,
             action: #selector(wishLishButtonDidTap)
         )
+        let locationLabel = UILabel()
         let dropDownImageView = UIImageView(image: .icnArrowDownFilled16)
+        let locationButtonStack = UIStackView()
         
-        let locationItem = UIBarButtonItem(customView: locationLabel)
-        let dropDownItem = UIBarButtonItem(customView: dropDownImageView)
-        likedButton.tintColor = .grayscale10
-        barAppearance.backgroundColor = .primaryLight4
         locationLabel.do {
             $0.setText(location, style: .title2, color: .grayscale10)
         }
         
+        dropDownImageView.snp.makeConstraints {
+            $0.size.equalTo(16)
+        }
+        
+        locationButtonStack.addArrangedSubviews(locationLabel, dropDownImageView)
+        locationButtonStack.do {
+            $0.axis = .horizontal
+                    $0.spacing = 8
+                    $0.alignment = .center
+                    $0.isUserInteractionEnabled = false
+        }
+        
+        locationButton.addSubview(locationButtonStack)
+        locationButtonStack.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        locationButton.snp.makeConstraints {
+            $0.height.equalTo(22)
+        }
+        locationButton.sizeToFit()
+        
+        let locationBarButton = UIBarButtonItem(customView: locationButton)
+        
+        likedButton.tintColor = .grayscale10
+        barAppearance.backgroundColor = .primaryLight4
+        
         navigationItem.rightBarButtonItem = likedButton
-        navigationItem.leftBarButtonItems = [locationItem, dropDownItem]
+        navigationItem.leftBarButtonItem = locationBarButton
         
         view.setNeedsLayout()
         view.layoutIfNeeded()
@@ -294,6 +345,22 @@ private extension HomeViewController {
                 cell.isSelected = false
             }
         }
+    }
+    
+    func presentLocationSearchSheet() {
+        let locationViewController = LocationSearchSheetViewController(viewModel: self.viewModel)
+        
+        locationViewController.delegate = self
+        
+        let customDetent = UISheetPresentationController.Detent.custom { _ in self.bottomSheetHeight }
+        
+        if let sheet = locationViewController.sheetPresentationController {
+            sheet.detents = [customDetent]
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 20
+        }
+        
+        self.present(locationViewController, animated: true)
     }
     
     @objc
@@ -329,7 +396,8 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        guard let houseID = viewModel.homeDataSubject.value?.recentlyViewedHouses[indexPath.item].houseID else { return }
+        guard let houseID = viewModel.homeDataSubject.value?.recentlyViewedHouses[indexPath.item].houseID
+        else { return }
         let houseDetailViewController = HouseDetailViewController(
             viewModel: HouseDetailViewModel(houseID: houseID, service: HousesService())
         )
@@ -356,3 +424,8 @@ extension HomeViewController: UIScrollViewDelegate {
     }
 }
 
+extension HomeViewController: LocationSearchSheetViewControllerDelegate {
+    func didSelectLocation(location: String, latitude: Double, longitude: Double) {
+        locationDidSelectSubject.send((latitude, longitude, location))
+    }
+}

@@ -11,6 +11,7 @@ import Moya
 
 enum MyPageTargetType {
     case fetchMyPageData
+    case fetchMyAccountData
 }
 
 extension MyPageTargetType: TargetType {
@@ -22,6 +23,8 @@ extension MyPageTargetType: TargetType {
         switch self {
         case .fetchMyPageData:
             return "/v1/users/mypage"
+        case .fetchMyAccountData:
+            return "/v1/users/mypage/accountinfo"
         }
     }
     
@@ -35,5 +38,9 @@ extension MyPageTargetType: TargetType {
     
     var headers: [String : String]? {
         return ["Content-Type": "application/json"]
+    }
+    
+    var validationType: ValidationType {
+        return .successCodes
     }
 }

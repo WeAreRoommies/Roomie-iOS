@@ -11,7 +11,9 @@ import Moya
 
 enum HomeTargetType {
     case fetchUserHomeData
+    case fetchLocationSearchData(query: String)
     case updatePinnedHouse(houseID: Int)
+    case updateUserLocation(latitude: Double, longitude: Double, location: String)
 }
 
 extension HomeTargetType: TargetType {
@@ -23,8 +25,12 @@ extension HomeTargetType: TargetType {
         switch self {
         case .fetchUserHomeData:
             return "/users/home"
+        case .fetchLocationSearchData:
+            return "/locations"
         case .updatePinnedHouse(houseID: let houseID):
             return "/houses/\(houseID)/pins"
+        case .updateUserLocation:
+            return "users/location"
         }
     }
     
@@ -34,14 +40,32 @@ extension HomeTargetType: TargetType {
             return .get
         case .updatePinnedHouse:
             return .patch
+        case .fetchLocationSearchData:
+            return .get
+        case .updateUserLocation:
+            return .patch
         }
     }
     
     var task: Moya.Task {
-        return .requestPlain
+        switch self {
+        case .fetchLocationSearchData(let query):
+            return .requestParameters(parameters: ["q": query], encoding: URLEncoding.queryString)
+        case .updateUserLocation(let lat, let lng, let location):
+            return .requestParameters(
+                parameters: ["latitude": lat, "longitude": lng, "location": location],
+                encoding: JSONEncoding.default
+            )
+        default:
+            return .requestPlain
+        }
     }
     
     var headers: [String : String]? {
         return ["Content-Type": "application/json"]
+    }
+    
+    var validationType: ValidationType {
+        return .successCodes
     }
 }

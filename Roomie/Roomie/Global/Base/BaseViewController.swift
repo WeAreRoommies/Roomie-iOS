@@ -100,7 +100,7 @@ extension BaseViewController {
     /// 화면 터치 시 키보드 내리기
     func hideKeyboardWhenDidTap() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = false
+        tapGesture.cancelsTouchesInView = true
         view.addGestureRecognizer(tapGesture)
     }
     

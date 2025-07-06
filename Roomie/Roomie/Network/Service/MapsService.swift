@@ -12,7 +12,10 @@ import Moya
 final class MapsService {
     let provider: MoyaProvider<MapsTargetType>
     
-    init(provider: MoyaProvider<MapsTargetType> = MoyaProvider(plugins: [MoyaLoggingPlugin()])) {
+    init(provider: MoyaProvider<MapsTargetType> = MoyaProvider(
+        session: Session(interceptor: Interceptor.shared),
+        plugins: [MoyaLoggingPlugin()])
+    ) {
         self.provider = provider
     }
     
@@ -61,36 +64,36 @@ final class MockMapSearchService: MapSearchServiceProtocol {
         let mockData: MapSearchResponseDTO = MapSearchResponseDTO(
             locations: [
                 Location(
-                    x: 0,
-                    y: 0,
+                    latitude: 0,
+                    longitude: 0,
                     location: "이화여자대학교",
                     address: "서울특별시 서대문구 대현동 11-1",
                     roadAddress: "서울특별시 서대문구 이화여대길 52"
                 ),
                 Location(
-                    x: 0,
-                    y: 0,
+                    latitude: 0,
+                    longitude: 0,
                     location: "건국대학교",
                     address: "서울특별시 서대문구 대현동 11-1",
                     roadAddress: "서울특별시 서대문구 이화여대길 52"
                 ),
                 Location(
-                    x: 0,
-                    y: 0,
+                    latitude: 0,
+                    longitude: 0,
                     location: "성신여자대학교",
                     address: "서울특별시 서대문구 대현동 11-1",
                     roadAddress: "서울특별시 서대문구 이화여대길 52"
                 ),
                 Location(
-                    x: 0,
-                    y: 0,
+                    latitude: 0,
+                    longitude: 0,
                     location: "홍익대학교",
                     address: "서울특별시 서대문구 대현동 11-1",
                     roadAddress: "서울특별시 서대문구 이화여대길 52"
                 ),
                 Location(
-                    x: 0,
-                    y: 0,
+                    latitude: 0,
+                    longitude: 0,
                     location: "가톨릭대학교",
                     address: "서울특별시 서대문구 대현동 11-1",
                     roadAddress: "서울특별시 서대문구 이화여대길 52"
@@ -106,8 +109,8 @@ final class MockMapSearchService: MapSearchServiceProtocol {
             houses: [
                 House(
                     houseID: 1,
-                    x: 37.555184166,
-                    y: 126.936910322,
+                    latitude: 37.555184166,
+                    longitude: 126.936910322,
                     monthlyRent: "35~50",
                     deposit: "200~300",
                     occupancyTypes: "2인실",
@@ -117,12 +120,13 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                     isPinned: true,
                     moodTag: "#차분한",
                     contractTerm: 6,
-                    mainImageURL: ""
+                    mainImageURL: "",
+                    isFull: false
                 ),
                 House(
                     houseID: 2,
-                    x: 37.552502661,
-                    y: 126.934998613,
+                    latitude: 37.552502661,
+                    longitude: 126.934998613,
                     monthlyRent: "25~40",
                     deposit: "50~100",
                     occupancyTypes: "4인실",
@@ -132,12 +136,13 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                     isPinned: true,
                     moodTag: "#깔끔한",
                     contractTerm: 6,
-                    mainImageURL: ""
+                    mainImageURL: "",
+                    isFull: false
                 ),
                 House(
                     houseID: 3,
-                    x: 37.553909,
-                    y: 126.933960,
+                    latitude: 37.553909,
+                    longitude: 126.933960,
                     monthlyRent: "50~80",
                     deposit: "300~500",
                     occupancyTypes: "1인실",
@@ -147,12 +152,13 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                     isPinned: false,
                     moodTag: "#활발한",
                     contractTerm: 12,
-                    mainImageURL: ""
+                    mainImageURL: "",
+                    isFull: false
                 ),
                 House(
                     houseID: 4,
-                    x: 37.556304,
-                    y: 126.943263,
+                    latitude: 37.556304,
+                    longitude: 126.943263,
                     monthlyRent: "30~50",
                     deposit: "100~300",
                     occupancyTypes: "2인실",
@@ -162,12 +168,13 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                     isPinned: true,
                     moodTag: "#활발한",
                     contractTerm: 12,
-                    mainImageURL: ""
+                    mainImageURL: "",
+                    isFull: false
                 ),
                 House(
                     houseID: 5,
-                    x: 37.547670,
-                    y: 126.942370,
+                    latitude: 37.547670,
+                    longitude: 126.942370,
                     monthlyRent: "50~70",
                     deposit: "50~100",
                     occupancyTypes: "3인실",
@@ -177,7 +184,8 @@ final class MockMapSearchService: MapSearchServiceProtocol {
                     isPinned: true,
                     moodTag: "#조용한",
                     contractTerm: 6,
-                    mainImageURL: ""
+                    mainImageURL: "",
+                    isFull: true
                 )
             ]
         )

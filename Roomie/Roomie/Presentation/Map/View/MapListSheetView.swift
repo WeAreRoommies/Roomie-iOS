@@ -18,6 +18,10 @@ final class MapListSheetView: BaseView {
     
     private let seperatorView = UIView()
     
+    let fullExcludedButton = UIButton()
+
+    let fullExcludedLabel = UILabel()
+    
     let collectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout().then {
@@ -39,6 +43,14 @@ final class MapListSheetView: BaseView {
             $0.backgroundColor = .grayscale4
         }
         
+        fullExcludedButton.do {
+            $0.setImage(.btnCircleDefault, for: .normal)
+        }
+        
+        fullExcludedLabel.do {
+            $0.setText("만실제외", style: .body1, color: .grayscale10)
+        }
+        
         collectionView.do {
             $0.backgroundColor = .clear
             $0.showsVerticalScrollIndicator = true
@@ -47,7 +59,14 @@ final class MapListSheetView: BaseView {
     }
     
     override func setUI() {
-        addSubviews(titleLabel, seperatorView, collectionView, emptyView)
+        addSubviews(
+            titleLabel,
+            seperatorView,
+            fullExcludedButton,
+            fullExcludedLabel,
+            collectionView,
+            emptyView
+        )
     }
     
     override func setLayout() {
@@ -62,8 +81,19 @@ final class MapListSheetView: BaseView {
             $0.height.equalTo(1)
         }
         
+        fullExcludedButton.snp.makeConstraints {
+            $0.top.equalTo(seperatorView.snp.bottom).offset(12)
+            $0.leading.equalToSuperview().inset(20)
+            $0.size.equalTo(Screen.height(20))
+        }
+        
+        fullExcludedLabel.snp.makeConstraints {
+            $0.centerY.equalTo(fullExcludedButton.snp.centerY)
+            $0.leading.equalTo(fullExcludedButton.snp.trailing).offset(6)
+        }
+        
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(seperatorView.snp.bottom)
+            $0.top.equalTo(fullExcludedButton.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
         }

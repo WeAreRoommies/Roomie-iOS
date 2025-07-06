@@ -23,7 +23,7 @@ final class MapSearchViewModel {
 extension MapSearchViewModel: ViewModelType {
     struct Input {
         let searchTextFieldEnterSubject: AnyPublisher<String, Never>
-        let locationDidSelectSubject: AnyPublisher<String, Never>
+        let locationDidSelectSubject: AnyPublisher<AddressInfo, Never>
     }
     
     struct Output {
@@ -38,9 +38,11 @@ extension MapSearchViewModel: ViewModelType {
             .store(in: cancelBag)
         
         input.locationDidSelectSubject
-            .sink { [weak self] location in
+            .sink { [weak self] address in
                 guard let self = self else { return }
-                self.builder.setLocation(location)
+                self.builder.setAddress(address.address)
+                self.builder.setLatitude(address.latitude)
+                self.builder.setLongitude(address.longitude)
             }
             .store(in: cancelBag)
         

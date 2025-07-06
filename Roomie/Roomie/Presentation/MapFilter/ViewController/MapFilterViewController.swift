@@ -37,8 +37,10 @@ final class MapFilterViewController: BaseViewController {
     private let doubleButtonDidTapSubject = PassthroughSubject<Void, Never>()
     private let tripleButtonDidTapSubject = PassthroughSubject<Void, Never>()
     private let quadButtonDidTapSubject = PassthroughSubject<Void, Never>()
-    private let quintButtonDidTapSubject = PassthroughSubject<Void, Never>()
-    private let sextButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    
+    private let calmButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let livelyButtonDidTapSubject = PassthroughSubject<Void, Never>()
+    private let neatButtonDidTapSubject = PassthroughSubject<Void, Never>()
     
     private let preferredDateSubject = PassthroughSubject<String?, Never>()
     
@@ -76,6 +78,10 @@ final class MapFilterViewController: BaseViewController {
 
     override func setView() {
         setNavigationBar(with: "필터", isBorderHidden: true)
+    }
+    
+    override func setDelegate() {
+        rootView.filterPeriodView.preferredDatePickerView.delegate = self
     }
     
     override func setAction() {
@@ -201,30 +207,27 @@ final class MapFilterViewController: BaseViewController {
             }
             .store(in: cancelBag)
         
-        rootView.filterRoomView.quintButton.optionButton
+        rootView.filterRoomView.calmButton.optionButton
             .tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                self.quintButtonDidTapSubject.send(())
+                self.calmButtonDidTapSubject.send(())
             }
             .store(in: cancelBag)
         
-        rootView.filterRoomView.sextButton.optionButton
+        rootView.filterRoomView.livelyButton.optionButton
             .tapPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                self.sextButtonDidTapSubject.send(())
+                self.livelyButtonDidTapSubject.send(())
             }
             .store(in: cancelBag)
         
-        rootView.filterPeriodView.preferredDatePickerView.datePicker
-            .controlEventPublisher(for: .valueChanged)
-            .compactMap { [weak self] _ in
-                let date = self?.rootView.filterPeriodView.preferredDatePickerView.dateLabel.text
-                return date
-            }
-            .sink { [weak self] formattedDate in
-                self?.preferredDateSubject.send(formattedDate)
+        rootView.filterRoomView.neatButton.optionButton
+            .tapPublisher
+            .sink { [weak self] in
+                guard let self = self else { return }
+                self.neatButtonDidTapSubject.send(())
             }
             .store(in: cancelBag)
         
@@ -286,8 +289,9 @@ private extension MapFilterViewController {
             doubleButtonDidTap: doubleButtonDidTapSubject.eraseToAnyPublisher(),
             tripleButtonDidTap: tripleButtonDidTapSubject.eraseToAnyPublisher(),
             quadButtonDidTap: quadButtonDidTapSubject.eraseToAnyPublisher(),
-            quintButtonDidTap: quintButtonDidTapSubject.eraseToAnyPublisher(),
-            sextButtonDidTap: sextButtonDidTapSubject.eraseToAnyPublisher(),
+            calmButtonDidTap: calmButtonDidTapSubject.eraseToAnyPublisher(),
+            livelyButtonDidTap: livelyButtonDidTapSubject.eraseToAnyPublisher(),
+            neatButtonDidTap: neatButtonDidTapSubject.eraseToAnyPublisher(),
             preferredDate: preferredDateSubject.eraseToAnyPublisher(),
             threeMonthButtonDidTap: threeMonthButtonDidTapSubject.eraseToAnyPublisher(),
             sixMonthButtonDidTap: sixMonthButtonDidTapSubject.eraseToAnyPublisher(),
@@ -330,64 +334,62 @@ private extension MapFilterViewController {
             }
             .store(in: cancelBag)
         
-        output.isGenderEmpty
-            .sink { [weak self] isEmpty in
+        output.selectedGenders
+            .sink { [weak self] genders in
                 guard let self = self else { return }
+                let filterRoomView = self.rootView.filterRoomView
                 
-                let buttons = [
-                    self.rootView.filterRoomView.maleButton,
-                    self.rootView.filterRoomView.femaleButton,
-                    self.rootView.filterRoomView.genderDivisionButton,
-                    self.rootView.filterRoomView.genderFreeButton
-                ]
+                filterRoomView.maleButton.isSelected = genders.contains("남성전용")
+                filterRoomView.femaleButton.isSelected = genders.contains("여성전용")
+                filterRoomView.genderDivisionButton.isSelected = genders.contains("남녀분리")
+                filterRoomView.genderFreeButton.isSelected = genders.contains("성별무관")
                 
-                if isEmpty {
-                    buttons.forEach { $0.isSelected = false }
-                }
             }
             .store(in: cancelBag)
         
-        output.isOccupancyTypeEmpty
-            .sink { [weak self] isEmpty in
+        output.selectedOccupancyTypes
+            .sink { [weak self] types in
                 guard let self = self else { return }
+                let filterRoomView = self.rootView.filterRoomView
                 
-                let buttons = [
-                    self.rootView.filterRoomView.singleButton,
-                    self.rootView.filterRoomView.doubleButton,
-                    self.rootView.filterRoomView.tripleButton,
-                    self.rootView.filterRoomView.quadButton,
-                    self.rootView.filterRoomView.quintButton,
-                    self.rootView.filterRoomView.sextButton
-                ]
-                
-                if isEmpty {
-                    buttons.forEach { $0.isSelected = false }
-                }
+                filterRoomView.singleButton.isSelected = types.contains("1인실")
+                filterRoomView.doubleButton.isSelected = types.contains("2인실")
+                filterRoomView.tripleButton.isSelected = types.contains("3인실")
+                filterRoomView.quadButton.isSelected = types.contains("4인실")
             }
             .store(in: cancelBag)
         
-        output.isContractPeriodEmpty
-            .sink { [weak self] isEmpty in
+        output.selectedMoodTags
+            .sink { [weak self] tags in
                 guard let self = self else { return }
+                let filterRoomView = self.rootView.filterRoomView
                 
-                let buttons = [
-                    self.rootView.filterPeriodView.threeMonthButton,
-                    self.rootView.filterPeriodView.sixMonthButton,
-                    self.rootView.filterPeriodView.oneYearButton
-                ]
-                
-                if isEmpty {
-                    buttons.forEach { $0.isSelected = false }
-                }
+                filterRoomView.calmButton.isSelected = tags.contains("#차분한")
+                filterRoomView.livelyButton.isSelected = tags.contains("#활기찬")
+                filterRoomView.neatButton.isSelected = tags.contains("#깔끔한")
             }
             .store(in: cancelBag)
         
-        output.isPreferredDateEmpty
-            .sink { [weak self] isEmpty in
+        output.selectedContractPeriods
+            .sink { [weak self] periods in
                 guard let self = self else { return }
+                let filterPeriodView = self.rootView.filterPeriodView
                 
-                if isEmpty {
-                    self.rootView.filterPeriodView.preferredDatePickerView.dateLabel.setText(
+                filterPeriodView.threeMonthButton.isSelected = periods.contains(3)
+                filterPeriodView.sixMonthButton.isSelected = periods.contains(6)
+                filterPeriodView.oneYearButton.isSelected = periods.contains(12)
+            }
+            .store(in: cancelBag)
+        
+        output.selectedPreferredDate
+            .sink { [weak self] dateString in
+                guard let self = self else { return }
+                let filterPeriodView = self.rootView.filterPeriodView
+                
+                if let dateString = dateString, let date = dateString.toDate() {
+                    filterPeriodView.preferredDatePickerView.setDate(date)
+                } else {
+                    filterPeriodView.preferredDatePickerView.dateLabel.setText(
                         String.formattedDate(date: Date()),
                         style: .body1,
                         color: .grayscale6
@@ -412,5 +414,13 @@ private extension MapFilterViewController {
             rootView.filterRoomView.isHidden = true
             rootView.filterPeriodView.isHidden = false
         }
+    }
+}
+
+// MARK: - DatePickerViewDelegate
+
+extension MapFilterViewController: DatePickerViewDelegate {
+    func dateDidPick(date: String) {
+        preferredDateSubject.send(date)
     }
 }

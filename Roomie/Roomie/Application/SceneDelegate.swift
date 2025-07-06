@@ -7,6 +7,8 @@
 
 import UIKit
 
+import KakaoSDKAuth
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
@@ -17,8 +19,67 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        self.window = UIWindow(windowScene: windowScene)
-        self.window?.rootViewController = MainTabBarController()
-        self.window?.makeKeyAndVisible()
+        configureNotificationCenter()
+        configureRootWindow(in: windowScene)
+    }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        if let url = URLContexts.first?.url {
+            if (AuthApi.isKakaoTalkLoginUrl(url)) {
+                _ = AuthController.handleOpenUrl(url: url)
+            }
+        }
+    }
+}
+
+private extension SceneDelegate {
+    func configureNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleLogout),
+            name: Notification.shouldLogout,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleLogin),
+            name: Notification.shouldLogin,
+            object: nil
+        )
+    }
+    
+    func configureRootWindow(in windowScene: UIWindowScene) {
+        let window = UIWindow(windowScene: windowScene)
+        self.window = window
+        updateRootViewController()
+        window.makeKeyAndVisible()
+    }
+
+    func updateRootViewController() {
+        var rootViewController = UIViewController()
+        
+        if TokenManager.shared.isSessionAvailable {
+            rootViewController = MainTabBarController()
+        } else {
+            rootViewController = UINavigationController(rootViewController: OnBoardingViewController())
+        }
+        
+        window?.rootViewController = rootViewController
+    }
+    
+    @objc
+    func handleLogout() {
+        TokenManager.shared.clearTokens()
+        DispatchQueue.main.async {
+            self.updateRootViewController()
+        }
+    }
+
+    @objc
+    func handleLogin(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.updateRootViewController()
+        }
     }
 }

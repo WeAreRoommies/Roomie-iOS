@@ -11,23 +11,25 @@ extension MapRequestDTO {
     final class Builder {
         static let shared = MapRequestDTO.Builder()
         
-        private var location: String = "서울특별시 마포구 노고산동"
-        private var moodTag: String? = nil
-        private var depositRange: MinMaxRange = MinMaxRange(min: 0, max: 500)
-        private var monthlyRentRange: MinMaxRange = MinMaxRange(min: 0, max: 150)
-        private var genderPolicy: [String] = []
-        private var preferredDate: String? = nil
-        private var occupancyTypes: [String] = []
-        private var contractPeroid: [Int] = []
+        private var address: String? = nil
+        var moodTag: [String] = []
+        var depositRange: MinMaxRange = MinMaxRange(min: 0, max: 500)
+        var monthlyRentRange: MinMaxRange = MinMaxRange(min: 0, max: 150)
+        var genderPolicy: [String] = []
+        var preferredDate: String? = nil
+        var occupancyTypes: [String] = []
+        var contractPeriod: [Int] = []
+        var latitude: Double = 0
+        var longitude: Double = 0
         
         @discardableResult
-        func setLocation(_ location: String) -> Self {
-            self.location = location
+        func setAddress(_ address: String?) -> Self {
+            self.address = address
             return self
         }
         
         @discardableResult
-        func setMoodTag(_ moodTag: String?) -> Self {
+        func setMoodTag(_ moodTag: [String]) -> Self {
             self.moodTag = moodTag
             return self
         }
@@ -63,21 +65,35 @@ extension MapRequestDTO {
         }
         
         @discardableResult
-        func setContractPeroid(_ contractPeriod: [Int]) -> Self {
-            self.contractPeroid = contractPeriod
+        func setContractPeriod(_ contractPeriod: [Int]) -> Self {
+            self.contractPeriod = contractPeriod
+            return self
+        }
+        
+        @discardableResult
+        func setLatitude(_ latitude: Double) -> Self {
+            self.latitude = latitude
+            return self
+        }
+        
+        @discardableResult
+        func setLongitude(_ longitude: Double) -> Self {
+            self.longitude = longitude
             return self
         }
         
         func build() -> MapRequestDTO {
             return MapRequestDTO(
-                location: location,
+                address: address,
                 moodTag: moodTag,
                 depositRange: depositRange,
                 monthlyRentRange: monthlyRentRange,
                 genderPolicy: genderPolicy,
                 preferredDate: preferredDate,
                 occupancyTypes: occupancyTypes,
-                contractPeriod: contractPeroid
+                contractPeriod: contractPeriod,
+                latitude: latitude,
+                longitude: longitude
             )
         }
     }
