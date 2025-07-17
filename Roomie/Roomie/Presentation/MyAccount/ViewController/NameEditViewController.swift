@@ -58,7 +58,7 @@ final class NameEditViewController: BaseViewController {
     }
     
     override func setAction() {
-        hideKeyboardWhenDidTap()
+        hideKeyboardWhenDidTap(excluding: [rootView.editButton])
         
         rootView.nameTextField
             .textPublisher

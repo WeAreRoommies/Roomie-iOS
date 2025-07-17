@@ -58,7 +58,7 @@ final class PhoneNumberEditViewController: BaseViewController {
     }
     
     override func setAction() {
-        hideKeyboardWhenDidTap()
+        hideKeyboardWhenDidTap(excluding: [rootView.editButton])
         
         rootView.phoneNumberTextField
             .controlEventPublisher(for: .editingChanged)
