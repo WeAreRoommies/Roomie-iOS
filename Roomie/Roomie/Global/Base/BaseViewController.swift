@@ -10,6 +10,9 @@ import UIKit
 import SnapKit
 
 class BaseViewController: UIViewController {
+    
+    private var viewsToIgnore: [UIView] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -98,9 +101,12 @@ extension BaseViewController {
     }
     
     /// 화면 터치 시 키보드 내리기
-    func hideKeyboardWhenDidTap() {
+    func hideKeyboardWhenDidTap(excluding viewsToIgnore: [UIView] = []) {
+        self.viewsToIgnore = viewsToIgnore
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = true
+        tapGesture.cancelsTouchesInView = false
+        tapGesture.delegate = self
         view.addGestureRecognizer(tapGesture)
     }
     
@@ -122,5 +128,15 @@ extension BaseViewController: UIGestureRecognizerDelegate {
     /// 뒤로가기 제스쳐 삽입
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return navigationController?.viewControllers.count ?? 0 > 1
+    }
+    
+    /// 특정 뷰를 터치한 경우 키보드 dismiss 막기
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        for ignoredView in viewsToIgnore {
+            if let touchedView = touch.view, touchedView.isDescendant(of: ignoredView) {
+                return false
+            }
+        }
+        return true
     }
 }
