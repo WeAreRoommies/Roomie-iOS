@@ -13,7 +13,24 @@ enum WebViewType {
     case latestNews
     case policy
     
-    var url: String {
+    var title: String {
+        switch self {
+        case .searchHouse:
+            return "쉐어하우스 찾기"
+        case .registerHouse:
+            return "매물 등록하기"
+        case .sendFeedback:
+            return "의견 보내기"
+        case .introduceService:
+            return "서비스 소개"
+        case .latestNews:
+            return "최근 소식"
+        case .policy:
+            return "약관 및 소개"
+        }
+    }
+    
+    var urlString: String {
         switch self {
         case .searchHouse:
             return "https://tally.so/r/3y8ygX"

@@ -68,13 +68,13 @@ final class MyPageWebViewontroller: BaseViewController {
     }
     
     override func setView() {
-        setNavigationBar(with: "")
+        setNavigationBar(with: webViewType.title)
     }
     
     // MARK: - Function
     
     func loadURL() {
-        let urlString = webViewType.url
+        let urlString = webViewType.urlString
         guard let url = URL(string: urlString) else {
             print("URL 변환 실패: \(urlString)")
             return
