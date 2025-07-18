@@ -19,23 +19,23 @@ final class MyPageView: BaseView {
     private let plusLabel = UILabel()
     private let plusStackView = UIStackView()
     let wishListButton = MyPageCellButton(title: "찜리스트")
-    private let searchHouseButton = MyPageCellButton(
+    let searchHouseButton = MyPageCellButton(
         title: "쉐어하우스 찾기",
         subtitle: "원하는 매물이 없다면 새로 요청해보세요"
     )
-    private let registerHouseButton = MyPageCellButton(
+    let registerHouseButton = MyPageCellButton(
         title: "매물 등록하기",
         subtitle: "쉐어하우스 사장님이라면 매물을 등록해보세요"
     )
-    private let sendFeedbackButton = MyPageCellButton(title: "의견 보내기")
+    let sendFeedbackButton = MyPageCellButton(title: "의견 보내기")
     
     private let seperatorView = UIView()
     
     private let serviceLabel = UILabel()
     private let serviceStackView = UIStackView()
-    private let introduceServiceButton = MyPageCellButton(title: "서비스 소개")
-    private let latestNewsButton = MyPageCellButton(title: "최근 소식")
-    private let policyButton = MyPageCellButton(title: "약관 및 소개")
+    let introduceServiceButton = MyPageCellButton(title: "서비스 소개")
+    let latestNewsButton = MyPageCellButton(title: "최근 소식")
+    let policyButton = MyPageCellButton(title: "약관 및 소개")
     
     // MARK: - UISetting
     
