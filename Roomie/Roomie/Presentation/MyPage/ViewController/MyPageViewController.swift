@@ -83,6 +83,66 @@ final class MyPageViewController: BaseViewController {
                 self.navigationController?.pushViewController(wishListViewController, animated: true)
             }
             .store(in: cancelBag)
+        
+        rootView.searchHouseButton.button
+            .tapPublisher
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                let myPageWebViewontroller = MyPageWebViewontroller(type: .searchHouse)
+                myPageWebViewontroller.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(myPageWebViewontroller, animated: true)
+            }
+            .store(in: cancelBag)
+        
+        rootView.registerHouseButton.button
+            .tapPublisher
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                let myPageWebViewontroller = MyPageWebViewontroller(type: .registerHouse)
+                myPageWebViewontroller.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(myPageWebViewontroller, animated: true)
+            }
+            .store(in: cancelBag)
+        
+        rootView.sendFeedbackButton.button
+            .tapPublisher
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                let myPageWebViewontroller = MyPageWebViewontroller(type: .sendFeedback)
+                myPageWebViewontroller.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(myPageWebViewontroller, animated: true)
+            }
+            .store(in: cancelBag)
+        
+        rootView.introduceServiceButton.button
+            .tapPublisher
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                let myPageWebViewontroller = MyPageWebViewontroller(type: .introduceService)
+                myPageWebViewontroller.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(myPageWebViewontroller, animated: true)
+            }
+            .store(in: cancelBag)
+        
+        rootView.latestNewsButton.button
+            .tapPublisher
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                let myPageWebViewontroller = MyPageWebViewontroller(type: .latestNews)
+                myPageWebViewontroller.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(myPageWebViewontroller, animated: true)
+            }
+            .store(in: cancelBag)
+        
+        rootView.policyButton.button
+            .tapPublisher
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                let myPageWebViewontroller = MyPageWebViewontroller(type: .policy)
+                myPageWebViewontroller.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(myPageWebViewontroller, animated: true)
+            }
+            .store(in: cancelBag)
     }
 }
 
