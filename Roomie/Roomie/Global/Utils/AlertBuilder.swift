@@ -80,7 +80,6 @@ final class RoomieAlertViewController: UIViewController {
     private func setStyle() {
         view.do {
             $0.backgroundColor = .transpGray1260
-            $0.isUserInteractionEnabled = true
         }
         
         alertContainer.do {
@@ -168,16 +167,8 @@ final class RoomieAlertViewController: UIViewController {
     }
     
     private func setAction() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(backgroundDidTap))
-        view.addGestureRecognizer(tapGesture)
-        
         confirmButton.addTarget(self, action: #selector(alertButtonDidTap), for: .touchUpInside)
         cancelButton.addTarget(self, action: #selector(alertButtonDidTap), for: .touchUpInside)
-    }
-    
-    @objc
-    private func backgroundDidTap() {
-        dismiss(animated: true)
     }
     
     @objc
