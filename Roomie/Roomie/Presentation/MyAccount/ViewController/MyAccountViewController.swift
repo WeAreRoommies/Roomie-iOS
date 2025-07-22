@@ -126,12 +126,14 @@ final class MyAccountViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self else { return }
-                AlertManager.shared.showAlert(
-                    on: self,
-                    alertType: .logout
-                ) { _ in
-                    self.logoutButtonDidTapSubject.send()
-                }
+                
+                AlertBuilder(viewController: self)
+                    .setTitle("로그아웃 하시겠습니까?")
+                    .setConfirmAction("확인") {
+                        self.logoutButtonDidTapSubject.send()
+                    }
+                    .setCancelAction("취소")
+                    .build()
             }
             .store(in: cancelBag)
         
@@ -139,12 +141,14 @@ final class MyAccountViewController: BaseViewController {
             .tapPublisher
             .sink { [weak self] in
                 guard let self else { return }
-                AlertManager.shared.showAlert(
-                    on: self,
-                    alertType: .signout
-                ) { _ in
-                    self.signoutButtonDidTapSubject.send()
-                }
+                
+                AlertBuilder(viewController: self)
+                    .setTitle("회원 탈퇴 시, 고미와 찾았던\n셰어하우스는 모두 사라져요")
+                    .setConfirmAction("유지하기")
+                    .setCancelAction("탈퇴하기") {
+                        self.signoutButtonDidTapSubject.send()
+                    }
+                    .build()
             }
             .store(in: cancelBag)
     }
