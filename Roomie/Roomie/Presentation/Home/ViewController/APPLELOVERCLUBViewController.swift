@@ -62,7 +62,7 @@ final class APPLELOVERCLUBViewController: BaseViewController {
     // MARK: - Function
     
     func loadURL() {
-        if let url = URL(string: "https://1401kms-70595.waveon.me") {
+        if let url = URL(string: "https://smore.im/quiz/mDC9DH57g2x") {
             let urlRequest = URLRequest(url: url)
             webView?.load(urlRequest)
         } else {
