@@ -19,6 +19,7 @@ final class HomeViewModel {
     private let didTapHouseDataSubject = PassthroughSubject<Int, Never>()
     private let locationSearchDataSubject = PassthroughSubject<MapSearchResponseDTO, Never>()
     private let isSuccessSubject = PassthroughSubject<Bool, Never>()
+    private let invalidLocationSubject = PassthroughSubject<String, Never>()
     
     init(service: HomeServiceProtocol) {
         self.service = service
@@ -40,6 +41,7 @@ extension HomeViewModel: ViewModelType {
         let pinnedInfo: AnyPublisher<(Int,Bool), Never>
         let locationSearchData: AnyPublisher<MapSearchResponseDTO, Never>
         let isSuccess: AnyPublisher<Bool, Never>
+        let inValidLocation: AnyPublisher<String, Never>
     }
     
     func transform(from input: Input, cancelBag: CancelBag) -> Output {
@@ -114,7 +116,8 @@ extension HomeViewModel: ViewModelType {
             houseCount: houseCount,
             pinnedInfo: pinnedInfoData,
             locationSearchData: locationSearchData,
-            isSuccess: isSuccess
+            isSuccess: isSuccess,
+            inValidLocation: invalidLocationSubject.eraseToAnyPublisher()
         )
     }
 }
@@ -163,7 +166,16 @@ private extension HomeViewModel {
                     latitude: latitude,
                     longitude: longitude,
                     location: location
-                ), let _ = responseBody.data else { return }
+                ) else {
+                    isSuccessSubject.send(false)
+                    return
+                }
+                
+                if responseBody.data?.location.isEmpty == true {
+                    invalidLocationSubject.send(responseBody.message)
+                    return
+                }
+                
                 fetchHomeData()
                 isSuccessSubject.send(true)
             } catch {

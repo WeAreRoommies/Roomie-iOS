@@ -138,6 +138,13 @@ private extension LocationSearchSheetViewController {
                 self.updateEmptyView(isEmpty: result.isEmpty)
             }
             .store(in: cancelBag)
+        
+        output.inValidLocation
+            .receive(on: DispatchQueue.main)
+            .sink { _ in 
+                Toast().show(message: "서울 이외의 지역은 아직 준비중이에요", inset: 23, view: self.rootView)
+            }
+            .store(in: cancelBag)
     }
     
     func createDiffableDataSource() -> UICollectionViewDiffableDataSource<Int, Location> {
